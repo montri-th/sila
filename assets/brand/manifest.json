@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "citychat-sila-logo-adoption-1",
+  "artifact": "sila-citymeter-officer",
+  "adoptedOn": "2026-10-06",
+  "parentDesignSystem": "LDS0.9.7 /CityChatAdd-on0.9.2",
+  "identity": "CityChat rounded-balloon animated lockup",
+  "assets": [
+    {
+      "assetId": "logo-bubbles-proposal-light",
+      "file": "logo-bubbles-proposal-light.svg",
+      "bytes": 9249,
+      "sha256": "4f3defeb8901a9fc1b92690dab53c88c8c06532c99ef99eb8dc20f06f07f9aeb",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/assets/logo-bubbles-proposal-light.svg",
+      "role": "identity_component",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "logo-bubbles-proposal-dark",
+      "file": "logo-bubbles-proposal-dark.svg",
+      "bytes": 9249,
+      "sha256": "d60f1b348ba9d3040ba65a4ebb267fedb52a78dc3fc766a05158475a8fdbfd8e",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/assets/logo-bubbles-proposal-dark.svg",
+      "role": "identity_component",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "lockup-without-bubbles-light",
+      "file": "lockup-without-bubbles-light.png",
+      "bytes": 17608,
+      "sha256": "df00f1c02f2c2c453dbd6a21746d015fff8079880de863b2643c9fc7c2449583",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/assets/lockup-without-bubbles-light.png",
+      "role": "identity_component",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "lockup-without-bubbles-dark",
+      "file": "lockup-without-bubbles-dark.png",
+      "bytes": 17483,
+      "sha256": "37af6d9675ee4c1eac934e60c6e481727c0ddb0aff0ad0db87000a6b1923990a",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/assets/lockup-without-bubbles-dark.png",
+      "role": "identity_component",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "citychat-motif-motion",
+      "file": "citychat-motif-motion.css",
+      "bytes": 6779,
+      "sha256": "67c4f2638ef76b7ecf355edd53a7c4f2c55cc51cafe7291f28dbf9cd4e00e91d",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/motion/citychat-motif-motion.css",
+      "role": "animated_identity_components",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "citychat-motif-motion",
+      "file": "citychat-motif-motion.js",
+      "bytes": 43005,
+      "sha256": "cbcf4b541dfe784cdd8894770fbbd6a6495d7e8de82fc5cae4beb8257871b012",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/citychat-motif-set/motion/citychat-motif-motion.js",
+      "role": "animated_identity_components",
+      "modification": "retain_exact"
+    },
+    {
+      "assetId": "citychat-header-logo",
+      "file": "citychat-header-logo.js",
+      "bytes": 2973,
+      "sha256": "c0f95051e2feed9f6cb0b11ac469b93ab5dc9788ebfe923e6c99f1f5833d3ced",
+      "role": "artifact-motion-adapter",
+      "source": "createdforuser-authorizedSilaheader;exactlogo/motioncomponentsretained",
+      "modification": "newcontroller/layoutonly; noidentityreconstruction"
+    },
+    {
+      "assetId": "citychat-header-logo",
+      "file": "citychat-header-logo.css",
+      "bytes": 1523,
+      "sha256": "9e33af264616176c11cf358e6c68713c686fe37daf77d324ce85ab75963187e4",
+      "role": "artifact-layout-adapter",
+      "source": "createdforuser-authorizedSilaheader;exactlogo/motioncomponentsretained",
+      "modification": "newcontroller/layoutonly; noidentityreconstruction"
+    },
+    {
+      "assetId": "citychat-browser-tab-favicon-exact-3b7439f6",
+      "file": "citychat-favicon-3b7439f6.png",
+      "bytes": 7315,
+      "sha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "sourceRepository": "montri-th/CityChat",
+      "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+      "sourcePath": "assets/identity/citychat-favicon-3b7439f6.png",
+      "role": "browser_tab_favicon",
+      "approvedSourceRole": "browser_tab_favicon",
+      "originalApprovalArtifact": "https://montri-th.github.io/CityChat/",
+      "currentAdoptionScope": "Sila browser-tab undercurrentowner-requestto usecorrectCityChatidentityandpublish",
+      "modification": "retain_exact; no crop/resize/recolor",
+      "receiptRef": "citychat-favicon-3b7439f6.receipt.json",
+      "receiptSha256": "2ad25a4e8c2558a9d25f1c7004ae7cf62e4651bd21822a028d83b5beb97b71ac",
+      "intrinsicWidth": 250,
+      "intrinsicHeight": 265,
+      "notAllowedByOriginalReceipt": [
+        "touch",
+        "maskable",
+        "social",
+        "horizontal_header"
+      ]
+    },
+    {
+      "assetId": "citychat-favicon-original-receipt",
+      "file": "citychat-favicon-3b7439f6.receipt.json",
+      "role": "source_permission_receipt",
+      "bytes": 1205,
+      "sha256": "2ad25a4e8c2558a9d25f1c7004ae7cf62e4651bd21822a028d83b5beb97b71ac",
+      "modification": "retain_exact"
+    }
+  ],
+  "authority": {
+    "priorExactBuildApproval": {
+      "date": "2026-09-08",
+      "source": "citychat_publish_repo/citychat-build-card.json",
+      "text": "อนุมัติ animated motif + logo ทุกชิ้น",
+      "scope": "original CityChat landing opening hero; not automaticallyotherartifacts"
+    },
+    "currentArtifactAuthorization": {
+      "source": "Current humanuser request reported byroot2026-10-06",
+      "scope": "correct animatedCityChatlogo withroundedballoons andpublishto montri-th/sila",
+      "allowsHeaderUse": true
+    },
+    "canonicalDesignSystemPromotion": false
+  },
+  "renditionRule": "Use light on foundationlight anddark onfoundationdark; priorherogradientinversion does not apply toheadercanvas.",
+  "motion": {
+    "registeredModule": "citychat-motif-motion.js",
+    "registeredStylesheet": "citychat-motif-motion.css",
+    "adapter": "citychat-header-logo.js",
+    "adapterStyle": "citychat-header-logo.css",
+    "oncePerPageLoad": true,
+    "noReplayOnThemeChange": true,
+    "animatedParts": "twochatballoons/dots only; pin andwordmark still",
+    "reducedMotion": "exactstaticcomposition",
+    "noJavaScript": "exactstaticcomposition",
+    "failure": "exactstaticcomposition",
+    "hiddenTab": "settlecomplete"
+  },
+  "fallback": {
+    "light": [
+      "lockup-without-bubbles-light.png",
+      "logo-bubbles-proposal-light.svg"
+    ],
+    "dark": [
+      "lockup-without-bubbles-dark.png",
+      "logo-bubbles-proposal-dark.svg"
+    ]
+  },
+  "verification": {
+    "sourceHashParity": "pass:6files",
+    "packageAndDS": "retainedcurrent0.9.7; old0.9.1tokensnotadopted",
+    "renderedHeader": "rootmustverifyactualdesktop/mobile/light/dark/reducedmotion",
+    "publication": "rootmustfetchdeployedassetbytescomparehashes",
+    "staticComponentAppearance": {
+      "method": "sharpcompositeexactPNG+exactSVGat494x106forview_image",
+      "light": "viewed on#FCFCFA; roundedgreen/blue balloonsandbluewordmark",
+      "dark": "viewed on#20292D; roundedmint/beigeballoonsandcyanwordmark",
+      "runtimeCompositeReplacementCreated": false
+    },
+    "adapterSyntax": "node--checkpass",
+    "faviconSourceHashParity": "exact PNG+receipt source SHA match; no resize/crop",
+    "faviconIconSetBoundary": "Source has onebrowser-tabimage; notsix-size LDS0.9.7 producticonset approval. No full FAVICON-01 conformance claimed."
+  }
+}

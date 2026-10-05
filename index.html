@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="th" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#11191D" />
+    <title>ศิลา · ข้อมูลเมือง | CityChat CityMETER</title>
+    <link
+      rel="icon"
+      href="assets/brand/citychat-favicon-3b7439f6.png"
+      type="image/png"
+    />
+    <link rel="stylesheet" href="assets/fonts.css" />
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="assets/brand/citychat-motif-motion.css" />
+    <link rel="stylesheet" href="assets/brand/citychat-header-logo.css" />
+    <script type="module" src="assets/brand/citychat-header-logo.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#inspector">ข้ามไปข้อมูลพื้นที่</a>
+    <header class="app-header">
+      <a class="brand" href="./" aria-label="CityChat หน้าภาพรวมศิลา"
+        ><span
+          class="cc-header-logo"
+          data-citychat-header-logo
+          aria-hidden="true"
+        >
+          <span class="cc-header-logo__still">
+            <span class="cc-header-logo__rendition" data-logo-rendition="light">
+              <img
+                src="assets/brand/lockup-without-bubbles-light.png"
+                alt=""
+                width="494"
+                height="106"
+              />
+              <img
+                src="assets/brand/logo-bubbles-proposal-light.svg"
+                alt=""
+                width="494"
+                height="106"
+              />
+            </span>
+            <span class="cc-header-logo__rendition" data-logo-rendition="dark">
+              <img
+                src="assets/brand/lockup-without-bubbles-dark.png"
+                alt=""
+                width="494"
+                height="106"
+              />
+              <img
+                src="assets/brand/logo-bubbles-proposal-dark.svg"
+                alt=""
+                width="494"
+                height="106"
+              />
+            </span>
+          </span> </span
+      ></a>
+      <div class="header-title">
+        <span>CityMETER for Organization</span
+        ><strong data-i18n="municipality">เทศบาลเมืองศิลา</strong>
+      </div>
+      <div class="header-actions">
+        <button id="language" class="quiet" aria-label="Switch to English">
+          EN</button
+        ><button id="theme" class="quiet" data-i18n="lightTheme">
+          พื้นสว่าง</button
+        ><span class="officer-label" data-i18n="preview"
+          >ต้นแบบสำหรับเจ้าหน้าที่</span
+        >
+      </div>
+    </header>
+    <main class="workspace">
+      <section class="map-workspace" aria-label="แผนที่ศิลา">
+        <div class="map-toolbar">
+          <button
+            id="dataset-open"
+            class="dataset-trigger"
+            aria-haspopup="dialog"
+          >
+            <span class="dataset-dot" aria-hidden="true"></span
+            ><span
+              ><small data-i18n="dataset">ชุดข้อมูล</small
+              ><strong id="dataset-title">ภาพรวมพื้นที่</strong></span
+            ><span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="map-toolbar-secondary">
+            <label
+              ><span class="sr-only" data-i18n="boundaries">ขอบเขตพื้นที่</span
+              ><select id="boundary-mode" aria-label="ขอบเขตพื้นที่">
+                <option value="municipality">ขอบเขตเทศบาล</option>
+                <option value="village">28 หมู่บ้าน</option>
+                <option value="election">3 เขตเลือกตั้ง · ขอบเขตทดลอง</option>
+              </select></label
+            ><button
+              id="layers-open"
+              class="quiet"
+              aria-expanded="false"
+              aria-controls="layer-options"
+              data-i18n="layers"
+            >
+              ซ้อนชั้นข้อมูล
+            </button>
+          </div>
+        </div>
+        <nav id="breadcrumbs" class="breadcrumbs" aria-label="ลำดับพื้นที่">
+          <span>ขอนแก่น</span><span aria-hidden="true">›</span
+          ><strong>เทศบาลเมืองศิลา</strong>
+        </nav>
+        <div class="map-stage">
+          <div
+            id="map"
+            tabindex="0"
+            role="region"
+            aria-label="แผนที่โต้ตอบ เลือกหมู่บ้านเพื่อลงรายละเอียด"
+          ></div>
+          <div id="layer-options" class="layer-options" hidden>
+            <h3 data-i18n="contextLayers">ข้อมูลประกอบแผนที่</h3>
+            <label
+              ><input type="checkbox" data-overlay="waterways" /><span
+                data-i18n="waterways"
+                >ลำห้วย</span
+              ></label
+            ><label
+              ><input type="checkbox" data-overlay="roads" /><span
+                data-i18n="roads"
+                >ถนนขึ้นทะเบียน</span
+              ></label
+            ><label
+              ><input type="checkbox" data-overlay="buildings" /><span
+                data-i18n="buildings"
+                >รูปอาคาร</span
+              ></label
+            ><label
+              ><span data-i18n="basemap">พื้นหลัง</span
+              ><select id="basemap">
+                <option value="street">แผนที่ถนน</option>
+                <option value="none">เฉพาะข้อมูลพื้นที่</option>
+              </select></label
+            >
+          </div>
+          <div class="map-context">
+            <span class="status-dot" aria-hidden="true"></span
+            ><span id="map-context-text"
+              >ขอบเขตจากไฟล์เทศบาล · คลิกพื้นที่เพื่อลงรายละเอียด</span
+            >
+          </div>
+          <div class="map-controls">
+            <button id="back" class="map-control" data-i18n="back" disabled>
+              ย้อนกลับ</button
+            ><button id="fit" class="map-control" data-i18n="fit">
+              ดูเต็มพื้นที่
+            </button>
+          </div>
+          <div id="map-legend" class="map-legend"></div>
+          <div id="map-loading" class="map-loading" hidden role="status">
+            กำลังเปิดข้อมูล…
+          </div>
+          <div id="map-error" class="map-error" hidden role="status"></div>
+        </div>
+        <section class="map-summary" aria-label="สรุปจากขอบเขตที่เลือก">
+          <div class="summary-heading">
+            <div>
+              <small id="summary-eyebrow">สำรวจข้อมูลที่ได้รับ</small>
+              <h2 id="summary-title">ศิลาในแผนที่เดียว</h2>
+            </div>
+            <span class="snapshot-label">5 ต.ค. 2569</span>
+          </div>
+          <div id="summary-metrics" class="summary-metrics">
+            <div><strong>28</strong><span>หมู่บ้านจากไฟล์</span></div>
+            <div><strong>14</strong><span>โฟลเดอร์ต้นทาง</span></div>
+            <div><strong>—</strong><span>กำลังอ่านข้อมูล</span></div>
+          </div>
+          <div class="summary-footnote" id="summary-note">
+            ข้อมูลที่ได้รับจากเทศบาล ไม่ใช่สถานการณ์น้ำท่วมปัจจุบัน
+          </div>
+        </section>
+      </section>
+      <aside
+        id="inspector"
+        class="inspector"
+        aria-label="ข้อมูลพื้นที่ที่เลือก"
+      >
+        <div class="inspector-heading">
+          <div class="eyebrow" id="place-eyebrow">ขอนแก่น · ข้อมูลเทศบาล</div>
+          <h1 id="place-title">เทศบาลเมืองศิลา</h1>
+          <p id="place-description">
+            เริ่มจากภาพรวม เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้อง
+          </p>
+        </div>
+        <div class="purpose-actions" role="group" aria-label="หัวข้องาน">
+          <button data-purpose="flood" data-i18n="floodPurpose">
+            น้ำและแผนป้องกัน</button
+          ><button data-purpose="tax" data-i18n="taxPurpose">
+            ที่ดินและสิ่งปลูกสร้าง
+          </button>
+        </div>
+        <div id="record-detail" hidden></div>
+        <div class="inspector-tabs" role="tablist" aria-label="มุมมองข้อมูล">
+          <button
+            role="tab"
+            id="tab-overview"
+            data-tab="overview"
+            aria-selected="true"
+            aria-controls="tab-content"
+            data-i18n="overview"
+          >
+            ภาพรวม</button
+          ><button
+            role="tab"
+            id="tab-list"
+            data-tab="list"
+            aria-selected="false"
+            aria-controls="tab-content"
+            data-i18n="list"
+          >
+            รายการ</button
+          ><button
+            role="tab"
+            id="tab-source"
+            data-tab="source"
+            aria-selected="false"
+            aria-controls="tab-content"
+            data-i18n="sources"
+          >
+            แหล่งข้อมูล
+          </button>
+        </div>
+        <div
+          id="tab-content"
+          class="tab-content"
+          role="tabpanel"
+          aria-labelledby="tab-overview"
+          tabindex="0"
+        >
+          <div class="initial-state">
+            <h2>ข้อมูลเมืองที่ตรวจสอบต่อได้</h2>
+            <p>
+              เลือกหมู่บ้านบนแผนที่ หรือเปิดเมนูชุดข้อมูลเพื่อดูอาคาร ถนน
+              สถานที่ และแผนงาน
+            </p>
+            <p>
+              ข้อมูลแปลงที่ดินยังรอยืนยันระบบพิกัด ประชากรหมู่ 11
+              มีตัวเลขที่ต้องสอบทาน
+            </p>
+            <noscript
+              ><p>
+                เปิด JavaScript เพื่อใช้งานแผนที่โต้ตอบ หรือตรวจ
+                <a href="data/catalog.json">บัญชีชุดข้อมูล</a> และ
+                <a href="README.md">คำอธิบายต้นแบบ</a>
+              </p></noscript
+            >
+          </div>
+        </div>
+        <footer class="inspector-footer">
+          <span data-i18n="localPreview"
+            >ดูข้อมูลในต้นแบบนี้ · ยังไม่ได้เชื่อมระบบงานเทศบาล</span
+          ><a
+            href="README.md"
+            target="_blank"
+            rel="noopener"
+            data-i18n="readGuide"
+            >คำอธิบาย</a
+          >
+        </footer>
+      </aside>
+    </main>
+    <dialog
+      id="dataset-dialog"
+      class="dataset-dialog"
+      aria-labelledby="dataset-dialog-title"
+    >
+      <div class="dialog-heading">
+        <div>
+          <small data-i18n="cityData">CITY DATA</small>
+          <h2 id="dataset-dialog-title" data-i18n="chooseDataset">
+            เลือกชุดข้อมูล
+          </h2>
+        </div>
+        <button class="quiet" id="dataset-close" data-i18n="close">ปิด</button>
+      </div>
+      <label class="search-field"
+        ><span class="sr-only" data-i18n="searchDataset">ค้นหาชุดข้อมูล</span
+        ><input
+          id="dataset-search"
+          type="search"
+          placeholder="ค้นหาชุดข้อมูลหรือชื่อโฟลเดอร์"
+          autocomplete="off"
+      /></label>
+      <div id="dataset-catalog"></div>
+      <div class="dialog-footnote" data-i18n="datasetFootnote">
+        จำนวนไฟล์ไม่ใช่จำนวนชุดข้อมูล แต่ละชั้นแสดงที่มาและข้อจำกัดของตัวเอง
+      </div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

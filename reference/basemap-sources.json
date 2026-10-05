@@ -1,0 +1,22 @@
+{
+  "checkedAtUtc": "2026-10-05T17:28:32.706992+00:00",
+  "dark": {
+    "baseService": "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer",
+    "referenceService": "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer",
+    "maxNativeZoomBase": 23,
+    "maxNativeZoomReference": 23,
+    "attribution": "Esri, HERE, Garmin, (c) OpenStreetMap contributors, and the GIS user community",
+    "tileInfoVerified": {
+      "tileSize": 256,
+      "crs": "EPSG:3857",
+      "levelZeroResolutionMetersPerPixel": 156543.03392800014,
+      "zoomOffset": 0
+    }
+  },
+  "light": {
+    "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "policy": "https://operations.osmfoundation.org/policies/tiles/",
+    "attribution": "OpenStreetMap contributors"
+  },
+  "dataLayers": "Analytical layer HEX values and opacity are unchanged by theme. The 0.78 outside-area context mask composites only outside the municipal polygon; its interior is transparent."
+}

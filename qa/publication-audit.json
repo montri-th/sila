@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "date": "2026-10-06",
+  "target": "https://github.com/montri-th/sila",
+  "scope": "Static frontend publication bundle; source ingestion packages and unrelated municipal contracts excluded.",
+  "credentialPatternsFound": false,
+  "disallowedPersonalPropertyFieldsFound": false,
+  "intendedLocationData": {
+    "houseLocationRecords": 28783,
+    "nonemptySourceHouseNumbers": 22620,
+    "CCTVLocations": 50,
+    "note": "Requested municipal Officer location datasets remain included. These data are not aggregate-only anonymized data."
+  },
+  "municipalOpenReuseLicenseVerified": false,
+  "licenseMeaning": "Code and third-party font/Leaflet license notices do not establish an open-data license for municipal source datasets.",
+  "sanitizedMetadata": [
+    "Machine-specific source locators converted to relative provenance labels.",
+    "Google Docs source link ouid account query identifier removed."
+  ],
+  "excluded": [
+    "Raw GIS companions",
+    "Owner/tax identifiers and phones",
+    "CCTV streams",
+    "Ingestion packages and caches",
+    "Unrelated municipal contracts/LOI/invoices"
+  ],
+  "validation": "All spatial output property schemas reviewed; no person-title/email/phone/citizen-ID property-value pattern findings. Credential/signed-URL pattern scan of intended text artifacts found none.",
+  "limitations": [
+    "Source accuracy/legal boundary versions are not independently verified.",
+    "Source folder access is not proof of municipal open-data licensing."
+  ],
+  "frozenBundleCheck": {
+    "date": "2026-10-06",
+    "checkedPublicationFilesBeforeManifest": 85,
+    "checkedPublicationFilesIncludingManifest": 86,
+    "scannedTextFilesBeforeManifest": 62,
+    "scannedTextFilesIncludingManifest": 63,
+    "credentialSignedURLPrivatePathThreadIdentifierFindings": [],
+    "sourceGeoJSONCount": 13,
+    "allGeoJSONBytesMatchOriginal": true,
+    "disallowedPersonalPropertyFieldsFound": false,
+    "rawGISFilesPresent": false,
+    "ingestionCacheFoldersPresent": false,
+    "READMElinks": {
+      "checked": 8,
+      "relativeExisting": 6,
+      "external": 2,
+      "missing": 0
+    },
+    "fourScreenshotsContainEXIFOrPrivatePathBytes": false,
+    "remainingWorkstationPathFixesRequired": 0
+  }
+}

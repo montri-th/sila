@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "receiptId": "citychat-favicon-extraction-20260903-01",
+  "artifactBuildId": "citychat-landing-20260903-03",
+  "output": {
+    "path": "assets/identity/citychat-favicon-3b7439f6.png",
+    "mimeType": "image/png",
+    "intrinsicWidth": 250,
+    "intrinsicHeight": 265,
+    "bytes": 7315,
+    "sha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+    "transparentCanvas": true
+  },
+  "source": {
+    "path": "assets/identity/citychat-lockup.source.svg",
+    "mimeType": "image/svg+xml",
+    "sha256": "3a3cd1b4c6091a107bd41502e6df04ddfc62c3074b75b850bfabdf9ddacab98c",
+    "embeddedImageId": "image0_553_8896",
+    "embeddedMimeType": "image/png"
+  },
+  "method": {
+    "operation": "exact_embedded_png_extraction",
+    "description": "Decoded the embedded PNG bytes from the protected CityChat lockup source.",
+    "crop": "none",
+    "resize": "none",
+    "recolor": "none",
+    "padding": "none",
+    "filter": "none",
+    "metadataChange": "none"
+  },
+  "authorization": {
+    "basis": "owner_request",
+    "requestDate": "2026-09-03",
+    "approvedRole": "browser_tab_favicon",
+    "approvedArtifact": "https://montri-th.github.io/CityChat/"
+  }
+}

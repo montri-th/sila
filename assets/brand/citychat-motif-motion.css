@@ -1,0 +1,41 @@
+/* CityChat motif motion — five siblings, one grammar (arrive → face → blink → still), each with its own gesture.
+   One play, fail-open: the SVG base state is the still. Curves: state (.2,0,0,1) · enter (.16,1,.3,1) · settle (.2,.9,.25,1.08) */
+.mm-ground{transform-box:fill-box;transform-origin:left center;animation:mmDraw 760ms cubic-bezier(.16,1,.3,1) both}
+.mm-talk-r{transform-box:fill-box;transform-origin:50% 100%;animation:mmPopO 520ms cubic-bezier(.2,.9,.25,1.08) both,mmLeanR 760ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-talk-l{transform-box:fill-box;transform-origin:50% 100%;animation:mmPopO 520ms cubic-bezier(.2,.9,.25,1.08) both,mmLeanL 760ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-hop{transform-box:fill-box;transform-origin:50% 100%;animation:mmHop 920ms cubic-bezier(.2,0,0,1) both,mmNod 640ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-peek{transform-box:fill-box;transform-origin:50% 100%;animation:mmPeek 760ms cubic-bezier(.2,.9,.25,1.08) both,mmNod 640ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-sprout{transform-box:fill-box;transform-origin:50% 100%;animation:mmSprout 760ms cubic-bezier(.2,.9,.25,1.08) both,mmWave 520ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-pin{transform-box:fill-box;transform-origin:50% 100%;animation:mmDropHop 920ms cubic-bezier(.2,0,0,1) both,mmWobble 760ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-q{transform-box:fill-box;transform-origin:50% 100%;animation:mmPopO 420ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-logo{transform-box:fill-box;transform-origin:20% 100%;animation:mmPopO 420ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-pop{transform-box:fill-box;transform-origin:center;animation:mmPopO 420ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-flip{transform-box:fill-box;transform-origin:center;animation:mmFlip 520ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-eye{transform-box:fill-box;transform-origin:center;animation:mmBlink 220ms cubic-bezier(.2,0,0,1) both}
+.mm-ripple{transform-box:fill-box;transform-origin:center;opacity:0;animation:mmRipple 700ms cubic-bezier(.16,1,.3,1) both}
+.mm-dot{transform-box:fill-box;transform-origin:center;animation:mmDotHop 360ms cubic-bezier(.2,.9,.25,1.08) both}
+.mm-fade{animation:mmFade 760ms cubic-bezier(.16,1,.3,1) both}
+@keyframes mmPopO{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.15)}100%{opacity:1;transform:scale(1)}}
+@keyframes mmLeanR{0%,100%{rotate:0deg}40%{rotate:6deg}75%{rotate:-2deg}}
+@keyframes mmLeanL{0%,100%{rotate:0deg}40%{rotate:-6deg}75%{rotate:2deg}}
+@keyframes mmHop{0%{opacity:0;transform:translateY(-36px) scale(.92,1.08)}45%{opacity:1;transform:translateY(0) scale(1.08,.9)}68%{transform:translateY(-5px) scale(.98,1.03)}84%{transform:translateY(0) scale(1.02,.99)}100%{opacity:1;transform:none}}
+@keyframes mmNod{0%,100%{rotate:0deg}35%{rotate:3deg}70%{rotate:-2deg}}
+@keyframes mmPeek{0%{opacity:0;transform:translate(40px,8px) rotate(10deg)}60%{opacity:1;transform:translate(-4px,0) rotate(-3deg)}100%{opacity:1;transform:none}}
+@keyframes mmSprout{0%{opacity:0;transform:scale(.6,0)}55%{opacity:1;transform:scale(.96,1.1)}78%{transform:scale(1.03,.96)}100%{opacity:1;transform:none}}
+@keyframes mmWave{0%,100%{translate:0 0}45%{translate:0 -7px}}
+@keyframes mmFlip{0%{opacity:0;transform:scaleX(0)}60%{opacity:1;transform:scaleX(1.12)}100%{opacity:1;transform:none}}
+@keyframes mmDropHop{0%{opacity:0;transform:translateY(-52px) scale(.92,1.1)}50%{opacity:1;transform:translateY(0) scale(1.1,.88)}72%{transform:translateY(-6px) scale(.98,1.04)}88%{transform:translateY(0) scale(1.01,.99)}100%{opacity:1;transform:none}}
+@keyframes mmWobble{0%,100%{rotate:0deg}25%{rotate:-4deg}55%{rotate:3deg}80%{rotate:-1deg}}
+@keyframes mmBlink{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.08)}}
+@keyframes mmRipple{0%{opacity:.7;transform:scale(.5)}100%{opacity:0;transform:scale(2.4)}}
+@keyframes mmDotHop{0%{opacity:0;transform:translateY(10px)}55%{opacity:1;transform:translateY(-5px)}100%{opacity:1;transform:none}}
+@keyframes mmFade{from{opacity:0}to{opacity:1}}
+@keyframes mmDraw{from{transform:scaleX(0)}to{transform:none}}
+.mm-spin-1{transform-box:fill-box;transform-origin:center;animation:mmSpin2 1500ms linear both}
+.mm-spin-2{transform-box:fill-box;transform-origin:center;animation:mmSpin3 2200ms linear both}
+.mm-spin-3{transform-box:fill-box;transform-origin:center;animation:mmSpin1 1700ms linear both}
+@keyframes mmSpin1{0%{opacity:0;transform:scaleX(1) scaleY(1)}33.01%{opacity:1;transform:scaleX(0.707) scaleY(1)}57.81%{transform:scaleX(0) scaleY(1.06)}75.59%{transform:scaleX(-0.707) scaleY(1)}87.5%{transform:scaleX(-1) scaleY(1)}94.73%{transform:scaleX(-0.707) scaleY(1)}98.44%{transform:scaleX(0) scaleY(1.06)}99.8%{transform:scaleX(0.707) scaleY(1)}100%{transform:scaleX(1) scaleY(1)}}
+@keyframes mmSpin2{0%{opacity:0;transform:scaleX(1) scaleY(1)}17.6%{opacity:1;transform:scaleX(0.707) scaleY(1)}33.01%{transform:scaleX(0) scaleY(1.06)}46.36%{transform:scaleX(-0.707) scaleY(1)}57.81%{transform:scaleX(-1) scaleY(1)}67.5%{transform:scaleX(-0.707) scaleY(1)}75.59%{transform:scaleX(0) scaleY(1.06)}82.2%{transform:scaleX(0.707) scaleY(1)}87.5%{transform:scaleX(1) scaleY(1)}91.63%{transform:scaleX(0.707) scaleY(1)}94.73%{transform:scaleX(0) scaleY(1.06)}96.95%{transform:scaleX(-0.707) scaleY(1)}98.44%{transform:scaleX(-1) scaleY(1)}99.34%{transform:scaleX(-0.707) scaleY(1)}99.8%{transform:scaleX(0) scaleY(1.06)}99.98%{transform:scaleX(0.707) scaleY(1)}100%{transform:scaleX(1) scaleY(1)}}
+@keyframes mmSpin3{0%{opacity:0;transform:scaleX(1) scaleY(1)}11.99%{opacity:1;transform:scaleX(0.707) scaleY(1)}22.97%{transform:scaleX(0) scaleY(1.06)}33.01%{transform:scaleX(-0.707) scaleY(1)}42.13%{transform:scaleX(-1) scaleY(1)}50.38%{transform:scaleX(-0.707) scaleY(1)}57.81%{transform:scaleX(0) scaleY(1.06)}64.46%{transform:scaleX(0.707) scaleY(1)}70.37%{transform:scaleX(1) scaleY(1)}75.59%{transform:scaleX(0.707) scaleY(1)}80.15%{transform:scaleX(0) scaleY(1.06)}84.11%{transform:scaleX(-0.707) scaleY(1)}87.5%{transform:scaleX(-1) scaleY(1)}90.37%{transform:scaleX(-0.707) scaleY(1)}92.77%{transform:scaleX(0) scaleY(1.06)}94.73%{transform:scaleX(0.707) scaleY(1)}96.3%{transform:scaleX(1) scaleY(1)}97.52%{transform:scaleX(0.707) scaleY(1)}98.44%{transform:scaleX(0) scaleY(1.06)}99.1%{transform:scaleX(-0.707) scaleY(1)}99.54%{transform:scaleX(-1) scaleY(1)}99.8%{transform:scaleX(-0.707) scaleY(1)}99.94%{transform:scaleX(0) scaleY(1.06)}99.99%{transform:scaleX(0.707) scaleY(1)}100%{transform:scaleX(1) scaleY(1)}}
+.mm-grow{transform-box:fill-box;transform-origin:50% 100%;animation:mmSprout 920ms cubic-bezier(.2,.9,.25,1.08) both,mmWobble 760ms cubic-bezier(.2,.9,.25,1.08) both}
+@media (prefers-reduced-motion:reduce){[class^="mm-"],[class*=" mm-"]{animation:none!important;opacity:1}.mm-ripple{opacity:0}}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "revision": "1.1",
+  "adaptedInteractionReference": "Yolk 1.7.5 / workspace-map 1.7 / map-boundary-appearance 1.7.4",
+  "hierarchy": ["municipality", "village_or_election_view", "dataset_record"],
+  "boundaryViews": ["municipality", "village", "election"],
+  "boundaryRendering": "Display one selected boundary type; no additional municipal context stroke. Selected scope is unfilled except meaning-specific population aggregate data.",
+  "municipalMask": "Actual municipal polygon remains the transparent aperture; the outside context mask has opacity 0.78 and does not intercept input.",
+  "scope": "Source ID determines aggregate/list membership independently of viewport. Intersecting records may belong to more than one source boundary; subtotals are not additive.",
+  "datasetChange": "Retain scope and camera for ordinary dataset changes. A boundary dataset chooses its matching boundary view and resets incompatible scope.",
+  "boundaryViewChange": "Reset to municipal scope, clear record/search/page and fit the municipal area.",
+  "recordSelection": "Open one record separately; retain scope aggregates. Fit only when the explicit focus-record control is used.",
+  "navigation": "Map polygons and list rows select the same source scope ID. Enter/Space activates a focused boundary; breadcrumb/back returns to the available parent.",
+  "camera": "Fit on explicit area drill/back/fit/record-focus; ordinary dataset, theme and language changes retain camera.",
+  "url": "Validated dataset, boundary, scope, lang, theme and optional record ID restore state across reload; browser back/forward supported.",
+  "missingEvidence": "Missing geometry, unknown CRS, no-data population or current flood metrics remain unavailable with explanations; never infer administrative parentage, tax ownership or flood risk from display geometry.",
+  "implementation": "app.js",
+  "observedValidation": "qa/revision-1.1-browser-checks.json"
+}

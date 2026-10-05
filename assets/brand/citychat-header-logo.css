@@ -1,0 +1,13 @@
+/* Artifact adapter: exact CityChat rounded-balloon components, one finite gesture. */
+.cc-header-logo{display:block;position:relative;width:156px;aspect-ratio:494/106;line-height:0;isolation:isolate;flex-shrink:0}
+.cc-header-logo__still,.cc-header-logo__motion,.cc-header-logo__rendition{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cc-header-logo img,.cc-header-logo svg{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.cc-header-logo__motion{pointer-events:none;visibility:hidden}
+.cc-header-logo[data-logo-ready]>.cc-header-logo__still{visibility:hidden}
+.cc-header-logo[data-logo-ready]>.cc-header-logo__motion{visibility:visible}
+[data-theme="dark"] .cc-header-logo [data-logo-rendition="light"],[data-theme="light"] .cc-header-logo [data-logo-rendition="dark"]{display:none}
+.cc-header-logo[data-logo-suppressed]>.cc-header-logo__still{visibility:visible!important}
+.cc-header-logo[data-logo-suppressed]>.cc-header-logo__motion{display:none!important}
+@media(max-width:599px){.cc-header-logo{width:124px}}
+@media(prefers-reduced-motion:reduce){.cc-header-logo>.cc-header-logo__still{visibility:visible!important}.cc-header-logo>.cc-header-logo__motion{display:none!important}}
+@media print{.cc-header-logo>.cc-header-logo__still{visibility:visible!important}.cc-header-logo>.cc-header-logo__motion{display:none!important}.cc-header-logo [data-logo-rendition="dark"]{display:none!important}.cc-header-logo [data-logo-rendition="light"]{display:block!important}}

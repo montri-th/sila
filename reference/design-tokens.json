@@ -1,0 +1,2453 @@
+{
+  "schemaVersion": "sila-prototype-design-tokens-1",
+  "designSystem": {
+    "schemaVersion": "lds-standalone-document-1",
+    "documentId": "lds-0.9.7-landometer-standalone-r1",
+    "documentRevision": "standalone-0.9.7-r1",
+    "title": "Landometer Design System v0.9.7",
+    "dsVersion": "0.9.7",
+    "releaseRef": "v0.9.7-owner.1",
+    "colorSetId": "color-srgb-10",
+    "product": "landometer",
+    "structureBaseline": "Landometer Design System v0.9.1",
+    "humanSha256": "f3f67736c9d27c05e96c60254dffc9fd51002400f4d9cea46bf860e370934200",
+    "requiredNormativeFiles": 1,
+    "supersedes": "Previous LDS Project Source masters, overlays and fragmented machine sources for new work in this scope.",
+    "sha256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96"
+  },
+  "addon": {
+    "schemaVersion": "lds-standalone-document-1",
+    "documentId": "citychat-addon-0.9.2-lds-0.9.7-r1",
+    "documentRevision": "standalone-0.9.7-r1",
+    "documentKind": "addon",
+    "title": "CityChat Add-on v0.9.2 for LDS v0.9.7",
+    "dsVersion": "0.9.7",
+    "releaseRef": "v0.9.7-owner.1",
+    "colorSetId": "color-srgb-10",
+    "product": "citychat",
+    "productVersion": "0.9.2",
+    "humanSha256": "8bfa49e80dcf5f1b1029fd5859d57b71e68917ef548ff3ab9c81ca9d9bbecd67",
+    "requiredNormativeFiles": 2,
+    "supersedes": "Previous product design-rule Add-ons within this product scope. Requires the complete LDS 0.9.7 base, never a predecessor master.",
+    "sha256": "345ef4054d7a646a73a8b369549c58c8b11d3190e39de5aa0f59704d6a3223ad",
+    "baseBindingVerified": true
+  },
+  "foundation": {
+    "surface.canvas": {
+      "light": "#F6F7F3",
+      "dark": "#11191D"
+    },
+    "surface.alt": {
+      "light": "#EEF1EE",
+      "dark": "#172126"
+    },
+    "surface.card": {
+      "light": "#FCFCFA",
+      "dark": "#20292D"
+    },
+    "surface.raised": {
+      "light": "#FFFFFF",
+      "dark": "#293337"
+    },
+    "surface.soft": {
+      "light": "#E5E9E6",
+      "dark": "#2B3534"
+    },
+    "surface.blueTint": {
+      "light": "#E2E9ED",
+      "dark": "#18333E"
+    },
+    "surface.beigeTint": {
+      "light": "#F2F1DF",
+      "dark": "#2C2A22"
+    },
+    "text.primary": {
+      "light": "#182327",
+      "dark": "#F1F4EF"
+    },
+    "text.secondary": {
+      "light": "#5F635A",
+      "dark": "#C4CECA"
+    },
+    "text.metadata": {
+      "light": "#5C6A61",
+      "dark": "#A6B5B1"
+    },
+    "text.muted": {
+      "light": "#7B877D",
+      "dark": "#8D9D99"
+    },
+    "text.disabled": {
+      "light": "#A7B3A9",
+      "dark": "#71817D"
+    },
+    "border.hairline": {
+      "light": "#DCE1DD",
+      "dark": "#33403D"
+    },
+    "border.default": {
+      "light": "#C9D0CB",
+      "dark": "#46524F"
+    },
+    "border.emphasis": {
+      "light": "#7D877F",
+      "dark": "#7C8A84"
+    },
+    "interaction.accent": {
+      "light": "#176B82",
+      "dark": "#68C4E2"
+    },
+    "interaction.focus.ring": {
+      "light": "#176B82",
+      "dark": "#68C4E2"
+    }
+  },
+  "semanticState": {
+    "success": {
+      "light": {
+        "surface": "#E2F4E5",
+        "content": "#126B49"
+      },
+      "dark": {
+        "surface": "#17362D",
+        "content": "#72E8C4"
+      }
+    },
+    "warning": {
+      "light": {
+        "surface": "#FFF1D1",
+        "content": "#A64A00"
+      },
+      "dark": {
+        "surface": "#3B2E16",
+        "content": "#F5C15C"
+      }
+    },
+    "danger": {
+      "light": {
+        "surface": "#FCE5DF",
+        "content": "#B43A3A"
+      },
+      "dark": {
+        "surface": "#3A1F21",
+        "content": "#FF7C72"
+      }
+    },
+    "info": {
+      "light": {
+        "surface": "#E8EEF0",
+        "content": "#176B82"
+      },
+      "dark": {
+        "surface": "#18333E",
+        "content": "#68C4E2"
+      }
+    },
+    "neutral": {
+      "light": {
+        "surface": "#ECE4D2",
+        "content": "#5F635A"
+      },
+      "dark": {
+        "surface": "#2B3534",
+        "content": "#C4CECA"
+      }
+    },
+    "pending": {
+      "light": {
+        "surface": "#F3EEDB",
+        "content": "#5C6A61"
+      },
+      "dark": {
+        "surface": "#2C2A22",
+        "content": "#D8CFB2"
+      }
+    },
+    "assisted": {
+      "light": {
+        "surface": "#DFF3F1",
+        "content": "#176C67"
+      },
+      "dark": {
+        "surface": "#163331",
+        "content": "#79D9D1"
+      }
+    }
+  },
+  "dataState": {
+    "noData": {
+      "light": "#D5DAD6",
+      "dark": "#404844",
+      "cue": "diagonal-pattern-plus-label"
+    },
+    "zero": {
+      "light": "#7D877F",
+      "dark": "#93A398",
+      "cue": "distinct-outline-only-when-zero-is-a-fact"
+    },
+    "valueStates": {
+      "rule": "EVID-05 as amended in DS0.9.5: six states, never collapse missing into zero",
+      "labelInk": "text.metadata",
+      "disabledHintOnly": "text.muted",
+      "labelPlacement": "legend or table cell, never on the no-data hatch fill (owner decision 15 September 2026)",
+      "states": [
+        {
+          "id": "measured",
+          "th": "ค่าที่มีข้อมูล",
+          "en": "Measured value",
+          "glyph": null,
+          "map": "appropriate analytical class with label and unit",
+          "table": "exact finite nonzero number with unit",
+          "requires": [
+            "unit",
+            "source",
+            "date",
+            "boundary",
+            "limitation"
+          ]
+        },
+        {
+          "id": "measured_zero",
+          "th": "ศูนย์ (สำรวจแล้ว)",
+          "en": "Zero (measured)",
+          "glyph": "0",
+          "map": "lowest class fill + --dataviz-zero-outline 2px",
+          "table": "numeric 0 with unit",
+          "requires": [
+            "unit",
+            "survey completeness"
+          ]
+        },
+        {
+          "id": "no_data",
+          "th": "ไม่มีข้อมูล",
+          "en": "No data",
+          "glyph": "—",
+          "map": "--data-no-data-pattern 135° hatch + --border-emphasis",
+          "table": "— + short reason, sorted last",
+          "requires": [
+            "reason",
+            "latest available value"
+          ]
+        },
+        {
+          "id": "out_of_scope",
+          "th": "นอกขอบเขตข้อมูล",
+          "en": "Out of scope",
+          "glyph": "นอกขอบเขต",
+          "map": "bare basemap (no fill, no hatch)",
+          "table": "text label",
+          "requires": [
+            "scope statement"
+          ]
+        },
+        {
+          "id": "suppressed",
+          "th": "ปิดค่า (n<5)",
+          "en": "Suppressed (n<5)",
+          "glyph": "‹5",
+          "map": "--surface-soft + dashed --border-emphasis",
+          "table": "‹5 + rule",
+          "requires": [
+            "threshold",
+            "aggregation level that unlocks"
+          ]
+        },
+        {
+          "id": "not_yet",
+          "th": "ยังไม่ถึงรอบข้อมูล",
+          "en": "Not yet available",
+          "glyph": "…",
+          "map": "--semantic-pending-fill + dotted --semantic-pending-ink",
+          "table": "… + expected date",
+          "requires": [
+            "expected date",
+            "source cadence"
+          ]
+        }
+      ],
+      "treatments": {
+        "measured_zero": {
+          "map": {
+            "fill": "scale lowest class",
+            "outline": "dataState.zero",
+            "outlineWidthPx": 2
+          },
+          "table": "numeric 0 with unit"
+        },
+        "no_data": {
+          "map": {
+            "fill": "dataState.noData",
+            "pattern": "135deg hatch",
+            "stroke": "border.emphasis"
+          },
+          "table": "— plus short reason; sorted last"
+        },
+        "out_of_scope": {
+          "map": {
+            "fill": "none (bare basemap)"
+          },
+          "table": "text label"
+        },
+        "suppressed": {
+          "map": {
+            "fill": "surface.soft",
+            "stroke": "border.emphasis",
+            "strokeStyle": "dashed"
+          },
+          "table": "‹n plus threshold"
+        },
+        "not_yet": {
+          "map": {
+            "fill": "semantic.pending.surface",
+            "stroke": "semantic.pending.content",
+            "strokeStyle": "dotted"
+          },
+          "table": "… plus expected date"
+        }
+      },
+      "agentContract": "Every governed numeric value carries measured (finite nonzero), measured_zero (0), or an exceptional state (null)."
+    }
+  },
+  "map": {
+    "activeLayer": {
+      "light": "#347DA8",
+      "dark": "#65B6DB"
+    },
+    "hoverStroke": {
+      "light": "#347DA8",
+      "dark": "#65B6DB"
+    },
+    "selectedStroke": {
+      "light": "#176B82",
+      "dark": "#68C4E2"
+    },
+    "focusStroke": {
+      "light": "#176B82",
+      "dark": "#68C4E2"
+    },
+    "markerHalo": {
+      "light": "#FFFFFF",
+      "dark": "#101318"
+    },
+    "markerStroke": {
+      "light": "#182327",
+      "dark": "#F1F4EF"
+    }
+  },
+  "typography": {
+    "families": {
+      "displayLatin": "Arvo",
+      "displayThai": "IBM Plex Sans Thai Looped",
+      "body": "Bai Jamjuree",
+      "technicalLatin": "JetBrains Mono",
+      "technicalThai": "IBM Plex Sans Thai",
+      "symbols": "Material Symbols Rounded"
+    },
+    "weights": {
+      "regular": 400,
+      "semibold": 600,
+      "display": 700,
+      "symbol": 300
+    },
+    "sizes": {
+      "caption": "0.75rem",
+      "label": "0.8125rem",
+      "bodySm": "0.875rem",
+      "body": "1rem",
+      "bodyLg": "1.125rem",
+      "h3": "clamp(1.35rem, 2vw, 1.75rem)",
+      "h2": "clamp(2rem, 4vw, 3.25rem)",
+      "h1Latin": "clamp(3.25rem, 7vw, 6.5rem)",
+      "h1Thai": "clamp(2.5rem, 6vw, 5rem)"
+    },
+    "thaiDisplayLineHeight": {
+      "status": "size-and-script-fixture-required",
+      "deprecatedUniversalValue": 1.16,
+      "safeFallbackWhenUnvalidated": 1.25
+    }
+  },
+  "control": {
+    "discreteTargetMinCssPx": 44,
+    "textOrIconLabelButton": {
+      "shape": "capsule",
+      "minHeightCssPx": 44,
+      "paddingInlineCssPx": 24,
+      "gapCssPx": 8,
+      "borderCssPx": 2,
+      "radiusRef": "layout.radiusPx.pill"
+    },
+    "iconOnlyButton": {
+      "shape": "circle",
+      "widthCssPx": 44,
+      "heightCssPx": 44,
+      "borderCssPx": 2,
+      "accessibleNameRequired": true
+    },
+    "inlineTextLink": {
+      "forcedInto44Box": false,
+      "usesTextLinkExceptionAndSpacingBranch": true
+    }
+  },
+  "layout": {
+    "spacingPx": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      24,
+      32,
+      48,
+      64,
+      96,
+      128
+    ],
+    "radiusPx": {
+      "xs": 6,
+      "sm": 10,
+      "md": 16,
+      "lg": 24,
+      "xl": 32,
+      "pill": 999
+    },
+    "containerPx": {
+      "reading": 760,
+      "default": 1120,
+      "wide": 1280
+    },
+    "gutterPx": [
+      16,
+      24,
+      32
+    ],
+    "breakpointPx": {
+      "xs": 360,
+      "sm": 600,
+      "md": 900,
+      "lg": 1200,
+      "xl": 1600
+    },
+    "directTargetMinCssPx": {
+      "width": 44,
+      "height": 44
+    }
+  },
+  "categoricalSeries": {
+    "registryId": "landometer-series-10-v8",
+    "values": [
+      {
+        "id": "series.01",
+        "name": "coral",
+        "cue": "circle",
+        "light": {
+          "fill": "#D88381",
+          "ink": "#963538",
+          "vivid": "#F66C6D"
+        },
+        "dark": {
+          "fill": "#E37A84",
+          "vivid": "#FF4F6D",
+          "ink": "#FF4F6D"
+        }
+      },
+      {
+        "id": "series.02",
+        "name": "apricot",
+        "cue": "square",
+        "light": {
+          "fill": "#E39B6E",
+          "ink": "#182327",
+          "vivid": "#FF8A36"
+        },
+        "dark": {
+          "fill": "#F59B62",
+          "vivid": "#FF8A37",
+          "ink": "#FF8A37"
+        }
+      },
+      {
+        "id": "series.03",
+        "name": "yellow",
+        "cue": "triangle",
+        "light": {
+          "fill": "#EAC578",
+          "ink": "#182327",
+          "vivid": "#FDC010"
+        },
+        "dark": {
+          "fill": "#ECCB67",
+          "vivid": "#FFD242",
+          "ink": "#FFD242"
+        }
+      },
+      {
+        "id": "series.04",
+        "name": "lime",
+        "cue": "diamond",
+        "light": {
+          "fill": "#BECE7E",
+          "ink": "#606E00",
+          "vivid": "#BBD23C"
+        },
+        "dark": {
+          "fill": "#A9C065",
+          "vivid": "#A9CB00",
+          "ink": "#A9CB00"
+        }
+      },
+      {
+        "id": "series.05",
+        "name": "mint",
+        "cue": "cross",
+        "light": {
+          "fill": "#7BD0A3",
+          "ink": "#007047",
+          "vivid": "#2ADB94"
+        },
+        "dark": {
+          "fill": "#6EC69D",
+          "vivid": "#00E39D",
+          "ink": "#00E39D"
+        }
+      },
+      {
+        "id": "series.06",
+        "name": "sky",
+        "cue": "star",
+        "light": {
+          "fill": "#6ACCF0",
+          "ink": "#006580",
+          "vivid": "#36D0FF"
+        },
+        "dark": {
+          "fill": "#62BEE6",
+          "vivid": "#54CDFF",
+          "ink": "#54CDFF"
+        }
+      },
+      {
+        "id": "series.07",
+        "name": "teal",
+        "cue": "hexagon",
+        "light": {
+          "fill": "#49C0BC",
+          "ink": "#006967",
+          "vivid": "#00C4BF"
+        },
+        "dark": {
+          "fill": "#2DA096",
+          "vivid": "#00B6AB",
+          "ink": "#00B6AB"
+        }
+      },
+      {
+        "id": "series.08",
+        "name": "blue",
+        "cue": "ring",
+        "light": {
+          "fill": "#6196D1",
+          "ink": "#0E599D",
+          "vivid": "#3295F6"
+        },
+        "dark": {
+          "fill": "#5A8CDA",
+          "vivid": "#5396FF",
+          "ink": "#5396FF"
+        }
+      },
+      {
+        "id": "series.09",
+        "name": "slate",
+        "cue": "dash",
+        "light": {
+          "fill": "#8AA4AA",
+          "ink": "#355F6A",
+          "vivid": "#7FA6B0"
+        },
+        "dark": {
+          "fill": "#BFD4E7",
+          "vivid": "#C0DBF4",
+          "ink": "#C0DBF4"
+        }
+      },
+      {
+        "id": "series.10",
+        "name": "green",
+        "cue": "plus",
+        "light": {
+          "fill": "#82AC79",
+          "ink": "#34622A",
+          "vivid": "#71B262"
+        },
+        "dark": {
+          "fill": "#5B9455",
+          "vivid": "#3CA633",
+          "ink": "#3CA633"
+        }
+      }
+    ],
+    "defaultVariant": "soft",
+    "variants": [
+      "soft",
+      "vivid"
+    ],
+    "policyRef": "policy.json#/categorical"
+  },
+  "analyticalScales": [
+    {
+      "scaleId": "density.area",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "ความหนาแน่นต่อพื้นที่",
+      "meaning": "จำนวนต่อหน่วยพื้นที่ ต้องระบุหน่วยพื้นที่",
+      "unitExample": "แห่ง / ตร.กม.",
+      "use": "per km², per rai (denominator = area)",
+      "directionLabel": "gold / orange",
+      "designNote": "Land-area denominator stays orange. The golden middle and clean orange high avoid borrowing the urgent red reserved for risk. Always state km², rai or the actual area denominator. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF1D9",
+        "#E6AB30",
+        "#D6600C"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF1D9",
+        "#FEEED2",
+        "#FDEACA",
+        "#FCE7C3",
+        "#FAE3BC",
+        "#F9E0B5",
+        "#F8DCAD",
+        "#F7D9A6",
+        "#F6D59E",
+        "#F4D297",
+        "#F3CF8F",
+        "#F2CB87",
+        "#F1C87F",
+        "#EFC477",
+        "#EEC06F",
+        "#EDBD66",
+        "#EBB95D",
+        "#EAB653",
+        "#E9B249",
+        "#E7AF3D",
+        "#E6AB30",
+        "#E5A72E",
+        "#E5A42D",
+        "#E4A02B",
+        "#E49D2A",
+        "#E39928",
+        "#E29526",
+        "#E29225",
+        "#E18E23",
+        "#E08A21",
+        "#DF8720",
+        "#DF831E",
+        "#DE7F1C",
+        "#DD7B1A",
+        "#DC7818",
+        "#DB7417",
+        "#DA7015",
+        "#D96C13",
+        "#D86811",
+        "#D7640E",
+        "#D6600C"
+      ],
+      "classes": {
+        "3": [
+          "#FFF1D9",
+          "#E6AB30",
+          "#D6600C"
+        ],
+        "5": [
+          "#FFF1D9",
+          "#F3CF8F",
+          "#E6AB30",
+          "#DF8720",
+          "#D6600C"
+        ],
+        "7": [
+          "#FFF1D9",
+          "#F7D9A6",
+          "#EFC477",
+          "#E6AB30",
+          "#E29225",
+          "#DD7B1A",
+          "#D6600C"
+        ],
+        "9": [
+          "#FFF1D9",
+          "#F9E0B5",
+          "#F3CF8F",
+          "#EDBD66",
+          "#E6AB30",
+          "#E39928",
+          "#DF8720",
+          "#DB7417",
+          "#D6600C"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "554812a7c19107b3a9b8658ba541fc8e13519cb19708e885a425f32d5b30f101",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "density.area",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "ความหนาแน่นต่อพื้นที่",
+      "meaning": "จำนวนต่อหน่วยพื้นที่ ต้องระบุหน่วยพื้นที่",
+      "unitExample": "แห่ง / ตร.กม.",
+      "use": "per km², per rai (denominator = area)",
+      "directionLabel": "gold / orange",
+      "designNote": "Land-area denominator stays orange. The golden middle and clean orange high avoid borrowing the urgent red reserved for risk. Always state km², rai or the actual area denominator. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF1D9",
+        "#E6AB30",
+        "#D6600C"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF1D9",
+        "#FEEED2",
+        "#FDEACA",
+        "#FCE7C3",
+        "#FAE3BC",
+        "#F9E0B5",
+        "#F8DCAD",
+        "#F7D9A6",
+        "#F6D59E",
+        "#F4D297",
+        "#F3CF8F",
+        "#F2CB87",
+        "#F1C87F",
+        "#EFC477",
+        "#EEC06F",
+        "#EDBD66",
+        "#EBB95D",
+        "#EAB653",
+        "#E9B249",
+        "#E7AF3D",
+        "#E6AB30",
+        "#E5A72E",
+        "#E5A42D",
+        "#E4A02B",
+        "#E49D2A",
+        "#E39928",
+        "#E29526",
+        "#E29225",
+        "#E18E23",
+        "#E08A21",
+        "#DF8720",
+        "#DF831E",
+        "#DE7F1C",
+        "#DD7B1A",
+        "#DC7818",
+        "#DB7417",
+        "#DA7015",
+        "#D96C13",
+        "#D86811",
+        "#D7640E",
+        "#D6600C"
+      ],
+      "classes": {
+        "3": [
+          "#FFF1D9",
+          "#E6AB30",
+          "#D6600C"
+        ],
+        "5": [
+          "#FFF1D9",
+          "#F3CF8F",
+          "#E6AB30",
+          "#DF8720",
+          "#D6600C"
+        ],
+        "7": [
+          "#FFF1D9",
+          "#F7D9A6",
+          "#EFC477",
+          "#E6AB30",
+          "#E29225",
+          "#DD7B1A",
+          "#D6600C"
+        ],
+        "9": [
+          "#FFF1D9",
+          "#F9E0B5",
+          "#F3CF8F",
+          "#EDBD66",
+          "#E6AB30",
+          "#E39928",
+          "#DF8720",
+          "#DB7417",
+          "#D6600C"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "554812a7c19107b3a9b8658ba541fc8e13519cb19708e885a425f32d5b30f101",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "density.household",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "ต่อครัวเรือน",
+      "meaning": "ระบุตัวหารเป็นครัวเรือน",
+      "unitExample": "หน่วย / ครัวเรือน",
+      "use": "per 100 households (denominator = household · Living)",
+      "directionLabel": "rose / scarlet coral",
+      "designNote": "Household density uses a rose middle and a lighter scarlet/coral high than risk. This warm living-related lane is not a hazard code. Always name the household denominator. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF2E4",
+        "#EF84A3",
+        "#DF491F"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF2E4",
+        "#FFEDE1",
+        "#FFE7DD",
+        "#FEE2DA",
+        "#FEDCD7",
+        "#FDD7D3",
+        "#FDD1D0",
+        "#FCCCCD",
+        "#FCC7CA",
+        "#FBC1C6",
+        "#FABCC3",
+        "#F9B6C0",
+        "#F8B1BD",
+        "#F7ABB9",
+        "#F6A6B6",
+        "#F5A0B3",
+        "#F49BB0",
+        "#F395AD",
+        "#F28FA9",
+        "#F08AA6",
+        "#EF84A3",
+        "#EE819D",
+        "#EE7F98",
+        "#ED7C92",
+        "#EC7A8C",
+        "#EB7787",
+        "#EB7481",
+        "#EA727B",
+        "#E96F75",
+        "#E86C70",
+        "#E8696A",
+        "#E76664",
+        "#E6635D",
+        "#E56057",
+        "#E45D51",
+        "#E35A4A",
+        "#E35743",
+        "#E2543B",
+        "#E15033",
+        "#E04D2A",
+        "#DF491F"
+      ],
+      "classes": {
+        "3": [
+          "#FFF2E4",
+          "#EF84A3",
+          "#DF491F"
+        ],
+        "5": [
+          "#FFF2E4",
+          "#FABCC3",
+          "#EF84A3",
+          "#E8696A",
+          "#DF491F"
+        ],
+        "7": [
+          "#FFF2E4",
+          "#FCCCCD",
+          "#F7ABB9",
+          "#EF84A3",
+          "#EA727B",
+          "#E56057",
+          "#DF491F"
+        ],
+        "9": [
+          "#FFF2E4",
+          "#FDD7D3",
+          "#FABCC3",
+          "#F5A0B3",
+          "#EF84A3",
+          "#EB7787",
+          "#E8696A",
+          "#E35A4A",
+          "#DF491F"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "4219491ca990af391a4d5320183601149b86bc19b0cc4da5a575c95673d2c843",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "density.household",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "ต่อครัวเรือน",
+      "meaning": "ระบุตัวหารเป็นครัวเรือน",
+      "unitExample": "หน่วย / ครัวเรือน",
+      "use": "per 100 households (denominator = household · Living)",
+      "directionLabel": "rose / scarlet coral",
+      "designNote": "Household density uses a rose middle and a lighter scarlet/coral high than risk. This warm living-related lane is not a hazard code. Always name the household denominator. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF2E4",
+        "#EF84A3",
+        "#DF491F"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF2E4",
+        "#FFEDE1",
+        "#FFE7DD",
+        "#FEE2DA",
+        "#FEDCD7",
+        "#FDD7D3",
+        "#FDD1D0",
+        "#FCCCCD",
+        "#FCC7CA",
+        "#FBC1C6",
+        "#FABCC3",
+        "#F9B6C0",
+        "#F8B1BD",
+        "#F7ABB9",
+        "#F6A6B6",
+        "#F5A0B3",
+        "#F49BB0",
+        "#F395AD",
+        "#F28FA9",
+        "#F08AA6",
+        "#EF84A3",
+        "#EE819D",
+        "#EE7F98",
+        "#ED7C92",
+        "#EC7A8C",
+        "#EB7787",
+        "#EB7481",
+        "#EA727B",
+        "#E96F75",
+        "#E86C70",
+        "#E8696A",
+        "#E76664",
+        "#E6635D",
+        "#E56057",
+        "#E45D51",
+        "#E35A4A",
+        "#E35743",
+        "#E2543B",
+        "#E15033",
+        "#E04D2A",
+        "#DF491F"
+      ],
+      "classes": {
+        "3": [
+          "#FFF2E4",
+          "#EF84A3",
+          "#DF491F"
+        ],
+        "5": [
+          "#FFF2E4",
+          "#FABCC3",
+          "#EF84A3",
+          "#E8696A",
+          "#DF491F"
+        ],
+        "7": [
+          "#FFF2E4",
+          "#FCCCCD",
+          "#F7ABB9",
+          "#EF84A3",
+          "#EA727B",
+          "#E56057",
+          "#DF491F"
+        ],
+        "9": [
+          "#FFF2E4",
+          "#FDD7D3",
+          "#FABCC3",
+          "#F5A0B3",
+          "#EF84A3",
+          "#EB7787",
+          "#E8696A",
+          "#E35A4A",
+          "#DF491F"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "4219491ca990af391a4d5320183601149b86bc19b0cc4da5a575c95673d2c843",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "count",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "จำนวนรวม",
+      "meaning": "จำนวนรวม ไม่ใช่อัตราหรือความหนาแน่น",
+      "unitExample": "แห่ง",
+      "use": "population, number of firms, vehicles (totals)",
+      "directionLabel": "dusty cyan / editorial navy",
+      "designNote": "A dusty cyan middle and deep editorial navy end give totals weight without heat or danger meaning. Count is not an area/population/household rate. Blue-family collisions remain a specific review item. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#F4F0E7",
+        "#7DBAC0",
+        "#213E70"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#F4F0E7",
+        "#EEEDE5",
+        "#E8EBE3",
+        "#E3E8E1",
+        "#DDE5DF",
+        "#D7E3DD",
+        "#D1E0DB",
+        "#CBDDD9",
+        "#C5DAD7",
+        "#C0D8D6",
+        "#BAD5D4",
+        "#B4D2D2",
+        "#AED0D0",
+        "#A8CDCE",
+        "#A2CACC",
+        "#9CC8CA",
+        "#96C5C8",
+        "#90C2C6",
+        "#8ABFC4",
+        "#83BDC2",
+        "#7DBAC0",
+        "#78B3BC",
+        "#73ADB8",
+        "#6EA7B4",
+        "#69A0B0",
+        "#649AAC",
+        "#5F93A8",
+        "#5A8DA4",
+        "#5587A0",
+        "#50809C",
+        "#4C7A98",
+        "#477494",
+        "#436E90",
+        "#3E688C",
+        "#3A6288",
+        "#355C84",
+        "#315680",
+        "#2D507C",
+        "#294A78",
+        "#254474",
+        "#213E70"
+      ],
+      "classes": {
+        "3": [
+          "#F4F0E7",
+          "#7DBAC0",
+          "#213E70"
+        ],
+        "5": [
+          "#F4F0E7",
+          "#BAD5D4",
+          "#7DBAC0",
+          "#4C7A98",
+          "#213E70"
+        ],
+        "7": [
+          "#F4F0E7",
+          "#CBDDD9",
+          "#A8CDCE",
+          "#7DBAC0",
+          "#5A8DA4",
+          "#3E688C",
+          "#213E70"
+        ],
+        "9": [
+          "#F4F0E7",
+          "#D7E3DD",
+          "#BAD5D4",
+          "#9CC8CA",
+          "#7DBAC0",
+          "#649AAC",
+          "#4C7A98",
+          "#355C84",
+          "#213E70"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "4ff5c1fb4be71ecd13c48685b38371b528bcd4ce369ce964a75354c2eb4d0980",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "count",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "จำนวนรวม",
+      "meaning": "จำนวนรวม ไม่ใช่อัตราหรือความหนาแน่น",
+      "unitExample": "แห่ง",
+      "use": "population, number of firms, vehicles (totals)",
+      "directionLabel": "dusty cyan / editorial navy",
+      "designNote": "A dusty cyan middle and deep editorial navy end give totals weight without heat or danger meaning. Count is not an area/population/household rate. Blue-family collisions remain a specific review item. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#F4F0E7",
+        "#7DBAC0",
+        "#213E70"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#F4F0E7",
+        "#EEEDE5",
+        "#E8EBE3",
+        "#E3E8E1",
+        "#DDE5DF",
+        "#D7E3DD",
+        "#D1E0DB",
+        "#CBDDD9",
+        "#C5DAD7",
+        "#C0D8D6",
+        "#BAD5D4",
+        "#B4D2D2",
+        "#AED0D0",
+        "#A8CDCE",
+        "#A2CACC",
+        "#9CC8CA",
+        "#96C5C8",
+        "#90C2C6",
+        "#8ABFC4",
+        "#83BDC2",
+        "#7DBAC0",
+        "#78B3BC",
+        "#73ADB8",
+        "#6EA7B4",
+        "#69A0B0",
+        "#649AAC",
+        "#5F93A8",
+        "#5A8DA4",
+        "#5587A0",
+        "#50809C",
+        "#4C7A98",
+        "#477494",
+        "#436E90",
+        "#3E688C",
+        "#3A6288",
+        "#355C84",
+        "#315680",
+        "#2D507C",
+        "#294A78",
+        "#254474",
+        "#213E70"
+      ],
+      "classes": {
+        "3": [
+          "#F4F0E7",
+          "#7DBAC0",
+          "#213E70"
+        ],
+        "5": [
+          "#F4F0E7",
+          "#BAD5D4",
+          "#7DBAC0",
+          "#4C7A98",
+          "#213E70"
+        ],
+        "7": [
+          "#F4F0E7",
+          "#CBDDD9",
+          "#A8CDCE",
+          "#7DBAC0",
+          "#5A8DA4",
+          "#3E688C",
+          "#213E70"
+        ],
+        "9": [
+          "#F4F0E7",
+          "#D7E3DD",
+          "#BAD5D4",
+          "#9CC8CA",
+          "#7DBAC0",
+          "#649AAC",
+          "#4C7A98",
+          "#355C84",
+          "#213E70"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "4ff5c1fb4be71ecd13c48685b38371b528bcd4ce369ce964a75354c2eb4d0980",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "water",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "น้ำ",
+      "meaning": "ปริมาณหรือระดับน้ำตามหน่วยที่ระบุ",
+      "unitExample": "ระดับน้ำตัวอย่าง",
+      "use": "water level, depth, flood frequency",
+      "directionLabel": "ice / cyan / deep blue",
+      "designNote": "Every phase stays in an aquatic cyan/blue vocabulary; no lime or foliage middle. This maps amount/depth/frequency of water, not flood-danger categories; consequence-based risk uses the risk family. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#EEF7FC",
+        "#3DBBCD",
+        "#073E78"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#EEF7FC",
+        "#E6F4FA",
+        "#DFF1F7",
+        "#D7EEF5",
+        "#D0EBF3",
+        "#C8E8F0",
+        "#C0E5EE",
+        "#B8E2EC",
+        "#B0DFE9",
+        "#A8DCE7",
+        "#A0D9E5",
+        "#98D6E2",
+        "#90D3E0",
+        "#87D0DE",
+        "#7ECDDB",
+        "#75CAD9",
+        "#6BC7D6",
+        "#61C4D4",
+        "#56C1D2",
+        "#4BBECF",
+        "#3DBBCD",
+        "#3AB4C9",
+        "#36AEC4",
+        "#33A7C0",
+        "#30A1BC",
+        "#2D9BB8",
+        "#2A94B4",
+        "#278EAF",
+        "#2387AB",
+        "#2181A7",
+        "#1E7BA3",
+        "#1B759E",
+        "#186F9A",
+        "#156896",
+        "#136292",
+        "#105C8D",
+        "#0E5689",
+        "#0C5085",
+        "#0A4A81",
+        "#08447C",
+        "#073E78"
+      ],
+      "classes": {
+        "3": [
+          "#EEF7FC",
+          "#3DBBCD",
+          "#073E78"
+        ],
+        "5": [
+          "#EEF7FC",
+          "#A0D9E5",
+          "#3DBBCD",
+          "#1E7BA3",
+          "#073E78"
+        ],
+        "7": [
+          "#EEF7FC",
+          "#B8E2EC",
+          "#87D0DE",
+          "#3DBBCD",
+          "#278EAF",
+          "#156896",
+          "#073E78"
+        ],
+        "9": [
+          "#EEF7FC",
+          "#C8E8F0",
+          "#A0D9E5",
+          "#75CAD9",
+          "#3DBBCD",
+          "#2D9BB8",
+          "#1E7BA3",
+          "#105C8D",
+          "#073E78"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "99754dd9298f92e96bbc071cc14e7d2f209ba7ea6f52817e0e13ee2227c518e2",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "water",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "น้ำ",
+      "meaning": "ปริมาณหรือระดับน้ำตามหน่วยที่ระบุ",
+      "unitExample": "ระดับน้ำตัวอย่าง",
+      "use": "water level, depth, flood frequency",
+      "directionLabel": "ice / cyan / deep blue",
+      "designNote": "Every phase stays in an aquatic cyan/blue vocabulary; no lime or foliage middle. This maps amount/depth/frequency of water, not flood-danger categories; consequence-based risk uses the risk family. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#EEF7FC",
+        "#3DBBCD",
+        "#073E78"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#EEF7FC",
+        "#E6F4FA",
+        "#DFF1F7",
+        "#D7EEF5",
+        "#D0EBF3",
+        "#C8E8F0",
+        "#C0E5EE",
+        "#B8E2EC",
+        "#B0DFE9",
+        "#A8DCE7",
+        "#A0D9E5",
+        "#98D6E2",
+        "#90D3E0",
+        "#87D0DE",
+        "#7ECDDB",
+        "#75CAD9",
+        "#6BC7D6",
+        "#61C4D4",
+        "#56C1D2",
+        "#4BBECF",
+        "#3DBBCD",
+        "#3AB4C9",
+        "#36AEC4",
+        "#33A7C0",
+        "#30A1BC",
+        "#2D9BB8",
+        "#2A94B4",
+        "#278EAF",
+        "#2387AB",
+        "#2181A7",
+        "#1E7BA3",
+        "#1B759E",
+        "#186F9A",
+        "#156896",
+        "#136292",
+        "#105C8D",
+        "#0E5689",
+        "#0C5085",
+        "#0A4A81",
+        "#08447C",
+        "#073E78"
+      ],
+      "classes": {
+        "3": [
+          "#EEF7FC",
+          "#3DBBCD",
+          "#073E78"
+        ],
+        "5": [
+          "#EEF7FC",
+          "#A0D9E5",
+          "#3DBBCD",
+          "#1E7BA3",
+          "#073E78"
+        ],
+        "7": [
+          "#EEF7FC",
+          "#B8E2EC",
+          "#87D0DE",
+          "#3DBBCD",
+          "#278EAF",
+          "#156896",
+          "#073E78"
+        ],
+        "9": [
+          "#EEF7FC",
+          "#C8E8F0",
+          "#A0D9E5",
+          "#75CAD9",
+          "#3DBBCD",
+          "#2D9BB8",
+          "#1E7BA3",
+          "#105C8D",
+          "#073E78"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "99754dd9298f92e96bbc071cc14e7d2f209ba7ea6f52817e0e13ee2227c518e2",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "density.capita",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "ต่อประชากร",
+      "meaning": "ระบุตัวหารและฐานประชากร",
+      "unitExample": "หน่วย / คน",
+      "use": "per 1,000 people (denominator = people)",
+      "directionLabel": "salmon / rose",
+      "designNote": "Per-person density stays warm with a salmon middle and rose high. It must remain distinct from household scarlet and never be read as demographic behaviour, eligibility or risk. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF0ED",
+        "#F3A076",
+        "#B72B63"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF0ED",
+        "#FFECE7",
+        "#FEE8E1",
+        "#FEE4DB",
+        "#FEE0D5",
+        "#FDDCCF",
+        "#FDD8CA",
+        "#FCD4C4",
+        "#FCD0BE",
+        "#FBCCB8",
+        "#FBC8B2",
+        "#FAC4AC",
+        "#F9C0A6",
+        "#F9BCA0",
+        "#F8B89A",
+        "#F7B494",
+        "#F6B08E",
+        "#F6AC88",
+        "#F5A882",
+        "#F4A47C",
+        "#F3A076",
+        "#F09B75",
+        "#ED9575",
+        "#EB9074",
+        "#E88B73",
+        "#E58572",
+        "#E28072",
+        "#DF7A71",
+        "#DC7570",
+        "#D96F6F",
+        "#D66A6E",
+        "#D3646D",
+        "#D05F6C",
+        "#CD596B",
+        "#CA536A",
+        "#C74D69",
+        "#C44768",
+        "#C14167",
+        "#BD3A65",
+        "#BA3364",
+        "#B72B63"
+      ],
+      "classes": {
+        "3": [
+          "#FFF0ED",
+          "#F3A076",
+          "#B72B63"
+        ],
+        "5": [
+          "#FFF0ED",
+          "#FBC8B2",
+          "#F3A076",
+          "#D66A6E",
+          "#B72B63"
+        ],
+        "7": [
+          "#FFF0ED",
+          "#FCD4C4",
+          "#F9BCA0",
+          "#F3A076",
+          "#DF7A71",
+          "#CD596B",
+          "#B72B63"
+        ],
+        "9": [
+          "#FFF0ED",
+          "#FDDCCF",
+          "#FBC8B2",
+          "#F7B494",
+          "#F3A076",
+          "#E58572",
+          "#D66A6E",
+          "#C74D69",
+          "#B72B63"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "0b49c15c6f91e48db79f5c6bd9c729656c95cd6f3162941490c5c125111b4ab1",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "density.capita",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "ต่อประชากร",
+      "meaning": "ระบุตัวหารและฐานประชากร",
+      "unitExample": "หน่วย / คน",
+      "use": "per 1,000 people (denominator = people)",
+      "directionLabel": "salmon / rose",
+      "designNote": "Per-person density stays warm with a salmon middle and rose high. It must remain distinct from household scarlet and never be read as demographic behaviour, eligibility or risk. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF0ED",
+        "#F3A076",
+        "#B72B63"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF0ED",
+        "#FFECE7",
+        "#FEE8E1",
+        "#FEE4DB",
+        "#FEE0D5",
+        "#FDDCCF",
+        "#FDD8CA",
+        "#FCD4C4",
+        "#FCD0BE",
+        "#FBCCB8",
+        "#FBC8B2",
+        "#FAC4AC",
+        "#F9C0A6",
+        "#F9BCA0",
+        "#F8B89A",
+        "#F7B494",
+        "#F6B08E",
+        "#F6AC88",
+        "#F5A882",
+        "#F4A47C",
+        "#F3A076",
+        "#F09B75",
+        "#ED9575",
+        "#EB9074",
+        "#E88B73",
+        "#E58572",
+        "#E28072",
+        "#DF7A71",
+        "#DC7570",
+        "#D96F6F",
+        "#D66A6E",
+        "#D3646D",
+        "#D05F6C",
+        "#CD596B",
+        "#CA536A",
+        "#C74D69",
+        "#C44768",
+        "#C14167",
+        "#BD3A65",
+        "#BA3364",
+        "#B72B63"
+      ],
+      "classes": {
+        "3": [
+          "#FFF0ED",
+          "#F3A076",
+          "#B72B63"
+        ],
+        "5": [
+          "#FFF0ED",
+          "#FBC8B2",
+          "#F3A076",
+          "#D66A6E",
+          "#B72B63"
+        ],
+        "7": [
+          "#FFF0ED",
+          "#FCD4C4",
+          "#F9BCA0",
+          "#F3A076",
+          "#DF7A71",
+          "#CD596B",
+          "#B72B63"
+        ],
+        "9": [
+          "#FFF0ED",
+          "#FDDCCF",
+          "#FBC8B2",
+          "#F7B494",
+          "#F3A076",
+          "#E58572",
+          "#D66A6E",
+          "#C74D69",
+          "#B72B63"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "0b49c15c6f91e48db79f5c6bd9c729656c95cd6f3162941490c5c125111b4ab1",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "built",
+      "kind": "sequential",
+      "theme": "light",
+      "label": "พื้นที่ก่อสร้าง",
+      "meaning": "ความเข้มข้นของสิ่งปลูกสร้างตามนิยามชุดข้อมูล",
+      "unitExample": "ดัชนีตัวอย่าง",
+      "use": "building footprint, height, coverage",
+      "directionLabel": "peach / gold",
+      "designNote": "The built-area family stays gold with a peach middle. Gold has a shorter useful lightness range before becoming prohibited brown; class-count limitations are reported rather than hidden. State footprint, height or coverage definition. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF5D8",
+        "#F3BC93",
+        "#BFA000"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF5D8",
+        "#FFF2D5",
+        "#FEEFD1",
+        "#FEECCE",
+        "#FDEACA",
+        "#FDE7C7",
+        "#FCE4C3",
+        "#FBE1C0",
+        "#FBDEBC",
+        "#FADBB9",
+        "#FAD8B5",
+        "#F9D6B2",
+        "#F9D3AF",
+        "#F8D0AB",
+        "#F7CDA8",
+        "#F7CAA4",
+        "#F6C7A1",
+        "#F5C59D",
+        "#F4C29A",
+        "#F4BF96",
+        "#F3BC93",
+        "#F0BB8E",
+        "#EEB989",
+        "#EBB884",
+        "#E8B77F",
+        "#E6B57A",
+        "#E3B475",
+        "#E0B370",
+        "#DEB16A",
+        "#DBB065",
+        "#D9AE5F",
+        "#D6AD59",
+        "#D3AC53",
+        "#D1AA4D",
+        "#CEA946",
+        "#CCA73F",
+        "#C9A638",
+        "#C7A42F",
+        "#C4A325",
+        "#C2A118",
+        "#BFA000"
+      ],
+      "classes": {
+        "3": [
+          "#FFF5D8",
+          "#F3BC93",
+          "#BFA000"
+        ],
+        "5": [
+          "#FFF5D8",
+          "#FAD8B5",
+          "#F3BC93",
+          "#D9AE5F",
+          "#BFA000"
+        ],
+        "7": [
+          "#FFF5D8",
+          "#FBE1C0",
+          "#F8D0AB",
+          "#F3BC93",
+          "#E0B370",
+          "#D1AA4D",
+          "#BFA000"
+        ],
+        "9": [
+          "#FFF5D8",
+          "#FDE7C7",
+          "#FAD8B5",
+          "#F7CAA4",
+          "#F3BC93",
+          "#E6B57A",
+          "#D9AE5F",
+          "#CCA73F",
+          "#BFA000"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "f161dbd3448675c99137879735e1bda2cde4c33644e889ca3b9166cbfc9df3fb",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "built",
+      "kind": "sequential",
+      "theme": "dark",
+      "label": "พื้นที่ก่อสร้าง",
+      "meaning": "ความเข้มข้นของสิ่งปลูกสร้างตามนิยามชุดข้อมูล",
+      "unitExample": "ดัชนีตัวอย่าง",
+      "use": "building footprint, height, coverage",
+      "directionLabel": "peach / gold",
+      "designNote": "The built-area family stays gold with a peach middle. Gold has a shorter useful lightness range before becoming prohibited brown; class-count limitations are reported rather than hidden. State footprint, height or coverage definition. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#FFF5D8",
+        "#F3BC93",
+        "#BFA000"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#FFF5D8",
+        "#FFF2D5",
+        "#FEEFD1",
+        "#FEECCE",
+        "#FDEACA",
+        "#FDE7C7",
+        "#FCE4C3",
+        "#FBE1C0",
+        "#FBDEBC",
+        "#FADBB9",
+        "#FAD8B5",
+        "#F9D6B2",
+        "#F9D3AF",
+        "#F8D0AB",
+        "#F7CDA8",
+        "#F7CAA4",
+        "#F6C7A1",
+        "#F5C59D",
+        "#F4C29A",
+        "#F4BF96",
+        "#F3BC93",
+        "#F0BB8E",
+        "#EEB989",
+        "#EBB884",
+        "#E8B77F",
+        "#E6B57A",
+        "#E3B475",
+        "#E0B370",
+        "#DEB16A",
+        "#DBB065",
+        "#D9AE5F",
+        "#D6AD59",
+        "#D3AC53",
+        "#D1AA4D",
+        "#CEA946",
+        "#CCA73F",
+        "#C9A638",
+        "#C7A42F",
+        "#C4A325",
+        "#C2A118",
+        "#BFA000"
+      ],
+      "classes": {
+        "3": [
+          "#FFF5D8",
+          "#F3BC93",
+          "#BFA000"
+        ],
+        "5": [
+          "#FFF5D8",
+          "#FAD8B5",
+          "#F3BC93",
+          "#D9AE5F",
+          "#BFA000"
+        ],
+        "7": [
+          "#FFF5D8",
+          "#FBE1C0",
+          "#F8D0AB",
+          "#F3BC93",
+          "#E0B370",
+          "#D1AA4D",
+          "#BFA000"
+        ],
+        "9": [
+          "#FFF5D8",
+          "#FDE7C7",
+          "#FAD8B5",
+          "#F7CAA4",
+          "#F3BC93",
+          "#E6B57A",
+          "#D9AE5F",
+          "#CCA73F",
+          "#BFA000"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "f161dbd3448675c99137879735e1bda2cde4c33644e889ca3b9166cbfc9df3fb",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "flow",
+      "kind": "diverging",
+      "theme": "light",
+      "label": "การไหลสุทธิ",
+      "meaning": "ขาออกและขาเข้ารอบค่าสุทธิศูนย์",
+      "unitExample": "การไหลสุทธิตัวอย่าง",
+      "use": "out-migration ↔ in-migration · closures ↔ openings",
+      "directionLabel": "coral / neutral / teal",
+      "designNote": "Coral outflow and teal inflow keep directional movement distinct from accumulated activity. Use arrows, signed labels and explicit boundary/time units. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#C95368",
+        "#F1F3EC",
+        "#2E9095"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#C95368",
+        "#CC5C6E",
+        "#CF6474",
+        "#D26D7B",
+        "#D57581",
+        "#D77D87",
+        "#DA858E",
+        "#DC8D94",
+        "#DF959B",
+        "#E19DA1",
+        "#E3A5A8",
+        "#E5ACAE",
+        "#E7B4B5",
+        "#E8BCBC",
+        "#EAC4C3",
+        "#ECCCC9",
+        "#EDD4D0",
+        "#EEDBD7",
+        "#EFE3DE",
+        "#F0EBE5",
+        "#F1F3EC",
+        "#E8EEE8",
+        "#DFE9E3",
+        "#D6E4DF",
+        "#CDDFDA",
+        "#C4DAD6",
+        "#BBD5D1",
+        "#B2D0CD",
+        "#A9CBC9",
+        "#A0C6C4",
+        "#97C1C0",
+        "#8DBCBC",
+        "#84B7B7",
+        "#7BB2B3",
+        "#71ADAF",
+        "#67A8AA",
+        "#5DA4A6",
+        "#539FA2",
+        "#489A9D",
+        "#3C9599",
+        "#2E9095"
+      ],
+      "classes": {
+        "3": [
+          "#C95368",
+          "#F1F3EC",
+          "#2E9095"
+        ],
+        "5": [
+          "#C95368",
+          "#E3A5A8",
+          "#F1F3EC",
+          "#97C1C0",
+          "#2E9095"
+        ],
+        "7": [
+          "#C95368",
+          "#DC8D94",
+          "#E8BCBC",
+          "#F1F3EC",
+          "#B2D0CD",
+          "#7BB2B3",
+          "#2E9095"
+        ],
+        "9": [
+          "#C95368",
+          "#D77D87",
+          "#E3A5A8",
+          "#ECCCC9",
+          "#F1F3EC",
+          "#C4DAD6",
+          "#97C1C0",
+          "#67A8AA",
+          "#2E9095"
+        ]
+      },
+      "canvas": "#F6F7F3",
+      "noData": "#D5DAD6",
+      "zeroOutline": "#7D877F",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "74619cfd484c3894314a693d103dda5987a8ef0e46f445663b4703b72caff223",
+      "pivotMeaning": "Zero net flow over the same time interval and boundary.",
+      "themePolicy": "identical-light-values-on-both-themes"
+    },
+    {
+      "scaleId": "flow",
+      "kind": "diverging",
+      "theme": "dark",
+      "label": "การไหลสุทธิ",
+      "meaning": "ขาออกและขาเข้ารอบค่าสุทธิศูนย์",
+      "unitExample": "การไหลสุทธิตัวอย่าง",
+      "use": "out-migration ↔ in-migration · closures ↔ openings",
+      "directionLabel": "coral / neutral / teal",
+      "designNote": "Coral outflow and teal inflow keep directional movement distinct from accumulated activity. Use arrows, signed labels and explicit boundary/time units. Same approved light colors and value direction on both themes; use readable labels, boundaries or a neutral backplate without recoloring the data.",
+      "anchors": [
+        "#C95368",
+        "#F1F3EC",
+        "#2E9095"
+      ],
+      "knots": null,
+      "positions": [
+        0,
+        20,
+        40
+      ],
+      "interpolation": "none at consumption; exact approved 41-sample sRGB lookup table",
+      "lut": [
+        "#C95368",
+        "#CC5C6E",
+        "#CF6474",
+        "#D26D7B",
+        "#D57581",
+        "#D77D87",
+        "#DA858E",
+        "#DC8D94",
+        "#DF959B",
+        "#E19DA1",
+        "#E3A5A8",
+        "#E5ACAE",
+        "#E7B4B5",
+        "#E8BCBC",
+        "#EAC4C3",
+        "#ECCCC9",
+        "#EDD4D0",
+        "#EEDBD7",
+        "#EFE3DE",
+        "#F0EBE5",
+        "#F1F3EC",
+        "#E8EEE8",
+        "#DFE9E3",
+        "#D6E4DF",
+        "#CDDFDA",
+        "#C4DAD6",
+        "#BBD5D1",
+        "#B2D0CD",
+        "#A9CBC9",
+        "#A0C6C4",
+        "#97C1C0",
+        "#8DBCBC",
+        "#84B7B7",
+        "#7BB2B3",
+        "#71ADAF",
+        "#67A8AA",
+        "#5DA4A6",
+        "#539FA2",
+        "#489A9D",
+        "#3C9599",
+        "#2E9095"
+      ],
+      "classes": {
+        "3": [
+          "#C95368",
+          "#F1F3EC",
+          "#2E9095"
+        ],
+        "5": [
+          "#C95368",
+          "#E3A5A8",
+          "#F1F3EC",
+          "#97C1C0",
+          "#2E9095"
+        ],
+        "7": [
+          "#C95368",
+          "#DC8D94",
+          "#E8BCBC",
+          "#F1F3EC",
+          "#B2D0CD",
+          "#7BB2B3",
+          "#2E9095"
+        ],
+        "9": [
+          "#C95368",
+          "#D77D87",
+          "#E3A5A8",
+          "#ECCCC9",
+          "#F1F3EC",
+          "#C4DAD6",
+          "#97C1C0",
+          "#67A8AA",
+          "#2E9095"
+        ]
+      },
+      "canvas": "#11191D",
+      "noData": "#3B4849",
+      "zeroOutline": "#BAC6C0",
+      "classificationMethod": "consumer supplied with exact thresholds and unit",
+      "outlierPolicy": "explicit; never silently clamp",
+      "scaleVersion": "74619cfd484c3894314a693d103dda5987a8ef0e46f445663b4703b72caff223",
+      "pivotMeaning": "Zero net flow over the same time interval and boundary.",
+      "themePolicy": "identical-light-values-on-both-themes"
+    }
+  ],
+  "analyticalPolicy": {
+    "required": true,
+    "sourceTheme": "light",
+    "anchorsEqual": true,
+    "lutEqual": true,
+    "classesEqual": true,
+    "valueDirectionEqual": true,
+    "darkDerivationForbidden": true,
+    "contrastRemedy": "Keep data HEX; use labels, meaningful boundaries or a neutral backplate. Test actual surfaces and sizes. No automatic 3:1, CVD or full accessibility claim."
+  },
+  "citychatIdentityGradient": {
+    "purpose": "product identity only",
+    "light": [
+      "#007A58",
+      "#007E79"
+    ],
+    "dark": [
+      "#3BD19B",
+      "#3BD3CB"
+    ],
+    "analyticalUseAllowed": false
+  },
+  "fontAssets": [
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/arvo-latin-700-normal.woff2",
+      "bytes": 17348,
+      "sha256": "3d908a2c04ec4c59d26d1454008b2d6744480654663a5f88e439f6483976bd37",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/arvo-latin-700-normal.woff2",
+      "localPath": "assets/fonts/arvo-latin-700-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/arvo-OFL.txt",
+      "bytes": 4508,
+      "sha256": "f4f2cb57f7050c4e615863a39bf04811eada567d76d99b10b0f33d1e10e6cccd",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/arvo-OFL.txt",
+      "localPath": "assets/fonts/arvo-OFL.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/bai-jamjuree-latin-400-normal.woff2",
+      "bytes": 11596,
+      "sha256": "5200faf54f32adc1dc47b8522adbd1399e739f4ce5c9236866806c04d6397b19",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/bai-jamjuree-latin-400-normal.woff2",
+      "localPath": "assets/fonts/bai-jamjuree-latin-400-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/bai-jamjuree-latin-600-normal.woff2",
+      "bytes": 11844,
+      "sha256": "5ae338ac0db4222226ad96bf1b4b460030c3af1affabb475c67bf218b2eaa83f",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/bai-jamjuree-latin-600-normal.woff2",
+      "localPath": "assets/fonts/bai-jamjuree-latin-600-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/bai-jamjuree-OFL.txt",
+      "bytes": 5487,
+      "sha256": "74b7deafa632a5ed301dc322fcc2867ac200402e06b6d0b0b01faf09b8514e3e",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/bai-jamjuree-OFL.txt",
+      "localPath": "assets/fonts/bai-jamjuree-OFL.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/bai-jamjuree-thai-400-normal.woff2",
+      "bytes": 9168,
+      "sha256": "357f8fe9fd08973568a061a2fc266a07819cdc33e8c9bb2b39985cc4ec49bfa9",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/bai-jamjuree-thai-400-normal.woff2",
+      "localPath": "assets/fonts/bai-jamjuree-thai-400-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/bai-jamjuree-thai-600-normal.woff2",
+      "bytes": 9808,
+      "sha256": "547483c6fbedcc13f4c04489c4ec3f6be4c69877ae7cd4cfbf4a0d289889ba32",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/bai-jamjuree-thai-600-normal.woff2",
+      "localPath": "assets/fonts/bai-jamjuree-thai-600-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-latin-700-normal.woff2",
+      "bytes": 18012,
+      "sha256": "47eb0fe82a8b96cc5f1ac057e2edad4d2550d6b73d4aa030697bf1678047c526",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-latin-700-normal.woff2",
+      "localPath": "assets/fonts/ibm-plex-sans-thai-looped-latin-700-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-OFL.txt",
+      "bytes": 4832,
+      "sha256": "e3ac4237aef600394644cdab2375d7011b0f80d2229ff05f47df2e61a109ab57",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-OFL.txt",
+      "localPath": "assets/fonts/ibm-plex-sans-thai-looped-OFL.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-thai-700-normal.woff2",
+      "bytes": 14176,
+      "sha256": "fa03fc4dda6a69763997e79d50e0437795d06c02e1798bdacf3a2f5e685cea2c",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-looped-thai-700-normal.woff2",
+      "localPath": "assets/fonts/ibm-plex-sans-thai-looped-thai-700-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-OFL.txt",
+      "bytes": 4796,
+      "sha256": "1b4f4d1f1463b63f1356e7b6034ad5a94311b35ffb53cc4bf83f2fbda24450e4",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-OFL.txt",
+      "localPath": "assets/fonts/ibm-plex-sans-thai-OFL.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-thai-400-normal.woff2",
+      "bytes": 11804,
+      "sha256": "2d66381c26d32bf2a95bfe559d1a5ed5475fcdac3fa128e45a33301010d42056",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/ibm-plex-sans-thai-thai-400-normal.woff2",
+      "localPath": "assets/fonts/ibm-plex-sans-thai-thai-400-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/jetbrains-mono-latin-400-normal.woff2",
+      "bytes": 21168,
+      "sha256": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/jetbrains-mono-latin-400-normal.woff2",
+      "localPath": "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/jetbrains-mono-OFL.txt",
+      "bytes": 4524,
+      "sha256": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/jetbrains-mono-OFL.txt",
+      "localPath": "assets/fonts/jetbrains-mono-OFL.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/material-symbols-Apache-2.0.txt",
+      "bytes": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/material-symbols-Apache-2.0.txt",
+      "localPath": "assets/fonts/material-symbols-Apache-2.0.txt",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/material-symbols-rounded-nav-300.woff2",
+      "bytes": 2500,
+      "sha256": "d7e283106ed2898726b24504c4e0f5ad524292984a90a4d29553c7dcf53b9657",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/material-symbols-rounded-nav-300.woff2",
+      "localPath": "assets/fonts/material-symbols-rounded-nav-300.woff2",
+      "sha256Verified": true
+    },
+    {
+      "path": "assets/lds-0.9.7/build-kit/assets/material-symbols-rounded-open-in-new-300.woff2",
+      "bytes": 1124,
+      "sha256": "778b29f8befe5ba7a8f0f8188d4c12e3c53d00810dac10337609b04d8506d46e",
+      "url": "https://montri-th.github.io/Landometer/v0.9.7/package/assets/lds-0.9.7/build-kit/assets/material-symbols-rounded-open-in-new-300.woff2",
+      "localPath": "assets/fonts/material-symbols-rounded-open-in-new-300.woff2",
+      "sha256Verified": true
+    }
+  ],
+  "rules": {
+    "selection": "restrained surface,text weight and spacing; no decorative bracket or colored left rail",
+    "minTargetCssPx": 44,
+    "interfaceIcons": {
+      "FILL": 0,
+      "wght": 300,
+      "GRAD": 0
+    },
+    "missingValue": "No missing-as-zero; state plus reason/source/time",
+    "terrain": "No terrain/flood-risk magnitude implied by city boundaries or spot levels",
+    "publicDeployment": "Owner-authorized static prototype publication to montri-th/sila; no municipal production authentication or writes. Exact asset authorization and release receipts are scoped to this artifact."
+  },
+  "identityAssetCandidate": {
+    "status": "approved_for_current_artifact",
+    "identity": "CityChat rounded-balloon animated lockup",
+    "manifestRef": "assets/brand/manifest.json",
+    "integrationRef": "assets/brand/INTEGRATION.md",
+    "sourceRepository": "montri-th/CityChat",
+    "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+    "adoptedOn": "2026-10-06",
+    "role": "CityChat Sila header identity and browser-tab favicon",
+    "decision": "retain_exact_identity_components_and_registered_motion; artifact_layout_and_controller_adapter_only",
+    "allowIdentityModification": false,
+    "authority": {
+      "priorExactBuildApproval": {
+        "date": "2026-09-08",
+        "text": "อนุมัติ animated motif + logo ทุกชิ้น",
+        "scope": "Original CityChat landing opening hero only"
+      },
+      "currentArtifactAuthorization": {
+        "source": "Current human user instructions recorded by root on 2026-10-06 and in assets/brand/manifest.json",
+        "scope": "Correct rounded-balloon animated CityChat identity for the Sila header and publication to montri-th/sila",
+        "allowsHeaderUse": true,
+        "publicationAuthorized": true
+      },
+      "canonicalDesignSystemPromotion": false
+    },
+    "assets": [
+      {
+        "path": "assets/brand/logo-bubbles-proposal-light.svg",
+        "role": "identity_component",
+        "bytes": 9249,
+        "sha256": "4f3defeb8901a9fc1b92690dab53c88c8c06532c99ef99eb8dc20f06f07f9aeb",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/logo-bubbles-proposal-dark.svg",
+        "role": "identity_component",
+        "bytes": 9249,
+        "sha256": "d60f1b348ba9d3040ba65a4ebb267fedb52a78dc3fc766a05158475a8fdbfd8e",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/lockup-without-bubbles-light.png",
+        "role": "identity_component",
+        "bytes": 17608,
+        "sha256": "df00f1c02f2c2c453dbd6a21746d015fff8079880de863b2643c9fc7c2449583",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/lockup-without-bubbles-dark.png",
+        "role": "identity_component",
+        "bytes": 17483,
+        "sha256": "37af6d9675ee4c1eac934e60c6e481727c0ddb0aff0ad0db87000a6b1923990a",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/citychat-motif-motion.css",
+        "role": "animated_identity_components",
+        "bytes": 6779,
+        "sha256": "67c4f2638ef76b7ecf355edd53a7c4f2c55cc51cafe7291f28dbf9cd4e00e91d",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/citychat-motif-motion.js",
+        "role": "animated_identity_components",
+        "bytes": 43005,
+        "sha256": "cbcf4b541dfe784cdd8894770fbbd6a6495d7e8de82fc5cae4beb8257871b012",
+        "modification": "retain_exact"
+      },
+      {
+        "path": "assets/brand/citychat-header-logo.js",
+        "role": "artifact-motion-adapter",
+        "bytes": 2973,
+        "sha256": "c0f95051e2feed9f6cb0b11ac469b93ab5dc9788ebfe923e6c99f1f5833d3ced",
+        "modification": "newcontroller/layoutonly; noidentityreconstruction"
+      },
+      {
+        "path": "assets/brand/citychat-header-logo.css",
+        "role": "artifact-layout-adapter",
+        "bytes": 1523,
+        "sha256": "9e33af264616176c11cf358e6c68713c686fe37daf77d324ce85ab75963187e4",
+        "modification": "newcontroller/layoutonly; noidentityreconstruction"
+      },
+      {
+        "path": "assets/brand/citychat-favicon-3b7439f6.png",
+        "role": "browser_tab_favicon",
+        "bytes": 7315,
+        "sha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+        "modification": "retain_exact; no crop/resize/recolor"
+      },
+      {
+        "path": "assets/brand/citychat-favicon-3b7439f6.receipt.json",
+        "role": "source_permission_receipt",
+        "bytes": 1205,
+        "sha256": "2ad25a4e8c2558a9d25f1c7004ae7cf62e4651bd21822a028d83b5beb97b71ac",
+        "modification": "retain_exact"
+      }
+    ],
+    "renditionRule": "Exact light composition on light foundation; exact dark composition on dark foundation.",
+    "motion": {
+      "oncePerPageLoad": true,
+      "replayOnThemeChange": false,
+      "animatedParts": "Rounded chat balloons and dots only",
+      "reducedMotion": "exact static composition",
+      "noJavaScript": "exact static composition",
+      "failure": "exact static composition"
+    },
+    "favicon": {
+      "path": "assets/brand/citychat-favicon-3b7439f6.png",
+      "role": "browser_tab_favicon",
+      "receiptRef": "assets/brand/citychat-favicon-3b7439f6.receipt.json",
+      "fullSixSizeIconSetConformanceClaimed": false,
+      "originalReceiptExcludedRoles": [
+        "touch",
+        "maskable",
+        "social",
+        "horizontal_header"
+      ]
+    },
+    "verificationScope": "Exact original logo/motion/favicon source hash parity and adapter syntax verified. Revision 1.1 actual desktop/mobile light/dark header and finite motion observed in qa/revision-1.1-browser-checks.json; reduced motion source-reviewed only. Deployed-byte parity is recorded separately by root."
+  },
+  "verificationBoundary": "Exact current token/font values projected and local font bytes verified; not full artifact or accessibility conformance",
+  "iconSubsets": [
+    {
+      "id": "icon.material-symbols-rounded.open-in-new.300.01",
+      "family": "Material Symbols Rounded",
+      "role": "interface_icon",
+      "file": "material-symbols-rounded-open-in-new-300.woff2",
+      "packageFile": "material-symbols-rounded-open-in-new-300.woff2",
+      "mediaType": "font/woff2",
+      "bytes": 1124,
+      "sha256": "778b29f8befe5ba7a8f0f8188d4c12e3c53d00810dac10337609b04d8506d46e",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 20
+      },
+      "glyphs": [
+        "open_in_new"
+      ],
+      "license": "Apache-2.0",
+      "licenseFileRef": "material-symbols-Apache-2.0.txt",
+      "approvalStatus": "approved",
+      "approvedBy": "Landometer owner",
+      "approvedAt": "2026-09-01T00:33:36+07:00",
+      "approvalReceiptRef": "asset-approval-receipt.json",
+      "approvalReceiptSha256": "fe4400d2d2e2a25a0232c9e64870bd814d41cca83acf6f17f5c6000535262e75"
+    },
+    {
+      "id": "icon.material-symbols-rounded.nav-7.300.01",
+      "family": "Material Symbols Rounded",
+      "role": "interface_icon",
+      "file": "material-symbols-rounded-nav-300.woff2",
+      "packageFile": "material-symbols-rounded-nav-300.woff2",
+      "mediaType": "font/woff2",
+      "bytes": 2500,
+      "sha256": "d7e283106ed2898726b24504c4e0f5ad524292984a90a4d29553c7dcf53b9657",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "glyphs": [
+        "open_in_new",
+        "menu",
+        "close",
+        "light_mode",
+        "dark_mode",
+        "contrast",
+        "groups"
+      ],
+      "license": "Apache-2.0",
+      "licenseFileRef": "material-symbols-Apache-2.0.txt",
+      "approvalStatus": "approved",
+      "approvedBy": "Landometer owner",
+      "approvedAt": "2026-09-01T00:33:36+07:00",
+      "approvalReceiptRef": "asset-approval-receipt.json",
+      "approvalReceiptSha256": "fe4400d2d2e2a25a0232c9e64870bd814d41cca83acf6f17f5c6000535262e75",
+      "note": "FILL 1 variants are excluded; selected state does not change icon fill."
+    }
+  ]
+}

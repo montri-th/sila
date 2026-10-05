@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0.0",
+  "revision": "1.1",
+  "checkedAtUtc": "2026-10-05T17:41:00.166420+00:00",
+  "sourceFiles": {
+    "index.html": "9022f138c01398f1a3a5a888b8c04a70bc725d538652ac15c6198d5e25972bf5",
+    "styles.css": "bc4a4da1a3c6b651411c83638065157513b80f9edb24595d9eb8c487d8726e08",
+    "app.js": "a6d965c72ff125ec783e9e44730debce77406822a8e205892074c7aa602eec1d",
+    "assets/brand/citychat-header-logo.js": "c0f95051e2feed9f6cb0b11ac469b93ab5dc9788ebfe923e6c99f1f5833d3ced",
+    "assets/brand/citychat-header-logo.css": "9e33af264616176c11cf358e6c68713c686fe37daf77d324ce85ab75963187e4"
+  },
+  "observedChecks": [
+    {
+      "id": "single-boundary",
+      "pass": true,
+      "observed": {
+        "municipalityPaths": 1,
+        "villagePaths": 28,
+        "electionPaths": 3,
+        "maskPaths": 1,
+        "contextOutline": "absent"
+      }
+    },
+    {
+      "id": "municipal-mask",
+      "pass": true,
+      "observed": {
+        "fillRule": "evenodd",
+        "fillOpacity": 0.78,
+        "darkFill": "#11191D",
+        "lightFill": "#FFFFFF",
+        "pointerEvents": "none",
+        "holeSource": "data/municipality.geojson"
+      }
+    },
+    {
+      "id": "native-dark-basemap",
+      "pass": true,
+      "observed": {
+        "provider": "Esri World Dark Gray Base + Reference",
+        "tileNaturalDimensions": [
+          256,
+          256
+        ],
+        "cssFilter": "none",
+        "mobileLoadedTiles": 8,
+        "mobileTotalTiles": 8,
+        "lightProvider": "OpenStreetMap Standard"
+      }
+    },
+    {
+      "id": "keyboard-drilldown",
+      "pass": true,
+      "observed": {
+        "action": "Enter on village 02 row",
+        "scope": "v02",
+        "boundaryPaths": 1,
+        "houses": 3907,
+        "buildings": 4631,
+        "datasetChangeRetainsScope": true
+      }
+    },
+    {
+      "id": "rounded-animated-identity",
+      "pass": true,
+      "observed": {
+        "normalMotion": "animating then complete; theme change remains complete",
+        "source": "assets/brand/manifest.json",
+        "renditions": "exact light/dark rounded-balloon assets",
+        "missingAssetOrReducedMotion": "static complete fallback source-reviewed"
+      }
+    },
+    {
+      "id": "responsive-render",
+      "pass": true,
+      "observed": {
+        "desktop": [
+          1280,
+          720
+        ],
+        "mobile": [
+          390,
+          844
+        ],
+        "languages": [
+          "th",
+          "en"
+        ],
+        "themes": [
+          "light",
+          "dark"
+        ],
+        "horizontalOverflow": false,
+        "mobileRecordList": "Rendered readable; keyboard activation of area row passed"
+      }
+    }
+  ],
+  "screenshots": [
+    "screenshots/revision-1.1-desktop-dark.jpg",
+    "screenshots/revision-1.1-desktop-light.jpg",
+    "screenshots/revision-1.1-mobile-th-light.jpg",
+    "screenshots/revision-1.1-mobile-en-dark.jpg"
+  ],
+  "limits": [
+    "Browser spot checks, not a full accessibility or native-device audit.",
+    "Reduced-motion and missing-JS static fallback source-reviewed; OS preference was not toggled.",
+    "130% Thai typography and 200% browser zoom not separately exercised in this revision.",
+    "Raw municipal data accuracy, flood conditions and legal boundaries remain unverified; existing data limitations persist."
+  ],
+  "browserErrors": {
+    "reviewedAtUtc": "2026-10-05T17:42:25.844276+00:00",
+    "capturedErrors": []
+  },
+  "nonVisualFollowup": "Added explicit strict-origin-when-cross-origin referrer metadata after render checks; no layout change."
+}

@@ -1,0 +1,549 @@
+{
+  "releaseRef": "v0.9.7-owner.1",
+  "status": "PASS",
+  "checks": 9768,
+  "passed": 9768,
+  "failed": [],
+  "warnings": [
+    {
+      "id": "density.capita/light",
+      "hex": "#E88B73",
+      "index": 24,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "density.capita/light",
+      "hex": "#E58572",
+      "index": 25,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "density.capita/light",
+      "hex": "#E28072",
+      "index": 26,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "density.capita/light",
+      "hex": "#DF7A71",
+      "index": 27,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "density.capita/light",
+      "hex": "#DC7570",
+      "index": 28,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "built/light",
+      "hex": "#C9A638",
+      "index": 36,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "built/light",
+      "hex": "#C7A42F",
+      "index": 37,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "built/light",
+      "hex": "#C4A325",
+      "index": 38,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "built/light",
+      "hex": "#C2A118",
+      "index": 39,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "balance/light",
+      "hex": "#D76C60",
+      "index": 3,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "balance/light",
+      "hex": "#DA7468",
+      "index": 4,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "balance/light",
+      "hex": "#DC7C70",
+      "index": 5,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "balance/light",
+      "hex": "#DF8578",
+      "index": 6,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "balance/light",
+      "hex": "#E18D80",
+      "index": 7,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "delta/light",
+      "hex": "#D76E46",
+      "index": 3,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "delta/light",
+      "hex": "#DA7750",
+      "index": 4,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "delta/light",
+      "hex": "#DC7F5A",
+      "index": 5,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "delta/light",
+      "hex": "#DE8764",
+      "index": 6,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "delta/light",
+      "hex": "#E18F6E",
+      "index": 7,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "tradeoff/light",
+      "hex": "#B79900",
+      "index": 0,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "tradeoff/light",
+      "hex": "#BA9E23",
+      "index": 1,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "tradeoff/light",
+      "hex": "#BDA235",
+      "index": 2,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "tradeoff/light",
+      "hex": "#C0A743",
+      "index": 3,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "anomaly/light",
+      "hex": "#E58B79",
+      "index": 33,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "anomaly/light",
+      "hex": "#E38270",
+      "index": 34,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "anomaly/light",
+      "hex": "#E17A67",
+      "index": 35,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "anomaly/light",
+      "hex": "#DE715F",
+      "index": 36,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.spending_readiness/light",
+      "hex": "#C9A638",
+      "index": 36,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.spending_readiness/light",
+      "hex": "#C7A42F",
+      "index": 37,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.spending_readiness/light",
+      "hex": "#C4A325",
+      "index": 38,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.spending_readiness/light",
+      "hex": "#C2A118",
+      "index": 39,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.competitive_pressure/light",
+      "hex": "#E49530",
+      "index": 27,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.competitive_pressure/light",
+      "hex": "#E39130",
+      "index": 28,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#E89077",
+      "index": 23,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#E58B76",
+      "index": 24,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#E38575",
+      "index": 25,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#E08074",
+      "index": 26,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#DD7A73",
+      "index": 27,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.cannibalization/light",
+      "hex": "#DA7572",
+      "index": 28,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E88C87",
+      "index": 26,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E78981",
+      "index": 27,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E5867A",
+      "index": 28,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E48373",
+      "index": 29,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E3806D",
+      "index": 30,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E27D66",
+      "index": 31,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#E07A5F",
+      "index": 32,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#DF7757",
+      "index": 33,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.occupancy_cost/light",
+      "hex": "#DE7450",
+      "index": 34,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.demand_growth/light",
+      "hex": "#D76E46",
+      "index": 3,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.demand_growth/light",
+      "hex": "#DA7750",
+      "index": 4,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.demand_growth/light",
+      "hex": "#DC7F5A",
+      "index": 5,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.demand_growth/light",
+      "hex": "#DE8764",
+      "index": 6,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.demand_growth/light",
+      "hex": "#E18F6E",
+      "index": 7,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.service_gap/light",
+      "hex": "#E58A7B",
+      "index": 33,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.service_gap/light",
+      "hex": "#E38273",
+      "index": 34,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.service_gap/light",
+      "hex": "#E1796A",
+      "index": 35,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "li.service_gap/light",
+      "hex": "#DE7162",
+      "index": 36,
+      "gate": "B-HUE-01",
+      "window": "clay",
+      "severity": "warning"
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "light",
+      "pair": [
+        "density.area",
+        "density.capita"
+      ],
+      "meanDeltaE": 8.858527229590223,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "light",
+      "pair": [
+        "density.area",
+        "density.household"
+      ],
+      "meanDeltaE": 9.648656779221731,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "light",
+      "pair": [
+        "density.area",
+        "built"
+      ],
+      "meanDeltaE": 7.795416271150486,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "light",
+      "pair": [
+        "density.capita",
+        "density.household"
+      ],
+      "meanDeltaE": 6.188934146623498,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "dark",
+      "pair": [
+        "density.area",
+        "density.capita"
+      ],
+      "meanDeltaE": 8.858527229590223,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "dark",
+      "pair": [
+        "density.area",
+        "density.household"
+      ],
+      "meanDeltaE": 9.648656779221731,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "dark",
+      "pair": [
+        "density.area",
+        "built"
+      ],
+      "meanDeltaE": 7.795416271150486,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    },
+    {
+      "id": "density-family-similarity",
+      "theme": "dark",
+      "pair": [
+        "density.capita",
+        "density.household"
+      ],
+      "meanDeltaE": 6.188934146623498,
+      "remedy": "Keep explicit denominator labels; color alone does not identify a metric."
+    }
+  ],
+  "minimumAdjacentClassDeltaE": 3.5683785768559817,
+  "minimumDarkAnalyticalCanvasContrast": 1.6680080158482617,
+  "signatureStatus": "unsigned-owner-approved",
+  "scope": "Package parity, theme-invariant Story and Location light values, inherited signed source, analytical math, CSS projection and standalone document/schema consistency only. No artifact or team-installation conformance claim."
+}

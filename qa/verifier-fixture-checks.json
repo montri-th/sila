@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "date": "2026-10-06",
+  "status": "passed",
+  "scope": "Local controlled HTTP fixtures, not live deployment or browser UI verification",
+  "successfulFixtures": 4,
+  "intentionalFailureFixtures": 4,
+  "checks": {
+    "correctHTTPMIMEHashBytes": true,
+    "redirectFinalURLRecorded": true,
+    "transient503RetriedAndRecovered": true,
+    "gzipEntityHashVerified": true,
+    "HTTP404NotRetried": true,
+    "wrongMIMERejected": true,
+    "wrongHashRejected": true,
+    "emptyResponseRejected": true
+  },
+  "runtimeExternalNetworkUsed": false
+}
