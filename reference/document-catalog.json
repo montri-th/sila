@@ -158,8 +158,25 @@
       "datasets": [
         "parcels"
       ],
-      "currentPrototypeStatus": "blocked_crs",
-      "inspectionScope": "blocked_crs"
+      "currentPrototypeStatus": "inferred_control_validated",
+      "inspectionScope": "actual_source_geometry; source_numeric_coordinate_controls; independent_supplied_WGS84_footprint_holdout_projection_test; display_only_topology_validation",
+      "sourceRecords": 40368,
+      "mappedRecords": 40367,
+      "insideMunicipality": 40224,
+      "displayRepairCount": 48,
+      "quarantinedRecords": 1,
+      "sourceCRSMetadata": "UNKNOWN",
+      "displayCRS": {
+        "interpretedEPSG": 24048,
+        "datumOperation": "Indian 1975 to WGS 84 (2)",
+        "status": "inferred_control_validated",
+        "formalSourceCRSConfirmed": false,
+        "fieldPositionAccuracyVerified": false,
+        "legalBoundaryVerified": false
+      },
+      "evidence": "qa/crs-repair-evidence.json",
+      "geometry": "data/parcels.geojson",
+      "exportedAttributes": "display labels, source ordinals and spatial membership only; no cadastral, owner or tax identifiers"
     },
     {
       "folderId": "1r9bfdW4ezTGzN7dL0UwngHHIRHAcRPlc",
@@ -1096,7 +1113,7 @@
     "Do not treat historical plan as current risk assessment or flood forecast",
     "Keep conflicting/null budget values distinct from zero",
     "Local drafted notes do not mean official received/approved project",
-    "Population authority, parcel CRS, tax registry and terrain remain separate data readiness issues"
+    "Population authority, formal parcel CRS confirmation, tax registry and terrain remain separate data readiness issues; control-validated display CRS does not establish field or legal accuracy"
   ],
   "provenance": {
     "strategyFileId": "14xHu2hJzSvYuS5EMxeaNl6Q10IDOUa1E",
@@ -1105,5 +1122,7 @@
     "auditSourcePath": "source-audit-reference/sila-data-audit.json",
     "generation": "faithful field projection plus Thai copy normalized from extracted source with existing visual audit; no coordinates fabricated"
   },
-  "folderInventorySource": "data/catalog.json (current prototype data build)"
+  "folderInventorySource": "data/catalog.json (current prototype data build)",
+  "currentDataRevision": "1.2",
+  "updatedOn": "2026-10-06"
 }

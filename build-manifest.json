@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.1",
-  "builtAtUtc": "2026-10-05T17:48:29.567742+00:00",
+  "revision": "1.2",
+  "builtAtUtc": "2026-10-05T18:46:01.261052+00:00",
   "releaseDateBangkok": "2026-10-06",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -29,13 +29,13 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.1-browser-checks.json",
-  "publicationAudit": "qa/publication-audit.json",
+  "browserReceipt": "qa/revision-1.2-browser-checks.json",
+  "publicationAudit": "qa/revision-1.2-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 18596,
-      "sha256": "371b05888380fc76645e027d63d6bc255aba112b8bcca1d594972193fc49cacc",
+      "bytes": 31900,
+      "sha256": "5433bc93cd299d104160d4033fd4e90a5bf042784a3d5447fe38eacb1c2587b5",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -44,8 +44,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 77318,
-      "sha256": "a6d965c72ff125ec783e9e44730debce77406822a8e205892074c7aa602eec1d",
+      "bytes": 85185,
+      "sha256": "e33e0bbc753b531cfabca5fc4883b400da41fc2ac77601810bf9a5237f2ad82c",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -53,8 +53,8 @@
     },
     {
       "path": "assets/brand/INTEGRATION.md",
-      "bytes": 3563,
-      "sha256": "45089745050f4e13086ac659660019d09fa9709a518d869fca633fe00add228e",
+      "bytes": 3768,
+      "sha256": "859ba3892376e26eaca2ed0d90d5af5e4a43d2737dfd5370e32aba06667a73dc",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -111,6 +111,48 @@
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
+      ]
+    },
+    {
+      "path": "assets/brand/citychat-tab-16-e839e275.png",
+      "bytes": 823,
+      "sha256": "e839e275948a7bacadf0925303f7a3b315d068cc3f5184d5b1a85233d1e387fd",
+      "mimeTypes": [
+        "image/png"
+      ]
+    },
+    {
+      "path": "assets/brand/citychat-tab-32-d9ac160e.png",
+      "bytes": 1935,
+      "sha256": "d9ac160eaf23cffcd771afd13ce4b3240f486ac12043a44880760bfa27bd39a9",
+      "mimeTypes": [
+        "image/png"
+      ]
+    },
+    {
+      "path": "assets/brand/citychat-tab-48-20e950c7.png",
+      "bytes": 3137,
+      "sha256": "20e950c70248d08a76df8c67cb42316a4fd3d898d6ba8755f48cc632382f7e1f",
+      "mimeTypes": [
+        "image/png"
+      ]
+    },
+    {
+      "path": "assets/brand/citychat-tab-square-1fc894ca.svg",
+      "bytes": 9961,
+      "sha256": "1fc894ca3b8c7eed0e94294e63f25839d6ce9b7ebb0880f718620ec2da23e1cb",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/brand/favicon-formats.manifest.json",
+      "bytes": 8344,
+      "sha256": "e0fa3f117b2be09a028e11d51eee23cf8084b63710d068c359474e5c49e3d00f",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -336,9 +378,43 @@
       ]
     },
     {
+      "path": "basemap.css",
+      "bytes": 531,
+      "sha256": "86a4786d559c6400be986d9fb560095922d2a1eaa7ca1773deaa64ca62f916ea",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "basemap.js",
+      "bytes": 8876,
+      "sha256": "efa546a5341ec5c714bd5186c7d0d0dc024822ded069d90349a101b883f3b21f",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "context-actions.css",
+      "bytes": 2876,
+      "sha256": "0ad880fc42fc2305ce85ab368a76b1bfb764a20b24165f1974623f5467930724",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "context-actions.js",
+      "bytes": 21853,
+      "sha256": "6f6d29b82af235a0757bed0538ee5529bedffc939de8bdd48ef60bc6ff848d39",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
       "path": "data/buildings.geojson",
-      "bytes": 27675534,
-      "sha256": "ef48e5a0a7471669ebbe26b13b9078e1360f001fe549f1917078f7092ebeafaa",
+      "bytes": 27674202,
+      "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -347,8 +423,8 @@
     },
     {
       "path": "data/catalog.json",
-      "bytes": 67851,
-      "sha256": "6a22f20064e2178fe2e9482b12ea31b04c9ed631d60e2bbdc45ed6b8975374f4",
+      "bytes": 69061,
+      "sha256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -357,8 +433,8 @@
     },
     {
       "path": "data/cctv.geojson",
-      "bytes": 21191,
-      "sha256": "491b44169be7612d70bd9d0057408eed7a562c0b6fccda36336e52f85e850ba1",
+      "bytes": 21188,
+      "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -367,8 +443,8 @@
     },
     {
       "path": "data/data-validation.json",
-      "bytes": 2077,
-      "sha256": "4bd614ea3f2b40b6c869897f2afcb35533ac794056c6f076990eb0c082c24c8f",
+      "bytes": 2401,
+      "sha256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -427,8 +503,8 @@
     },
     {
       "path": "data/houses.geojson",
-      "bytes": 13315943,
-      "sha256": "62c4c521fbb2fa6536b8db5025f3d189ee1d3e1ec36ee01c7106ffd68ef9a820",
+      "bytes": 13323656,
+      "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -437,8 +513,8 @@
     },
     {
       "path": "data/metadata.json",
-      "bytes": 32334,
-      "sha256": "141223683c94002172c6cc3845de1486e727adb6b80cede0717fadcc2de6cf7d",
+      "bytes": 34190,
+      "sha256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -447,8 +523,18 @@
     },
     {
       "path": "data/municipality.geojson",
-      "bytes": 36555,
-      "sha256": "009efcf1e15c5ea092a5d235fb939396c2b99e69058d443144c4b13549f2eecd",
+      "bytes": 36585,
+      "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+      "mimeTypes": [
+        "application/geo+json",
+        "application/json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "data/parcels.geojson",
+      "bytes": 30883759,
+      "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -457,8 +543,8 @@
     },
     {
       "path": "data/publicfacilities.geojson",
-      "bytes": 88846,
-      "sha256": "a1d7b894dd55ac049856dd2ab26634a814db4d71d1e7d8cfe6f72a2af6c2712c",
+      "bytes": 88645,
+      "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -467,8 +553,8 @@
     },
     {
       "path": "data/religion.geojson",
-      "bytes": 11527,
-      "sha256": "b2db4d4579e42688e7be2f0261d00e81775848607ad9381480f250a4a375806e",
+      "bytes": 11526,
+      "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -477,8 +563,8 @@
     },
     {
       "path": "data/roads.geojson",
-      "bytes": 608970,
-      "sha256": "3cbc284bfb8a0b4ac53c7e70eea722f558c7ff585014d9d405091d4d02554d20",
+      "bytes": 608961,
+      "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -487,8 +573,8 @@
     },
     {
       "path": "data/source-manifest.json",
-      "bytes": 47061,
-      "sha256": "ab70d1c272de592f9617c825415b0b7265a3ed9f5c4839e2b38a5fd5be7eb737",
+      "bytes": 48576,
+      "sha256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -507,8 +593,8 @@
     },
     {
       "path": "data/waterways.geojson",
-      "bytes": 416513,
-      "sha256": "3d4cd1c4b4f07932d75b665030ac1dfbf6bf1f96ab51ba06ec64022bb5d7a371",
+      "bytes": 416511,
+      "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -516,11 +602,106 @@
       ]
     },
     {
+      "path": "favicon.ico",
+      "bytes": 14510,
+      "sha256": "6541e9e256e8c3780fbf7b768f0cffee5a4b82f4c5feb11fbd27d3b11ee0da2b",
+      "mimeTypes": [
+        "image/x-icon",
+        "image/vnd.microsoft.icon"
+      ]
+    },
+    {
+      "path": "house-points.css",
+      "bytes": 1539,
+      "sha256": "f662f8ccfbbd7d0349ca63dd2eeafb9f7eab915165b0b1701bbd96d723779507",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "house-points.js",
+      "bytes": 11167,
+      "sha256": "640358d46d5d1057ea18b4cf491fdf8654976c9cf8f74fb5c0b34b14d51761da",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
       "path": "index.html",
-      "bytes": 13395,
-      "sha256": "9022f138c01398f1a3a5a888b8c04a70bc725d538652ac15c6198d5e25972bf5",
+      "bytes": 14042,
+      "sha256": "68c8a7ea996b73645a371dfa4b03c4b562a652e6ed1d3f4f2d4d077f1d8c6ef4",
       "mimeTypes": [
         "text/html"
+      ]
+    },
+    {
+      "path": "map-pick.js",
+      "bytes": 7190,
+      "sha256": "f349e62b1a8b8fcc374c556389ee66cb9860cfb73b9b929680ee1904aec9e6f9",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "qa/check-house-points.cjs",
+      "bytes": 2162,
+      "sha256": "dadc02776a500cd61b3a98ddd208d0f48a8d88369716c6be3dc1ac7d03e1c487",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/check-map-pick.cjs",
+      "bytes": 3193,
+      "sha256": "d6844dd2d2d62b1e1527606eedc57f23ca01930a216a73f2af5350604a8c9ed3",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/context-actions-semantic-checks.json",
+      "bytes": 1297,
+      "sha256": "07042600f754fc0ad0864850e692c0d627ee7f85aaff7c4cb3b65204fc5710c0",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/crs-repair-evidence.json",
+      "bytes": 11552,
+      "sha256": "6d349a9485463993e3b46a254bc2976a32a7025c7fcae69e3c439c02def5797e",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/house-points-grouping-checks.json",
+      "bytes": 121,
+      "sha256": "e642cbfc3cae876f10222525add775255dc9943255df3a39371f3610f2b8e79a",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/house-points-source-profile.json",
+      "bytes": 1173,
+      "sha256": "4dd6ee179616947c4d9b9d6bab80aa684d2dd8514fd34ceb72600f04b418b776",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -547,6 +728,16 @@
       "path": "qa/lds-static-styles-css.json",
       "bytes": 451,
       "sha256": "d83d548237371b0ee8d361286724bbd5470ad3c9186bf3cfa1218ad1c7d3d25b",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/map-pick-fixture-checks.json",
+      "bytes": 151,
+      "sha256": "d3a9888dfd3aa89049d03628aa1d1673d80730d3cf5d5c9d4395952a6b15bc1b",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -584,6 +775,56 @@
       ]
     },
     {
+      "path": "qa/revision-1.2-browser-checks.json",
+      "bytes": 4623,
+      "sha256": "dceef4f56753048648915e6c7ef2da4fdbcf4f3e9294c48a80e88113b77080ae",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.2-lds-static-app-js.json",
+      "bytes": 446,
+      "sha256": "a8bded8c6fe76c4c339405c7b4e8094a3c1aa1a22f5df1afc778d80214b7d717",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.2-lds-static-index-html.json",
+      "bytes": 820,
+      "sha256": "451ac35c9bb3d3faa6bdcd966f7917ce686d8cbaaad6031b880ea678f7ff0b90",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.2-lds-static-styles-css.json",
+      "bytes": 451,
+      "sha256": "d83d548237371b0ee8d361286724bbd5470ad3c9186bf3cfa1218ad1c7d3d25b",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.2-publication-audit.json",
+      "bytes": 4576,
+      "sha256": "02116ed6417288a6d1ae8e8d2440ee7a7c0bfbd27cac6d7c925663f6e66cf42d",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "qa/verifier-fixture-checks.json",
       "bytes": 574,
       "sha256": "c58815981ae54b36b4b1d0b1c966c3bd3e0c5953b7e88c4c096a82ea8c6b8de8",
@@ -595,11 +836,31 @@
     },
     {
       "path": "reference/basemap-sources.json",
-      "bytes": 1039,
-      "sha256": "bd3ca5e3ba44d9d4e7aa4678929478f8b0dc2227e357edc3e6fc6295eba34347",
+      "bytes": 15319,
+      "sha256": "c9851d7cac6555205e497ef46ed81775ad5752707428db23602fd1bc0a9ae083",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/context-actions-contract.json",
+      "bytes": 34588,
+      "sha256": "ba31d153c4a97d2534f8eab7eeee2781c30171c832a455d1f2ada08d6434ccf4",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/context-actions-notes.md",
+      "bytes": 4225,
+      "sha256": "4f185dd1b7eaa7ace6201e86b5b9cd18836792ef081ebd0c56e5a268d006a08d",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
         "application/octet-stream"
       ]
     },
@@ -615,8 +876,8 @@
     },
     {
       "path": "reference/document-catalog.json",
-      "bytes": 72023,
-      "sha256": "59373f5be160bce3e2a32900e536a39766efa419e49f34a9e6bd33d555214424",
+      "bytes": 73053,
+      "sha256": "6478f85e16850b3298e33af444d82c2be4d2d97adcfb1b451f94d2eaf8339149",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -637,6 +898,16 @@
       "path": "reference/lds-package-verifier.json",
       "bytes": 12395,
       "sha256": "a396dd0d02244cb2b68fd3a0a8b725bafcb6b9fc43d0dddac68a253791e0cb86",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/openfreemap-packages.json",
+      "bytes": 11084,
+      "sha256": "391d7bb697a4d5287ea27bf84f24ace17cde430688073ee59bb72d3bcce47b1b",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -676,9 +947,41 @@
       ]
     },
     {
+      "path": "screenshots/revision-1.2-desktop-houses-dark.jpg",
+      "bytes": 93729,
+      "sha256": "270fc590fb0028eb9edea6902607e3a9cd99985de8377fd0c0196c28eb2d00cc",
+      "mimeTypes": [
+        "image/jpeg"
+      ]
+    },
+    {
+      "path": "screenshots/revision-1.2-desktop-parcels-en-light.jpg",
+      "bytes": 111182,
+      "sha256": "17799b28c74a43ce108ba354a2adceb4ee7ae5d06e7f39491d4306ee51caeb94",
+      "mimeTypes": [
+        "image/jpeg"
+      ]
+    },
+    {
+      "path": "screenshots/revision-1.2-mobile-ai-en-dark.jpg",
+      "bytes": 54298,
+      "sha256": "42f9f8f2397fabf60af776c81b8373e57ba99fb59d397d5028da28f1410e4810",
+      "mimeTypes": [
+        "image/jpeg"
+      ]
+    },
+    {
+      "path": "screenshots/revision-1.2-mobile-context-th-light.jpg",
+      "bytes": 53918,
+      "sha256": "3c260bcb27c46dc03014cbb3bca99585aea5469ee4db654204b1cdc033bf60f3",
+      "mimeTypes": [
+        "image/jpeg"
+      ]
+    },
+    {
       "path": "server.py",
-      "bytes": 2027,
-      "sha256": "284e0f54a7d764f96ff51cdff8e98437295bb5488df10d9dfe2687c464428588",
+      "bytes": 2170,
+      "sha256": "0420cb4260ffe2b6322e79b90ab79e8bc8c66600ed7d78ed15ca0da49b1bc7af",
       "mimeTypes": [
         "text/plain",
         "application/octet-stream"
@@ -686,16 +989,16 @@
     },
     {
       "path": "styles.css",
-      "bytes": 24578,
-      "sha256": "bc4a4da1a3c6b651411c83638065157513b80f9edb24595d9eb8c487d8726e08",
+      "bytes": 25328,
+      "sha256": "9766d3a31b60e8a6bc51e4ddd11627e19b77eab47b267b697b7a11ff34b23dfb",
       "mimeTypes": [
         "text/css"
       ]
     },
     {
       "path": "tools/README.md",
-      "bytes": 1296,
-      "sha256": "b2f245af3916a944f94f5dd9ba4c5f6f3d0ec1254a5f6dbb668dd6e181ec6ba8",
+      "bytes": 3287,
+      "sha256": "0d2535597fcea2f9d3fea79698188447b2b5639309c76a5b4e63e18c82df7eae",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -703,9 +1006,18 @@
       ]
     },
     {
+      "path": "tools/repair-crs.py",
+      "bytes": 23487,
+      "sha256": "6ebfd6d10482f7aa629ea6bd9fd72b37adc5674662ae932751a03c4358e6b3af",
+      "mimeTypes": [
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "tools/validation-config.json",
-      "bytes": 1300,
-      "sha256": "5bbb2e63447d82261c1a2995b9e16061712f7c4d8d6c0cb86c28b5b530ea496d",
+      "bytes": 1844,
+      "sha256": "a0f8fc63cf89218b7c46551d24670d951c9c4c396ac0d5976ec0d5cd42227191",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -800,6 +1112,108 @@
       "path": "vendor/leaflet/vendor-manifest.json",
       "bytes": 1833,
       "sha256": "706e577bdffdfe85bb244991986d90a67f09a399a73db9195abd1c3c06ef1c40",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/LICENSE.txt",
+      "bytes": 5984,
+      "sha256": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2",
+      "mimeTypes": [
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/maplibre-gl-shared.mjs",
+      "bytes": 516951,
+      "sha256": "df3d0b4ba965ebafd2deae3c568500308be2982d87dadd771ba82dc5a49a4631",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/maplibre-gl-worker.mjs",
+      "bytes": 19130,
+      "sha256": "1ecca7178f0a496b7980dc7a3c6a8c3575eda673cf3e9fa3324dcce7ef3890c2",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/maplibre-gl.css",
+      "bytes": 83305,
+      "sha256": "8456072adc2cbf04f7b845bc83b90cec571b293bd37816970e6566f34946ab8b",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/maplibre-gl.mjs",
+      "bytes": 597295,
+      "sha256": "8e0545d1042293cb8c1e09949f36ba83237f69b4fbc080958cf38829615bcf69",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl/package.json",
+      "bytes": 6566,
+      "sha256": "a119141ae7c5a0795d72638e826f761877c6e77bd59d6df0a14e6f86f2e06ea4",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl-leaflet/API.md",
+      "bytes": 1388,
+      "sha256": "f3adb9a2c374265b79aa943ceaca58370066bbe674d87a36c3ee507633fa7df4",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl-leaflet/LICENSE",
+      "bytes": 767,
+      "sha256": "eaa721ba158cbeff47ad53b1035dfc26ff744df66662c93ff715c9885197ebf3",
+      "mimeTypes": [
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl-leaflet/README.md",
+      "bytes": 4909,
+      "sha256": "f33daf615c923a9e98bdae8be0c47eaa8513d4107162d33173638560c37720ae",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl-leaflet/leaflet-maplibre-gl.js",
+      "bytes": 9296,
+      "sha256": "1e6cf8cb3eb5fd909879aa1bf36a383fb506c9a5b2dbbfababce65a294dd1fcb",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-gl-leaflet/package.json",
+      "bytes": 2024,
+      "sha256": "0c07fbad5a4ddf0d0515aeedcc7fd49e317ceaa85b1dbe5951062f60632afcac",
       "mimeTypes": [
         "application/json",
         "application/geo+json",

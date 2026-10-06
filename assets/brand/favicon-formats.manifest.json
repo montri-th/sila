@@ -1,0 +1,262 @@
+{
+  "schemaVersion": "citychat-browser-tab-formats-1",
+  "createdOn": "2026-10-06",
+  "artifact": "sila-citymeter-officer-prototype",
+  "designSystem": {
+    "version": "0.9.7",
+    "releaseRef": "v0.9.7-owner.1",
+    "colorSetId": "color-srgb-10",
+    "citychatAddon": "0.9.2"
+  },
+  "source": {
+    "publicPath": "assets/brand/citychat-favicon-3b7439f6.png",
+    "sha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+    "mime": "image/png",
+    "width": 250,
+    "height": 265,
+    "bytes": 7315,
+    "sourceRole": "browser_tab_favicon",
+    "receiptRef": "assets/brand/citychat-favicon-3b7439f6.receipt.json",
+    "receiptSha256": "2ad25a4e8c2558a9d25f1c7004ae7cf62e4651bd21822a028d83b5beb97b71ac",
+    "sourceModified": false
+  },
+  "runtime": {
+    "python": "bundled codex-primary-runtime Python",
+    "pillow": "12.3.0"
+  },
+  "assets": [
+    {
+      "assetId": "citychat-tab-square-1fc894ca",
+      "role": "browser_tab_favicon",
+      "publicPath": "assets/brand/citychat-tab-square-1fc894ca.svg",
+      "mime": "image/svg+xml",
+      "width": 265,
+      "height": 265,
+      "bytes": 9961,
+      "sha256": "1fc894ca3b8c7eed0e94294e63f25839d6ce9b7ebb0880f718620ec2da23e1cb",
+      "transparentCanvas": true,
+      "sourceSha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "approvalBasis": "Current owner-requested Sila browser-tab favicon formats, as commissioned by root on 2026-10-06",
+      "approvedRoles": [
+        "browser_tab_favicon"
+      ],
+      "prohibitedRoles": [
+        "apple_touch",
+        "maskable",
+        "social",
+        "header"
+      ],
+      "recipe": {
+        "operation": "square SVG wrapper embedding exact original PNG bytes",
+        "sourceEmbeddedUnchanged": true,
+        "padding": {
+          "left": 7,
+          "right": 8,
+          "top": 0,
+          "bottom": 0
+        },
+        "resize": "none; browser scales complete image",
+        "crop": "none",
+        "reshape": "none",
+        "recolor": "none",
+        "motion": "none",
+        "externalResources": "none"
+      }
+    },
+    {
+      "assetId": "citychat-tab-16-e839e275",
+      "role": "browser_tab_favicon",
+      "publicPath": "assets/brand/citychat-tab-16-e839e275.png",
+      "mime": "image/png",
+      "width": 16,
+      "height": 16,
+      "bytes": 823,
+      "sha256": "e839e275948a7bacadf0925303f7a3b315d068cc3f5184d5b1a85233d1e387fd",
+      "transparentCanvas": true,
+      "sourceSha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "approvalBasis": "Current owner-requested Sila browser-tab favicon formats, as commissioned by root on 2026-10-06",
+      "approvedRoles": [
+        "browser_tab_favicon"
+      ],
+      "prohibitedRoles": [
+        "apple_touch",
+        "maskable",
+        "social",
+        "header"
+      ],
+      "recipe": {
+        "operation": "uniform downsample of source-contained transparent 265-square canvas",
+        "resampler": "Pillow LANCZOS",
+        "sourcePaste": [
+          7,
+          0
+        ],
+        "crop": "none",
+        "reshape": "none; one uniform square-canvas scale",
+        "recolor": "none",
+        "colorProfile": "source has none; assumed_srgb; no conversion",
+        "encoding": {
+          "format": "PNG",
+          "compressLevel": 9,
+          "optimize": false,
+          "metadata": "none"
+        }
+      }
+    },
+    {
+      "assetId": "citychat-tab-32-d9ac160e",
+      "role": "browser_tab_favicon",
+      "publicPath": "assets/brand/citychat-tab-32-d9ac160e.png",
+      "mime": "image/png",
+      "width": 32,
+      "height": 32,
+      "bytes": 1935,
+      "sha256": "d9ac160eaf23cffcd771afd13ce4b3240f486ac12043a44880760bfa27bd39a9",
+      "transparentCanvas": true,
+      "sourceSha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "approvalBasis": "Current owner-requested Sila browser-tab favicon formats, as commissioned by root on 2026-10-06",
+      "approvedRoles": [
+        "browser_tab_favicon"
+      ],
+      "prohibitedRoles": [
+        "apple_touch",
+        "maskable",
+        "social",
+        "header"
+      ],
+      "recipe": {
+        "operation": "uniform downsample of source-contained transparent 265-square canvas",
+        "resampler": "Pillow LANCZOS",
+        "sourcePaste": [
+          7,
+          0
+        ],
+        "crop": "none",
+        "reshape": "none; one uniform square-canvas scale",
+        "recolor": "none",
+        "colorProfile": "source has none; assumed_srgb; no conversion",
+        "encoding": {
+          "format": "PNG",
+          "compressLevel": 9,
+          "optimize": false,
+          "metadata": "none"
+        }
+      }
+    },
+    {
+      "assetId": "citychat-tab-48-20e950c7",
+      "role": "browser_tab_favicon",
+      "publicPath": "assets/brand/citychat-tab-48-20e950c7.png",
+      "mime": "image/png",
+      "width": 48,
+      "height": 48,
+      "bytes": 3137,
+      "sha256": "20e950c70248d08a76df8c67cb42316a4fd3d898d6ba8755f48cc632382f7e1f",
+      "transparentCanvas": true,
+      "sourceSha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "approvalBasis": "Current owner-requested Sila browser-tab favicon formats, as commissioned by root on 2026-10-06",
+      "approvedRoles": [
+        "browser_tab_favicon"
+      ],
+      "prohibitedRoles": [
+        "apple_touch",
+        "maskable",
+        "social",
+        "header"
+      ],
+      "recipe": {
+        "operation": "uniform downsample of source-contained transparent 265-square canvas",
+        "resampler": "Pillow LANCZOS",
+        "sourcePaste": [
+          7,
+          0
+        ],
+        "crop": "none",
+        "reshape": "none; one uniform square-canvas scale",
+        "recolor": "none",
+        "colorProfile": "source has none; assumed_srgb; no conversion",
+        "encoding": {
+          "format": "PNG",
+          "compressLevel": 9,
+          "optimize": false,
+          "metadata": "none"
+        }
+      }
+    },
+    {
+      "assetId": "favicon",
+      "role": "browser_tab_favicon",
+      "publicPath": "favicon.ico",
+      "mime": "image/x-icon",
+      "width": 48,
+      "height": 48,
+      "bytes": 14510,
+      "sha256": "6541e9e256e8c3780fbf7b768f0cffee5a4b82f4c5feb11fbd27d3b11ee0da2b",
+      "transparentCanvas": true,
+      "sourceSha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+      "approvalBasis": "Current owner-requested Sila browser-tab favicon formats, as commissioned by root on 2026-10-06",
+      "approvedRoles": [
+        "browser_tab_favicon"
+      ],
+      "prohibitedRoles": [
+        "apple_touch",
+        "maskable",
+        "social",
+        "header"
+      ],
+      "recipe": {
+        "operation": "multi-resolution ICO of precomputed PNG-equivalent RGBA frames",
+        "frames": [
+          16,
+          32,
+          48
+        ],
+        "bitmapFormat": "32-bit BMP/DIB",
+        "sourcePaste": [
+          7,
+          0
+        ],
+        "resampler": "Pillow LANCZOS",
+        "crop": "none",
+        "reshape": "none",
+        "recolor": "none",
+        "metadata": "none"
+      }
+    }
+  ],
+  "head": {
+    "icoHref": "favicon.ico?v=6541e9e2",
+    "pngHref": "assets/brand/citychat-tab-32-d9ac160e.png",
+    "svgHref": "assets/brand/citychat-tab-square-1fc894ca.svg"
+  },
+  "verification": {
+    "originalSourceSha256": "pass",
+    "svgEmbeddedSourceExact": "pass",
+    "ICOFrameSizes": "16/32/48 pass",
+    "ICODecodedFramesEqualPreparedPNGs": "pass",
+    "repeatEncodingByteParity": "pass",
+    "visualReview": {
+      "method": "Local contact sheet viewed at original resolution",
+      "sizes": [
+        16,
+        32,
+        48
+      ],
+      "surfaces": [
+        "#FCFCFA",
+        "#20292D"
+      ],
+      "observed": "Complete rainbow pin and transparent edges retained; small-size pin recognizable in reviewed frames.",
+      "claimBoundary": "Image contact sheet only; actual browser tab, cold/warm cache and deployed MIME/hash remain root checks."
+    },
+    "liveTabAndCache": "root verifies after integration"
+  },
+  "claimBoundary": {
+    "browserTabFormatsOnly": true,
+    "animatedArtworkUsed": false,
+    "sixSizeProductIconSet": false,
+    "appleTouchOrMaskableApproval": false,
+    "fullFAVICON01ConformanceClaimed": false,
+    "notASymbolRedraw": true
+  }
+}

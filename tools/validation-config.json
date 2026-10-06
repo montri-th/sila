@@ -4,27 +4,99 @@
   "workers": 4,
   "timeoutSeconds": 30,
   "maxTransientRetries": 2,
-  "retryDelaySeconds": [1, 2],
-  "transientHttpStatuses": [408, 425, 429, 500, 502, 503, 504],
+  "retryDelaySeconds": [
+    1,
+    2
+  ],
+  "transientHttpStatuses": [
+    408,
+    425,
+    429,
+    500,
+    502,
+    503,
+    504
+  ],
   "skipManifestSelf": true,
   "allowedMimeTypesByExtension": {
-    ".html": ["text/html"],
-    ".js": ["application/javascript", "text/javascript"],
-    ".css": ["text/css"],
-    ".json": ["application/json", "application/geo+json", "application/octet-stream"],
-    ".geojson": ["application/geo+json", "application/json", "application/octet-stream"],
-    ".map": ["application/json", "application/octet-stream"],
-    ".svg": ["image/svg+xml"],
-    ".png": ["image/png"],
-    ".jpg": ["image/jpeg"],
-    ".jpeg": ["image/jpeg"],
-    ".webp": ["image/webp"],
-    ".ico": ["image/x-icon", "image/vnd.microsoft.icon"],
-    ".woff2": ["font/woff2", "application/font-woff", "application/octet-stream"],
-    ".woff": ["font/woff", "application/font-woff", "application/octet-stream"],
-    ".txt": ["text/plain", "application/octet-stream"],
-    ".md": ["text/markdown", "text/plain", "application/octet-stream"],
-    ".py": ["text/plain", "application/octet-stream"],
-    "": ["text/plain", "application/octet-stream"]
+    ".html": [
+      "text/html"
+    ],
+    ".js": [
+      "application/javascript",
+      "text/javascript"
+    ],
+    ".css": [
+      "text/css"
+    ],
+    ".json": [
+      "application/json",
+      "application/geo+json",
+      "application/octet-stream"
+    ],
+    ".geojson": [
+      "application/geo+json",
+      "application/json",
+      "application/octet-stream"
+    ],
+    ".map": [
+      "application/json",
+      "application/octet-stream"
+    ],
+    ".svg": [
+      "image/svg+xml"
+    ],
+    ".png": [
+      "image/png"
+    ],
+    ".jpg": [
+      "image/jpeg"
+    ],
+    ".jpeg": [
+      "image/jpeg"
+    ],
+    ".webp": [
+      "image/webp"
+    ],
+    ".ico": [
+      "image/x-icon",
+      "image/vnd.microsoft.icon"
+    ],
+    ".woff2": [
+      "font/woff2",
+      "application/font-woff",
+      "application/octet-stream"
+    ],
+    ".woff": [
+      "font/woff",
+      "application/font-woff",
+      "application/octet-stream"
+    ],
+    ".txt": [
+      "text/plain",
+      "application/octet-stream"
+    ],
+    ".md": [
+      "text/markdown",
+      "text/plain",
+      "application/octet-stream"
+    ],
+    ".py": [
+      "text/plain",
+      "application/octet-stream"
+    ],
+    "": [
+      "text/plain",
+      "application/octet-stream"
+    ],
+    ".mjs": [
+      "application/javascript",
+      "text/javascript"
+    ],
+    ".cjs": [
+      "application/javascript",
+      "text/javascript",
+      "application/octet-stream"
+    ]
   }
 }

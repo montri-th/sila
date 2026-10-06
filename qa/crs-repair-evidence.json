@@ -1,0 +1,258 @@
+{
+  "schemaVersion": "sila-control-validated-crs-repair-1",
+  "checkedAtUtc": "2026-10-05T18:25:05.438740+00:00",
+  "status": "passed",
+  "sourceFiles": [
+    {
+      "folder": "หมุดโรงเรือน",
+      "name": "B_P002.shp",
+      "sha256": "4d0fa0d98be4c299a4155a40f3146f5fb10f161a333b9032902766a4478c9794",
+      "companions": [
+        {
+          "name": "B_P002.prj",
+          "sha256": "ed2f4eb241929b92a1560c4fe95749dc9ed76d46e55126173e564a30ade73ebc"
+        },
+        {
+          "name": "B_P002.shx",
+          "sha256": "2f3b799371854a8c12a812eccb2d3c6e174a8d63a9e9e8708e0d42d006fd9fc4"
+        },
+        {
+          "name": "B_P002.dbf",
+          "sha256": "f20022306b0b8f1c54a75d45a890640d2ab98ca7d1a7c0fad4e2714f50e6b345"
+        },
+        {
+          "name": "B_P002.cpg",
+          "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+        }
+      ]
+    },
+    {
+      "folder": "แปลงที่ดิน(แผนที่ภาษี)",
+      "name": "parcel.SHP",
+      "sha256": "c4d79342f11bd411925c3d09b9e6ecb1db30e0c18c4b59949f2e3d789d1e5613",
+      "companions": [
+        {
+          "name": "parcel.prj",
+          "sha256": "64a952fcaa8e779c6dc32906753450c2d674ad93053af1921df5e5d3bc173aff"
+        },
+        {
+          "name": "parcel.shx",
+          "sha256": "999539726af3b04ce56904937f50aedb026ce5470531807e25f921cc08006367"
+        }
+      ]
+    },
+    {
+      "folder": "เชฟโรงเรือน",
+      "name": "building.shp",
+      "sha256": "ecd5f991ae64a99344e9119aef914867589ca7b0a7a8936cb298c41f80bf3154",
+      "companions": [
+        {
+          "name": "building.prj",
+          "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4"
+        },
+        {
+          "name": "building.shx",
+          "sha256": "bdc3bd2206012ba83c05af725238f03f1cb93ac878c5505a54214d315e3e17ad"
+        }
+      ]
+    },
+    {
+      "folder": "ขอบเขตทม.ศิลา",
+      "name": "ขอบเขต ทม.ศิลา.shp",
+      "sha256": "71a6d66285f3e56c453b988f7e47381a6e8bb83d06c2984d664dd7a64c6d6ca8",
+      "companions": [
+        {
+          "name": "ขอบเขต ทม.ศิลา.prj",
+          "sha256": "ed2f4eb241929b92a1560c4fe95749dc9ed76d46e55126173e564a30ade73ebc"
+        },
+        {
+          "name": "ขอบเขต ทม.ศิลา.shx",
+          "sha256": "ed085f83c2f636b7d96ece8ff6ae3e1456cbd53a06c4021b7325e045fa74f370"
+        }
+      ]
+    },
+    {
+      "folder": "สาธารณูปการ",
+      "name": "สาธารณูปการ.shp",
+      "sha256": "c2fef285b6dcbac806da6cc10c4202e6c0d823d5da2c71fc7d7773f58f57eafe",
+      "companions": [
+        {
+          "name": "สาธารณูปการ.prj",
+          "sha256": "ed2f4eb241929b92a1560c4fe95749dc9ed76d46e55126173e564a30ade73ebc"
+        },
+        {
+          "name": "สาธารณูปการ.shx",
+          "sha256": "f1c4f171e5108c91151d6cf45eca42f3d70366545fece54f3f4efc23f579083b"
+        }
+      ]
+    }
+  ],
+  "originalParcelPRJ": "UNKNOWN",
+  "selectedDisplayCRS": "EPSG:24048 Indian1975 UTM48N",
+  "selectedDatumOperation": "Inverse of UTM zone 48N + Indian 1975 to WGS 84 (2) + axis order change (2D)",
+  "selectionMethod": "numeric coordinate-contract controls select datum operation; independent supplied WGS84 footprint holdout tests projection-family alignment",
+  "formalParcelCRSConfirmedByOwner": false,
+  "fieldPositionAccuracyVerified": false,
+  "legalBoundaryVerified": false,
+  "houseCoordinateControlTests": [
+    {
+      "operation": "Inverse of UTM zone 48N + Indian 1975 to WGS 84 (4) + axis order change (2D)",
+      "operationAccuracyMetadataM": 3.0,
+      "controls": 28594,
+      "medianResidualM": 189.06019457238403,
+      "p90ResidualM": 189.06828702954107,
+      "p99ResidualM": 189.0837220236877,
+      "maxResidualM": 233.54977408722004,
+      "within0_05M": 0,
+      "within1M": 0
+    },
+    {
+      "operation": "Inverse of UTM zone 48N + Indian 1975 to WGS 84 (2) + axis order change (2D)",
+      "operationAccuracyMetadataM": 5.0,
+      "controls": 28594,
+      "medianResidualM": 0.0031382749437613823,
+      "p90ResidualM": 0.003156401158787581,
+      "p99ResidualM": 0.16061767447597652,
+      "maxResidualM": 53.829909595932726,
+      "within0_05M": 28278,
+      "within1M": 28339
+    },
+    {
+      "operation": "Inverse of UTM zone 48N + Indian 1975 to WGS 84 (3) + axis order change (2D)",
+      "operationAccuracyMetadataM": 1.0,
+      "controls": 28594,
+      "medianResidualM": 1.595747345424956,
+      "p90ResidualM": 1.6023207004225,
+      "p99ResidualM": 1.6072032861690244,
+      "maxResidualM": 53.83672245090784,
+      "within0_05M": 0,
+      "within1M": 4
+    }
+  ],
+  "parcelProjectionFamilyTests": [
+    {
+      "candidate": "EPSG:24048 with Inverse of UTM zone 48N + Indian 1975 to WGS 84 (4) + axis order change (2D)",
+      "referenceFootprints": 38847,
+      "insideParcels": 30365,
+      "insideFraction": 0.7816562411511828,
+      "heldoutCount": 12949,
+      "heldoutInside": 10116,
+      "heldoutInsideFraction": 0.7812186269209977
+    },
+    {
+      "candidate": "EPSG:24048 with Inverse of UTM zone 48N + Indian 1975 to WGS 84 (2) + axis order change (2D)",
+      "referenceFootprints": 38847,
+      "insideParcels": 34919,
+      "insideFraction": 0.898885370813705,
+      "heldoutCount": 12949,
+      "heldoutInside": 11621,
+      "heldoutInsideFraction": 0.8974438180554483
+    },
+    {
+      "candidate": "EPSG:24048 with Inverse of UTM zone 48N + Indian 1975 to WGS 84 (3) + axis order change (2D)",
+      "referenceFootprints": 38847,
+      "insideParcels": 34937,
+      "insideFraction": 0.8993487270574304,
+      "heldoutCount": 12949,
+      "heldoutInside": 11617,
+      "heldoutInsideFraction": 0.8971349138929647
+    },
+    {
+      "candidate": "EPSG:32648 WGS84 UTM48N",
+      "referenceFootprints": 38847,
+      "insideParcels": 29329,
+      "insideFraction": 0.754987515123433,
+      "heldoutCount": 12949,
+      "heldoutInside": 9832,
+      "heldoutInsideFraction": 0.7592864313846629
+    }
+  ],
+  "holdoutRule": "source footprint ordinal modulo3==0,12949heldout from38847; no fitting or custom shift",
+  "nativeHousePointInParcel": {
+    "sourcePointCount": 28783,
+    "insideCount": 25937,
+    "insideFraction": 0.9011221901817045
+  },
+  "crosswalk": "No verified common house↔parcel key. Geometry joins are not ownership or tax entity matching.",
+  "affectedExistingGeometryLayers": [
+    "houses",
+    "municipality",
+    "publicfacilities"
+  ],
+  "newParcelDataset": {
+    "nativeRecords": 40368,
+    "mappedRecords": 40367,
+    "displayRepairCount": 48,
+    "quarantined": [
+      {
+        "sourceRecord": 38721,
+        "reason": "source degenerate near-zero-area ring becomes nonareal after projection",
+        "nativeAreaM2": 1.3552527156068805e-20,
+        "projectedGeometryType": "LineString"
+      }
+    ],
+    "sourceTopologyRepairCount": 46,
+    "additionalPostProjectionRepairCount": 2,
+    "properties": "geometry,source ordinal and spatial membership only; no cadastral/owner/tax identifiers or free-text notes"
+  },
+  "countsRecomputedBy": "actual geometry intersections with supplied municipality/villages/derived election boundaries, never bounding-box assignment",
+  "insideMunicipalityCounts": {
+    "houses": 28262,
+    "buildings": 38794,
+    "roads": 713,
+    "cctv": 48,
+    "education": 20,
+    "health": 4,
+    "religion": 23,
+    "publicfacilities": 96,
+    "waterways": 108,
+    "parcels": 40224
+  },
+  "beforeDataSHA256": {
+    "roads.geojson": "3cbc284bfb8a0b4ac53c7e70eea722f558c7ff585014d9d405091d4d02554d20",
+    "source-manifest.json": "ab70d1c272de592f9617c825415b0b7265a3ed9f5c4839e2b38a5fd5be7eb737",
+    "religion.geojson": "b2db4d4579e42688e7be2f0261d00e81775848607ad9381480f250a4a375806e",
+    "election.geojson": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+    "flood-evidence.json": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+    "cctv.geojson": "491b44169be7612d70bd9d0057408eed7a562c0b6fccda36336e52f85e850ba1",
+    "municipality.geojson": "009efcf1e15c5ea092a5d235fb939396c2b99e69058d443144c4b13549f2eecd",
+    "metadata.json": "141223683c94002172c6cc3845de1486e727adb6b80cede0717fadcc2de6cf7d",
+    "health.geojson": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+    "houses.geojson": "62c4c521fbb2fa6536b8db5025f3d189ee1d3e1ec36ee01c7106ffd68ef9a820",
+    "buildings.geojson": "ef48e5a0a7471669ebbe26b13b9078e1360f001fe549f1917078f7092ebeafaa",
+    "publicfacilities.geojson": "a1d7b894dd55ac049856dd2ab26634a814db4d71d1e7d8cfe6f72a2af6c2712c",
+    "data-validation.json": "4bd614ea3f2b40b6c869897f2afcb35533ac794056c6f076990eb0c082c24c8f",
+    "election-source-lines.geojson": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+    "education.geojson": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+    "catalog.json": "6a22f20064e2178fe2e9482b12ea31b04c9ed631d60e2bbdc45ed6b8975374f4",
+    "waterways.geojson": "3d4cd1c4b4f07932d75b665030ac1dfbf6bf1f96ab51ba06ec64022bb5d7a371",
+    "villages.geojson": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe"
+  },
+  "afterDataSHA256": {
+    "roads.geojson": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+    "source-manifest.json": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+    "religion.geojson": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+    "election.geojson": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+    "parcels.geojson": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+    "flood-evidence.json": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+    "cctv.geojson": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+    "municipality.geojson": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+    "metadata.json": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+    "health.geojson": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+    "houses.geojson": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+    "buildings.geojson": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+    "publicfacilities.geojson": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+    "data-validation.json": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+    "election-source-lines.geojson": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+    "education.geojson": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+    "catalog.json": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+    "waterways.geojson": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+    "villages.geojson": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe"
+  },
+  "limitations": [
+    "Source coordinate agreement is not independent field survey accuracy.255 control rows exceed1m; max53.83m.",
+    "Parcel display CRS is an evidence-supported inference; originalUNKNOWN metadata remains unchanged.",
+    "Operation2and3 nearlyagree; house numeric controls select2. No custom translation or inferred ownership/tax coverage is used.",
+    "Display-only geometry repair does not validate legal parcel boundaries."
+  ]
+}

@@ -21,11 +21,13 @@
   const S = {
     lang: "th",
     theme: "dark",
-    dataset: "overview",
+    dataset: "buildings",
     boundary: "municipality",
     scope: { type: "municipality", id: "sila" },
     tab: "overview",
     record: null,
+    choice: null,
+    pickIndex: null,
     search: "",
     page: 60,
     catalog: null,
@@ -157,8 +159,8 @@
       "Village figures for 2026 · reconciliation pending",
     ],
     parcels: [
-      "รอยืนยันระบบพิกัด และทะเบียนภาษีต้นทาง",
-      "Awaiting CRS and authoritative tax records",
+      "พิกัดเทียบต้นทางแล้ว · รอรับรองและทะเบียนภาษี",
+      "Source controls compared · formal CRS and tax register pending",
     ],
     flood: [
       "แผน พ.ศ. 2564–2567 ไม่ใช่สถานการณ์ปัจจุบัน",
@@ -178,6 +180,10 @@
     needs_reconciliation: ["รอสอบทาน", "To reconcile"],
     derived_display: ["ขอบเขตทดลอง", "Derived display"],
     blocked_crs: ["รอระบบพิกัด", "CRS pending"],
+    inferred_control_validated: [
+      "พิกัดเทียบต้นทางแล้ว",
+      "Source controls compared",
+    ],
     document_evidence_only: ["หลักฐานเอกสาร", "Document evidence"],
     external_team_pending: ["กำลังจัดทำ", "In preparation"],
   };
@@ -330,9 +336,11 @@
     history[replace ? "replaceState" : "pushState"]({}, "", u);
   }
   function fromURL() {
+    S.pickIndex = null;
     const q = new URLSearchParams(location.search);
-    S.dataset = q.get("dataset") || "overview";
-    if (S.dataset !== "overview" && !dataset(S.dataset)) S.dataset = "overview";
+    S.dataset = q.get("dataset") || "buildings";
+    if (S.dataset !== "overview" && !dataset(S.dataset))
+      S.dataset = "buildings";
     S.boundary = BOUNDARY_TYPES[q.get("boundary")]
       ? q.get("boundary")
       : "municipality";
@@ -349,6 +357,7 @@
     S.lang = q.get("lang") === "en" ? "en" : "th";
     S.theme = q.get("theme") === "light" ? "light" : "dark";
     S.record = null;
+    S.choice = null;
     S.search = "";
     S.page = 60;
     S.tab = "overview";
@@ -447,6 +456,16 @@
   function renderHeader() {
     applyLocale();
     $("dataset-title").textContent = label(S.dataset);
+    window.SilaContextActions.render({
+      mount: $("context-actions"),
+      language: S.lang,
+      datasetId: S.dataset,
+      datasetLabel: label(S.dataset),
+      scopeId: S.scope.id,
+      scopeLabel: scopeLabel(),
+      municipality: text("เทศบาลเมืองศิลา", "Sila Municipality"),
+      sourceDate: "2026-10-05",
+    });
     document.querySelector(".dataset-trigger .dataset-dot").style.background =
       categoryColor(S.dataset);
     $("boundary-mode").value = S.boundary;
@@ -470,7 +489,8 @@
           );
     $("breadcrumbs").innerHTML =
       `<span>${text("ขอนแก่น", "Khon Kaen")}</span><span aria-hidden="true">›</span>${S.scope.type === "municipality" ? `<strong>${scopeLabel()}</strong>` : `<button data-scope="sila">${text("เทศบาลเมืองศิลา", "Sila Municipality")}</button><span aria-hidden="true">›</span><strong>${esc(scopeLabel())}</strong>`}`;
-    $("back").disabled = S.scope.type === "municipality" && !S.record;
+    $("back").disabled =
+      S.scope.type === "municipality" && !S.record && !S.choice;
     document
       .querySelectorAll("[data-tab]")
       .forEach((b) =>
@@ -547,7 +567,10 @@
     else if (S.dataset === "parcels")
       items = [
         [dataset().count, text("รูปแปลงในไฟล์ต้นทาง", "source parcel records")],
-        [null, text("แปลงที่วางบนแผนที่ได้", "georeferenced parcels")],
+        [
+          c,
+          text("รูปแปลงตัดขอบเขตที่เลือก", "parcel shapes intersecting scope"),
+        ],
         [null, text("ความครอบคลุมทะเบียนภาษี", "tax register coverage")],
       ];
     else if (S.dataset === "terrain")
@@ -698,13 +721,33 @@
   function parcelContent() {
     return (
       notice(
-        text("ข้อมูลแปลงพร้อมตรวจต่อ", "Parcel records ready for review"),
         text(
-          "มี 40,368 รูปแปลงในไฟล์ แต่ระบบพิกัดระบุ UNKNOWN จึงยังวางทับบนแผนที่เมืองไม่ได้ ข้อมูลแปลงโฉนดชุดใหม่ยังรอรับ",
-          "The source has 40,368 parcel records with an UNKNOWN CRS, so they cannot be placed on this map yet. The new deed geometry is still pending.",
+          "ดูรูปแปลงเพื่อวางแผนพื้นที่",
+          "Inspect parcels for area planning",
+        ),
+        text(
+          "พิกัดแปลงเทียบข้อมูลต้นทางแล้ว โดยใช้พิกัดอ้างอิงในข้อมูลบ้านและรูปอาคาร ระบบพิกัดในไฟล์ยังเป็น UNKNOWN จึงรอเจ้าหน้าที่รับรองก่อนใช้เป็นหลักฐานทางกฎหมายหรือภาษี",
+          "Parcel coordinates were compared against source house controls and building footprints. The source CRS remains UNKNOWN; formal confirmation is required for legal or tax use.",
         ),
       ) +
-      `<section class="panel-section"><div class="facts-grid">${fact(40368, text("รายการต้นทาง", "Source records"))}${fact(null, text("ความครอบคลุมภาษี", "Tax coverage"), text("รอทะเบียนต้นทางและตัวหาร", "authoritative register pending"))}</div></section><section class="panel-section"><h2>${text("เริ่มตรวจสิ่งปลูกสร้างได้", "Start with buildings")}</h2><p>${text("ใช้รูปอาคารและตำแหน่งบ้านเลขที่สำรวจบริบทได้ เมื่อได้ระบบพิกัดและทะเบียนภาษีจึงทำรายการจับคู่ ตรวจซ้ำ และสอบทานรายการที่ยังจับคู่ไม่ได้", "Inspect footprints and address points now. Match and reconcile parcels only after CRS and authoritative tax records are available.")}</p><button data-dataset="buildings" class="more-button">${text("ดูรูปอาคารในพื้นที่นี้", "View footprints in this area")}</button></section><div class="notice"><strong>${text("ประเด็นในข้อมูลแปลงเดิม", "Source parcel issues")}</strong><p>${text("รหัสแปลงว่าง 77 รายการ · 47 กลุ่มรหัสซ้ำ · ค่าพื้นที่อ่านไม่ได้ 5,453 รายการ ไม่ใช้พื้นที่ที่มีค่าเป็นหลักฐานว่าอยู่ในทะเบียนภาษี", "77 blank parcel codes; 47 duplicate-code groups; 5,453 unreadable area values. Having an area value does not prove tax registration.")}</p></div>`
+      `<section class="panel-section"><div class="facts-grid">${fact(countFor("parcels"), text("รูปแปลงตัดขอบเขตนี้", "Parcel shapes intersecting this scope"))}${fact(null, text("ความครอบคลุมภาษี", "Tax coverage"), text("รอทะเบียนต้นทางและตัวหาร", "authoritative register pending"))}</div><button data-show-list class="more-button">${text("ตรวจรายการแปลงในพื้นที่นี้", "Inspect parcels in this scope")}</button></section>` +
+      notice(
+        text("แผนที่ใช้รูปแสดงผล", "Display geometry"),
+        text(
+          "ต้นทาง 40,368 รายการ แสดงได้ 40,367 รูป · 1 รูปไม่มีพื้นที่จึงไม่วาด · 48 รูปปรับ topology เพื่อแสดงผล ไม่มีชื่อเจ้าของหรือรหัสผู้เสียภาษี และยังไม่จับคู่แปลงกับอาคารเป็นรายการเดียวกัน",
+          "40,368 source rows; 40,367 display shapes. One zero-area shape is quarantined; 48 shapes were repaired for display. Owner and taxpayer identifiers are excluded. Parcels and buildings have no verified entity match.",
+        ),
+      ) +
+      notice(
+        text(
+          "ข้อมูลที่ต้องสอบทานก่อนงานภาษี",
+          "Reconcile before tax operations",
+        ),
+        text(
+          "รหัสแปลงว่าง 77 รายการ · 47 กลุ่มรหัสซ้ำ · ค่าพื้นที่อ่านไม่ได้ 5,453 รายการ ไม่ใช้รูปหรือค่าพื้นที่ยืนยันว่าอยู่ในทะเบียนภาษี",
+          "77 blank parcel codes; 47 duplicate-code groups; 5,453 unreadable area values. Geometry or area values do not prove tax registration.",
+        ),
+      )
     );
   }
   function terrainContent() {
@@ -720,8 +763,7 @@
     );
   }
   function recordsContent() {
-    if (["flood", "parcels", "terrain"].includes(S.dataset))
-      return overviewContent();
+    if (["flood", "terrain"].includes(S.dataset)) return overviewContent();
     if (
       [
         "overview",
@@ -783,7 +825,7 @@
         : S.catalog.folders.filter((f) =>
             (d.sourceFolders || []).includes(f.folder || f.title || f.name),
           );
-    return `<div class="section-title"><h2>${text("ข้อมูลที่ใช้ในมุมมองนี้", "Source for this view")}</h2><span class="status-label">${text(...(statusLabels[d.status] || ["ข้อมูลต้นทาง", "Source data"]))}</span></div><dl class="source-dl"><dt>${text("ความหมายของจำนวน", "Count meaning")}</dt><dd>${esc(text(...(hints[S.dataset] || ["จำนวนรายการจากไฟล์ ไม่ใช่จำนวนบุคคลหรือครัวเรือนที่ยืนยัน", "Source records, not verified unique people or households"])))}</dd><dt>${text("ขอบเขตคำนวณ", "Calculation scope")}</dt><dd>${esc(scopeLabel())} · ${["flood", "parcels", "terrain"].includes(S.dataset) ? text("เป็นบริบทพื้นที่ที่เลือก ชุดนี้ยังไม่ได้จับคู่เชิงพื้นที่", "View context only; this dataset is not spatially assigned") : text("ใช้การตัดกับรูปขอบเขต ไม่ใช้กรอบที่มองเห็น", "Geometry intersection, not the viewport")}</dd><dt>${text("วันรับข้อมูล", "Data received")}</dt><dd>5 ${text("ตุลาคม 2569", "October 2026")} · ${text("ไม่ใช่วันสำรวจ", "not the survey date")}</dd><dt>${text("ที่มารูป/พิกัด", "Geometry source")}</dt><dd>${["flood", "parcels", "terrain"].includes(S.dataset) ? text("ยังไม่มีรูป/พิกัดที่ยืนยันเพื่อแสดงผล", "No verified display geometry available") : d.sourceCRS?.join(", ") || text("ตามไฟล์ขอบเขตที่ได้รับ", "Received boundary files")} · ${text("ความแม่นยำภาคสนามยังไม่รับรอง", "field accuracy is unverified")}</dd><dt>${text("ข้อจำกัดสำคัญ", "Material limitations")}</dt><dd>${plainCaveats(d)}</dd></dl><section class="panel-section" style="margin-top:24px"><div class="section-title"><h2>${text("โฟลเดอร์ต้นทาง", "Source folders")}</h2><span>${num(sourceFolders.length)}</span></div>${sourceFolders.map((f) => `<a class="source-folder" target="_blank" rel="noopener" href="${esc(f.url || f.sourceUrl || "https://drive.google.com/drive/folders/" + f.id)}">${esc(f.folder || f.title || f.name)}<span>${num(f.fileCount ?? f.componentCount ?? f.inventoryComponents ?? f.files?.length)} ${text("ไฟล์ประกอบ", "file components")} · ${text("เปิดใน Google Drive", "open in Google Drive")}</span></a>`).join("")}${!sourceFolders.length && d.sourceUrl ? `<a class="mini-action" href="${esc(d.sourceUrl)}" target="_blank" rel="noopener">${text("เปิดต้นทาง", "Open source")}</a>` : ""}</section>${S.dataset === "flood" ? S.docs.documents.map((x) => `<article class="document-card"><h3>${esc(x.title)}</h3><p>${text("เอกสารประกอบการวางแผน ไม่ใช่สถานการณ์ปัจจุบัน", "Planning document, not current conditions")}</p><a href="${esc(x.url)}" target="_blank" rel="noopener">${text("อ่านเอกสารต้นฉบับ", "Read original document")}</a></article>`).join("") : ""}`;
+    return `<div class="section-title"><h2>${text("ข้อมูลที่ใช้ในมุมมองนี้", "Source for this view")}</h2><span class="status-label">${text(...(statusLabels[d.status] || ["ข้อมูลต้นทาง", "Source data"]))}</span></div><dl class="source-dl"><dt>${text("ความหมายของจำนวน", "Count meaning")}</dt><dd>${esc(text(...(hints[S.dataset] || ["จำนวนรายการจากไฟล์ ไม่ใช่จำนวนบุคคลหรือครัวเรือนที่ยืนยัน", "Source records, not verified unique people or households"])))}</dd><dt>${text("ขอบเขตคำนวณ", "Calculation scope")}</dt><dd>${esc(scopeLabel())} · ${["flood", "terrain"].includes(S.dataset) ? text("เป็นบริบทพื้นที่ที่เลือก ชุดนี้ยังไม่ได้จับคู่เชิงพื้นที่", "View context only; this dataset is not spatially assigned") : text("ใช้การตัดกับรูปขอบเขต ไม่ใช้กรอบที่มองเห็น", "Geometry intersection, not the viewport")}</dd><dt>${text("วันรับข้อมูล", "Data received")}</dt><dd>5 ${text("ตุลาคม 2569", "October 2026")} · ${text("ไม่ใช่วันสำรวจ", "not the survey date")}</dd><dt>${text("ที่มารูป/พิกัด", "Geometry source")}</dt><dd>${["flood", "terrain"].includes(S.dataset) ? text("ยังไม่มีรูป/พิกัดที่ยืนยันเพื่อแสดงผล", "No verified display geometry available") : (S.dataset === "parcels" ? text("ต้นทาง UNKNOWN · EPSG:24048 สำหรับแสดงผลจากการเทียบพิกัดต้นทาง · รอรับรอง", "Source UNKNOWN · display EPSG:24048 inferred from source controls · confirmation pending") : d.sourceCRS?.join(", ")) || text("ตามไฟล์ขอบเขตที่ได้รับ", "Received boundary files")} · ${text("ความแม่นยำภาคสนามยังไม่รับรอง", "field accuracy is unverified")}</dd><dt>${text("ข้อจำกัดสำคัญ", "Material limitations")}</dt><dd>${plainCaveats(d)}</dd></dl><section class="panel-section" style="margin-top:24px"><div class="section-title"><h2>${text("โฟลเดอร์ต้นทาง", "Source folders")}</h2><span>${num(sourceFolders.length)}</span></div>${sourceFolders.map((f) => `<a class="source-folder" target="_blank" rel="noopener" href="${esc(f.url || f.sourceUrl || "https://drive.google.com/drive/folders/" + f.id)}">${esc(f.folder || f.title || f.name)}<span>${num(f.fileCount ?? f.componentCount ?? f.inventoryComponents ?? f.files?.length)} ${text("ไฟล์ประกอบ", "file components")} · ${text("เปิดใน Google Drive", "open in Google Drive")}</span></a>`).join("")}${!sourceFolders.length && d.sourceUrl ? `<a class="mini-action" href="${esc(d.sourceUrl)}" target="_blank" rel="noopener">${text("เปิดต้นทาง", "Open source")}</a>` : ""}</section>${S.dataset === "flood" ? S.docs.documents.map((x) => `<article class="document-card"><h3>${esc(x.title)}</h3><p>${text("เอกสารประกอบการวางแผน ไม่ใช่สถานการณ์ปัจจุบัน", "Planning document, not current conditions")}</p><a href="${esc(x.url)}" target="_blank" rel="noopener">${text("อ่านเอกสารต้นฉบับ", "Read original document")}</a></article>`).join("") : ""}`;
   }
   function plainCaveats(d) {
     const notes = [];
@@ -831,6 +873,14 @@
   }
   function renderRecord() {
     const el = $("record-detail");
+    if (!S.record && S.choice) {
+      const c = S.choice,
+        rows = c.features.slice(0, c.page),
+        area = c.kind === "areas";
+      el.hidden = false;
+      el.innerHTML = `<article class="record-card"><div class="record-title"><div><small>${text("เลือกจากพื้นที่ที่คลิก", "Choose from the clicked area")}</small><h2>${num(c.features.length)} ${area ? text("ขอบเขต", "areas") : text("รายการ", "records")}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><p>${esc(c.reason)}</p><div class="record-choices">${rows.map((f) => `<button class="record-choice" ${area ? "data-scope" : "data-record"}="${esc(f.properties.id)}"><strong>${esc(f.properties.label || f.properties.id)}</strong>${!area ? `<span>${text("รายการต้นทาง", "Source row")} ${num(f.properties.sourceRecord)}</span>` : ""}</button>`).join("")}</div>${rows.length < c.features.length ? `<button class="more-button" data-choice-more>${text("แสดงเพิ่ม", "Show more")} (${num(c.features.length - rows.length)})</button>` : ""}${!area ? `<button class="mini-action" data-focus-choice>${text("ซูมดูบริเวณรายการนี้", "Zoom to these records")}</button>` : ""}</article>`;
+      return;
+    }
     if (!S.record) {
       el.hidden = true;
       el.innerHTML = "";
@@ -875,8 +925,9 @@
     $("map").addEventListener("click", (e) => {
       if (e.target.closest(".leaflet-control-zoom")) S.interactionRevision++;
     });
-    S.map.on("click", () => {
-      if (S.record) closeRecord();
+    S.map.on("click", handleMapClick);
+    S.map.on("zoomend", () => {
+      $("map").dataset.zoom = String(S.map.getZoom());
     });
     new ResizeObserver(() => S.map.invalidateSize({ pan: false })).observe(
       $("map"),
@@ -892,49 +943,48 @@
     }
     S.tileFailed = false;
     $("map-error").hidden = true;
-    if (S.basemap === "none") return;
-    const sources =
-      S.theme === "dark"
-        ? [
-            {
-              url: "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-              maxNativeZoom: 23,
-              attribution:
-                'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>, HERE, Garmin, <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, GIS user community',
-            },
-            {
-              url: "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
-              maxNativeZoom: 23,
-            },
-          ]
-        : [
-            {
-              url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-              maxNativeZoom: 19,
-              attribution:
-                '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
-            },
-          ];
-    const tiles = sources.map((source) =>
-      L.tileLayer(source.url, {
-        maxZoom: 20,
-        maxNativeZoom: source.maxNativeZoom,
-        noWrap: true,
-        keepBuffer: 1,
-        updateWhenIdle: true,
-        attribution: source.attribution,
-      }).on("tileerror", () => {
-        if (revision !== S.basemapRevision || S.tileFailed) return;
+    if (S.basemap === "none") {
+      $("map").dataset.basemapStatus = "none";
+      $("map").dataset.basemapRenderer = "";
+      return;
+    }
+    $("map").dataset.basemapStatus = "loading";
+    S.tile = window.SilaBasemap.create({
+      theme: S.theme,
+      language: S.lang,
+      fallback: true,
+    })
+      .on("basemapstatus", (e) => {
+        if (revision !== S.basemapRevision) return;
+        $("map").dataset.basemapStatus = e.status;
+        $("map").dataset.basemapRenderer = e.renderer || "";
+        $("map").dataset.basemapTheme = S.theme;
+        if (e.status === "ready") {
+          S.tileFailed = false;
+          $("map-error").hidden = true;
+        }
+      })
+      .on("tileerror", () => {
+        if (revision !== S.basemapRevision) return;
         S.tileFailed = true;
         $("map-error").textContent = text(
-          "พื้นหลังบางส่วนโหลดไม่ได้ ขอบเขตและข้อมูลยังใช้งานได้",
-          "Some basemap tiles failed. Boundaries and data remain usable.",
+          "พื้นหลังบางส่วนโหลดไม่ได้ ข้อมูลเทศบาลยังใช้งานได้",
+          "Some basemap tiles failed. Municipal data remains usable.",
         );
         $("map-error").hidden = false;
-      }),
-    );
-    S.tile = L.layerGroup(tiles).addTo(S.map);
+      })
+      .on("basemapfallback", () => {
+        if (revision !== S.basemapRevision) return;
+        S.tileFailed = true;
+        $("map-error").textContent = text(
+          "OpenFreeMap ใช้งานไม่ได้ในขณะนี้ · ใช้พื้นหลัง OpenStreetMap สำรอง",
+          "OpenFreeMap unavailable · using the OpenStreetMap fallback",
+        );
+        $("map-error").hidden = false;
+      })
+      .addTo(S.map);
   }
+
   function fitScope() {
     const b = scopeData().bbox;
     if (!b) return;
@@ -1063,20 +1113,8 @@
         });
         l.on("mouseout", () => S.boundaryLayer.resetStyle(l));
         l.on("click", (e) => {
-          L.DomEvent.stopPropagation(e.originalEvent);
-          if (S.scope.id !== f.properties.id) selectScope(f.properties.id);
-          else if (
-            ![
-              "overview",
-              "population",
-              "villages",
-              "municipality",
-              "election",
-            ].includes(S.dataset)
-          ) {
-            S.tab = "list";
-            renderPanel();
-          }
+          if (e.originalEvent) L.DomEvent.stopPropagation(e.originalEvent);
+          handleMapClick(e);
         });
         l.on("add", () => {
           const node = l.getElement?.();
@@ -1102,7 +1140,7 @@
       color: categoryColor(id),
       weight: id === "roads" ? 2 : id === "buildings" ? 0.8 : 1.2,
       opacity: 1,
-      fill: !["roads"].includes(id),
+      fill: !["roads", "parcels"].includes(id),
       fillColor: categoryColor(id),
       fillOpacity: 1,
     };
@@ -1143,6 +1181,7 @@
     if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
     S.selectedLayer = null;
     const d = dataset();
+    S.pickIndex = null;
     if (
       !d.geojson ||
       ["population", "villages", "municipality", "election"].includes(S.dataset)
@@ -1152,10 +1191,37 @@
     }
     const fc = await fetchJSON(d.geojson);
     if (ticket !== S.ticket) return;
-    S.featureLayer = featureGroup(
-      { ...fc, features: filterFeatures(fc) },
-      S.dataset,
-    ).addTo(S.map);
+    const scoped = filterFeatures(fc);
+    S.pickIndex = window.SilaMapPick.createIndex(scoped);
+    S.featureLayer =
+      S.dataset === "houses"
+        ? window.SilaHousePoints.create({
+            features: scoped,
+            language: S.lang,
+            color: categoryColor("houses"),
+            strokeColor: mapToken("markerStroke"),
+            clusterActionLabel:
+              S.scope.type === "municipality" && S.boundary !== "municipality"
+                ? text("เลือกพื้นที่บริเวณนี้", "select this area")
+                : text("เปิดรายการทั้งหมด", "open all members"),
+            onSelectRecord: (feature) => {
+              const [lng, lat] = feature.geometry.coordinates;
+              if (!tryDrillAreaAt({ lng, lat })) selectRecord(feature);
+            },
+            onCluster: (members, context) => {
+              if (tryDrillAreaAt(context.latlng)) return;
+              showChoice(
+                members,
+                text(
+                  "จำนวนคือหมุดจากไฟล์ เปิดเลือกแต่ละรายการได้ ไม่ใช่จำนวนครัวเรือนที่ยืนยัน",
+                  "Counts represent source point records. Choose any member; these are not verified households.",
+                ),
+              );
+            },
+          }).addTo(S.map)
+        : featureGroup({ ...fc, features: scoped }, S.dataset, false).addTo(
+            S.map,
+          );
     drawLegend();
     if (S.restoreRecord) {
       const r = fc.features.find((x) => x.properties.id === S.restoreRecord);
@@ -1163,6 +1229,75 @@
       S.restoreRecord = null;
     }
     if (S.record) drawSelected();
+  }
+  function showChoice(features, reason, kind = "records") {
+    S.record = null;
+    if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
+    S.selectedLayer = null;
+    S.choice = { features: [...features], reason, kind, page: 60 };
+    renderRecord();
+    renderHeader();
+    syncURL();
+    if (matchMedia("(max-width:899px)").matches)
+      $("record-detail").scrollIntoView({ behavior: "auto", block: "start" });
+  }
+  function tryDrillAreaAt(latlng) {
+    const xy = [latlng.lng, latlng.lat];
+    if (S.scope.type === "municipality" && S.boundary !== "municipality") {
+      const areas = geoForBoundary().features.filter((f) =>
+        window.SilaMapPick.containsPoint(f.geometry, xy),
+      );
+      if (areas.length === 1) {
+        selectScope(areas[0].properties.id);
+        return true;
+      }
+      if (areas.length > 1) {
+        showChoice(
+          areas,
+          text(
+            "ขอบเขตต้นทางซ้อนกันบริเวณนี้ เลือกพื้นที่ที่จะตรวจ",
+            "Source boundaries overlap here. Choose the area to inspect.",
+          ),
+          "areas",
+        );
+        return true;
+      }
+    }
+    return false;
+  }
+  function handleMapClick(e) {
+    if (!e.latlng) return;
+    const xy = [e.latlng.lng, e.latlng.lat];
+    const municipal = S.cache.get("data/municipality.geojson")?.features[0];
+    if (municipal && !window.SilaMapPick.containsPoint(municipal.geometry, xy))
+      return;
+    if (tryDrillAreaAt(e.latlng)) return;
+    const hits = S.pickIndex?.pick({
+      map: S.map,
+      latlng: e.latlng,
+      tolerancePx: matchMedia("(pointer:coarse)").matches ? 22 : 12,
+      limit: Infinity,
+    });
+    if (hits?.total === 1) {
+      selectRecord(hits.features[0]);
+      return;
+    }
+    if (hits?.total > 1) {
+      showChoice(
+        hits.features,
+        hits.exact
+          ? text(
+              "หลายรูปตัดตำแหน่งนี้ เลือกรายการที่ต้องการ",
+              "Several geometries intersect this position. Choose a record.",
+            )
+          : text(
+              "พบรายการใกล้จุดที่คลิก เลือกเพื่อดูตำแหน่งจริง",
+              "Nearby records found. Choose one to inspect its original position.",
+            ),
+      );
+      return;
+    }
+    if (S.record || S.choice) closeRecord();
   }
   function drawSelected() {
     if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
@@ -1221,7 +1356,7 @@
         `<div>${text("คน · รวมต้นทาง ปี 2569", "People · source total, 2026")}</div><div class="population-legend">${cs.map((c, i) => `<span><span class="legend-swatch" style="background:${c}"></span><small>${num(Math.ceil((i * max) / 5))}–${num(i === 4 ? max : Math.ceil(((i + 1) * max) / 5) - 1)}</small></span>`).join("")}</div><div class="legend-description">${text("หมู่ 11 รอสอบทาน · สีไม่ใช่ความเสี่ยง", "Village 11 to reconcile · not a risk scale")}</div>`;
     } else
       $("map-legend").innerHTML =
-        `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div>${dataset().geojson && !["overview", "population", "villages", "municipality", "election"].includes(S.dataset) ? `<div class="legend-row"><span class="legend-dot" style="background:${categoryColor(S.dataset)}"></span><span>${esc(label(S.dataset))}</span></div>` : ""}<div class="legend-description">${text("เลือกขอบเขตเพื่อดูรายการ · สีไม่ใช่ระดับความเสี่ยง", "Select a boundary to inspect records · colors are not risk levels")}</div>`;
+        `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div>${dataset().geojson && !["overview", "population", "villages", "municipality", "election"].includes(S.dataset) ? `<div class="legend-row"><span class="legend-dot" style="background:${categoryColor(S.dataset)}"></span><span>${esc(label(S.dataset))}</span></div>` : ""}<div class="legend-description">${S.dataset === "houses" ? text("ตัวเลขบนหมุด = รายการบ้านในกลุ่ม · กดเพื่อเลือกบ้าน", "Marker counts = grouped source house records · select to inspect") : text("คลิกพื้นที่หรือรูปข้อมูลเพื่อดูรายการ · สีไม่ใช่ความเสี่ยง", "Click an area or data shape to inspect records · colors are not risk")}</div>`;
     $("map-context-text").textContent =
       S.scope.type === "municipality"
         ? S.boundary === "election"
@@ -1231,8 +1366,8 @@
             )
           : S.boundary === "municipality"
             ? text(
-                "ขอบเขตเทศบาล · เลือกประเภทขอบเขตเพื่อลงรายละเอียด",
-                "Municipal boundary · choose a boundary type to drill down",
+                "คลิกรูปข้อมูลเพื่อดูรายการ หรือเลือกหมู่บ้านเพื่อลงรายละเอียด",
+                "Click data shapes to inspect records, or choose villages to drill down",
               )
             : text(
                 "ขอบเขตหมู่บ้านจากไฟล์ · คลิกพื้นที่เพื่อลงรายละเอียด",
@@ -1271,9 +1406,11 @@
     }
   }
   async function setDataset(id, push = true) {
+    S.pickIndex = null;
     if (id !== "overview" && !dataset(id)) return;
     S.dataset = id;
     S.record = null;
+    S.choice = null;
     S.restoreRecord = null;
     S.search = "";
     S.page = 60;
@@ -1296,7 +1433,9 @@
     await refreshMap();
   }
   async function selectScope(id, push = true) {
+    S.pickIndex = null;
     S.record = null;
+    S.choice = null;
     S.restoreRecord = null;
     S.search = "";
     S.page = 60;
@@ -1320,6 +1459,7 @@
     )
       return;
     S.record = f;
+    S.choice = null;
     renderRecord();
     drawSelected();
     renderHeader();
@@ -1329,6 +1469,7 @@
   }
   function closeRecord(push = true) {
     S.record = null;
+    S.choice = null;
     if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
     S.selectedLayer = null;
     renderRecord();
@@ -1438,7 +1579,28 @@
         renderPanel();
       }
       if (e.target.closest("[data-close-record]")) closeRecord();
+      if (e.target.closest("[data-choice-more]") && S.choice) {
+        S.choice.page += 60;
+        renderRecord();
+      }
+      if (
+        e.target.closest("[data-focus-choice]") &&
+        S.choice?.kind === "records"
+      ) {
+        const bounds = L.geoJSON({
+          type: "FeatureCollection",
+          features: S.choice.features,
+        }).getBounds();
+        S.interactionRevision++;
+        if (bounds.isValid())
+          S.map.fitBounds(bounds, {
+            padding: [48, 48],
+            maxZoom: 19,
+            animate: false,
+          });
+      }
       if (e.target.closest("[data-focus-record]") && S.selectedLayer) {
+        S.interactionRevision++;
         S.map.fitBounds(S.selectedLayer.getBounds(), {
           padding: [48, 48],
           maxZoom: 18,
@@ -1465,9 +1627,11 @@
       }
     });
     $("boundary-mode").addEventListener("change", () => {
+      S.pickIndex = null;
       S.boundary = $("boundary-mode").value;
       S.scope = { type: "municipality", id: "sila" };
       S.record = null;
+      S.choice = null;
       S.restoreRecord = null;
       S.search = "";
       S.page = 60;
@@ -1492,13 +1656,17 @@
       setBasemap();
     });
     $("back").addEventListener("click", () =>
-      S.record ? closeRecord() : selectScope("sila"),
+      S.record || S.choice ? closeRecord() : selectScope("sila"),
     );
-    $("fit").addEventListener("click", fitScope);
+    $("fit").addEventListener("click", () => {
+      S.interactionRevision++;
+      fitScope();
+    });
     $("language").addEventListener("click", () => {
       S.lang = S.lang === "th" ? "en" : "th";
       renderPanel();
       renderCatalog();
+      S.tile?.setLanguage?.(S.lang);
       refreshMap();
       syncURL();
     });
@@ -1516,7 +1684,7 @@
           if (!$("layer-options").hidden) {
             $("layer-options").hidden = true;
             $("layers-open").setAttribute("aria-expanded", "false");
-          } else if (S.record) closeRecord();
+          } else if (S.record || S.choice) closeRecord();
         }
       }
     });
@@ -1594,6 +1762,16 @@
       count: countFor(S.dataset),
       featureCount: currentFeatures().length,
       ready: S.ready,
+      basemap: S.tile?.getBasemapState?.() || { status: "none" },
+      houseDisplay:
+        S.dataset === "houses" ? S.featureLayer?.getDisplayState?.() : null,
+      choice: S.choice
+        ? {
+            kind: S.choice.kind,
+            total: S.choice.features.length,
+            page: S.choice.page,
+          }
+        : null,
     }),
     selectScope,
     setDataset,

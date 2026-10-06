@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "sila-context-actions-semantic-tests-1",
+  "checkedAtUtc": "2026-10-05T18:24:40.411Z",
+  "sourceFile": "context-actions.js",
+  "sourceSha256": "6f6d29b82af235a0757bed0538ee5529bedffc939de8bdd48ef60bc6ff848d39",
+  "method": "Node VM with test-only function exports; delivered module unchanged",
+  "status": "pass",
+  "checks": [
+    {
+      "id": "all-supported-defaults-public-safe",
+      "result": "pass"
+    },
+    {
+      "id": "unprovided-record-fields-not-composed",
+      "result": "pass"
+    },
+    {
+      "id": "sensitive-patterns-blocked",
+      "result": "pass"
+    },
+    {
+      "id": "empty-sensitive-edit-no-external-open",
+      "result": "pass"
+    },
+    {
+      "id": "no-provider-request-during-load-or-composition",
+      "result": "pass"
+    },
+    {
+      "id": "explicit-external-helper-new-tab-no-referrer",
+      "result": "pass"
+    },
+    {
+      "id": "ai-no-url-prompt-or-udm-deeplink",
+      "result": "pass"
+    }
+  ],
+  "compositionCases": 34,
+  "limits": [
+    "Bounded composition/privacy/helper tests; no actual browser render or accessibility pass.",
+    "Pattern guard does not prove every freeform edit is public-safe.",
+    "Clipboard/popup policy, TH/EN layout and native disclosure/edit preservation need root browser checks."
+  ]
+}

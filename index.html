@@ -9,12 +9,28 @@
     <title>ศิลา · ข้อมูลเมือง | CityChat CityMETER</title>
     <link
       rel="icon"
-      href="assets/brand/citychat-favicon-3b7439f6.png"
+      href="favicon.ico?v=6541e9e2"
+      type="image/x-icon"
+      sizes="16x16 32x32 48x48"
+    />
+    <link
+      rel="icon"
+      href="assets/brand/citychat-tab-32-d9ac160e.png"
       type="image/png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      href="assets/brand/citychat-tab-square-1fc894ca.svg"
+      type="image/svg+xml"
+      sizes="any"
     />
     <link rel="stylesheet" href="assets/fonts.css" />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="basemap.css" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="house-points.css" />
+    <link rel="stylesheet" href="context-actions.css" />
     <link rel="stylesheet" href="assets/brand/citychat-motif-motion.css" />
     <link rel="stylesheet" href="assets/brand/citychat-header-logo.css" />
     <script type="module" src="assets/brand/citychat-header-logo.js"></script>
@@ -84,7 +100,7 @@
             <span class="dataset-dot" aria-hidden="true"></span
             ><span
               ><small data-i18n="dataset">ชุดข้อมูล</small
-              ><strong id="dataset-title">ภาพรวมพื้นที่</strong></span
+              ><strong id="dataset-title">รูปอาคาร</strong></span
             ><span class="chevron" aria-hidden="true">⌄</span>
           </button>
           <div class="map-toolbar-secondary">
@@ -188,7 +204,7 @@
           <div class="eyebrow" id="place-eyebrow">ขอนแก่น · ข้อมูลเทศบาล</div>
           <h1 id="place-title">เทศบาลเมืองศิลา</h1>
           <p id="place-description">
-            เริ่มจากภาพรวม เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้อง
+            เริ่มจากรูปอาคาร เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้อง
           </p>
         </div>
         <div class="purpose-actions" role="group" aria-label="หัวข้องาน">
@@ -198,6 +214,7 @@
             ที่ดินและสิ่งปลูกสร้าง
           </button>
         </div>
+        <div id="context-actions"></div>
         <div id="record-detail" hidden></div>
         <div class="inspector-tabs" role="tablist" aria-label="มุมมองข้อมูล">
           <button
@@ -297,6 +314,10 @@
     </dialog>
     <div id="toast" class="toast" role="status" hidden></div>
     <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="basemap.js"></script>
+    <script src="house-points.js"></script>
+    <script src="map-pick.js"></script>
+    <script src="context-actions.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,0 +1,27 @@
+/* Artifact-local context actions; all colours inherit current LDS UI roles. */
+.cc-context-actions{margin:8px 0 0;border-top:1px solid var(--hairline);color:var(--primary);font:inherit}
+.cc-context-actions summary{min-height:44px;padding:10px 0;cursor:pointer;line-height:1.6;overflow-wrap:anywhere}
+.cc-context-actions>summary{font-weight:600;color:var(--secondary)}
+.cc-context-actions summary:focus-visible,.cc-context-actions button:focus-visible,.cc-context-actions textarea:focus-visible,.cc-context-actions a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.cc-context-body{padding:0 0 12px;max-width:100%;min-width:0}
+.cc-context-body p{margin:0 0 12px;line-height:1.7;overflow-wrap:anywhere}
+.cc-context-benefit,.cc-context-note{color:var(--muted);font-size:.9em}
+.cc-context-job{min-width:0}
+.cc-context-job+.cc-context-job{margin-top:12px;border-top:1px solid var(--hairline)}
+.cc-context-job>summary{font-weight:600}
+.cc-context-field-heading{font-weight:600;color:var(--secondary);font-size:.9em}
+.cc-context-fields{margin:0 0 14px;font-size:.85em;color:var(--muted)}
+.cc-context-fields>div{display:grid;grid-template-columns:minmax(80px,.8fr) minmax(0,1.8fr);gap:6px 12px;margin:5px 0}
+.cc-context-fields dt,.cc-context-fields dd{margin:0;overflow-wrap:anywhere}
+.cc-context-fields dd{color:var(--secondary)}
+.cc-context-job label{display:block;margin:0 0 6px;font-weight:600;font-size:.9em}
+.cc-context-job textarea{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:88px;resize:vertical;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--raised);color:var(--primary);font:inherit;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin-bottom:12px}
+.cc-context-controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;min-width:0}
+.cc-context-controls button,.cc-context-provider{box-sizing:border-box;min-height:44px;max-width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:999px;background:var(--card);color:var(--primary);font:inherit;line-height:1.6;white-space:normal;overflow-wrap:anywhere;cursor:pointer;text-align:center}
+.cc-context-controls button:hover,.cc-context-provider:hover{background:var(--soft)}
+.cc-context-controls .cc-context-copy{color:var(--secondary);background:transparent}
+.cc-context-provider{display:inline-flex;align-items:center;justify-content:center;color:var(--secondary);text-decoration:none;margin-bottom:12px}
+.cc-context-status{color:var(--secondary);font-size:.9em;min-height:0}
+.cc-context-status:empty{display:none}
+.cc-context-unavailable{margin:8px 0;color:var(--muted);font-size:.9em;line-height:1.7}
+@media(max-width:599px){.cc-context-controls{flex-direction:column}.cc-context-controls button{width:100%}.cc-context-fields>div{grid-template-columns:1fr;gap:0}.cc-context-provider{width:100%}}

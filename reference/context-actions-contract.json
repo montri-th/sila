@@ -1,0 +1,475 @@
+{
+  "schemaVersion": "sila-context-actions-contract-1",
+  "artifact": "sila-citymeter-officer-prototype",
+  "status": "implemented_artifact_local_behavior; browser_QA_and_deployed_parity_recorded_separately",
+  "updatedOn": "2026-10-06",
+  "authority": {
+    "lds": {
+      "version": "0.9.7",
+      "releaseRef": "v0.9.7-owner.1",
+      "colorSetId": "color-srgb-10",
+      "documentRef": "project-source:Landometer-Design-System-v0.9.7.md",
+      "sha256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96"
+    },
+    "citychatAddon": {
+      "version": "0.9.2",
+      "documentRef": "project-source:CityChat-Add-on-v0.9.2-for-LDS-v0.9.7.md",
+      "sha256": "345ef4054d7a646a73a8b369549c58c8b11d3190e39de5aa0f59704d6a3223ad"
+    },
+    "selection": "Current human user request explicitly names contextual discovery, external search and AI extension patterns; root commissioned this artifact-local module.",
+    "historicalBehaviorRefs": [
+      {
+        "patternId": "CONTEXT-01",
+        "source": "reference_landometer_repo/deployment/assets/downloads/landometer-design-system-v0.9.0.md",
+        "lines": [
+          2061,
+          2077
+        ],
+        "scope": "Historical conditional Context Discovery behavior; owner explicitly selected for this artifact.",
+        "currentNormativeRule": false,
+        "sourceSha256": "52ef41f1b231f8b84955a40c21a018991a114a4f5eaabd8c5111816bf8d645b1"
+      },
+      {
+        "patternId": "IMPL-SEARCH-EXT-01",
+        "source": "reference_landometer_repo/deployment/implementation-notes.v0.8.8.md",
+        "lines": [
+          87,
+          140
+        ],
+        "scope": "Historical artifact implementation note for visible editable external Source Search.",
+        "currentNormativeRule": false,
+        "sourceSha256": "fff3b5f3637e684817c5d9a648313603781576845630a529aa28f44403cfdb76"
+      },
+      {
+        "patternId": "IMPL-AI-EXT-01",
+        "source": "reference_landometer_repo/deployment/implementation-notes.v0.8.8.md",
+        "lines": [
+          141,
+          164
+        ],
+        "scope": "Historical artifact implementation note for named-provider AI synthesis handoff.",
+        "currentNormativeRule": false,
+        "sourceSha256": "fff3b5f3637e684817c5d9a648313603781576845630a529aa28f44403cfdb76"
+      }
+    ],
+    "migration": {
+      "source": "citychat_publish_repo/vendor/landometer/v0.9.1/migration-ledger.json",
+      "sourceSha256": "6545ef9ab6e42237055e725509f61d7ca1db4bf1bc75ea3b92802b0f2d71b34c",
+      "predecessorRuleId": "CONTEXT-01",
+      "disposition": "superseded_by",
+      "targetRuleIds": [
+        "LAYER-01",
+        "EVIDENCE-01"
+      ]
+    },
+    "classification": "Owner-selected artifact-local behavior adapted under current LDS and CityChat rules. Historical IDs are not present in the exact current base or CityChat Add-on rule catalog; no old color/font/asset tokens adopted.",
+    "currentNormativeRules": [
+      {
+        "id": "AUTHORITY-01",
+        "title": "Resolve authority before design",
+        "section": "governance",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "Build Card MUST ระบุ content sources, claim owner, evidence boundary และ applicable release ก่อนเริ่ม composition; example/proposal MUST NOT override approved truth เงียบ ๆ\n\n\nข้อความที่ติดป้าย Example/Reference/Candidate/Historical MUST NOT ถูกคัดลอกไปใช้เป็น authority หากขัดกับ numbered rule block, `machine.ruleCatalog` หรือ approved product/portfolio truth ให้ใช้ authority เหล่านั้นและแก้ตัวอย่าง ไม่ตีความตัวอย่างเป็นข้อยกเว้น",
+        "acceptance": [
+          {
+            "checkId": "AUTHORITY-01-A",
+            "method": "automated",
+            "criterion": "required authority fields มีค่าและ resolve ได้"
+          },
+          {
+            "checkId": "AUTHORITY-01-B",
+            "method": "manual",
+            "criterion": "conflict ถูกตัดสินตาม domain authority และมี record"
+          },
+          {
+            "checkId": "AUTHORITY-01-C",
+            "method": "automated",
+            "criterion": "pre-generation plan records authority, product scope, job, object, AHA, actions, format, capabilities, claims, assets, assumptions, blockers and QA without invented approval/evidence"
+          }
+        ],
+        "sourceTextSha256": "50a79eb7b9a6114dec2ad513ac1d39798d4d3805a84755ed22cea12e26820844",
+        "sourceRuleId": "AUTHORITY-01"
+      },
+      {
+        "id": "LAYER-01",
+        "title": "Keep shared and product-specific layers separate",
+        "section": "architecture",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "Shared Landometer language MUST product-neutral across Land, Location และ Living ส่วน named-product fact, audience, sector, data และ permission MUST อยู่ใน product-specific layer",
+        "acceptance": [
+          {
+            "checkId": "LAYER-01-A",
+            "method": "manual",
+            "criterion": "capability และ claim ทุกอันติดป้าย shared หรือ named product"
+          },
+          {
+            "checkId": "LAYER-01-B",
+            "method": "manual",
+            "criterion": "ไม่มี municipality, retail, F&B, ijji หรือ CityWiki example ถูกเหมารวมเป็น portfolio truth โดยไร้ approval"
+          }
+        ],
+        "sourceTextSha256": "563751989be8c6a6af7d70c631c7e33f0ff99f497508ba30d97942dd084adb62",
+        "sourceRuleId": "LAYER-01"
+      },
+      {
+        "id": "EVIDENCE-01",
+        "title": "Claims retain evidence boundaries",
+        "section": "evidence",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "Material factual claim ทุกอัน MUST resolve stable claim record ที่มี scope, source, method, time basis, status และ owner Limitation หรือ uncertainty ที่มีผลต่อการตีความ MUST มองเห็นใกล้ claim ในภาษาของผู้ใช้ ส่วน missing evidence ที่ทำให้ claim ไม่ปลอดภัยต้อง block claim/output ไม่ใช่กลายเป็นข้อความแก้ตัว",
+        "acceptance": [
+          {
+            "checkId": "EVIDENCE-01-A",
+            "method": "automated",
+            "criterion": "displayed material claimId resolve record เดียวที่มี required fields"
+          },
+          {
+            "checkId": "EVIDENCE-01-B",
+            "method": "manual",
+            "criterion": "wording ไม่เกิน scope/certainty ของ evidence"
+          }
+        ],
+        "sourceTextSha256": "56d8d62cde1baa05c1d03d4e3a5cb610520d5d6b590a42a79ead81c2e35b3792",
+        "sourceRuleId": "EVIDENCE-01"
+      },
+      {
+        "id": "OUTPUT-CLARITY-01",
+        "title": "Ship resolved audience meaning, not workflow residue",
+        "section": "evidence",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "Public, client-facing หรือ production output MUST มีเฉพาะสิ่งที่ผู้ใช้ต้องใช้เพื่อเข้าใจ ตัดสินใจ หรือทำงานต่อ ได้แก่ content, state, ข้อจำกัดจริง และ action ที่พร้อมใช้ คำว่า `workflow residue` ใน machine contract หมายถึงข้อความเกี่ยวกับขั้นตอนทำงานภายใน เช่น รออนุมัติ, ยังไม่ตรวจ, schema/rule/package ID, local/source path, debug/validator text, TODO/TBD/FIXME และ placeholder สิ่งเหล่านี้ MUST อยู่ใน internal record เท่านั้นและ MUST NOT ปรากฏในงานที่ส่งให้ผู้ใช้\n\n\nถ้าข้อมูลหรือสิทธิ์ที่ยังขาดอาจเปลี่ยนความจริง, identity, rights, accessibility, ความครบของภาษา, primary action หรือการตีความ evidence งานนั้น MUST หยุดส่งและอยู่เป็น internal preview จนแก้เสร็จ ห้ามส่งข้อความเกี่ยวกับการผลิตงาน เช่น “ยังไม่ยืนยันเพื่อเผยแพร่” หรือ “รอข้อมูลจากทีม” เพื่อให้ผู้ใช้รับภาระแทนทีม ข้อจำกัดจริงที่ผู้ใช้ต้องรู้—เช่นช่วงเวลาข้อมูล, พื้นที่ครอบคลุม หรือสิ่งที่ข้อมูลนี้ใช้สรุปไม่ได้—ยัง MUST แสดงใกล้ claim/action ที่เกี่ยวข้อง ด้วยภาษาตรงเรื่องและบอกผลต่อการตัดสินใจ ห้ามใช้ disclaimer รวมกว้าง ๆ หรือคำเตือนหลายชั้นแทนคำอธิบายเฉพาะเรื่อง\n\n`audienceOutput.disclosurePurpose: ordinary_experience` เป็น default สำหรับ output ที่คนใช้ตามปกติ Purpose แบบ nonordinary ได้แก่ `design_system_reference` และ `provenance_record` เท่านั้น และ MUST bind `disclosureAuthorityRef` กับ `disclosureAuthoritySha256` คู่กัน Authority ต้องอยู่ใน bundle, hash-bound และเปิดได้เฉพาะ field class ที่ schema อนุญาต: DS reference ใช้ `release_identifiers | schema_examples`; provenance record ใช้ `provenance_facts | approval_facts` เท่านั้น Immutable approval fact ที่ได้รับอนุญาตไม่ใช่ mutable approval workflow คำว่า draft/candidate/pending/unverified ถูกห้ามเฉพาะเมื่อเป็น **internal approval/release workflow residue**; state ที่เป็นความจริงของงานผู้ใช้ เช่น draft content, pending transaction หรือ unverified audience-domain datum ยังคงแสดงได้เมื่อจำเป็นและต้องมี label/behavior ที่ตรงความหมาย Authority ทุกแบบยังห้าม debug/validator text, local path, placeholder และ unresolved dependency Artifact manifest `representation.outputClarity` MUST carry `deliveryAudience`, `disclosurePurpose` และ authority ref/hash เดียวกันเมื่อ applicable\n\nResidue scan ครอบคลุม Build Card `navigation.destinations[]` ใน `target`, `label`, `labelByLocale`, `compactLabel`, `compactLabelByLocale` และ Artifact Manifest ใน `representation.navigation`, audience fields ของ `delivery.metadataProjection` กับ `delivery.accessibilityProjection` ตลอดจน final audience bytes ทุกไฟล์ผ่าน `delivery.contentInspections[]` แบบ exact one-per-file ห้าม skip ตาม media type หรือ skip บาง rendered unit: text-readable format เทียบ extracted text กับ bytes โดยตรง; DOCX, PPTX และ PDF MUST bind จำนวน page/slide, render ทุก unit เป็น raster ที่ path/hash/media bytes ตรงกัน และตรวจด้วย text extraction + OCR + visual review พร้อม flag ว่าได้ตรวจ image-only/outlined text แล้ว ข้อความแต่ละ channel รวมด้วยลำดับและ label ที่ deterministic ก่อน hash/scan; raster social ใช้ OCR พร้อม visual review และ media อื่นใช้ transcript/content review ที่ตรงชนิด ไฟล์ evidence ทุกใบ MUST อยู่ใน bundle, bind path/media type/subject hash/byte count/method/time และมี SHA-256 ของตัว evidence เอง การย้าย draft/review/debug/local-path wording เข้า label, target, export หรือภาพยังคงเป็น workflow residue; nonordinary authority เปิดได้เฉพาะ allowed field class ที่ระบุ และไม่เคยเปิด universal workflow residue",
+        "acceptance": [
+          {
+            "checkId": "OUTPUT-CLARITY-01-A",
+            "method": "automated",
+            "criterion": "Build Card ใช้ `audienceOutput.mode: resolved_only`, declare delivery audience/purpose และ bind nonordinary authority เมื่อ applicable; client/public/internal-operational หรือ artifact ที่ claim `artifact_qa_passed` ขึ้นไปมี `blockingDependencyRefs: []`, ใช้เฉพาะ asset ที่ bind exact role/rights/receipt/hash และ claim ที่ approved, current-at-`claimAsOf`, locale-complete, manifest-record-hash-bound/public-eligible; audience projection ไม่มี placeholder หรือ internal-governance marker; `delivery.contentInspections[]` ครอบคลุม `delivery.files` เท่ากันพอดีและใช้ method ตาม media type; DOCX/PPTX/PDF ครบทุก page/slide ด้วย extraction + OCR + visual review, raster render hash และ explicit image-only/outlined-text review; receipt ของ acceptance นี้ MUST bind exact file set/hash และ cite inspection evidence ทุกใบ"
+          },
+          {
+            "checkId": "OUTPUT-CLARITY-01-B",
+            "method": "production",
+            "criterion": "final visible bytes, metadata, preview, export และ machine projection ผ่าน format-aware residue scan รวม combined rendered-unit text; dated receipt MUST bind exact `delivery.files` set/hash และ cite inspection evidence ชุดเดียวกันก่อน `production_verified`"
+          },
+          {
+            "checkId": "OUTPUT-CLARITY-01-C",
+            "method": "manual",
+            "criterion": "limitation ที่มองเห็นทุกอัน material, specific, proximal และเข้าใจได้; ไม่มี disclaimer กว้าง ๆ หรือคำอธิบายขั้นตอนภายในแทนข้อจำกัดจริง"
+          }
+        ],
+        "sourceTextSha256": "5413469effbf49ad6a260a8061970d6f48aba94ce641fd4ce1ae6ed1caa33281",
+        "sourceRuleId": "OUTPUT-CLARITY-01"
+      },
+      {
+        "id": "FAVICON-01",
+        "title": "Every web build binds one approved icon set",
+        "section": "identity",
+        "normativeLevel": "MUST",
+        "scope": "web_public,app_interactive",
+        "requirement": "A web build ships one icon set chosen by property — portfolio: the symbol on transparent; product: the product's identity-gradient tile with the symbol in that gradient's foreground contract (`symbol-white` on onDeep, `symbol-color` on onLight). Six sizes: 16 · 32 · 48 · 180 (apple-touch) · 192 · 512 (maskable, safe zone 80%). Corners 25% at 16/32; maskable sizes ship full-square. The icon never changes per page and never signals status. `<title>` is `[page] · [product]`, ≤ 60 characters, page first. A missing icon set is a WEBFMT-01 blocker, not a caveat. Icon sets live in the asset register with hashes.\n\n\nชุดไอคอนเป็น identity asset role ใหม่ `icon_set` ใน `machine.contracts.assetRegistry#/iconSets` แต่ละไฟล์ต้องมี role ตามขนาด, exact SHA-256, `approvalReceiptRef` และ `approvalReceiptSha256` ตาม ASSET-DELIVERY-01 ชุด portfolio `iconset.landometer.portfolio.symbol.01` (generator deterministic จาก symbol PNG ทางการ `b818eeb6…`; 16/32/48/192 บนพื้นใส, 180/512 เป็น tile `brand.beige`; hash ทั้งหกไฟล์ใน `machine.contracts.assetRegistry#/iconSets`) ได้รับการอนุมัติ role `icon_set` จากเจ้าของเมื่อ 15 กันยายน 2569 (`owner-message:2026-09-15:0.9.3-answers`) ส่วน product tile ต้อง resolve identity gradient และ asset bytes ที่อนุมัติต่อผลิตภัณฑ์จาก Add-on แยกของผลิตภัณฑ์ปัจจุบัน ซึ่งใช้ร่วมกับ LDS ฉบับเต็มนี้ motif หรือ animated variant ห้ามใช้เป็นไอคอน (MOTION-04, MOTIF-02)",
+        "acceptance": [
+          {
+            "checkId": "FAVICON-01-A",
+            "method": "automated",
+            "criterion": "initial HTML ของทุก route มี icon set ครบหกขนาดที่ resolve จาก asset registry ด้วย hash ตรง, web manifest ที่ประกาศ 192/512 (512 maskable), `theme-color` light/dark และ `<title>` ตาม pattern `[page] · [product]` ≤ 60 ตัวอักษร; ขาดข้อใดข้อหนึ่งเป็น WEBFMT-01 blocker"
+          },
+          {
+            "checkId": "FAVICON-01-B",
+            "method": "visual",
+            "criterion": "ไอคอน 16/32 อ่านออกที่ขนาดจริงบน light/dark tab strip, 180 บน iOS home, 192/512 maskable ไม่ถูกตัดใน safe zone 80% และไอคอนไม่เปลี่ยนตามหน้าหรือสถานะ"
+          }
+        ],
+        "sourceTextSha256": "079ae3446942e05d8a0eb9e8ddb424064bf2007deef327e6f0160e0963c07f38",
+        "sourceRuleId": "FAVICON-01"
+      },
+      {
+        "id": "CTRL-01",
+        "title": "Control geometry stays direct and recognizable",
+        "section": "components",
+        "normativeLevel": "MUST",
+        "scope": "interactive",
+        "requirement": "กฎนี้ใช้กับ direct controls ใน `web_public` และ `app_interactive` เท่านั้น Build Card `navigation.controlBudgets.minimumDirectTarget` MUST เท่ากับ selected target profile พอดี: browser ใช้ `{value: 44, unit: css_px}` กับ semantic browser element/DOM order; native app ใช้ `{value: 44, unit: platform_dp}` กับ native semantic view/platform accessibility order Discrete action target ทุกอัน MUST มีขนาดอย่างน้อย 44 × 44 ในหน่วยของ branch นั้นทุก state Text และ icon+label button ใช้ approved capsule; icon-only button ใช้ approved circle Padding/gap/border/focus/loading/disabled resolve component tokens และห้าม proxy click-forward งาน document, PDF, deck และ social ใช้ static action equivalent ตาม §7.1/§11 และ selected target profile โดยไม่สร้าง interactive target ปลอม\n\n\nCanonical geometry:\n\n| Control | Geometry |\n|---|---|\n| text or icon+label button | browser: min-height 44 CSS px; native: min-height 44 platform dp; capsule geometry จาก runtime adapter โดย label ต้องไม่ถูกตัด |\n| icon-only button | browser: 44 × 44 CSS px; native: 44 × 44 platform dp; circle geometry และ accessible name required |\n| inline link in running text | not forced into a 44px box; follows WCAG text-link exception/spacing branch and visible focus |",
+        "acceptance": [
+          {
+            "checkId": "CTRL-01-A",
+            "method": "automated",
+            "criterion": "exact target-profile value/unit, browser element + DOM order หรือ native view + platform accessibility order, tokens และ accessible names pass every state"
+          },
+          {
+            "checkId": "CTRL-01-B",
+            "method": "visual",
+            "criterion": "capsule/circle/label/icon/focus/loading/disabled fixtures remain intact across locale, width and zoom"
+          }
+        ],
+        "sourceTextSha256": "962ae8f68e1b164205863b88f2fd9d700c901bf8d3d53b78f653bf108a9475de",
+        "sourceRuleId": "CTRL-01"
+      },
+      {
+        "id": "ASSET-DELIVERY-01",
+        "title": "Font and icon delivery is deterministic",
+        "section": "visual-foundations",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "Delivered font, interface-icon subset, identity, governed media และ generated vector MUST resolve artifact-owned registry, approved role, source, rights, exact byte hash, typed approval receipt และ fallback Web subsets record glyph map; non-web selects one exact platform mapping, forbids substitution, and final export embeds the exact font or uses an approved vector/raster projection under recorded fixtures\n\n\nBuild Card `assetRegistries` MUST bind each registry by `registryRef`, `sha256`, `schemaRef`; each approved asset MUST bind `approvalReceiptRef` and `approvalReceiptSha256` Receipt grant ต้อง match exact `assetId`, `role`, `sha256`, `allowedFormatProfiles`, `allowedSurfaceRoles`, `allowedAudiences`, `publicationPermission`, `licenseOrPermission` และ `fallback`; interface icon เพิ่ม exact `glyphs` ส่วน identity และ governed media เพิ่ม `altOrTextEquivalent` Identity requires `licenseOrPermission`, `fallback`, `altOrTextEquivalent`; icon requires `glyphs`, `licenseOrPermission`, `fallback`; font requires `fontRole`, `fontFamily`, `fontSubset`, `fontWeight`, `fontFallback`, `licenseOrPermission` Production manifest MUST include matching identity/font/icon/media registry references and exact emitted asset bindings Fonts/icons load from first-party-controlled or explicitly approved durable assets when deterministic delivery is required If delayed/blocked/offline, Thai/Latin text and controls remain readable and actions stay identifiable",
+        "acceptance": [
+          {
+            "checkId": "ASSET-DELIVERY-01-A",
+            "method": "automated",
+            "criterion": "file, role, source, approval, rights, hash, Unicode/glyph coverage and fallback resolve; non-web mapping ID/platform/format, substitution policy, embedding/vector policy and fixture IDs resolve exactly"
+          },
+          {
+            "checkId": "ASSET-DELIVERY-01-B",
+            "method": "visual",
+            "criterion": "delayed/blocked/offline/print/export fixtures have no tofu, identity reconstruction or substitution drift; non-web output retains complete labels and exact selected typography"
+          }
+        ],
+        "sourceTextSha256": "0d9647664ba01e216e5ae39d802e3b7050bc5b80a17c0e393c9466161b3bc710",
+        "sourceRuleId": "ASSET-DELIVERY-01"
+      },
+      {
+        "id": "CTA-01",
+        "title": "Every CTA has one truthful outcome",
+        "section": "actions",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "CTA ทุกอัน MUST ใช้ specific verb-led label, outcome และ `destinationBinding` จริงหนึ่งอย่าง โดย `kind` ต้องเป็น `anchor | route | external | download | form | contact | command`, target และ `targetByLocale` ต้องตรง syntax/locale/section ที่อ้าง และ `presentation.mode` + `presentation.technique` ต้องตรง selected format; CTA ต้องตรง availability/permission และแยกออกจาก navigation, evidence link และ decoration ได้",
+        "acceptance": [
+          {
+            "checkId": "CTA-01-A",
+            "method": "automated",
+            "criterion": "CTA record มี label, outcome, availability และ locale-complete `destinationBinding` ซึ่ง kind, target syntax, resolved anchor, presentation mode และ technique ตรง selected format"
+          },
+          {
+            "checkId": "CTA-01-B",
+            "method": "interaction",
+            "criterion": "activation ให้ outcome ที่ระบุเพียงครั้งเดียว, เก็บ input/state เมื่อ fail และแสดง result ที่รับรู้ได้"
+          },
+          {
+            "checkId": "CTA-01-C",
+            "method": "automated",
+            "criterion": "intent, priority, availability, orthogonal consequence, permission/confirmation policy, immutable progress/result/recovery/receipt contracts และ locale-specific label/outcome/destination fields satisfy action schema"
+          }
+        ],
+        "sourceTextSha256": "25f88d0c550357c65bd55e08f0b2ad884092420dc722e55a164db838b3e9062a",
+        "sourceRuleId": "CTA-01"
+      },
+      {
+        "id": "A11Y-01",
+        "title": "Semantics and direct operation survive every state",
+        "section": "accessibility",
+        "normativeLevel": "MUST",
+        "scope": "all",
+        "requirement": "ทุก applicable artifact MUST meet WCAG 2.2 Level AA เป็น floor Information structure, names, roles, values, focus order, alternatives, status announcements และ direct operation MUST equivalent ใน initial, hydrated, loading, success, empty, error, reduced-motion, high-zoom, keyboard, touch, print และ export states ที่ applicable Native HTML/format-native structure comes first; ARIA supplements rather than repairs wrong semantics",
+        "acceptance": [
+          {
+            "checkId": "A11Y-01-A",
+            "method": "automated",
+            "criterion": "zero critical/serious release-blocking errors; normal text ≥4.5:1, large text ≥3:1 และ required non-text/focus ≥3:1 ในทุก applicable state"
+          },
+          {
+            "checkId": "A11Y-01-B",
+            "method": "manual",
+            "criterion": "keyboard, screen-reader, zoom, reflow, reduced-motion และ touch checks มี receipts"
+          }
+        ],
+        "sourceTextSha256": "9f3b853fdad7a1f66dcc5b10cc137cf9535eb00dff4f9a769bc7c6aabb71b142",
+        "sourceRuleId": "A11Y-01"
+      }
+    ],
+    "fullBuildCardSchemaClaimed": false,
+    "fullDesignSystemConformanceClaimed": false
+  },
+  "interface": {
+    "script": "context-actions.js",
+    "stylesheet": "context-actions.css",
+    "export": "window.SilaContextActions.render",
+    "renderOptions": [
+      "mount",
+      "language",
+      "datasetId",
+      "datasetLabel",
+      "scopeId",
+      "scopeLabel",
+      "municipality",
+      "sourceDate"
+    ],
+    "languages": [
+      "th",
+      "en"
+    ],
+    "supportedDatasetIds": [
+      "overview",
+      "houses",
+      "buildings",
+      "roads",
+      "cctv",
+      "education",
+      "health",
+      "religion",
+      "publicfacilities",
+      "waterways",
+      "population",
+      "villages",
+      "municipality",
+      "election",
+      "parcels",
+      "flood",
+      "terrain"
+    ],
+    "supportedScopeIds": [
+      "sila",
+      "v01-v28",
+      "e01-e03",
+      "e1-e3"
+    ],
+    "supportedEntityIntentMatrix": "Area or dataset-level context only. Each supported dataset has an explicit source-finding/planning intent in INTENTS. No selected-record handoff is supported.",
+    "unsupportedBehavior": "Visible unavailable explanation; no automatic object broadening or provider substitution.",
+    "defaultDisclosure": "closed",
+    "sourceSearchDisclosure": "open inside activated outer disclosure",
+    "aiDisclosure": "closed",
+    "minimumDirectTargetCssPx": 44,
+    "colors": "Existing foundation CSS variables only; no new literals, analytical scale or data-state colour.",
+    "semanticControls": "Native details/summary, labelled textareas, direct buttons, named external links, polite live status.",
+    "preservation": {
+      "sameDatasetAndScope": "User edits and disclosure state retained; unedited defaults translate when language changes; theme changes inherit CSS variables.",
+      "actualContextChange": "Reset default query/prompt and disclosures.",
+      "storage": "Memory only; no localStorage, analytics, input logging or service write."
+    }
+  },
+  "contextComposition": {
+    "allowedFields": [
+      "public dataset label",
+      "public municipality or village/electoral area name",
+      "municipality name",
+      "Khon Kaen province name from user-provided project context",
+      "explicit dataset planning/source-checking intent",
+      "ISO local file received date in AI prompt, labelled not survey/reference date"
+    ],
+    "excludedFields": [
+      "selected record",
+      "house number",
+      "raw geometry",
+      "coordinate",
+      "parcel code",
+      "tax ID",
+      "citizen ID",
+      "owner/person name",
+      "phone",
+      "email",
+      "CCTV identifier or stream",
+      "restricted Drive URL",
+      "private notes",
+      "internal filters",
+      "municipal raw file"
+    ],
+    "valuesOrCountsIncluded": false,
+    "autoGeneratedPrivateFieldsIncluded": false,
+    "userEditedTextGuard": "Block empty text and email/phone/13-digit identifier/precise coordinate/URL patterns before external open or copy. This is a bounded pattern guard, not a proof that every freeform edit is public-safe.",
+    "preview": "Exact editable query/prompt and composed field list visible before activation.",
+    "backgroundProviderRequests": false
+  },
+  "actions": {
+    "sourceSearch": {
+      "job": "source_search",
+      "provider": "Google Search",
+      "thLabel": "ค้นคำนี้ต่อใน Google",
+      "enLabel": "Search this query in Google",
+      "target": "https://www.google.com/search",
+      "parameters": [
+        "q: URLSearchParams-encoded edited public-safe query",
+        "hl: current th/en UI language"
+      ],
+      "activation": "explicit click only",
+      "context": "new tab",
+      "referrer": "no-referrer",
+      "rel": [
+        "noopener",
+        "noreferrer"
+      ],
+      "fallback": "Exact copyable query; existing CityChat state retained."
+    },
+    "aiHandoff": {
+      "job": "ai_synthesis_handoff",
+      "provider": "Google AI Mode",
+      "thLabel": "คัดลอกคำถามและเปิด Google AI",
+      "enLabel": "Copy question & open Google AI",
+      "target": "https://www.google.com/ai",
+      "promptInURL": false,
+      "automaticPromptTransmission": false,
+      "activation": "explicit click copies exact visible prompt and opens documented entry; user pastes/submits at provider",
+      "context": "new tab",
+      "referrer": "no-referrer",
+      "rel": [
+        "noopener",
+        "noreferrer"
+      ],
+      "providerDisclosure": "Model, signed-in account, history and personalisation can affect the response.",
+      "clipboardFailure": "Select visible prompt for manual Copy; offer documented AI entry.",
+      "popupFailure": "Visible manual provider link and exact prompt retained; browser open is not claimed as a provider receipt.",
+      "silentSearchFallback": false,
+      "providerSubstitution": false,
+      "deepLinkUdm50Used": false
+    }
+  },
+  "evidenceBoundary": {
+    "externalSearchResults": "discovery_only",
+    "externalAIResponse": "discovery_only",
+    "incorporation": "Open cited sources, verify material claims, record provenance/date/method/scope/limitations/allowed use and deliberately incorporate in an owning workflow. Prototype does not provide this write workflow.",
+    "mapRiskTaxOrMunicipalStateMutation": false,
+    "runtimeAIClaimed": false,
+    "AIUploads": false,
+    "superiorRelevanceOrAccuracyClaimed": false
+  },
+  "providerReference": {
+    "title": "Google Search Help: Get AI-powered responses with AI Mode in Google Search",
+    "url": "https://support.google.com/websearch/answer/16011537?co=GENIE.Platform%3DDesktop&hl=en",
+    "checkedOn": "2026-10-06",
+    "supports": [
+      "Documented google.com/ai entry",
+      "Account/history/personalisation can influence responses",
+      "AI can make mistakes; verify important information with sources"
+    ],
+    "entryObservedRedirect": "https://www.google.com/webhp?aep=11",
+    "stablePromptPrefillDocumented": false
+  },
+  "favicon": {
+    "path": "assets/brand/citychat-favicon-3b7439f6.png",
+    "sha256": "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+    "mime": "image/png",
+    "dimensions": [
+      250,
+      265
+    ],
+    "role": "browser_tab_favicon",
+    "receiptRef": "assets/brand/citychat-favicon-3b7439f6.receipt.json",
+    "transformation": "Exact protected-source embedded PNG extraction; none in this module.",
+    "roundedHeaderArtworkIsFavicon": false,
+    "animatedFavicon": false,
+    "approvedCompleteSixSizeProductSetAvailable": false,
+    "requiredActualChecks": [
+      "16/32 rendered tab strip recognition on light/dark",
+      "cold/warm cache and deployed bytes"
+    ],
+    "notClaimed": [
+      "apple-touch approval",
+      "maskable approval",
+      "social approval",
+      "full FAVICON-01 conformance"
+    ],
+    "formatsManifestRef": "assets/brand/favicon-formats.manifest.json",
+    "currentHead": {
+      "icoHref": "favicon.ico?v=6541e9e2",
+      "pngHref": "assets/brand/citychat-tab-32-d9ac160e.png",
+      "svgHref": "assets/brand/citychat-tab-square-1fc894ca.svg"
+    },
+    "currentFormatAuthorization": "Owner-requested contain-only browser-tab format conversion. Exact embedded source preserved; PNG/ICO use recorded proportional downsampling. No PWA/apple roles."
+  },
+  "verification": {
+    "syntax": "node --check pass",
+    "semanticTestsRef": "qa/context-actions-semantic-checks.json",
+    "browserChecks": "root records actual narrow/desktop TH/EN render, keyboard, edit preservation and no automatic external requests",
+    "deployedParity": "root release receipt"
+  }
+}

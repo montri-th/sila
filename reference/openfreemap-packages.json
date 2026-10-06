@@ -1,0 +1,442 @@
+{
+  "checkedOn": "2026-10-06",
+  "packages": [
+    {
+      "name": "maplibre-gl",
+      "version": "6.12.0",
+      "license": "BSD-3-Clause",
+      "metadataUrl": "https://registry.npmjs.org/maplibre-gl/6.12.0",
+      "tarball": "https://registry.npmjs.org/maplibre-gl/-/maplibre-gl-6.12.0.tgz",
+      "integrity": "sha512-DwgganVi2BhNxOpD7ob3lJC0dQQz4HfJfuQQV3XxCY3XdOzFrMqp9ylMXhRzryRsOnIezdZcklWXIIs/Q8JPjA==",
+      "integrityVerified": true,
+      "files": [
+        {
+          "path": "vendor/maplibre-gl/maplibre-gl.css",
+          "bytes": 83305,
+          "sha256": "8456072adc2cbf04f7b845bc83b90cec571b293bd37816970e6566f34946ab8b"
+        },
+        {
+          "path": "vendor/maplibre-gl/package.json",
+          "bytes": 6566,
+          "sha256": "a119141ae7c5a0795d72638e826f761877c6e77bd59d6df0a14e6f86f2e06ea4"
+        },
+        {
+          "path": "vendor/maplibre-gl/maplibre-gl-shared.mjs",
+          "bytes": 516951,
+          "sha256": "df3d0b4ba965ebafd2deae3c568500308be2982d87dadd771ba82dc5a49a4631"
+        },
+        {
+          "path": "vendor/maplibre-gl/maplibre-gl-worker.mjs",
+          "bytes": 19130,
+          "sha256": "1ecca7178f0a496b7980dc7a3c6a8c3575eda673cf3e9fa3324dcce7ef3890c2"
+        },
+        {
+          "path": "vendor/maplibre-gl/maplibre-gl.mjs",
+          "bytes": 597295,
+          "sha256": "8e0545d1042293cb8c1e09949f36ba83237f69b4fbc080958cf38829615bcf69"
+        },
+        {
+          "path": "vendor/maplibre-gl/LICENSE.txt",
+          "bytes": 5984,
+          "sha256": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2"
+        }
+      ]
+    },
+    {
+      "name": "@maplibre/maplibre-gl-leaflet",
+      "version": "0.1.4",
+      "license": "ISC",
+      "metadataUrl": "https://registry.npmjs.org/@maplibre/maplibre-gl-leaflet/0.1.4",
+      "tarball": "https://registry.npmjs.org/@maplibre/maplibre-gl-leaflet/-/maplibre-gl-leaflet-0.1.4.tgz",
+      "integrity": "sha512-k57wcndZIvq3m08g2je4pjUPGr43ffNW3j+gXbymt8Vi2l1lUERUi1UmdTZcTPN8LuDDYOMWRNBaSLwpAu02ew==",
+      "integrityVerified": true,
+      "files": [
+        {
+          "path": "vendor/maplibre-gl-leaflet/LICENSE",
+          "bytes": 767,
+          "sha256": "eaa721ba158cbeff47ad53b1035dfc26ff744df66662c93ff715c9885197ebf3"
+        },
+        {
+          "path": "vendor/maplibre-gl-leaflet/leaflet-maplibre-gl.js",
+          "bytes": 9296,
+          "sha256": "1e6cf8cb3eb5fd909879aa1bf36a383fb506c9a5b2dbbfababce65a294dd1fcb"
+        },
+        {
+          "path": "vendor/maplibre-gl-leaflet/package.json",
+          "bytes": 2024,
+          "sha256": "0c07fbad5a4ddf0d0515aeedcc7fd49e317ceaa85b1dbe5951062f60632afcac"
+        },
+        {
+          "path": "vendor/maplibre-gl-leaflet/API.md",
+          "bytes": 1388,
+          "sha256": "f3adb9a2c374265b79aa943ceaca58370066bbe674d87a36c3ee507633fa7df4"
+        },
+        {
+          "path": "vendor/maplibre-gl-leaflet/README.md",
+          "bytes": 4909,
+          "sha256": "f33daf615c923a9e98bdae8be0c47eaa8513d4107162d33173638560c37720ae"
+        }
+      ]
+    }
+  ],
+  "styles": [
+    {
+      "id": "dark",
+      "url": "https://tiles.openfreemap.org/styles/dark",
+      "httpStatus": 200,
+      "name": null,
+      "version": 8,
+      "sha256": "4ba4a1990dc5e1b72b38483dfbb92ffdd945bcc13e9f1235466dae900bc51631",
+      "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+      "sprite": "https://tiles.openfreemap.org/sprites/ofm_f384/ofm",
+      "sources": {
+        "ne2_shaded": {
+          "maxzoom": 6,
+          "tileSize": 256,
+          "tiles": [
+            "https://tiles.openfreemap.org/natural_earth/ne2sr/{z}/{x}/{y}.png"
+          ],
+          "type": "raster"
+        },
+        "openmaptiles": {
+          "type": "vector",
+          "url": "https://tiles.openfreemap.org/planet"
+        }
+      },
+      "sampleLabels": [
+        {
+          "id": "water_name",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              "\n",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "road_oneway",
+          "textField": null
+        },
+        {
+          "id": "road_oneway_opposite",
+          "textField": null
+        },
+        {
+          "id": "highway_name_other",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              " ",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "positron",
+      "url": "https://tiles.openfreemap.org/styles/positron",
+      "httpStatus": 200,
+      "name": null,
+      "version": 8,
+      "sha256": "a0f5b8487480a47ba5a5eaf25e165a19789dfa422f9ef9442f04da79c7d216db",
+      "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+      "sprite": "https://tiles.openfreemap.org/sprites/ofm_f384/ofm",
+      "sources": {
+        "ne2_shaded": {
+          "maxzoom": 6,
+          "tileSize": 256,
+          "tiles": [
+            "https://tiles.openfreemap.org/natural_earth/ne2sr/{z}/{x}/{y}.png"
+          ],
+          "type": "raster"
+        },
+        "openmaptiles": {
+          "type": "vector",
+          "url": "https://tiles.openfreemap.org/planet"
+        }
+      },
+      "sampleLabels": [
+        {
+          "id": "waterway_line_label",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              " ",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "water_name_point_label",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              "\n",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "water_name_line_label",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              " ",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "highway-name-path",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              " ",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liberty",
+      "url": "https://tiles.openfreemap.org/styles/liberty",
+      "httpStatus": 200,
+      "name": null,
+      "version": 8,
+      "sha256": "6010998863b4876911ac9a2d62c9a28d97c8877f6d20cd158b74808572257b60",
+      "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+      "sprite": "https://tiles.openfreemap.org/sprites/ofm_f384/ofm",
+      "sources": {
+        "ne2_shaded": {
+          "maxzoom": 6,
+          "tileSize": 256,
+          "tiles": [
+            "https://tiles.openfreemap.org/natural_earth/ne2sr/{z}/{x}/{y}.png"
+          ],
+          "type": "raster"
+        },
+        "openmaptiles": {
+          "type": "vector",
+          "url": "https://tiles.openfreemap.org/planet"
+        }
+      },
+      "sampleLabels": [
+        {
+          "id": "road_one_way_arrow",
+          "textField": null
+        },
+        {
+          "id": "road_one_way_arrow_opposite",
+          "textField": null
+        },
+        {
+          "id": "waterway_line_label",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              " ",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        },
+        {
+          "id": "water_name_point_label",
+          "textField": [
+            "case",
+            [
+              "has",
+              "name:nonlatin"
+            ],
+            [
+              "concat",
+              [
+                "get",
+                "name:latin"
+              ],
+              "\n",
+              [
+                "get",
+                "name:nonlatin"
+              ]
+            ],
+            [
+              "coalesce",
+              [
+                "get",
+                "name_en"
+              ],
+              [
+                "get",
+                "name"
+              ]
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

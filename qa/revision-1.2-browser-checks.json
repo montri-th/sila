@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "sila-browser-receipt-1",
+  "revision": "1.2",
+  "checkedAtUtc": "2026-10-05T18:46:01.261052+00:00",
+  "sourceFiles": {
+    "index.html": "68c8a7ea996b73645a371dfa4b03c4b562a652e6ed1d3f4f2d4d077f1d8c6ef4",
+    "styles.css": "9766d3a31b60e8a6bc51e4ddd11627e19b77eab47b267b697b7a11ff34b23dfb",
+    "app.js": "e33e0bbc753b531cfabca5fc4883b400da41fc2ac77601810bf9a5237f2ad82c",
+    "basemap.js": "efa546a5341ec5c714bd5186c7d0d0dc024822ded069d90349a101b883f3b21f",
+    "basemap.css": "86a4786d559c6400be986d9fb560095922d2a1eaa7ca1773deaa64ca62f916ea",
+    "house-points.js": "640358d46d5d1057ea18b4cf491fdf8654976c9cf8f74fb5c0b34b14d51761da",
+    "house-points.css": "f662f8ccfbbd7d0349ca63dd2eeafb9f7eab915165b0b1701bbd96d723779507",
+    "map-pick.js": "f349e62b1a8b8fcc374c556389ee66cb9860cfb73b9b929680ee1904aec9e6f9",
+    "context-actions.js": "6f6d29b82af235a0757bed0538ee5529bedffc939de8bdd48ef60bc6ff848d39",
+    "context-actions.css": "0ad880fc42fc2305ce85ab368a76b1bfb764a20b24165f1974623f5467930724"
+  },
+  "observedChecks": [
+    {
+      "id": "default-dataset",
+      "pass": true,
+      "observed": "An empty-query page opened the buildings dataset with 38,794 municipal intersections."
+    },
+    {
+      "id": "vector-basemap",
+      "pass": true,
+      "observed": {
+        "renderer": "openfreemap-vector",
+        "dark": "ready",
+        "light": "ready",
+        "attributionLinks": "visible and above the mask",
+        "camera": "theme changes retained the current area view",
+        "css": "canvas layout subset only; no theme filter"
+      }
+    },
+    {
+      "id": "source-geometry-picking",
+      "pass": true,
+      "observed": [
+        "Real map click through footprint Canvas drilled to village v07.",
+        "At village view, a small-building click opened 81 nearby candidates; selecting source 11421 worked.",
+        "Detailed-zoom direct click selected building 10886.",
+        "Enter on the village 26 SVG button drilled to v26.",
+        "Parcel map click selected source 382."
+      ]
+    },
+    {
+      "id": "house-points",
+      "pass": true,
+      "observed": [
+        "237-member cluster opened a paginated member list in v07.",
+        "Selecting source 3089 and Fit this record showed its original point.",
+        "Direct singleton click selected source 3090 at detailed zoom.",
+        "Both themes rendered visible neutral rims and categorical fills.",
+        "Parent-scope house cluster drill selected village v17."
+      ],
+      "limits": "Not a physical-device touch test; all zoom levels covered by pure grouping fixtures, browser spot checks only."
+    },
+    {
+      "id": "context-actions",
+      "pass": true,
+      "observed": [
+        "TH/EN context summaries, query preview and AI question rendered.",
+        "Theme/language changes kept disclosures open.",
+        "Copy question displayed the copied success state.",
+        "Generated question omitted the currently selected individual record."
+      ],
+      "limits": "Clipboard read-back through the browser API was empty; no parity claim for the system clipboard. External Google output was not evaluated."
+    },
+    {
+      "id": "responsive",
+      "pass": true,
+      "observed": {
+        "desktop": [
+          1280,
+          720
+        ],
+        "narrow": [
+          390,
+          844
+        ],
+        "renderedLanguages": [
+          "th",
+          "en"
+        ],
+        "renderedThemes": [
+          "light",
+          "dark"
+        ],
+        "reviewedSections": [
+          "map",
+          "parcel explanation",
+          "record chooser/card",
+          "context search",
+          "AI handoff"
+        ],
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "id": "favicon-formats",
+      "pass": true,
+      "observed": "DOM links reference the exact-derived ICO, 32 px PNG and square SVG; deterministic format checks are in the favicon manifest. Cold/warm browser cache behavior is not exhaustively tested."
+    }
+  ],
+  "screenshots": [
+    "screenshots/revision-1.2-desktop-houses-dark.jpg",
+    "screenshots/revision-1.2-desktop-parcels-en-light.jpg",
+    "screenshots/revision-1.2-mobile-context-th-light.jpg",
+    "screenshots/revision-1.2-mobile-ai-en-dark.jpg"
+  ],
+  "capturedBrowserErrors": [],
+  "limits": [
+    "No exhaustive accessibility audit, physical-device touch, OS reduced-motion toggle, 130% Thai text or 200% browser zoom.",
+    "No deliberately forced WebGL/provider failure or slow-network test; fallback and async guards source-reviewed.",
+    "Field accuracy, legal boundaries and tax coverage remain unverified."
+  ]
+}

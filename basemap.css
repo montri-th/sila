@@ -1,0 +1,16 @@
+/* MapLibre GL JS 6.12.0 layout subset for the noninteractive Leaflet bridge.
+ * Derived from vendor/maplibre-gl/maplibre-gl.css, retained unchanged on disk.
+ * BSD-3-Clause notices: vendor/maplibre-gl/LICENSE.txt.
+ * Leaflet owns navigation, interaction and attribution. No MapLibre controls,
+ * popups, UI colors, font styling or analytical-layer styling are mounted here.
+ */
+.maplibregl-map {
+  overflow: hidden;
+  position: relative;
+}
+.maplibregl-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}

@@ -1,0 +1,53 @@
+{
+  "scope": "actual source points intersecting supplied Sila boundary",
+  "inputCount": 28262,
+  "allSourceCount": 28783,
+  "zooms": [
+    {
+      "zoom": 10,
+      "groupCount": 4,
+      "clusters": 4,
+      "singletons": 0,
+      "representedCount": 28262,
+      "largestCluster": 15754,
+      "groupingMs": 36
+    },
+    {
+      "zoom": 13,
+      "groupCount": 66,
+      "clusters": 65,
+      "singletons": 1,
+      "representedCount": 28262,
+      "largestCluster": 1847,
+      "groupingMs": 31
+    },
+    {
+      "zoom": 15,
+      "groupCount": 1161,
+      "clusters": 1007,
+      "singletons": 154,
+      "representedCount": 28262,
+      "largestCluster": 316,
+      "groupingMs": 32
+    },
+    {
+      "zoom": 17,
+      "groupCount": 14582,
+      "clusters": 7025,
+      "singletons": 7557,
+      "representedCount": 28262,
+      "largestCluster": 18,
+      "groupingMs": 43
+    },
+    {
+      "zoom": 20,
+      "groupCount": 28171,
+      "clusters": 86,
+      "singletons": 28085,
+      "representedCount": 28262,
+      "largestCluster": 4,
+      "groupingMs": 70
+    }
+  ],
+  "limits": "Model profiling only; native browser draw, labels and touch are separate"
+}
