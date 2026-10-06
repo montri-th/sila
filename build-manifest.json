@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.2",
-  "builtAtUtc": "2026-10-06T01:10:12.672385+00:00",
+  "builtAtUtc": "2026-10-06T01:18:06.472556+00:00",
   "releaseDateBangkok": "2026-10-06",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -34,8 +34,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 31900,
-      "sha256": "5433bc93cd299d104160d4033fd4e90a5bf042784a3d5447fe38eacb1c2587b5",
+      "bytes": 33089,
+      "sha256": "fa3c8214a47d3e58f14528a89aac9fda15b911b7cc48372eb1d92331eebcfe77",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -44,8 +44,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 85185,
-      "sha256": "e33e0bbc753b531cfabca5fc4883b400da41fc2ac77601810bf9a5237f2ad82c",
+      "bytes": 85245,
+      "sha256": "08d4b4d5738a61b70689d9a2802e7239a26c07a286d018314963bb7f33baea64",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -612,8 +612,8 @@
     },
     {
       "path": "house-points.css",
-      "bytes": 1539,
-      "sha256": "f662f8ccfbbd7d0349ca63dd2eeafb9f7eab915165b0b1701bbd96d723779507",
+      "bytes": 1562,
+      "sha256": "821c7f841c7e4bc0b18ddb30aef9c9b1c2f7789de11ddd792785cf5af36caf81",
       "mimeTypes": [
         "text/css"
       ]
@@ -778,8 +778,8 @@
     },
     {
       "path": "qa/revision-1.2-browser-checks.json",
-      "bytes": 4623,
-      "sha256": "dceef4f56753048648915e6c7ef2da4fdbcf4f3e9294c48a80e88113b77080ae",
+      "bytes": 7217,
+      "sha256": "d9100fb254a79beead7a447fff704eabfe1e02f051443d1a3f94d69892f7b7ef",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -944,6 +944,14 @@
       "path": "screenshots/revision-1.1-mobile-th-light.jpg",
       "bytes": 50772,
       "sha256": "97e484825173a962bfe60d3d1921377117fab589f4758292e15311270010410c",
+      "mimeTypes": [
+        "image/jpeg"
+      ]
+    },
+    {
+      "path": "screenshots/revision-1.2-cluster-hit-regression.jpg",
+      "bytes": 97636,
+      "sha256": "afc533cfd6d6eb79dd298be949f666bc9144547902c7a2be139dd6ef619e0968",
       "mimeTypes": [
         "image/jpeg"
       ]

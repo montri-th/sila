@@ -913,6 +913,7 @@
     S.map.getPane("features").style.zIndex = 360;
     S.map.createPane("selected");
     S.map.getPane("selected").style.zIndex = 390;
+    S.map.getPane("selected").style.pointerEvents = "none";
     S.map.createPane("outsideMask");
     S.map.getPane("outsideMask").style.zIndex = 450;
     S.map.getPane("outsideMask").style.pointerEvents = "none";

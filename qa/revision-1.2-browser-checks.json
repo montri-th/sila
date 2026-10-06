@@ -1,15 +1,15 @@
 {
   "schemaVersion": "sila-browser-receipt-1",
   "revision": "1.2",
-  "checkedAtUtc": "2026-10-05T18:46:01.261052+00:00",
+  "checkedAtUtc": "2026-10-06T01:18:06.472556+00:00",
   "sourceFiles": {
     "index.html": "68c8a7ea996b73645a371dfa4b03c4b562a652e6ed1d3f4f2d4d077f1d8c6ef4",
     "styles.css": "9766d3a31b60e8a6bc51e4ddd11627e19b77eab47b267b697b7a11ff34b23dfb",
-    "app.js": "e33e0bbc753b531cfabca5fc4883b400da41fc2ac77601810bf9a5237f2ad82c",
+    "app.js": "08d4b4d5738a61b70689d9a2802e7239a26c07a286d018314963bb7f33baea64",
     "basemap.js": "efa546a5341ec5c714bd5186c7d0d0dc024822ded069d90349a101b883f3b21f",
     "basemap.css": "86a4786d559c6400be986d9fb560095922d2a1eaa7ca1773deaa64ca62f916ea",
     "house-points.js": "640358d46d5d1057ea18b4cf491fdf8654976c9cf8f74fb5c0b34b14d51761da",
-    "house-points.css": "f662f8ccfbbd7d0349ca63dd2eeafb9f7eab915165b0b1701bbd96d723779507",
+    "house-points.css": "821c7f841c7e4bc0b18ddb30aef9c9b1c2f7789de11ddd792785cf5af36caf81",
     "map-pick.js": "f349e62b1a8b8fcc374c556389ee66cb9860cfb73b9b929680ee1904aec9e6f9",
     "context-actions.js": "6f6d29b82af235a0757bed0538ee5529bedffc939de8bdd48ef60bc6ff848d39",
     "context-actions.css": "0ad880fc42fc2305ce85ab368a76b1bfb764a20b24165f1974623f5467930724"
@@ -106,12 +106,53 @@
     "screenshots/revision-1.2-desktop-houses-dark.jpg",
     "screenshots/revision-1.2-desktop-parcels-en-light.jpg",
     "screenshots/revision-1.2-mobile-context-th-light.jpg",
-    "screenshots/revision-1.2-mobile-ai-en-dark.jpg"
+    "screenshots/revision-1.2-mobile-ai-en-dark.jpg",
+    "screenshots/revision-1.2-cluster-hit-regression.jpg"
   ],
   "capturedBrowserErrors": [],
   "limits": [
     "No exhaustive accessibility audit, physical-device touch, OS reduced-motion toggle, 130% Thai text or 200% browser zoom.",
     "No deliberately forced WebGL/provider failure or slow-network test; fallback and async guards source-reviewed.",
     "Field accuracy, legal boundaries and tax coverage remain unverified."
-  ]
+  ],
+  "initialMatrixCheckedAtUtc": "2026-10-05T18:46:01.261052+00:00",
+  "initialMatrixSourceFiles": {
+    "index.html": "68c8a7ea996b73645a371dfa4b03c4b562a652e6ed1d3f4f2d4d077f1d8c6ef4",
+    "styles.css": "9766d3a31b60e8a6bc51e4ddd11627e19b77eab47b267b697b7a11ff34b23dfb",
+    "app.js": "e33e0bbc753b531cfabca5fc4883b400da41fc2ac77601810bf9a5237f2ad82c",
+    "basemap.js": "efa546a5341ec5c714bd5186c7d0d0dc024822ded069d90349a101b883f3b21f",
+    "basemap.css": "86a4786d559c6400be986d9fb560095922d2a1eaa7ca1773deaa64ca62f916ea",
+    "house-points.js": "640358d46d5d1057ea18b4cf491fdf8654976c9cf8f74fb5c0b34b14d51761da",
+    "house-points.css": "f662f8ccfbbd7d0349ca63dd2eeafb9f7eab915165b0b1701bbd96d723779507",
+    "map-pick.js": "f349e62b1a8b8fcc374c556389ee66cb9860cfb73b9b929680ee1904aec9e6f9",
+    "context-actions.js": "6f6d29b82af235a0757bed0538ee5529bedffc939de8bdd48ef60bc6ff848d39",
+    "context-actions.css": "0ad880fc42fc2305ce85ab368a76b1bfb764a20b24165f1974623f5467930724"
+  },
+  "coverageNote": "The initial TH/EN desktop/narrow matrix remains evidence for its recorded source files. Final app.js and house-points.css changes only affect pointer routing and cluster stacking; the final targeted regression is recorded separately below, not a repeat of every initial check.",
+  "interactionRegression": {
+    "checkedAtUtc": "2026-10-06T01:18:06.472556+00:00",
+    "baseUrl": "http://127.0.0.1:8769/",
+    "viewport": [
+      1280,
+      720
+    ],
+    "pass": true,
+    "reproducedPriorLiveBug": "Select parcel 22972 in v01 then switch houses: clicking 126-member badge opened central nearby35 because retained selected Canvas intercepted the pointer.",
+    "fix": {
+      "selectedPanePointerEvents": "none",
+      "clusterZIndex": "1000!important fixed within features pane"
+    },
+    "observedChecks": [
+      "Restoring selected parcel22972 then switching houses retained a non-interactive selected pane.",
+      "elementFromPoint at126 badge center reached its button; cluster computed z-index1000.",
+      "126 badge pointer click opened126 members with source-cluster reason.",
+      "Selected house source3112, closed details, then Enter on126 badge reopened126 members.",
+      "After changing to dark, both10-member badge centers reached their own buttons.",
+      "Top10-member badge pointer click opened exactly10 source members."
+    ],
+    "limits": [
+      "No physical-device touch or extreme accumulated pan regression."
+    ],
+    "screenshot": "screenshots/revision-1.2-cluster-hit-regression.jpg"
+  }
 }
