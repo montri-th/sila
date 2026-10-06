@@ -1,6 +1,6 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "1.2"
+artifact_revision: "1.3"
 updated_on: "2026-10-06"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
@@ -23,9 +23,17 @@ municipal_writes: false
 
 เว็บต้นแบบนี้นำข้อมูลจริงจากทุกโฟลเดอร์ที่ได้รับมาแยกเป็น 16 dataset และภาพรวม ให้เลือกขอบเขตเทศบาล หมู่บ้าน หรือเขตเลือกตั้ง แล้วดูรายการในพื้นที่ตามแนวทาง drilldown ของ Yolk ผู้ใช้อนุญาตให้เผยแพร่ต้นแบบที่ [montri-th/sila](https://github.com/montri-th/sila) แล้ว สถานะการเผยแพร่และ hash ของ build ให้ยึด release receipt ที่จัดทำพร้อมการส่งมอบ
 
+Revision 1.3 ปรับ shell ให้ใกล้หน้า Officer ใน repository CityChat: แผนที่และ panel ข้อมูล 50/50 ปรับขนาดด้วยเมาส์หรือคีย์บอร์ดได้ มี breadcrumb ติดด้านบนตามพื้นที่/รายการที่เลือก ปุ่ม “พื้นที่ของฉัน” ใช้ identity gradient ของ CityChat ตามธีม เลือกชุดข้อมูลทาง panel ขวา และเลือกถนน/ดาวเทียม/ข้อมูลล้วนได้ตรง toolbar สถานะพื้นหลังบันทึกใน URL
+
+ใช้ LDS 0.9.7 คู่กับ CityChat Add-on 0.9.2 จริง: exact font และ logo animated เดิม เพิ่ม ConversationMotif ต้นฉบับที่อนุมัติบนคำแนะนำเริ่มใช้งาน พร้อม Material Symbols Rounded subset ที่รับไว้เฉพาะต้นแบบนี้ มี source commit/license/hash แยกจาก registry กลาง การมี asset หรือผลตรวจสีแบบ static ไม่ใช่ใบรับรอง conformance ทั้ง UI
+
+ธีมสว่างคงสี categorical ของข้อมูล แต่เพิ่มขอบกลางของรูปอาคาร จุด และเส้นประกอบ หมุดบ้านแสดงเป็นจุดต้นทางทุกจุดในขอบเขตที่เลือกโดยไม่รวมกลุ่ม ปรับขนาดจุดตามซูม คงพิกัดเดิมและสีข้อมูล พร้อมขอบกลางเพื่อให้อ่านบนพื้นหลังต่าง ๆ ได้ง่ายขึ้น จุดที่อยู่ใกล้กันหรือซ้อนกันเปิดตัวเลือกจาก geometry จริงได้ ภาพดาวเทียมหลักใช้ Google Hybrid tile URL เดียวกับ `CmScreen.tsx` ใน CityChat ตามคำสั่งเจ้าของงาน เรียกจาก Google โดยตรง ไม่คัดลอก API key หรือเก็บ raw tile Google เป็นชุดข้อมูลใน repo ไม่ยืนยันปีถ่าย ความละเอียด หรือสิทธิ์จากการเปิด URL ได้ ระดับ 20 ขยายภาพระดับ 19; ช่องทางนี้ต่างจาก Google Map Tiles API ทางการที่ใช้ key และ session token มีตัวเลือก “ภาพเก่า 2016/2017 · EOX” แยกไว้ ใช้ Sentinel-2 cloudless CC BY 4.0 เก็บเฉพาะพื้นที่ศิลา ความละเอียดประมาณ 10 ม. ขยายภาพระดับ 14 ได้ถึง 20 โดยไม่เพิ่มรายละเอียด ดู [สัญญาพื้นหลังดาวเทียม](reference/satellite-basemap-contract.md)
+
+ให้น้องเริ่มต่อจาก [คู่มือย้ายเข้าระบบ CityChat](reference/platform-layout-handoff.md) และ machine contract คู่กันใน JSON: ใช้ CmMapLayout, breadcrumb, dataset dropdown, guard และ entitlement เดิม ข้อมูล/พฤติกรรมของต้นแบบนี้เป็นสิ่งส่งต่อ ไม่ต้องเปลี่ยน stack ของ platform ไปเป็น Leaflet
+
 Revision 1.2 แก้ datum operation ของหมุดบ้าน ขอบเขตเทศบาล และสาธารณูปการตามพิกัดอ้างอิงที่มีในไฟล์ต้นทาง เพิ่มรูปแปลง 40,367 รายการ และคำนวณจำนวนต่อขอบเขตใหม่จาก geometry จริง สถานะ CRS ของแปลงเป็น `inferred_control_validated`; PRJ ต้นทางยังระบุ `UNKNOWN` และยังไม่มีการรับรองพิกัดภาคสนามหรือขอบเขตทางกฎหมาย ดูหลักฐานและข้อจำกัดด้านล่าง
 
-Revision 1.2 เริ่มต้นที่รูปอาคาร ใช้ OpenFreeMap แบบ vector ตามธีม แก้การคลิกหมู่บ้านและอาคารด้วย geometry จริง มีรายการให้เลือกเมื่อรูปซ้อนหรืออยู่ใกล้กัน หมุดบ้านรวมเป็นกลุ่มตามซูมและเปิดสมาชิกได้ เพิ่มเมนูค้นต้นทาง/เตรียมคำถามเพื่อวางโครงการ และ favicon แบบ ICO/PNG/SVG ตรวจ browser ตาม coverage ใน [receipt 1.2](qa/revision-1.2-browser-checks.json) แล้ว ส่วน Esri/OSM และภาพทดสอบ 1.1 เป็นหลักฐานของรุ่นก่อน
+ในรุ่นก่อน Revision 1.2 เริ่มต้นที่รูปอาคาร ใช้ OpenFreeMap แบบ vector ตามธีม แก้การคลิกหมู่บ้านและอาคารด้วย geometry จริง มีรายการให้เลือกเมื่อรูปซ้อนหรืออยู่ใกล้กัน หมุดบ้านในรุ่น 1.2 รวมเป็นกลุ่มตามซูมและเปิดสมาชิกได้; รุ่น 1.3 ยกเลิกการรวมกลุ่มตามคำสั่งผู้ใช้ เพิ่มเมนูค้นต้นทาง/เตรียมคำถามเพื่อวางโครงการ และ favicon แบบ ICO/PNG/SVG ตรวจ browser ตาม coverage ใน [receipt 1.2](qa/revision-1.2-browser-checks.json) แล้ว ส่วน Esri/OSM และภาพทดสอบ 1.1 เป็นหลักฐานของรุ่นก่อน
 
 ต้นแบบยังไม่ได้เชื่อมบัญชี Officer, ฐานข้อมูล CityChat, ระบบรับเรื่อง, การอนุมัติโครงการ หรือทะเบียนภาษี จึงไม่มีการเขียนข้อมูลกลับไปยังระบบงานเทศบาล
 
@@ -180,6 +188,14 @@ Pipeline ที่รันจริงคืออ่าน source geometry แ
 - เห็น logo เปลี่ยนจาก animating เป็น complete; เปลี่ยน theme แล้วไม่เล่นซ้ำ ทั้งสาม LDS static scans ผ่านตาม scope ที่ระบุ
 
 Revision 1.2 ตรวจ desktop 1280×720 และจอแคบ 390×844 ภาษาไทย/อังกฤษ ธีมมืด/สว่าง รวมส่วนแปลง รายการ และเมนูตามบริบทแล้ว ไม่พบ horizontal overflow หรือ browser error ในรอบที่ตรวจ ดู [receipt](qa/revision-1.2-browser-checks.json) Static LDS checks ของ index ที่รวม CSS, app และ styles ผ่านในขอบเขต checker; ไม่อ้าง full conformance Reduced-motion fallback รุ่นเดิมตรวจจาก source ยังไม่ได้สลับ OS preference; ยังไม่ได้ตรวจ native devices, Thai text 130%, zoom 200% หรือจำลอง slow network ไม่อ้าง exhaustive accessibility หรือการทดสอบระบบสิทธิ์/การเขียน production ผลเทียบ bytes บนเว็บเผยแพร่ให้ยึด release receipt ที่จัดทำสำหรับ revision นี้
+
+## ผลตรวจ revision 1.3
+
+ตรวจหน้าที่เปลี่ยนจริงใน browser ที่ความกว้าง 320, 390, 1024 และ 1440 พิกเซล ภาษาไทย/อังกฤษ ธีมมืด/สว่าง รวมคำแนะนำพร้อม motif, dataset catalog, breadcrumb, toolbar, รายการบ้าน และแปลง รวมทั้ง native Chrome ขยาย 200% แล้วคืนค่า 100% ไม่พบ horizontal overflow ใน states ที่ตรวจ แถบแบ่งหน้ารองรับ Arrow Left/Right และ Home; เมนูตัวเลือกปิดด้วย Escape และคืน focus ได้ ผลเป็น coverage ที่ระบุใน [receipt 1.3](qa/revision-1.3-browser-checks.json) ไม่ใช่ทุกอุปกรณ์/ทุกสถานะ
+
+[ผลคำนวณ contrast](reference/map-contrast-audit.md) ใช้คู่สีจริงจาก OpenFreeMap light/dark และสี UI ของ LDS: ขอบกลางเพิ่มความชัดโดยคง fill สีข้อมูลเดิม พร้อมตัวเลข/ป้ายข้อความประกอบ ไม่อ้างว่า fill ทุกสีผ่าน 3:1 บนทุก pixel ของดาวเทียม หรือรับรอง WCAG ทั้งเว็บไซต์ ส่วนภาพ Google ทดสอบใน browser โดยไม่มี raw tile cache หรือชุดดาวน์โหลดใน repo; ภาพ QA เป็น composite screenshot ของหน้าเว็บที่มีแผนที่ประกอบ
+
+การย้ายขึ้น platform ให้ยึด [handoff](reference/platform-layout-handoff.md) ซึ่งผูก module/API จริงใน CityChat กับแต่ละงาน กำหนดรวม **5 MD** สำหรับ intern สองคน คนละ 2.5 MD ตาม dependency ที่ระบุ ไม่รวมงาน DEM ของอีกทีม การรับรอง CRS ทะเบียนภาษี หรือการสร้างระบบ auth/backend ใหม่
 
 ## งานตามบริบทและการคลิก revision 1.2
 

@@ -66,6 +66,12 @@
     roads: ["ถนนขึ้นทะเบียน", "Registered roads"],
     buildings: ["รูปอาคาร", "Building footprints"],
     basemap: ["พื้นหลัง", "Basemap"],
+    settings: ["ตัวเลือก", "Options"],
+    myArea: ["พื้นที่ของฉัน", "My area"],
+    workflowTitle: ["เริ่มจากพื้นที่ ไปสู่แผนงาน", "From an area to a plan"],
+    workflowArea: ["เลือกขอบเขต เพื่อรู้ว่ากำลังดูพื้นที่ใด", "Choose a boundary to define your area"],
+    workflowData: ["เปลี่ยนชุดข้อมูล แล้วเปิดรายการที่สนใจ", "Choose a dataset and inspect a record"],
+    workflowPlan: ["ตรวจที่มา ก่อนนำไปวางแผนหรือสำรวจต่อ", "Check sources before planning or fieldwork"],
     back: ["ย้อนกลับ", "Back"],
     fit: ["ดูเต็มพื้นที่", "Fit area"],
     floodPurpose: ["น้ำและแผนป้องกัน", "Water & prevention"],
@@ -330,6 +336,7 @@
       scope: S.scope.type === "municipality" ? "sila" : S.scope.id,
       lang: S.lang,
       theme: S.theme,
+      basemap: S.basemap,
     });
     if (S.record)
       u.searchParams.set("record", S.record.properties?.id || S.record.id);
@@ -356,6 +363,7 @@
     if (e) S.boundary = "election";
     S.lang = q.get("lang") === "en" ? "en" : "th";
     S.theme = q.get("theme") === "light" ? "light" : "dark";
+    S.basemap = ["street", "satellite", "satellite-archive", "none"].includes(q.get("basemap")) ? q.get("basemap") : "street";
     S.record = null;
     S.choice = null;
     S.search = "";
@@ -386,11 +394,12 @@
       "ค้นหาชุดข้อมูลหรือชื่อโฟลเดอร์",
       "Search a dataset or source folder",
     );
-    $("basemap").options[0].textContent = text("แผนที่ถนน", "Street map");
-    $("basemap").options[1].textContent = text(
-      "เฉพาะข้อมูลพื้นที่",
-      "Data only",
-    );
+    for (const option of $("basemap").options) option.textContent = text(...({street:["แผนที่ถนน", "Street map"],satellite:["ภาพดาวเทียม · CityChat", "Satellite · CityChat"],"satellite-archive":["ภาพเก่า 2016/2017 · EOX", "Archive 2016/2017 · EOX"],none:["เฉพาะข้อมูลพื้นที่", "Data only"]}[option.value]));
+    $("basemap").value = S.basemap;
+    document.querySelector(".header-settings > summary").setAttribute("aria-label",text("ตัวเลือกภาษาและธีม", "Language and theme options"));
+    $("basemap").setAttribute("aria-label", text("พื้นหลังแผนที่", "Map background"));
+    $("panel-splitter").setAttribute("aria-label", text("ปรับขนาดแผนที่และข้อมูล", "Resize map and data panels"));
+    renderInterfaceIcons();
     $("map").setAttribute(
       "aria-label",
       text(
@@ -423,7 +432,22 @@
     document
       .querySelector(".inspector-tabs")
       .setAttribute("aria-label", text("มุมมองข้อมูล", "Data views"));
+    document.querySelector(".map-workspace").setAttribute("aria-label",text("แผนที่ศิลา", "Sila map"));
+    document.querySelector(".map-summary").setAttribute("aria-label",text("สรุปจากขอบเขตที่เลือก", "Summary of selected boundary"));
+    document.querySelector(".purpose-actions").setAttribute("aria-label",text("หัวข้องาน", "Work topics"));
+    document.querySelector(".snapshot-label").textContent=text("5 ต.ค. 2569", "5 Oct 2026");
     document.title = `${scopeLabel()} · ${label(S.dataset)} | CityChat CityMETER`;
+  }
+  function renderInterfaceIcons() {
+    const icon = window.SilaIcons.icon;
+    document.querySelectorAll("[data-icon-role]").forEach(el => {
+      const glyph = icon(el.dataset.iconRole, {size:20});
+      if (el.matches("button")) el.innerHTML = glyph + `<span>${el.textContent}</span>`;
+      else el.innerHTML = glyph;
+    });
+    const controls = {"layers-open":"layers", back:"back", fit:"fit", theme:S.theme === "dark" ? "light" : "dark"};
+    for (const [id,role] of Object.entries(controls)) { const el=$(id); el.innerHTML=icon(role,{size:20})+`<span>${el.textContent}</span>`; }
+    $("dataset-icon").innerHTML = window.SilaIcons.dataset(S.dataset,{size:28});
   }
   function renderCatalog() {
     const q = $("dataset-search").value.trim().toLowerCase();
@@ -447,7 +471,7 @@
       if (!list.length) continue;
       html += `<h3 class="dataset-group-title">${esc(text(...(groupLabels[g] || [g, g])))}</h3>`;
       for (const d of list)
-        html += `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === S.dataset}"><span class="dataset-dot" style="background:${categoryColor(d.id)}" aria-hidden="true"></span><span><strong>${esc(label(d.id))}</strong><small>${esc(text(...(hints[d.id] || statusLabels[d.status] || ["ข้อมูลจากเทศบาล", "Municipal source data"])))}</small></span><span class="number">${num(d.count)}<small>${d.id === "overview" ? text("หมู่บ้าน", "villages") : d.id === "flood" ? text("จุดในเอกสาร", "document sites") : d.count == null ? text("รอข้อมูล", "pending") : text("รายการต้นทาง", "source rows")}</small></span></button>`;
+        html += `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === S.dataset}"><span class="dataset-type-icon">${window.SilaIcons.dataset(d.id,{size:28})}</span><span><strong>${esc(label(d.id))}</strong><small>${esc(text(...(hints[d.id] || statusLabels[d.status] || ["ข้อมูลจากเทศบาล", "Municipal source data"])))}</small></span><span class="number">${num(d.count)}<small>${d.id === "overview" ? text("หมู่บ้าน", "villages") : d.id === "flood" ? text("จุดในเอกสาร", "document sites") : d.count == null ? text("รอข้อมูล", "pending") : text("รายการต้นทาง", "source rows")}</small></span></button>`;
     }
     $("dataset-catalog").innerHTML =
       html ||
@@ -466,8 +490,7 @@
       municipality: text("เทศบาลเมืองศิลา", "Sila Municipality"),
       sourceDate: "2026-10-05",
     });
-    document.querySelector(".dataset-trigger .dataset-dot").style.background =
-      categoryColor(S.dataset);
+
     $("boundary-mode").value = S.boundary;
     $("place-eyebrow").textContent =
       S.scope.type === "municipality"
@@ -487,8 +510,9 @@
             "ตัวเลขและรายการด้านล่างใช้ขอบเขตนี้ ไม่เปลี่ยนตามการเลื่อนแผนที่",
             "Figures and records use this boundary, not the current map viewport",
           );
-    $("breadcrumbs").innerHTML =
-      `<span>${text("ขอนแก่น", "Khon Kaen")}</span><span aria-hidden="true">›</span>${S.scope.type === "municipality" ? `<strong>${scopeLabel()}</strong>` : `<button data-scope="sila">${text("เทศบาลเมืองศิลา", "Sila Municipality")}</button><span aria-hidden="true">›</span><strong>${esc(scopeLabel())}</strong>`}`;
+    const sep = `<span class="breadcrumb-separator" aria-hidden="true">${window.SilaIcons.icon("next",{size:16})}</span>`;
+    const municipality = text("เทศบาลเมืองศิลา", "Sila Municipality");
+    $("breadcrumbs").innerHTML = `${window.SilaIcons.icon("municipality",{size:20})}<span>${text("ประเทศไทย", "Thailand")}</span>${sep}<span>${text("ขอนแก่น", "Khon Kaen")}</span>${sep}${S.scope.type === "municipality" && !S.record ? `<strong aria-current="location">${esc(municipality)}</strong>` : `<button data-scope="sila">${esc(municipality)}</button>`}${S.scope.type !== "municipality" ? `${sep}${S.record ? `<button data-close-record>${esc(scopeLabel())}</button>` : `<strong aria-current="location">${esc(scopeLabel())}</strong>`}` : ""}${S.record ? `${sep}<strong aria-current="location">${esc(S.record.properties.label || S.record.properties.id)}</strong>` : ""}`;
     $("back").disabled =
       S.scope.type === "municipality" && !S.record && !S.choice;
     document
@@ -930,6 +954,8 @@
     S.map.on("zoomend", () => {
       $("map").dataset.zoom = String(S.map.getZoom());
     });
+    const context=document.querySelector(".map-context");
+    new ResizeObserver(()=>{$("basemap-caption").style.top=Math.max(62,context.offsetTop+context.offsetHeight+8)+"px";}).observe(context);
     new ResizeObserver(() => S.map.invalidateSize({ pan: false })).observe(
       $("map"),
     );
@@ -947,10 +973,14 @@
     if (S.basemap === "none") {
       $("map").dataset.basemapStatus = "none";
       $("map").dataset.basemapRenderer = "";
+      $("basemap-caption").hidden = true;
       return;
     }
     $("map").dataset.basemapStatus = "loading";
+    $("basemap-caption").hidden = !S.basemap.startsWith("satellite");
+    $("basemap-caption").textContent = text("ภาพดาวเทียม · กำลังโหลดข้อมูลต้นทาง", "Satellite · loading source imagery");
     S.tile = window.SilaBasemap.create({
+      mode: S.basemap,
       theme: S.theme,
       language: S.lang,
       fallback: true,
@@ -961,9 +991,15 @@
         $("map").dataset.basemapRenderer = e.renderer || "";
         $("map").dataset.basemapTheme = S.theme;
         if (e.status === "ready") {
+          if (S.basemap.startsWith("satellite")) {const state=S.tile?.getBasemapState?.();$("basemap-caption").textContent=state?.zoomNotice || text("ภาพดาวเทียม · รอรายละเอียดต้นทาง", "Satellite · source details pending");}
           S.tileFailed = false;
           $("map-error").hidden = true;
         }
+      })
+      .on("basemapzoom", e => {
+        if (revision !== S.basemapRevision || !S.basemap.startsWith("satellite")) return;
+        const state = S.tile?.getBasemapState?.() || e;
+        $("basemap-caption").textContent = state.zoomNotice || text("ภาพดาวเทียม · รอรายละเอียดต้นทาง", "Satellite · source details pending");
       })
       .on("tileerror", () => {
         if (revision !== S.basemapRevision) return;
@@ -1074,6 +1110,13 @@
     const maxPop = Math.max(
       ...S.metadata.villages.map((x) => x.populationReported || 0),
     );
+    if (S.theme === "light" || S.basemap.startsWith("satellite")) {
+      const width = S.scope.type === "municipality" ? 1.2 : 2.5;
+      const halos=[];
+      if (S.basemap.startsWith("satellite")) halos.push(L.geoJSON(data,{pane:"boundary",renderer:S.boundaryRenderer,interactive:false,style:{color:"#FFFFFF",weight:width+4,opacity:1,fill:false}}));
+      halos.push(L.geoJSON(data,{pane:"boundary",renderer:S.boundaryRenderer,interactive:false,style:{color:"#182327",weight:width+2,opacity:1,fill:false}}));
+      S.contextLayer=L.featureGroup(halos).addTo(S.map);
+    }
     S.boundaryLayer = L.geoJSON(data, {
       pane: "boundary",
       renderer: S.boundaryRenderer,
@@ -1138,8 +1181,8 @@
   }
   function featureStyle(id) {
     return {
-      color: categoryColor(id),
-      weight: id === "roads" ? 2 : id === "buildings" ? 0.8 : 1.2,
+      color: !["roads", "parcels", "waterways"].includes(id) && (S.theme === "light" || S.basemap.startsWith("satellite")) ? "#182327" : categoryColor(id),
+      weight: id === "roads" ? 2 : id === "buildings" ? 1 : 1.2,
       opacity: 1,
       fill: !["roads", "parcels"].includes(id),
       fillColor: categoryColor(id),
@@ -1147,7 +1190,7 @@
     };
   }
   function featureGroup(fc, id, interactive = true) {
-    return L.geoJSON(fc, {
+    const main = L.geoJSON(fc, {
       pane: "features",
       interactive,
       style: featureStyle(id),
@@ -1155,8 +1198,8 @@
         L.circleMarker(ll, {
           pane: "features",
           radius: id === "houses" ? 3 : 6,
-          color: mapToken("markerStroke"),
-          weight: id === "houses" ? 0.5 : 1,
+          color: S.basemap.startsWith("satellite") ? "#182327" : mapToken("markerStroke"),
+          weight: 1.5,
           fillColor: categoryColor(id),
           fillOpacity: 1,
           opacity: 1,
@@ -1175,6 +1218,17 @@
           }
         : undefined,
     });
+    // A neutral underlay keeps original category HEX legible without recoloring data.
+    // Both layers are non-interactive; source geometry remains the central picking authority.
+    if (["roads", "parcels", "waterways"].includes(id)) {
+      const layers=[];
+      if (S.basemap.startsWith("satellite")) layers.push(L.geoJSON(fc,{pane:"features",interactive:false,style:{color:"#FFFFFF",weight:6,opacity:1,fill:false}}));
+      layers.push(L.geoJSON(fc,{pane:"features",interactive:false,style:{color:"#182327",weight:4,opacity:1,fill:false}}),main);
+      const group=L.featureGroup(layers);
+      group.on("add",()=>main.bringToFront());
+      return group;
+    }
+    return main;
   }
   async function drawFeatures(ticket) {
     if (S.featureLayer) S.map.removeLayer(S.featureLayer);
@@ -1200,24 +1254,16 @@
             features: scoped,
             language: S.lang,
             color: categoryColor("houses"),
-            strokeColor: mapToken("markerStroke"),
-            clusterActionLabel:
-              S.scope.type === "municipality" && S.boundary !== "municipality"
-                ? text("เลือกพื้นที่บริเวณนี้", "select this area")
-                : text("เปิดรายการทั้งหมด", "open all members"),
+            strokeColor: S.basemap.startsWith("satellite") ? "#182327" : mapToken("markerStroke"),
+            onPickPoint: (event) => handleMapClick({
+              ...event,
+              latlng: event.originalEvent
+                ? S.map.mouseEventToLatLng(event.originalEvent)
+                : event.latlng,
+            }),
             onSelectRecord: (feature) => {
               const [lng, lat] = feature.geometry.coordinates;
               if (!tryDrillAreaAt({ lng, lat })) selectRecord(feature);
-            },
-            onCluster: (members, context) => {
-              if (tryDrillAreaAt(context.latlng)) return;
-              showChoice(
-                members,
-                text(
-                  "จำนวนคือหมุดจากไฟล์ เปิดเลือกแต่ละรายการได้ ไม่ใช่จำนวนครัวเรือนที่ยืนยัน",
-                  "Counts represent source point records. Choose any member; these are not verified households.",
-                ),
-              );
             },
           }).addTo(S.map)
         : featureGroup({ ...fc, features: scoped }, S.dataset, false).addTo(
@@ -1357,7 +1403,7 @@
         `<div>${text("คน · รวมต้นทาง ปี 2569", "People · source total, 2026")}</div><div class="population-legend">${cs.map((c, i) => `<span><span class="legend-swatch" style="background:${c}"></span><small>${num(Math.ceil((i * max) / 5))}–${num(i === 4 ? max : Math.ceil(((i + 1) * max) / 5) - 1)}</small></span>`).join("")}</div><div class="legend-description">${text("หมู่ 11 รอสอบทาน · สีไม่ใช่ความเสี่ยง", "Village 11 to reconcile · not a risk scale")}</div>`;
     } else
       $("map-legend").innerHTML =
-        `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div>${dataset().geojson && !["overview", "population", "villages", "municipality", "election"].includes(S.dataset) ? `<div class="legend-row"><span class="legend-dot" style="background:${categoryColor(S.dataset)}"></span><span>${esc(label(S.dataset))}</span></div>` : ""}<div class="legend-description">${S.dataset === "houses" ? text("ตัวเลขบนหมุด = รายการบ้านในกลุ่ม · กดเพื่อเลือกบ้าน", "Marker counts = grouped source house records · select to inspect") : text("คลิกพื้นที่หรือรูปข้อมูลเพื่อดูรายการ · สีไม่ใช่ความเสี่ยง", "Click an area or data shape to inspect records · colors are not risk")}</div>`;
+        `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div>${dataset().geojson && !["overview", "population", "villages", "municipality", "election"].includes(S.dataset) ? `<div class="legend-row"><span class="legend-dot" style="background:${categoryColor(S.dataset)}"></span><span>${esc(label(S.dataset))}</span></div>` : ""}<div class="legend-description">${S.dataset === "houses" ? text("จุดบ้านจากไฟล์ทุกจุดในขอบเขต · คลิกเพื่อตรวจรายการ", "All source house points in this scope · click to inspect") : text("คลิกพื้นที่หรือรูปข้อมูลเพื่อดูรายการ · สีไม่ใช่ความเสี่ยง", "Click an area or data shape to inspect records · colors are not risk")}</div>`;
     $("map-context-text").textContent =
       S.scope.type === "municipality"
         ? S.boundary === "election"
@@ -1529,6 +1575,13 @@
     );
   }
   function bindEvents() {
+    const splitter = $("panel-splitter");
+    const setSplit = value => { const percent=Math.max(36,Math.min(64,value)); document.querySelector(".workspace").style.setProperty("--map-share",percent+"%"); splitter.setAttribute("aria-valuenow",String(Math.round(percent))); };
+    splitter.addEventListener("pointerdown",e=>{splitter.setPointerCapture(e.pointerId);splitter.dataset.dragging="true";});
+    splitter.addEventListener("pointermove",e=>{if(splitter.dataset.dragging!=="true")return;const r=document.querySelector(".workspace").getBoundingClientRect();setSplit((e.clientX-r.left)/r.width*100);});
+    splitter.addEventListener("pointerup",()=>delete splitter.dataset.dragging);
+    splitter.addEventListener("pointercancel",()=>delete splitter.dataset.dragging);
+    splitter.addEventListener("keydown",e=>{if(!["ArrowLeft","ArrowRight","Home"].includes(e.key))return;e.preventDefault();setSplit(e.key==="Home"?50:Number(splitter.getAttribute("aria-valuenow"))+(e.key==="ArrowLeft"?-2:2));});
     $("dataset-open").addEventListener("click", () => {
       renderCatalog();
       $("dataset-dialog").showModal();
@@ -1544,6 +1597,7 @@
     });
     $("dataset-search").addEventListener("input", renderCatalog);
     document.addEventListener("click", (e) => {
+      if (!e.target.closest(".header-settings")) document.querySelector(".header-settings").open=false;
       const d = e.target.closest("[data-dataset]");
       if (d) {
         $("dataset-dialog").close();
@@ -1655,6 +1709,8 @@
     $("basemap").addEventListener("change", () => {
       S.basemap = $("basemap").value;
       setBasemap();
+      refreshMap();
+      syncURL();
     });
     $("back").addEventListener("click", () =>
       S.record || S.choice ? closeRecord() : selectScope("sila"),
@@ -1675,12 +1731,15 @@
       S.theme = S.theme === "dark" ? "light" : "dark";
       renderPanel();
       renderCatalog();
-      setBasemap();
+      if (S.basemap.startsWith("satellite") && S.tile) S.tile.setTheme(S.theme);
+      else setBasemap();
       refreshMap();
       syncURL();
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
+        const settings=document.querySelector(".header-settings");
+        if(settings.open){settings.open=false;settings.querySelector("summary").focus();return;}
         if (!$("dataset-dialog").open) {
           if (!$("layer-options").hidden) {
             $("layer-options").hidden = true;

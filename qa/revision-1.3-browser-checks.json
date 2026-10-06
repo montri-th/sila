@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "sila-browser-review-1.3",
+  "revision": "1.3",
+  "reviewedAtUtc": "2026-10-06T03:49:20.495740+00:00",
+  "status": "passed_with_bounded_coverage",
+  "scope": "Actual local browser interactions and rendered review; not a universal accessibility, satellite rights, native mobile, or platform integration certificate.",
+  "sourcePins": {
+    "lds": "v0.9.7-owner.1 / color-srgb-10",
+    "citychatAddon": "0.9.2"
+  },
+  "reviewedStates": [
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "locale": "th",
+      "theme": "dark",
+      "dataset": "buildings",
+      "basemap": "street",
+      "checks": [
+        "50/50 platform layout",
+        "exact rounded animated logo",
+        "identity gradient",
+        "breadcrumb hierarchy",
+        "orientation motif and Thai steps",
+        "dataset menu and visible labels",
+        "no decorative bracket/left selected rail",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "locale": "en",
+      "theme": "light",
+      "dataset": "parcels",
+      "scope": "v26",
+      "basemap": "satellite",
+      "checks": [
+        "3259 source geometries intersect selected scope",
+        "original category core above neutral halo",
+        "Google Hybrid rendered",
+        "source date/resolution unknown caption",
+        "zoom15 and20 tested; at20 source19 overzoom",
+        "no completed failed tiles in checked state"
+      ]
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "locale": "en",
+      "theme": "dark",
+      "dataset": "buildings",
+      "basemap": "street",
+      "checks": [
+        "mobile stacked layout",
+        "dataset catalog wrapping",
+        "icon labels",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "viewport": [
+        320,
+        740
+      ],
+      "locale": "th",
+      "theme": "light",
+      "dataset": "buildings",
+      "checks": [
+        "expanded orientation card",
+        "actual Thai wrapping",
+        "motif visible",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "viewport": [
+        320,
+        740
+      ],
+      "locale": "en",
+      "theme": "light",
+      "dataset": "houses",
+      "scope": "v26",
+      "basemap": "satellite",
+      "checks": [
+        "2240 individual source points supplied to Canvas",
+        "zero cluster/count badges",
+        "physical map-point click",
+        "breadcrumb parent retains scope and dataset",
+        "caption does not overlap map context",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "locale": "en",
+      "theme": "light",
+      "dataset": "houses",
+      "checks": [
+        "expanded orientation card and labels",
+        "URL language matches content",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "browser": "native Chrome",
+      "browserZoomPercent": 200,
+      "effectiveWidth": 855,
+      "locale": [
+        "th",
+        "en"
+      ],
+      "theme": "light",
+      "checks": [
+        "native browser zoom reached200",
+        "boundary selector uses available width after fix",
+        "Thai/English text review",
+        "no horizontal overflow",
+        "reset zoom100 afterwards"
+      ]
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "locale": "th",
+      "theme": [
+        "light",
+        "dark"
+      ],
+      "dataset": "houses",
+      "scope": "sila",
+      "checks": [
+        "28262individualpoints at zoom8and20; countmatchesScope",
+        "streetnativeThemevisualReview",
+        "originalfill/coordinates preserved",
+        "nohorizontaloverflow"
+      ]
+    }
+  ],
+  "interactions": {
+    "separatorKeyboard": "ArrowLeft50→48, Home→50; visible focus",
+    "settings": "Escape closes and returns summary focus; outside click closes",
+    "breadcrumbRecordReturn": "v26/record15833→v26 using same-scope crumb; dataset houses preserved",
+    "basemapModes": [
+      "street",
+      "satellite",
+      "satellite-archive",
+      "none"
+    ],
+    "basemapModeSwitch": "Only active provider attribution remains; none retains Leaflet only. Scope/dataset retained.",
+    "pointOverlapSelection": "Actual Canvas click opens9 nearby source records; selecting111/11 (row18142) opens that record; same-scope breadcrumb closes record and keepsv26/houses. CircleMarker bubblingMouseEvents:false prevents second map-click override."
+  },
+  "housePoints": {
+    "moduleVersion": "2.0.0",
+    "aggregationEnabled": false,
+    "displayLimit": null,
+    "sourcePoints": 28783,
+    "viewportOnlyFiltering": false,
+    "canvasClipsToViewport": true,
+    "coordinateChanges": false,
+    "pureChecks": "qa/revision-1.3-house-points-checks.json",
+    "nativeMunicipalCountVerification": {
+      "scope": "sila",
+      "renderedSourcePoints": 28262,
+      "sourceInputPoints": 28262,
+      "atZooms": [
+        8,
+        12.75,
+        20
+      ],
+      "clusterBadgeCount": 0,
+      "allSourceDatasetRecords": 28783,
+      "outsideMunicipalScopeRecords": 521,
+      "v26ScopedPoints": 2240,
+      "explanation": "All points supplied for chosen boundary are represented; changing scope does not manufacture household totals."
+    }
+  },
+  "contrastEvidence": "reference/map-contrast-audit.json",
+  "staticReports": [
+    "qa/revision-1.3-lds-static-index-html.json",
+    "qa/revision-1.3-lds-static-app-js.json",
+    "qa/revision-1.3-lds-static-house-points-js.json"
+  ],
+  "proofs": [
+    "screenshots/revision-1.3-desktop-th-dark-points.jpg",
+    "screenshots/revision-1.3-desktop-th-dark.jpg",
+    "screenshots/revision-1.3-desktop-th-light-points.jpg",
+    "screenshots/revision-1.3-mobile-en-light-points.jpg",
+    "screenshots/revision-1.3-satellite-th-zoom20.jpg"
+  ],
+  "openCoverage": [
+    "Native iPhone/Android devices not tested",
+    "Operating-system reduced-motion switch not toggled; retained fallback checked in source",
+    "Full WCAG and all satellite pixels not verified",
+    "Google imagery license not verified; current owner-selected source compatibility only",
+    "CityChat production auth/data writes not connected; this public prototype is not merged into platform"
+  ],
+  "historicalEvidence": "revision1.1/1.2 receipts and cluster screenshots describe older builds only"
+}

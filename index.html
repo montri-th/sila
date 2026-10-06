@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="house-points.css" />
     <link rel="stylesheet" href="context-actions.css" />
+    <link rel="stylesheet" href="platform-shell.css" />
     <link rel="stylesheet" href="assets/brand/citychat-motif-motion.css" />
     <link rel="stylesheet" href="assets/brand/citychat-header-logo.css" />
     <script type="module" src="assets/brand/citychat-header-logo.js"></script>
@@ -80,11 +81,12 @@
         ><strong data-i18n="municipality">เทศบาลเมืองศิลา</strong>
       </div>
       <div class="header-actions">
+        <details class="header-settings"><summary aria-label="ตัวเลือกภาษาและธีม"><span data-icon-role="more"></span><span data-i18n="settings">ตัวเลือก</span></summary><div class="header-settings-panel">
         <button id="language" class="quiet" aria-label="Switch to English">
           EN</button
         ><button id="theme" class="quiet" data-i18n="lightTheme">
           พื้นสว่าง</button
-        ><span class="officer-label" data-i18n="preview"
+        ></div></details><span class="officer-label" data-i18n="preview"
           >ต้นแบบสำหรับเจ้าหน้าที่</span
         >
       </div>
@@ -92,17 +94,6 @@
     <main class="workspace">
       <section class="map-workspace" aria-label="แผนที่ศิลา">
         <div class="map-toolbar">
-          <button
-            id="dataset-open"
-            class="dataset-trigger"
-            aria-haspopup="dialog"
-          >
-            <span class="dataset-dot" aria-hidden="true"></span
-            ><span
-              ><small data-i18n="dataset">ชุดข้อมูล</small
-              ><strong id="dataset-title">รูปอาคาร</strong></span
-            ><span class="chevron" aria-hidden="true">⌄</span>
-          </button>
           <div class="map-toolbar-secondary">
             <label
               ><span class="sr-only" data-i18n="boundaries">ขอบเขตพื้นที่</span
@@ -121,11 +112,10 @@
               ซ้อนชั้นข้อมูล
             </button>
           </div>
+          <label class="basemap-picker"><span data-i18n="basemap">พื้นหลัง</span><select id="basemap" aria-label="พื้นหลังแผนที่">
+            <option value="street">แผนที่ถนน</option><option value="satellite">ภาพดาวเทียม · CityChat</option><option value="satellite-archive">ภาพเก่า 2016/2017 · EOX</option><option value="none">เฉพาะข้อมูลพื้นที่</option>
+          </select></label>
         </div>
-        <nav id="breadcrumbs" class="breadcrumbs" aria-label="ลำดับพื้นที่">
-          <span>ขอนแก่น</span><span aria-hidden="true">›</span
-          ><strong>เทศบาลเมืองศิลา</strong>
-        </nav>
         <div class="map-stage">
           <div
             id="map"
@@ -149,14 +139,7 @@
               ><input type="checkbox" data-overlay="buildings" /><span
                 data-i18n="buildings"
                 >รูปอาคาร</span
-              ></label
-            ><label
-              ><span data-i18n="basemap">พื้นหลัง</span
-              ><select id="basemap">
-                <option value="street">แผนที่ถนน</option>
-                <option value="none">เฉพาะข้อมูลพื้นที่</option>
-              </select></label
-            >
+              ></label>
           </div>
           <div class="map-context">
             <span class="status-dot" aria-hidden="true"></span
@@ -164,6 +147,7 @@
               >ขอบเขตจากไฟล์เทศบาล · คลิกพื้นที่เพื่อลงรายละเอียด</span
             >
           </div>
+          <div id="basemap-caption" class="basemap-caption" role="status" hidden></div>
           <div class="map-controls">
             <button id="back" class="map-control" data-i18n="back" disabled>
               ย้อนกลับ</button
@@ -195,11 +179,17 @@
           </div>
         </section>
       </section>
+      <div id="panel-splitter" class="panel-splitter" role="separator" aria-orientation="vertical" aria-label="ปรับขนาดแผนที่และข้อมูล" aria-valuemin="36" aria-valuemax="64" aria-valuenow="50" tabindex="0"></div>
       <aside
         id="inspector"
         class="inspector"
         aria-label="ข้อมูลพื้นที่ที่เลือก"
       >
+        <nav id="breadcrumbs" class="breadcrumbs" aria-label="ลำดับพื้นที่">
+          <span>ขอนแก่น</span><span aria-hidden="true">›</span
+          ><strong>เทศบาลเมืองศิลา</strong>
+        </nav>
+        <button class="my-area" data-scope="sila"><span data-icon-role="houses"></span><span data-i18n="myArea">พื้นที่ของฉัน</span></button>
         <div class="inspector-heading">
           <div class="eyebrow" id="place-eyebrow">ขอนแก่น · ข้อมูลเทศบาล</div>
           <h1 id="place-title">เทศบาลเมืองศิลา</h1>
@@ -207,10 +197,23 @@
             เริ่มจากรูปอาคาร เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้อง
           </p>
         </div>
+<div class="inspector-dataset">          <button
+            id="dataset-open"
+            class="dataset-trigger"
+            aria-haspopup="dialog"
+          >
+            <span id="dataset-icon" class="dataset-type-icon" aria-hidden="true"></span
+            ><span
+              ><small data-i18n="dataset">ชุดข้อมูล</small
+              ><strong id="dataset-title">รูปอาคาร</strong></span
+            ><span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+</div>
+        <details class="orientation-card"><summary><span data-icon-role="info"></span><span data-i18n="workflowTitle">เริ่มจากพื้นที่ ไปสู่แผนงาน</span></summary><div class="orientation-content"><img id="conversation-art" src="assets/brand/conversation-welcome.svg" width="96" height="72" alt="" /><ol><li><span data-icon-role="boundaries"></span><span data-i18n="workflowArea">เลือกขอบเขต เพื่อรู้ว่ากำลังดูพื้นที่ใด</span></li><li><span data-icon-role="datasets"></span><span data-i18n="workflowData">เปลี่ยนชุดข้อมูล แล้วเปิดรายการที่สนใจ</span></li><li><span data-icon-role="plan"></span><span data-i18n="workflowPlan">ตรวจที่มา ก่อนนำไปวางแผนหรือสำรวจต่อ</span></li></ol></div></details>
         <div class="purpose-actions" role="group" aria-label="หัวข้องาน">
-          <button data-purpose="flood" data-i18n="floodPurpose">
+          <button data-purpose="flood" data-icon-role="flood" data-i18n="floodPurpose">
             น้ำและแผนป้องกัน</button
-          ><button data-purpose="tax" data-i18n="taxPurpose">
+          ><button data-purpose="tax" data-icon-role="parcels" data-i18n="taxPurpose">
             ที่ดินและสิ่งปลูกสร้าง
           </button>
         </div>
@@ -318,6 +321,7 @@
     <script src="house-points.js"></script>
     <script src="map-pick.js"></script>
     <script src="context-actions.js"></script>
+    <script src="ui-icons.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,0 +1,23 @@
+{
+  "releaseRef": "v0.9.7-owner.1",
+  "status": "PASS",
+  "scope": "Static registered Story/Location literal-color, prohibited-alias, locally linked CSS and governed numeric-value state checks only. Full source truth, role correctness, actual contrast, dynamic rendering, layout and accessibility remain manual/rendered gates.",
+  "files": [
+    "index.html",
+    "assets/fonts.css",
+    "vendor/leaflet/leaflet.css",
+    "basemap.css",
+    "styles.css",
+    "house-points.css",
+    "context-actions.css",
+    "platform-shell.css",
+    "assets/brand/citychat-motif-motion.css",
+    "assets/brand/citychat-header-logo.css"
+  ],
+  "uniqueColors": 43,
+  "problems": [],
+  "warnings": [
+    "index.html: scripts require rendered review; static scanning does not prove runtime color or accessible-alternative parity"
+  ],
+  "fullConformance": false
+}

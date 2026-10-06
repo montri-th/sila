@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "checks": 35,
+  "version": "1.2.0",
+  "scope": "Exact repo-source URL/CORS and truthful metadata; native19→20 overzoom; mode/theme/camera lifecycle; explicit EOX archive; no silent imagery-provider fallback. Headless mocks, not native browser tile availability."
+}

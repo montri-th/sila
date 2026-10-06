@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "citychat-sila-conversation-asset-adoption-1",
+  "artifact": "sila-citymeter-officer",
+  "revision": "1.3",
+  "adoptedOn": "2026-10-06",
+  "asset": {
+    "assetId": "citychat-conversation-welcome-exact-fa672374",
+    "file": "conversation-welcome.svg",
+    "role": "welcome_illustration",
+    "bytes": 11610,
+    "sha256": "fa67237428dc510cb4e7bc15e86e3764e9911db8a5e26787cb7d40291a284ca4",
+    "mediaType": "image/svg+xml",
+    "intrinsicWidth": 156,
+    "intrinsicHeight": 127,
+    "viewBox": "0 0 156 127",
+    "modification": "retain_exact; renamed delivery path only; no crop/recolor/filter/geometry/metadata change",
+    "motion": "none",
+    "sourceRepository": "montri-th/CityChat",
+    "sourceCommit": "02bf0a94caec0adbf4cfba170cd9e4bad4cd8b6d",
+    "sourcePath": "deployment/assets/citychat-motif-set/assets/conversation-motif-original.svg",
+    "creator": "Original ConversationMotif supplied by CityChat owner, as identified in source register; no independent authorship or open license inferred",
+    "licenseOrPermission": "Prior exact-build owner permission + current owner-directed Sila identity/asset adoption; artifact-bounded, not an open license",
+    "accessibleTreatment": "Decorative <img alt=\"\" aria-hidden=\"true\"> adjacent to live place-first orientation copy; reserve width/height; hide image on failure while text remains"
+  },
+  "authority": {
+    "baseDocumentSha256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96",
+    "addonDocumentSha256": "345ef4054d7a646a73a8b369549c58c8b11d3190e39de5aa0f59704d6a3223ad",
+    "currentRule": "CityChat Add-on0.9.2 §2 lines45–49: ConversationMotif welcome/invitation/empty/receipt/calm success; never data/evidence/functional icon/second logo",
+    "originalRegisteredIdentity": "conversation-motif-original.svg; source register candidate label preserved historically; superseding explicit owner build approval recorded separately",
+    "priorExactBuildApproval": {
+      "date": "2026-09-08",
+      "approvalText": "อนุมัติ animated motif + logo ทุกชิ้น",
+      "scope": "Original CityChat landing registered motif stills and one-shot motion only",
+      "sourceRef": "citychat-build-card.json",
+      "sourceSha256": "02f020a89f62ad3d1a0293d5e279e1592b2641d9b320b3f0766267274b8d63be"
+    },
+    "sourceRegisterSha256": "abaad25d95312a7f39b5264816218629edf4641ab984d6f11e2bf6001fa8866a",
+    "currentArtifactAuthorization": {
+      "source": "Human owner revision relayed by parent 2026-10-06",
+      "scope": "Use true LDS0.9.7+CityChatAddon0.9.2 assets and identity in Sila; parent requested exact static ConversationMotif for welcome/orientation card",
+      "adoptionDecision": "retain_exact",
+      "allowedSurface": "One Sila welcome/orientation card outside map evidence",
+      "publicationDestination": "montri-th/sila"
+    },
+    "canonicalDesignSystemPromotion": false
+  },
+  "allowedRoles": [
+    "welcome_illustration"
+  ],
+  "prohibitedRoles": [
+    "map_marker",
+    "dataset_icon",
+    "metric_scale",
+    "official_state",
+    "proof_of_success",
+    "identity_logo",
+    "avatar",
+    "municipality_seal",
+    "functional_control"
+  ],
+  "fallback": "Keep live orientation text visible; remove failed decorative image; no alternate illustration family or invented artwork",
+  "verification": {
+    "sourceHashParity": "pass",
+    "xmlParse": "pass",
+    "scriptsAndExternalReferences": "none",
+    "visualReview": "Exact source rasterized at 2x (312x254) for local inspection: two rounded green conversational balloons and smiles, complete silhouette; not a browser surface/contrast verification",
+    "browserRender": "owned by parent; not claimed by this receipt",
+    "packageConformance": "No full DS/asset/AA conformance claimed"
+  }
+}

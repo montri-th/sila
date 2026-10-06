@@ -1,0 +1,1153 @@
+{
+  "schemaVersion": "sila-map-contrast-bounded-audit-1",
+  "revision": "1.3",
+  "checkedAtUtc": "2026-10-06T02:15:49.801969+00:00",
+  "status": "bounded_source_color_analysis_render_review_separate",
+  "baseDocumentSHA256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96",
+  "addonSHA256": "345ef4054d7a646a73a8b369549c58c8b11d3190e39de5aa0f59704d6a3223ad",
+  "method": {
+    "relativeLuminance": "WCAG2.2 sRGB channel linearization; (lighter+.05)/(darker+.05)",
+    "reference": "https://www.w3.org/TR/WCAG22/#dfn-relative-luminance",
+    "nonTextReference": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+    "thresholdUse": "3:1 diagnostic for necessary graphic boundaries; no full WCAG claim",
+    "actualRenderedPixelsMeasured": false
+  },
+  "styles": {
+    "light": {
+      "url": "https://tiles.openfreemap.org/styles/liberty",
+      "sha256": "6010998863b4876911ac9a2d62c9a28d97c8877f6d20cd158b74808572257b60",
+      "bytes": 43079,
+      "sampleSurfaces": [
+        {
+          "layerId": "background",
+          "sourcePaintColor": "#f8f4f0",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.9725490196078431,
+            0.9568627450980393,
+            0.9411764705882353
+          ],
+          "sampleColor": "#F8F4F0",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "park",
+          "sourcePaintColor": "#d8e8c8",
+          "paintOpacity": 0.7,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.8847058823529412,
+            0.923921568627451,
+            0.8313725490196078
+          ],
+          "sampleColor": "#E2ECD4",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "landuse_hospital",
+          "sourcePaintColor": "#fde",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            1.0,
+            0.8666666666666667,
+            0.9333333333333333
+          ],
+          "sampleColor": "#FFDDEE",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "landuse_school",
+          "sourcePaintColor": "rgb(236,238,204)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.9254901960784314,
+            0.9333333333333333,
+            0.8
+          ],
+          "sampleColor": "#ECEECC",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "water",
+          "sourcePaintColor": "rgb(158,189,255)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.6196078431372549,
+            0.7411764705882353,
+            1.0
+          ],
+          "sampleColor": "#9EBDFF",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "road_minor",
+          "sourcePaintColor": "#fff",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "sampleColor": "#FFFFFF",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "building",
+          "sourcePaintColor": "hsl(35,8%,85%)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.8619999999999999,
+            0.852,
+            0.8380000000000001
+          ],
+          "sampleColor": "#DCD9D6",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        }
+      ]
+    },
+    "dark": {
+      "url": "https://tiles.openfreemap.org/styles/dark",
+      "sha256": "4ba4a1990dc5e1b72b38483dfbb92ffdd945bcc13e9f1235466dae900bc51631",
+      "bytes": 20959,
+      "sampleSurfaces": [
+        {
+          "layerId": "background",
+          "sourcePaintColor": "rgb(12,12,12)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.047058823529411764,
+            0.047058823529411764,
+            0.047058823529411764
+          ],
+          "sampleColor": "#0C0C0C",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "water",
+          "sourcePaintColor": "rgb(27 ,27 ,29)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.10588235294117647,
+            0.10588235294117647,
+            0.11372549019607843
+          ],
+          "sampleColor": "#1B1B1D",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "landuse_residential",
+          "sourcePaintColor": "hsl(0,2%,5%)",
+          "paintOpacity": 0.4,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.048635294117647054,
+            0.04783529411764706,
+            0.04783529411764706
+          ],
+          "sampleColor": "#0C0C0C",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "landuse_park",
+          "sourcePaintColor": "rgb(32,32,32)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.12549019607843137,
+            0.12549019607843137,
+            0.12549019607843137
+          ],
+          "sampleColor": "#202020",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        },
+        {
+          "layerId": "building",
+          "sourcePaintColor": "rgb(10,10,10)",
+          "paintOpacity": 1,
+          "sourceAlpha": 1,
+          "sampleRGB": [
+            0.0392156862745098,
+            0.0392156862745098,
+            0.0392156862745098
+          ],
+          "sampleColor": "#0A0A0A",
+          "compositeAssumption": "single layer over style background; not every real overlap"
+        }
+      ]
+    }
+  },
+  "categoricalFillPairs": {
+    "light": {
+      "coral": {
+        "fill": "#D88381",
+        "minimumContrast": 1.4936,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.5644
+          },
+          {
+            "surface": "park",
+            "contrast": 2.2883
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 2.2489
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 2.361
+          },
+          {
+            "surface": "water",
+            "contrast": 1.4936
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 2.8062
+          },
+          {
+            "surface": "building",
+            "contrast": 1.9987
+          }
+        ]
+      },
+      "apricot": {
+        "fill": "#E39B6E",
+        "minimumContrast": 1.2175,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.0904
+          },
+          {
+            "surface": "park",
+            "contrast": 1.8654
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.8333
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.9247
+          },
+          {
+            "surface": "water",
+            "contrast": 1.2175
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 2.2876
+          },
+          {
+            "surface": "building",
+            "contrast": 1.6293
+          }
+        ]
+      },
+      "yellow": {
+        "fill": "#EAC578",
+        "minimumContrast": 1.1413,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 1.5044
+          },
+          {
+            "surface": "park",
+            "contrast": 1.3424
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.3193
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.3851
+          },
+          {
+            "surface": "water",
+            "contrast": 1.1413
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 1.6463
+          },
+          {
+            "surface": "building",
+            "contrast": 1.1725
+          }
+        ]
+      },
+      "lime": {
+        "fill": "#BECE7E",
+        "minimumContrast": 1.1022,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 1.5577
+          },
+          {
+            "surface": "park",
+            "contrast": 1.39
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.3661
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.4342
+          },
+          {
+            "surface": "water",
+            "contrast": 1.1022
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 1.7047
+          },
+          {
+            "surface": "building",
+            "contrast": 1.2141
+          }
+        ]
+      },
+      "mint": {
+        "fill": "#7BD0A3",
+        "minimumContrast": 1.0194,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 1.6843
+          },
+          {
+            "surface": "park",
+            "contrast": 1.5029
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.4771
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.5507
+          },
+          {
+            "surface": "water",
+            "contrast": 1.0194
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 1.8432
+          },
+          {
+            "surface": "building",
+            "contrast": 1.3128
+          }
+        ]
+      },
+      "sky": {
+        "fill": "#6ACCF0",
+        "minimumContrast": 1.0296,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 1.6675
+          },
+          {
+            "surface": "park",
+            "contrast": 1.488
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.4624
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.5353
+          },
+          {
+            "surface": "water",
+            "contrast": 1.0296
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 1.8248
+          },
+          {
+            "surface": "building",
+            "contrast": 1.2997
+          }
+        ]
+      },
+      "teal": {
+        "fill": "#49C0BC",
+        "minimumContrast": 1.1704,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.0095
+          },
+          {
+            "surface": "park",
+            "contrast": 1.7932
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 1.7623
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 1.8502
+          },
+          {
+            "surface": "water",
+            "contrast": 1.1704
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 2.1991
+          },
+          {
+            "surface": "building",
+            "contrast": 1.5663
+          }
+        ]
+      },
+      "blue": {
+        "fill": "#6196D1",
+        "minimumContrast": 1.6457,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.8256
+          },
+          {
+            "surface": "park",
+            "contrast": 2.5213
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 2.478
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 2.6015
+          },
+          {
+            "surface": "water",
+            "contrast": 1.6457
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 3.0921
+          },
+          {
+            "surface": "building",
+            "contrast": 2.2023
+          }
+        ]
+      },
+      "slate": {
+        "fill": "#8AA4AA",
+        "minimumContrast": 1.4021,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.4074
+          },
+          {
+            "surface": "park",
+            "contrast": 2.1482
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 2.1112
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 2.2165
+          },
+          {
+            "surface": "water",
+            "contrast": 1.4021
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 2.6345
+          },
+          {
+            "surface": "building",
+            "contrast": 1.8764
+          }
+        ]
+      },
+      "green": {
+        "fill": "#82AC79",
+        "minimumContrast": 1.3754,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 2.3615
+          },
+          {
+            "surface": "park",
+            "contrast": 2.1072
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 2.071
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 2.1742
+          },
+          {
+            "surface": "water",
+            "contrast": 1.3754
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 2.5842
+          },
+          {
+            "surface": "building",
+            "contrast": 1.8406
+          }
+        ]
+      }
+    },
+    "dark": {
+      "coral": {
+        "fill": "#E37A84",
+        "minimumContrast": 5.7284,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 6.8775
+          },
+          {
+            "surface": "water",
+            "contrast": 6.0463
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 6.8669
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 5.7284
+          },
+          {
+            "surface": "building",
+            "contrast": 6.9606
+          }
+        ]
+      },
+      "apricot": {
+        "fill": "#F59B62",
+        "minimumContrast": 7.5627,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.0798
+          },
+          {
+            "surface": "water",
+            "contrast": 7.9824
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.0658
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 7.5627
+          },
+          {
+            "surface": "building",
+            "contrast": 9.1895
+          }
+        ]
+      },
+      "yellow": {
+        "fill": "#ECCB67",
+        "minimumContrast": 10.3228,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 12.3935
+          },
+          {
+            "surface": "water",
+            "contrast": 10.8956
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 12.3745
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 10.3228
+          },
+          {
+            "surface": "building",
+            "contrast": 12.5434
+          }
+        ]
+      },
+      "lime": {
+        "fill": "#A9C065",
+        "minimumContrast": 8.0805,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.7014
+          },
+          {
+            "surface": "water",
+            "contrast": 8.5289
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.6866
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 8.0805
+          },
+          {
+            "surface": "building",
+            "contrast": 9.8187
+          }
+        ]
+      },
+      "mint": {
+        "fill": "#6EC69D",
+        "minimumContrast": 7.9352,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.527
+          },
+          {
+            "surface": "water",
+            "contrast": 8.3755
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.5124
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 7.9352
+          },
+          {
+            "surface": "building",
+            "contrast": 9.6422
+          }
+        ]
+      },
+      "sky": {
+        "fill": "#62BEE6",
+        "minimumContrast": 7.7799,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.3405
+          },
+          {
+            "surface": "water",
+            "contrast": 8.2116
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.3262
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 7.7799
+          },
+          {
+            "surface": "building",
+            "contrast": 9.4535
+          }
+        ]
+      },
+      "teal": {
+        "fill": "#2DA096",
+        "minimumContrast": 5.1055,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 6.1296
+          },
+          {
+            "surface": "water",
+            "contrast": 5.3888
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 6.1202
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 5.1055
+          },
+          {
+            "surface": "building",
+            "contrast": 6.2037
+          }
+        ]
+      },
+      "blue": {
+        "fill": "#5A8CDA",
+        "minimumContrast": 4.8091,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 5.7738
+          },
+          {
+            "surface": "water",
+            "contrast": 5.076
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 5.765
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 4.8091
+          },
+          {
+            "surface": "building",
+            "contrast": 5.8436
+          }
+        ]
+      },
+      "slate": {
+        "fill": "#BFD4E7",
+        "minimumContrast": 10.6966,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 12.8423
+          },
+          {
+            "surface": "water",
+            "contrast": 11.2901
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 12.8226
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 10.6966
+          },
+          {
+            "surface": "building",
+            "contrast": 12.9975
+          }
+        ]
+      },
+      "green": {
+        "fill": "#5B9455",
+        "minimumContrast": 4.5093,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 5.4139
+          },
+          {
+            "surface": "water",
+            "contrast": 4.7595
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 5.4056
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 4.5093
+          },
+          {
+            "surface": "building",
+            "contrast": 5.4793
+          }
+        ]
+      }
+    }
+  },
+  "neutralRims": {
+    "light": {
+      "color": "#182327",
+      "minimumContrastToSampledSurfaces": 8.5414,
+      "minimumContrastToCategoryFills": 5.1901
+    },
+    "dark": {
+      "color": "#F1F4EF",
+      "minimumContrastToSampledSurfaces": 14.6847,
+      "minimumContrastToCategoryFills": 1.3728
+    }
+  },
+  "neutralPair": {
+    "dark": "#182327",
+    "light": "#FFFFFF",
+    "contrast": 16.0483
+  },
+  "identityGradientInk": {
+    "light": {
+      "approvedEndpoints": [
+        "#007A58",
+        "#007E79"
+      ],
+      "recommendedInk": "#FFFFFF",
+      "endpointRatios": [
+        5.3507,
+        4.9291
+      ],
+      "minimumRatioAcross101Samples": 4.9291,
+      "method": "numerical sRGB interpolation; actual glyph bounds not measured"
+    },
+    "dark": {
+      "approvedEndpoints": [
+        "#3BD19B",
+        "#3BD3CB"
+      ],
+      "recommendedInk": "#182327",
+      "endpointRatios": [
+        8.2377,
+        8.686
+      ],
+      "minimumRatioAcross101Samples": 8.2377,
+      "method": "numerical sRGB interpolation; actual glyph bounds not measured"
+    }
+  },
+  "runtimeTreatment": {
+    "polygons": {
+      "fill": "unchanged categorical HEX",
+      "stroke": "#182327 light/satellite",
+      "widthCssPx": {
+        "buildings": 1,
+        "otherPolygons": 1.2
+      },
+      "opacity": 1
+    },
+    "lines": {
+      "datasets": [
+        "roads",
+        "parcels",
+        "waterways"
+      ],
+      "categoryCoreCssPx": {
+        "roads": 2,
+        "parcels": 1.2,
+        "waterways": 1.2
+      },
+      "neutralDarkUnderlayCssPx": 4,
+      "satelliteWhiteOuterCssPx": 6,
+      "minimumDarkBandPerSideCssPx": 1,
+      "whiteBandPerSideCssPx": 1,
+      "underlaysInteractive": false
+    },
+    "points": {
+      "neutralRimCssPx": 1.5,
+      "satelliteRecommendation": "#182327",
+      "fillCoordinatesUnchanged": true
+    },
+    "houseClusterBadge": {
+      "primaryBorderCssPx": 1.5,
+      "cardOuterBandCssPx": 1.5,
+      "countMeaning": "source point records, not households or risk"
+    }
+  },
+  "satelliteCoverage": {
+    "status": "not_yet_pixel_sampled",
+    "plannedSourceReportedByParent": "EOX cloudless2016/17",
+    "tileURLVerifiedInThisReceipt": false,
+    "pixelSampleCount": 0,
+    "scope": "dual-neutral-band rationale only; final source/runtime review separate"
+  },
+  "limits": [
+    "Paint pairs do not reconstruct real overlaps, labels, antialiasing, outside mask, raster terrain or every zoom.",
+    "No imagery pixels or glyph bounds measured here.",
+    "No universal map, WCAG, CVD or icon-render conformance claimed.",
+    "Categorical and analytical data HEX/opacity remain unchanged; neutral borders are separate display cues."
+  ],
+  "boundaryInteractionPairs": {
+    "light": {
+      "activeLayer": {
+        "color": "#347DA8",
+        "minimumContrast": 2.4063,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 4.1314
+          },
+          {
+            "surface": "park",
+            "contrast": 3.6866
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 3.6232
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 3.8038
+          },
+          {
+            "surface": "water",
+            "contrast": 2.4063
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 4.5211
+          },
+          {
+            "surface": "building",
+            "contrast": 3.2201
+          }
+        ]
+      },
+      "hoverStroke": {
+        "color": "#347DA8",
+        "minimumContrast": 2.4063,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 4.1314
+          },
+          {
+            "surface": "park",
+            "contrast": 3.6866
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 3.6232
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 3.8038
+          },
+          {
+            "surface": "water",
+            "contrast": 2.4063
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 4.5211
+          },
+          {
+            "surface": "building",
+            "contrast": 3.2201
+          }
+        ]
+      },
+      "selectedStroke": {
+        "color": "#176B82",
+        "minimumContrast": 3.2286,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 5.5432
+          },
+          {
+            "surface": "park",
+            "contrast": 4.9464
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 4.8613
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 5.1037
+          },
+          {
+            "surface": "water",
+            "contrast": 3.2286
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 6.0661
+          },
+          {
+            "surface": "building",
+            "contrast": 4.3205
+          }
+        ]
+      },
+      "focusStroke": {
+        "color": "#176B82",
+        "minimumContrast": 3.2286,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 5.5432
+          },
+          {
+            "surface": "park",
+            "contrast": 4.9464
+          },
+          {
+            "surface": "landuse_hospital",
+            "contrast": 4.8613
+          },
+          {
+            "surface": "landuse_school",
+            "contrast": 5.1037
+          },
+          {
+            "surface": "water",
+            "contrast": 3.2286
+          },
+          {
+            "surface": "road_minor",
+            "contrast": 6.0661
+          },
+          {
+            "surface": "building",
+            "contrast": 4.3205
+          }
+        ]
+      }
+    },
+    "dark": {
+      "activeLayer": {
+        "color": "#65B6DB",
+        "minimumContrast": 7.1903,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 8.6327
+          },
+          {
+            "surface": "water",
+            "contrast": 7.5893
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 8.6194
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 7.1903
+          },
+          {
+            "surface": "building",
+            "contrast": 8.737
+          }
+        ]
+      },
+      "hoverStroke": {
+        "color": "#65B6DB",
+        "minimumContrast": 7.1903,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 8.6327
+          },
+          {
+            "surface": "water",
+            "contrast": 7.5893
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 8.6194
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 7.1903
+          },
+          {
+            "surface": "building",
+            "contrast": 8.737
+          }
+        ]
+      },
+      "selectedStroke": {
+        "color": "#68C4E2",
+        "minimumContrast": 8.2109,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.8579
+          },
+          {
+            "surface": "water",
+            "contrast": 8.6665
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.8428
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 8.2109
+          },
+          {
+            "surface": "building",
+            "contrast": 9.9771
+          }
+        ]
+      },
+      "focusStroke": {
+        "color": "#68C4E2",
+        "minimumContrast": 8.2109,
+        "pairs": [
+          {
+            "surface": "background",
+            "contrast": 9.8579
+          },
+          {
+            "surface": "water",
+            "contrast": 8.6665
+          },
+          {
+            "surface": "landuse_residential",
+            "contrast": 9.8428
+          },
+          {
+            "surface": "landuse_park",
+            "contrast": 8.2109
+          },
+          {
+            "surface": "building",
+            "contrast": 9.9771
+          }
+        ]
+      }
+    }
+  },
+  "remainingSourcePairObservation": {
+    "role": "light activeLayer/hoverStroke",
+    "surface": "Liberty water paint",
+    "contrast": 2.4063,
+    "scope": "bounded mathematical color pair; actual boundary location/halo rendering not checked",
+    "recommendation": "If boundary visibility is essential on light water, retain approved blue token with a neutral backing stroke rather than replacing token."
+  },
+  "hostAdditionalChanges": {
+    "boundaryNeutralUnderlay": true,
+    "satellitePointRim": "#182327",
+    "categoryLineCoreBroughtToFront": true,
+    "browserObserved": [
+      "light parcel category core",
+      "satellite parcel category core zoom15",
+      "satellite overzoom20"
+    ],
+    "scope": "bounded observations; not universal map accessibility"
+  }
+}

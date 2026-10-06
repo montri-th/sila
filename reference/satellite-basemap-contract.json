@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "sila.satellite_basemap_contract/1.1",
+  "checkedOn": "2026-10-06",
+  "implementationVersion": "SilaBasemap 1.2.0",
+  "purpose": "Offer street/satellite/none at every app zoom while preserving Leaflet camera, selected dataset/scope, geometry and analytical colours.",
+  "defaultSatellite": {
+    "id": "googleCitychat",
+    "mode": "satellite",
+    "provider": "Google Hybrid",
+    "sourceType": "Existing CityChat public hybrid XYZ tile URL",
+    "tileURL": "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+    "crossOrigin": "anonymous",
+    "clientNativeTileCap": 19,
+    "displayZoomRange": [
+      8,
+      20
+    ],
+    "overzoomAbove": 19,
+    "nativeCapMeaning": "Client request cap inherited from existing repo 3D source configuration; this does not certify availability or source resolution for every location.",
+    "imageryDate": null,
+    "nominalResolutionM": null,
+    "latestImageryClaim": false,
+    "selfHosted": false,
+    "downloadedOrCachedGoogleImagery": false,
+    "addedAPIKeyOrSessionToken": false,
+    "licenseStatus": "not_verified",
+    "reuseAuthorization": "User explicitly requested reuse of the satellite source currently used by CityChat. This authorizes source-compatible implementation; it does not establish new third-party entitlements.",
+    "sourceCompatibility": "existing_citychat_google_hybrid_xyz",
+    "officialGoogleMapTilesAPI": false,
+    "attributionHTML": "<a href=\"https://maps.google.com/\" target=\"_blank\" rel=\"noopener\">Google Maps</a>",
+    "noOpenStreetMapCreditOnGoogleImagery": true,
+    "sourceEvidence": [
+      {
+        "path": "outputs/citychat-audit-20261005/repo-snapshot/web/src/modules/citymeter/base/CmScreen.tsx",
+        "activeURLLine": 439,
+        "crossOriginLine": 440,
+        "sha256": "cb0338020a7e371c2a026d3db6b84087fd228a0836ed6521d834d4c0fd264490"
+      },
+      {
+        "path": "outputs/citychat-audit-20261005/repo-snapshot/web/src/modules/citymeter/base/CmScreen-3d.tsx",
+        "sourceURLLine": 303,
+        "nativeCapLine": 306,
+        "sha256": "ae11c4d886ef92bbd4398148016efc5944a5c7f65b22db32595fdf95e68a31e9"
+      }
+    ],
+    "officialSupportedMigration": {
+      "sessionDocumentation": "https://developers.google.com/maps/documentation/tile/session_tokens",
+      "overview": "https://developers.google.com/maps/documentation/tile/2d-tiles-overview",
+      "policies": "https://developers.google.com/maps/documentation/tile/policies",
+      "difference": "Official Google Maps Tile API uses API-key/session requests, viewport availability and attribution metadata. The current legacy mt1 URL is not asserted equivalent to that API or licence.",
+      "status": "Existing rights/account/session configuration remains to be confirmed; no key was extracted or added."
+    }
+  },
+  "providerEligibility": [
+    {
+      "id": "googleCitychat",
+      "defaultEnabled": true,
+      "basis": "User-authorized reuse of exact existing CityChat source",
+      "licenseStatus": "not_verified",
+      "sourceCompatibility": "existing_citychat_google_hybrid_xyz",
+      "officialGoogleMapTilesAPI": false
+    },
+    {
+      "id": "eox2016",
+      "defaultEnabled": false,
+      "explicitArchiveOptionEnabled": true,
+      "rightsEvidence": "Specific EOX2016 per-layer CC BY4.0 declaration; existing cached Sila-only original tiles retained."
+    },
+    {
+      "id": "eox2018_to_2025",
+      "defaultEnabled": false,
+      "reason": "Newer products are declared CC BY-NC-SA4.0; no commercial licence evidence supplied.",
+      "sources": [
+        "https://cloudless.eox.at/pricing",
+        "https://cloudless.eox.at/documentation/license"
+      ]
+    },
+    {
+      "id": "esri_world_imagery",
+      "defaultEnabled": false,
+      "reason": "Public/tokenless endpoint is not proof of commercial use rights. Current Esri item terms point to ArcGIS/Esri licensing; existing licensed provider confirmation is pending.",
+      "source": [
+        "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9",
+        "https://goto.arcgis.com/termsofuse/viewsummary"
+      ]
+    }
+  ],
+  "hostIntegration": {
+    "factory": "SilaBasemap.create({mode:S.basemap,theme:S.theme,language:S.lang,fallback:true}).addTo(S.map)",
+    "modes": [
+      "street",
+      "satellite",
+      "satellite-archive",
+      "none"
+    ],
+    "sameLeafletMapInstance": true,
+    "themeHandler": "S.tile?.setTheme(S.theme); satellite pixels/layer remain intact across theme changes. Host may rebuild its analytical UI separately without a camera fit.",
+    "languageHandler": "S.tile?.setLanguage(S.lang)",
+    "caption": "Set #basemap-caption.textContent = layer.getBasemapState().zoomNotice on basemapstatus and basemapzoom; show when mode==='satellite' or mode==='satellite-archive'.",
+    "events": [
+      "basemapstatus",
+      "basemapzoom",
+      "tileerror",
+      "load",
+      "basemapfallback (street only)"
+    ],
+    "getterFields": [
+      "status",
+      "mode",
+      "renderer",
+      "theme",
+      "provider",
+      "imageryDate",
+      "nominalResolutionM",
+      "nativeZoom",
+      "sourceTileZoom",
+      "zoom",
+      "overzoom",
+      "scaleFactor",
+      "zoomNotice",
+      "zoomNoticeTh",
+      "zoomNoticeEn",
+      "coverageBounds",
+      "selfHosted",
+      "requiresWebGL",
+      "licenseStatus",
+      "sourceCompatibility",
+      "officialGoogleAPI"
+    ],
+    "cleanup": "S.map.removeLayer(layer); layer.off(); clears child tile/GL layer, startup timeout and map zoomend listener.",
+    "customLicensedProvider": "Additional provider objects still require licenseConfirmed:true; built-in googleCitychat explicitly preserves requested existing-source compatibility and records licence not verified.",
+    "staticServerAndPublishAllow": "vendor/satellite-eox-2016/**/*.jpg and the reference JSON/MD files; serve JPEG as image/jpeg."
+  },
+  "stateRules": {
+    "cameraAuthority": "Only host Leaflet controls/drill/focus may write camera. Neither basemap.js nor official bridge writes Leaflet setView/setZoom/fitBounds/pan/fly; bridge only reads Leaflet state and calls MapLibre jumpTo.",
+    "paletteAuthority": "Satellite image colours are source pixels. No filter/opacity transformation is applied to analytical layers; basemap stays in tilePane below all data and municipal outsideMask.",
+    "allZoomMeaning": "Satellite source remains available as a selectable basemap at app zoom8–20: Google requests capped19 and overzoomed19→20; archive uses cached8–14 and overzooms14→20. Rendering at a zoom does not establish native imagery detail or current capture date.",
+    "fallback": "No silent imagery-provider switch. Google failure remains Google unavailable/degraded; user may explicitly choose the labelled historical EOX option. Street failure retains explicit OSM fallback.",
+    "countSemantics": "Changing basemap or zoom changes no analytical scope, source geometry, coordinates or record counts."
+  },
+  "userVisibleCopy": {
+    "satelliteTh": "Google Hybrid · ไม่ทราบวันที่ถ่ายภาพ · ความละเอียดขึ้นกับพื้นที่ · ภาพประกอบพื้นที่ ยังไม่ยืนยันสภาพปัจจุบัน",
+    "satelliteEn": "Google Hybrid · capture date unknown · resolution varies by area · context imagery, current conditions unverified",
+    "satelliteOverzoomTh": "ซูม 20: ขยายภาพระดับ 19 ไม่เพิ่มรายละเอียด",
+    "satelliteOverzoomEn": "zoom 20: enlarging level 19, no added imagery detail",
+    "archiveTh": "EOX Sentinel-2 cloudless · 2016/2017 · ประมาณ 10 ม./พิกเซล · ภาพประกอบพื้นที่ ไม่ใช่ภาพปัจจุบัน",
+    "archiveEn": "EOX Sentinel-2 cloudless · 2016/2017 · approximately 10 m/pixel · context imagery, not current conditions"
+  },
+  "verification": {
+    "moduleSyntax": "passed",
+    "moduleLifecycleAssertions": 35,
+    "moduleAssertionsScope": "Exact repo-source URL/CORS and truthful metadata; native19→20 overzoom; mode/theme/camera lifecycle; explicit EOX archive; no silent imagery-provider fallback. Headless mocks, not native browser tile availability.",
+    "assetChecks": {
+      "allFileHashesMatched": true,
+      "allJPEGDimensions": [
+        256,
+        256
+      ],
+      "allRequestedTilesExist": true,
+      "sourceBytesChanged": false,
+      "sourceCoordinatesChanged": false,
+      "nativeZoomCap14Reason": "Display uses original 10m Sentinel-2 product at z14; cached imagery is overzoomed at app zoom >14. Generic WMTS matrix levels up to21 do not prove additional native image detail."
+    },
+    "sourceTileVisualReview": "Center z14 source tile viewed: nonblank satellite imagery; no claim about current field accuracy.",
+    "cameraDriftReview": "Complete official bridge inspected; no reverse GL-to-Leaflet camera setter. No new unsolicited fit fix added without a reproducible source.",
+    "browserRenderAndDeployment": "Root-owned QA pending for current source-compatible revision.",
+    "googleImageDownload": "None; only root browser QA may load tiles at requested views.",
+    "currentModuleSHA256": "022865e49d13d9e770487eb2282cf77912b1ec1f86f3c83169c7ced9c50c9905"
+  },
+  "satelliteArchive": {
+    "id": "eox2016",
+    "provider": "EOX IT Services GmbH",
+    "sourceLayer": "s2cloudless_3857",
+    "productYear": 2016,
+    "imagerySourceWindowLabel": "2016/2017",
+    "nominalResolutionM": 10,
+    "license": "CC BY 4.0",
+    "licenseDeclaredBy": "Official EOX WMTS capability per-layer Abstract",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "officialCapabilitiesURL": "https://tiles.maps.eox.at/wmts/1.0.0/WMTSCapabilities.xml",
+    "officialCapabilitiesSHA256": "dc25434ceac56666faf0e635744c91fe3bbefa1daeba37ee3c05b84a97b5702b",
+    "officialLicenseAbstract": "EOxCloudless https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) released under <a rel=\"license\" href=\"https://creativecommons.org/licenses/by/4.0/\">Creative Commons Attribution 4.0 International License</a>.",
+    "copyrightExplanationSource": "https://eox.at/2025/03/sentinel-2-cloudless-2024/",
+    "selfHosted": true,
+    "runtimeNetworkToEOX": false,
+    "localTileTemplate": "vendor/satellite-eox-2016/{z}/{x}/{y}.jpg",
+    "nativeTileZoomRange": [
+      8,
+      14
+    ],
+    "displayZoomRange": [
+      8,
+      20
+    ],
+    "overzoomAbove": 14,
+    "resolutionIncreasesAboveNative": false,
+    "tileCount": 121,
+    "tileBytes": 1505423,
+    "tilePixels": [
+      256,
+      256
+    ],
+    "coverageBBox": [
+      102.74739041101321,
+      16.40865806002118,
+      102.95219335992162,
+      16.569621432680513
+    ],
+    "coverageMeaning": "Sila municipal bounding box plus 0.04 degrees margin; local imagery outside this coverage is unavailable. All exact downloaded tile URLs and hashes are recorded in the tile inventory.",
+    "coordinateSystem": "EPSG:3857 / GoogleMapsCompatible",
+    "apiKeyRequired": false,
+    "newPaidAccountRequired": false,
+    "attributionText": "Sentinel-2 cloudless - https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 & 2017)",
+    "attributionLinks": [
+      "https://s2maps.eu/",
+      "https://eox.at/",
+      "https://creativecommons.org/licenses/by/4.0/"
+    ],
+    "inventory": "reference/satellite-tile-inventory.json",
+    "tileModification": "None; original JPEG bytes retained.",
+    "mode": "satellite-archive",
+    "defaultEnabled": false,
+    "explicitOptionEnabled": true
+  }
+}

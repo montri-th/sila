@@ -1,0 +1,1564 @@
+{
+  "schemaVersion": "sila-publication-audit-3",
+  "revision": "1.3",
+  "checkedAtUtc": "2026-10-06T03:57:28.268481+00:00",
+  "repository": "montri-th/sila",
+  "comparedHead": "26e9aa98ba153bd5eba3717d82558fa52c30e647",
+  "status": "passed_publication_scope",
+  "scope": "Exact changed tracked and untracked public checkout paths plus full data-directory byte/schema parity. Synced sources, private ingestion, browser profiles, environment secrets and unrelated contracts were not accessed. This is not browser/runtime, legal, LOI acceptance, or full design-system certification.",
+  "municipalPublicAuthorization": {
+    "status": "inherited_owner_authorization",
+    "destination": "montri-th/sila",
+    "evidence": [
+      "Existing README owner-authorized publication statement",
+      "Parent relayed persistent human municipal-owner authorization for this revision",
+      "qa/publication-audit.json",
+      "qa/revision-1.2-publication-audit.json"
+    ],
+    "scope": "Same processed location datasets, not expanded raw municipal inputs."
+  },
+  "municipalOpenReuseLicenseVerified": false,
+  "licenseMeaning": "Owner-directed public artifact publication does not establish a municipal open-data license or third-party Google imagery entitlement.",
+  "changedOrNewFileCountExcludingThisAudit": 190,
+  "textFilesScanned": 64,
+  "scanClasses": [
+    "private_key",
+    "google_api_key",
+    "github_token",
+    "aws_access_key",
+    "bearer_literal",
+    "jwt_literal",
+    "signed_url_or_session",
+    "workstation_path",
+    "local_file_uri",
+    "chat_thread_identifier",
+    "credential_assignment"
+  ],
+  "credentialPrivateLocatorFindings": [],
+  "rawPrivateOrGISPayloadFindings": [],
+  "publicFiles": [
+    {
+      "path": "README.md",
+      "bytes": 39557,
+      "sha256": "b8fdded207beb3e54c00ee2491c021b9c67b0bc2a1374945cddda772d8d044f8"
+    },
+    {
+      "path": "app.js",
+      "bytes": 91860,
+      "sha256": "057b4c14b0de4f4b607f37fef29b8cb75bd6062ae4765372347cd0ee7c2cb384"
+    },
+    {
+      "path": "assets/brand/conversation-welcome.receipt.json",
+      "bytes": 3803,
+      "sha256": "ef0498ad0c9e063b4b5c1901d8ae4d9633e682d84f3730bde94edc4e5e9d297b"
+    },
+    {
+      "path": "assets/brand/conversation-welcome.svg",
+      "bytes": 11610,
+      "sha256": "fa67237428dc510cb4e7bc15e86e3764e9911db8a5e26787cb7d40291a284ca4"
+    },
+    {
+      "path": "assets/ui-icons/LICENSE.txt",
+      "bytes": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "path": "assets/ui-icons/account_balance.svg",
+      "bytes": 1164,
+      "sha256": "919bfe35fdf53719ba0c95e6dd530ee4d1a7689d1b717bb80d42cf4a02a1bb98"
+    },
+    {
+      "path": "assets/ui-icons/apartment.svg",
+      "bytes": 673,
+      "sha256": "91c4c32127b1cd52242a170f5bc7d26de5935438a1947cc9a624653c20a28b25"
+    },
+    {
+      "path": "assets/ui-icons/arrow_back.svg",
+      "bytes": 479,
+      "sha256": "de7fe7b291b77846dfe762a8d0f583c7c6d59d9f181cacd81a87a99a7aab3d0f"
+    },
+    {
+      "path": "assets/ui-icons/assignment.svg",
+      "bytes": 1240,
+      "sha256": "1a9494b68913a9012285734294d4289c5b9e02e125180950db0e3888298ac0ac"
+    },
+    {
+      "path": "assets/ui-icons/check.svg",
+      "bytes": 361,
+      "sha256": "140bec93faf182e3e08c686184d6e3a23acc9782641411688d03abe137cc4491"
+    },
+    {
+      "path": "assets/ui-icons/chevron_right.svg",
+      "bytes": 404,
+      "sha256": "3ed874fac434e1139468598666126d0900e00bc124730bb6a69fa77cb37c2b04"
+    },
+    {
+      "path": "assets/ui-icons/close.svg",
+      "bytes": 530,
+      "sha256": "75af09ac581c99308e11982c8abd70b3d301350691518aef0b6cef810bf7d585"
+    },
+    {
+      "path": "assets/ui-icons/dark_mode.svg",
+      "bytes": 679,
+      "sha256": "744c6b3870182034f985755356ca5fb05bbd8fa5cb558357c9b7ddd82609c983"
+    },
+    {
+      "path": "assets/ui-icons/dashboard.svg",
+      "bytes": 1046,
+      "sha256": "98169d5cf7b68e9952c8b307d86dd5377db4224fe4444d8feda8834b462831ce"
+    },
+    {
+      "path": "assets/ui-icons/dataset.svg",
+      "bytes": 1258,
+      "sha256": "851c8514b8f30fcd5076c61072ad4b77c2a6b506344306007fee3b9519493e8c"
+    },
+    {
+      "path": "assets/ui-icons/download.svg",
+      "bytes": 815,
+      "sha256": "43fe2948740aca9f784eb1634c49405f15bc78aec7b70e0aef49dc7e3b843d05"
+    },
+    {
+      "path": "assets/ui-icons/flood.svg",
+      "bytes": 1830,
+      "sha256": "0d67f8f06ec7041057aae889f0b422f2010bf981428318270dfd4222897dc026"
+    },
+    {
+      "path": "assets/ui-icons/folder_open.svg",
+      "bytes": 908,
+      "sha256": "538b0b7662a13547cc7d9ff8c92ea6fb9109fc70cefb8674c07046cdfcfedb7d"
+    },
+    {
+      "path": "assets/ui-icons/forum.svg",
+      "bytes": 606,
+      "sha256": "bb679fc5adee29686da720c5e6b7bc119720c728be10eb0338c1e271c6bfcf06"
+    },
+    {
+      "path": "assets/ui-icons/grid_on.svg",
+      "bytes": 713,
+      "sha256": "46f86e90eb5401fd4d042d19e05bcb1ce44f56166abdedb0b450de0e070db23b"
+    },
+    {
+      "path": "assets/ui-icons/groups.svg",
+      "bytes": 1611,
+      "sha256": "ed5ea268487a2af9b2699378b53ad0f4084191cd83b4fd7a2ed3e75ca79cc3d3"
+    },
+    {
+      "path": "assets/ui-icons/holiday_village.svg",
+      "bytes": 1535,
+      "sha256": "e48f15b150c63861c9fcfbed7a052a35d5536d408f33828e19d032ca0aa6dc07"
+    },
+    {
+      "path": "assets/ui-icons/home.svg",
+      "bytes": 753,
+      "sha256": "8abfc7c2b027419ce9e30bfa80a2b27e3aa808b8e8c8ce7e8832096326328458"
+    },
+    {
+      "path": "assets/ui-icons/how_to_vote.svg",
+      "bytes": 1055,
+      "sha256": "b630e6876bdf0b715b9706eda63dbb7d042429b106e5865da8751670b9376791"
+    },
+    {
+      "path": "assets/ui-icons/info.svg",
+      "bytes": 867,
+      "sha256": "c0a15b0eb4e35951b10e0ef8c11e81af09b9431afdcb49fd386b3b4e34306bc6"
+    },
+    {
+      "path": "assets/ui-icons/landscape.svg",
+      "bytes": 619,
+      "sha256": "6c2a13e61f6138abfe997b3c28e57678a4d5793e8bd996ff798ee2dd86b49ce8"
+    },
+    {
+      "path": "assets/ui-icons/layers.svg",
+      "bytes": 835,
+      "sha256": "caec20f5accce6da05525a778977ff75dda5316e7489a2a1e960a94751a9d219"
+    },
+    {
+      "path": "assets/ui-icons/light_mode.svg",
+      "bytes": 1795,
+      "sha256": "e693c91d8c80e5d8c56b89b0027aaa54308ae150912796b5befb0391f82a5ee1"
+    },
+    {
+      "path": "assets/ui-icons/list.svg",
+      "bytes": 1084,
+      "sha256": "2ca034f4c69bd0070e557895f51f82d0bb1753096badde14323df7c817cb2dc8"
+    },
+    {
+      "path": "assets/ui-icons/local_hospital.svg",
+      "bytes": 800,
+      "sha256": "5d70d5268d5105e5071461f47d88102fa5881078ea5489b96afba51507d4f657"
+    },
+    {
+      "path": "assets/ui-icons/location_city.svg",
+      "bytes": 704,
+      "sha256": "42d6c5e450e3ce9b89b8e237cf23c73101f21328648ae67d254e6478f9b0336c"
+    },
+    {
+      "path": "assets/ui-icons/location_on.svg",
+      "bytes": 859,
+      "sha256": "4d4e503cf217375dc6ce3d7711e930d5fc162398bcbbc9caf187b4a7032fa76c"
+    },
+    {
+      "path": "assets/ui-icons/map.svg",
+      "bytes": 731,
+      "sha256": "ee667d082084e4f2acc43ee19ec27121eb270689375af8d080d3c74f26fb4cdd"
+    },
+    {
+      "path": "assets/ui-icons/more_vert.svg",
+      "bytes": 640,
+      "sha256": "a09963cf6bf95d70ef1a20f3e206bfce31fe6bdc3956e94f36c8317c0022faed"
+    },
+    {
+      "path": "assets/ui-icons/open_in_new.svg",
+      "bytes": 844,
+      "sha256": "69400a51fa279b356b90ce7ba83df4cbbb61bbf5a2987e9493a6adb514afabb0"
+    },
+    {
+      "path": "assets/ui-icons/route.svg",
+      "bytes": 1077,
+      "sha256": "a3dd5fa25bbaacc9ad4cd8a70c9d2c8e06f374fd32956be9a64b0fa07b31cfc1"
+    },
+    {
+      "path": "assets/ui-icons/school.svg",
+      "bytes": 1066,
+      "sha256": "aa19a32ced303b19baab867c0146df9ba45a9942fb63d3ee1c87593efb8e8fac"
+    },
+    {
+      "path": "assets/ui-icons/search.svg",
+      "bytes": 590,
+      "sha256": "4146c3fcafae369e464a69c5809d99c6f008e4d2372934ad07f4e6fd16a8feaa"
+    },
+    {
+      "path": "assets/ui-icons/share.svg",
+      "bytes": 1280,
+      "sha256": "62d4bb8e649e0cee09c65a78946acdf4384d3fd10dcad4e74769dffe63860698"
+    },
+    {
+      "path": "assets/ui-icons/videocam.svg",
+      "bytes": 578,
+      "sha256": "f7151c37266f95dea4e29cbeec8e5ecad565d820351d148275442c3acfc75d2a"
+    },
+    {
+      "path": "assets/ui-icons/water.svg",
+      "bytes": 1947,
+      "sha256": "30172dc0bdc9bd2552e123c6a226bc2063d1c704b05ec15509590428a48dae33"
+    },
+    {
+      "path": "assets/ui-icons/zoom_out_map.svg",
+      "bytes": 1405,
+      "sha256": "b7fb46e0c275fc08ab6775342d0fa3f3ae90c8469d53678e3006fb4b75f83034"
+    },
+    {
+      "path": "basemap.js",
+      "bytes": 18145,
+      "sha256": "022865e49d13d9e770487eb2282cf77912b1ec1f86f3c83169c7ced9c50c9905"
+    },
+    {
+      "path": "house-points.css",
+      "bytes": 413,
+      "sha256": "163e42a36c17649b5e581d4c9d4670804812a63a295acd4372ef8f69508e9c68"
+    },
+    {
+      "path": "house-points.js",
+      "bytes": 7724,
+      "sha256": "143ef7678fe867e0c6bf0b40752c63e8fae8674934bbd53746ada9683dd9e41d"
+    },
+    {
+      "path": "index.html",
+      "bytes": 16171,
+      "sha256": "c29e00fa393a88a314dd15f4984502d101b1e7857adf85f1b89020996ae6e54a"
+    },
+    {
+      "path": "platform-shell.css",
+      "bytes": 8289,
+      "sha256": "d314382134d91ad171d793c5459186f3bc2265c6d7a6123ce6ecec99693768e0"
+    },
+    {
+      "path": "qa/check-house-points.cjs",
+      "bytes": 7622,
+      "sha256": "2a61c6bf0f3c673b00818c81a8d3e22c2851185181eb3192a25c6589ba9ed871"
+    },
+    {
+      "path": "qa/revision-1.3-browser-checks.json",
+      "bytes": 6327,
+      "sha256": "e66a016cd2de41d45e60092d13ae582bdf2a9f39fc2f09341d403a17984748a5"
+    },
+    {
+      "path": "qa/revision-1.3-house-points-checks.json",
+      "bytes": 279,
+      "sha256": "12a079b554d3203c36e4b3dd9c704b1a4d6327a3fb1baf25f0030198da5fbb8a"
+    },
+    {
+      "path": "qa/revision-1.3-lds-static-app-js.json",
+      "bytes": 446,
+      "sha256": "47b661db01850f9e852d161615b26003ede67a8095030a5dd5591b0f115cc218"
+    },
+    {
+      "path": "qa/revision-1.3-lds-static-house-points-js.json",
+      "bytes": 455,
+      "sha256": "ffeea386749504e64c5a0ba96f921c0932c0a818eb0c14ba6aa37b57837d163c"
+    },
+    {
+      "path": "qa/revision-1.3-lds-static-index-html.json",
+      "bytes": 846,
+      "sha256": "226d59ed3c51f3a6b2ac9d2096385e4f09fb1d4ba3137c374f29bf2a63e5ca23"
+    },
+    {
+      "path": "reference/map-contrast-audit.json",
+      "bytes": 28782,
+      "sha256": "63c06d10282b4760d6620e33c7ec24064c4fb4132d8f87476d425057d9a90288"
+    },
+    {
+      "path": "reference/map-contrast-audit.md",
+      "bytes": 4917,
+      "sha256": "c81d86f523b221a571317cb5f9a462d74aa141cd439217545476b72e695d2d3d"
+    },
+    {
+      "path": "reference/platform-layout-handoff.json",
+      "bytes": 31358,
+      "sha256": "b18fbc95279039d51534566f2cf5d1472835f81f0e4532b921e32bb9ba788c61"
+    },
+    {
+      "path": "reference/platform-layout-handoff.md",
+      "bytes": 27242,
+      "sha256": "ef1288b765989ed08c29e8b493da5d9e4918623f65f2c7cd7d60012cc300150b"
+    },
+    {
+      "path": "reference/satellite-basemap-contract.json",
+      "bytes": 11716,
+      "sha256": "c1b6c74069cc8a4e74989fc48c3871329c6bef13bb746cd8cc4229fd50f091ff"
+    },
+    {
+      "path": "reference/satellite-basemap-contract.md",
+      "bytes": 7289,
+      "sha256": "a111887139b2dda2c45d83cafa9ad1daf5cc8e07a9cc1a355b845a3e69ad4ad6"
+    },
+    {
+      "path": "reference/satellite-module-smoke.json",
+      "bytes": 293,
+      "sha256": "e5ccd10b04dc1ed40e39e34d9f72f7a0c31664f7d84c876d85607a45986e95f8"
+    },
+    {
+      "path": "reference/satellite-tile-inventory.json",
+      "bytes": 52123,
+      "sha256": "1244c79ac5b016fa0aff4d63a6226988c1069d22ea68855dddcbcadafff220bf"
+    },
+    {
+      "path": "reference/ui-icons.manifest.json",
+      "bytes": 34371,
+      "sha256": "6f4c71ffe680d586f69842e86d33b0018e4661f0f8f9234b98d4d0ae013d5fdc"
+    },
+    {
+      "path": "screenshots/revision-1.3-desktop-th-dark-points.jpg",
+      "bytes": 138153,
+      "sha256": "cb15d98ebbe12c20060ff2126ac51c133a3480d47a7068d0fac8c7d2c6e31d96"
+    },
+    {
+      "path": "screenshots/revision-1.3-desktop-th-dark.jpg",
+      "bytes": 136984,
+      "sha256": "c12f7e63ebb7febdf03e3f27eb45d687b133c97c61b075eabc588e18e78ff167"
+    },
+    {
+      "path": "screenshots/revision-1.3-desktop-th-light-points.jpg",
+      "bytes": 150263,
+      "sha256": "eaf9ab8c5d90a2267bd8e2f12f2d3d134486c5495f895d3b53d35faf65270fa9"
+    },
+    {
+      "path": "screenshots/revision-1.3-mobile-en-light-points.jpg",
+      "bytes": 56349,
+      "sha256": "86f3f47d3e93bcc06543e5a7e50fb7e254adf221bff49e8d23e443550306e6a9"
+    },
+    {
+      "path": "screenshots/revision-1.3-satellite-th-zoom20.jpg",
+      "bytes": 135086,
+      "sha256": "309a4293b031dd3042caee879d24ae92c4970229e11fe17d50177bb180d4d06d"
+    },
+    {
+      "path": "server.py",
+      "bytes": 2207,
+      "sha256": "9b139beff688e9c56bd74db82360f2ac40f32e64b169177f144f252551558ebd"
+    },
+    {
+      "path": "ui-icons.js",
+      "bytes": 34631,
+      "sha256": "580bb7df2be978eebfaa6a3af0e7ee9a38bbaccd7a9bee84764c0f849b2538c4"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/10/804/464.jpg",
+      "bytes": 19310,
+      "sha256": "df29dd6b56178f18048c3a36da3b9c1a32d5807b5d133287d9f770a6ae9e64a7"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/11/1608/928.jpg",
+      "bytes": 21545,
+      "sha256": "33b42c865964615323bfb57ebf3330711cb30c5bd6a31ef152b9bc0e02c3d874"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/11/1608/929.jpg",
+      "bytes": 20499,
+      "sha256": "85787ad126f1e4068aa8eed3724db2be6cc9b6ef34f6c8eddec6d2a8ba3ecd47"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/11/1609/928.jpg",
+      "bytes": 17716,
+      "sha256": "17ecaf12e7c7d3b7f2dcb3c3d0ab0e92521c5789896daef063d95ba516a2883e"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/11/1609/929.jpg",
+      "bytes": 18591,
+      "sha256": "800daad624df9a816417d8100242ac866e00027c537201580a3de12fcb03c1ef"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3217/1856.jpg",
+      "bytes": 21508,
+      "sha256": "fe845ba1469f33e643eda90e6e08437623e99b5bbea6382765b032ddcb14eff4"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3217/1857.jpg",
+      "bytes": 20763,
+      "sha256": "da67a815894b40f4dc0f99f357e41eb3d966fc2a485fff1e8bd9db8099481fb8"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3217/1858.jpg",
+      "bytes": 22841,
+      "sha256": "1ec137e9297b1577ada9d3d8cc79316fce8a97eb16fd67ad9be3f3204dc92bcb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3218/1856.jpg",
+      "bytes": 14306,
+      "sha256": "6e131f5d461fe85c2ad2ad848a087d0e0936eca24c77469f3e366a19a0a029aa"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3218/1857.jpg",
+      "bytes": 17708,
+      "sha256": "06ed22009e73ae492e05f3e770bb9b3bd1437cd5f56986c63bd0292918b3c44c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3218/1858.jpg",
+      "bytes": 20139,
+      "sha256": "607e6dd80c7e7389a3d20a18fc28b6df5688a2cb668c5533113c6e863c2ba45b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3219/1856.jpg",
+      "bytes": 17491,
+      "sha256": "78007de7503ea5a391bf33743e6b10e2c23b389639d05d7e2c99e01eff7b62ab"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3219/1857.jpg",
+      "bytes": 16462,
+      "sha256": "d7e2f74267a68b3364a4fa9d3b1eeb47862eb389a39a1b7428b57985c76df59b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/12/3219/1858.jpg",
+      "bytes": 15966,
+      "sha256": "5b1d05f5beb173a536a020f2a9d257abfcd232c7def0c7507d808acba27054bd"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6434/3713.jpg",
+      "bytes": 19013,
+      "sha256": "c15a61d497957bd9d4e2ebf44179882590076570f418f3e527ae1139e3f8f17b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6434/3714.jpg",
+      "bytes": 17720,
+      "sha256": "7fdd85f9f80470db5f0edc17b2d7bbc6ed99458bdf77e4df1dba077901d587eb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6434/3715.jpg",
+      "bytes": 19278,
+      "sha256": "138fd5946db895d45f6efe811922de2fbabc5feec52cde2c679d0801a08b13f5"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6434/3716.jpg",
+      "bytes": 20151,
+      "sha256": "077fca0c2d48fa4eb84070066458cfe2f9e4fc2bdd1fc7227050ced302f8e25b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6434/3717.jpg",
+      "bytes": 18206,
+      "sha256": "cb389c91d1df884c8a05261ce592ad502e0a681f8ad133047dc5132f388831d1"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6435/3713.jpg",
+      "bytes": 18865,
+      "sha256": "398d71bcdd399db0f0cb7011a549fd5352c94ef80854ad592c6043e25206fdd1"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6435/3714.jpg",
+      "bytes": 18346,
+      "sha256": "46be81be50b6cc1708eb1b08b15e96a3276b94945d4c889f15ab8d6320cb14c6"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6435/3715.jpg",
+      "bytes": 20328,
+      "sha256": "7d6fd2395d1688dffe987288e1c47d395886cc504996d389b0f56e2ce78c1901"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6435/3716.jpg",
+      "bytes": 22332,
+      "sha256": "a65c65f848e45a285a2bc11a5297c23e6d5f6e091324d1af01ed4dab57f167bb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6435/3717.jpg",
+      "bytes": 22881,
+      "sha256": "08842e3ee99f6868cd61440611ac30c10a8f2b2fe26e926c6cd1e563357010f8"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6436/3713.jpg",
+      "bytes": 15960,
+      "sha256": "9004446610e4a2d8d56abf2a2f737b6ac1c4321a125892ee1b10a9e5200fc8ac"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6436/3714.jpg",
+      "bytes": 16814,
+      "sha256": "6531c5574ea92a94e02ee0d1e4035212f9a64a093e917b5d83d0ad34151d2103"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6436/3715.jpg",
+      "bytes": 20150,
+      "sha256": "43ee619b5a44a5e404180c0ec05d289bce7bdc3fcf79e54d732e665b9294b0ff"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6436/3716.jpg",
+      "bytes": 22116,
+      "sha256": "c154a9985eabf4f15093eb87903c0eb1b1a1fa581d09fc0b528dc7d0b70c6a03"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6436/3717.jpg",
+      "bytes": 21273,
+      "sha256": "d19fa92e583ea2e374270257fc6a6948a54f8e9a6fd029f7b1df56077374cc51"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6437/3713.jpg",
+      "bytes": 12608,
+      "sha256": "defeafde890081236a3f13b414cb1b8f15359018df2032f616e36bd34d38ffd8"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6437/3714.jpg",
+      "bytes": 14127,
+      "sha256": "6658f722b5443936a40b2d788998c2b001f0809f6431a98aec4f589cf7a32b92"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6437/3715.jpg",
+      "bytes": 15150,
+      "sha256": "10f73ad11f37682ccdb329da58e949b4a72349793d821421afc70b779c2a89a2"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6437/3716.jpg",
+      "bytes": 16203,
+      "sha256": "81590d0ba202f2d7d4982c71e8dd9b1567232476b01dfba224f9489b9c028a32"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6437/3717.jpg",
+      "bytes": 16572,
+      "sha256": "fb96228d4c587f8411a41230380c1cc1c684dc48bcd1525d0bc01b3a2f2670cb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6438/3713.jpg",
+      "bytes": 14281,
+      "sha256": "1da7b0a12c4d9bdd2bca45595c9a82c428635e99d564d5642e12301547b51857"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6438/3714.jpg",
+      "bytes": 11857,
+      "sha256": "6101f77b728f7f52934b85a5c671513e1ebb742cbb26971106726130fb4c4c45"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6438/3715.jpg",
+      "bytes": 16056,
+      "sha256": "17f14eb0311cb443af27f61116f2b406391cd9b8bb5ee9597b19e19f0b26f306"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6438/3716.jpg",
+      "bytes": 16218,
+      "sha256": "498e161aa88a22ff1bb40e0912755fc3c690200bd59903ba337a23c86695f13f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/13/6438/3717.jpg",
+      "bytes": 13341,
+      "sha256": "dae24985fd4f6403f042c389f4e0029553b8dbcf0f6c83d30d9ef64bd836baf3"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7427.jpg",
+      "bytes": 9731,
+      "sha256": "3ecd5b553015ba9a67c02dbbdd94e64c35f390e4ea7794e3ab1f60c942944b75"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7428.jpg",
+      "bytes": 9824,
+      "sha256": "41380f6d24a35cd190ddd8cbbc46a7da60933aa329c59c517cc037e72c3d2230"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7429.jpg",
+      "bytes": 9700,
+      "sha256": "80ba1b5e39eecd17327b844d166ab364c5afab6fffb7696d7fb8d9d3dc0a9b8d"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7430.jpg",
+      "bytes": 10670,
+      "sha256": "61c9f15373101aa94b5f86f2e983661db47b12df14d6be404e42a8870703b3e5"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7431.jpg",
+      "bytes": 10539,
+      "sha256": "94e4b07ed7fcc3ef228fd725f3501c9a0e1fbee99eb3ab6de9f6ca7dcb44eab2"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7432.jpg",
+      "bytes": 10404,
+      "sha256": "ab67c60d7de1dc7018ef5b38153d7b66afa8fb98ff55ec1e67b5e626bdc571d8"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7433.jpg",
+      "bytes": 10559,
+      "sha256": "c58bcb24843aaa77c8dab02433488b970d372d66022130d03e73a8bb92915b54"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12868/7434.jpg",
+      "bytes": 9977,
+      "sha256": "85c0fd49a07e4dd49ae8b5520c76a80ecd9aea7e6263dd23f92d8b0f4761062f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7427.jpg",
+      "bytes": 11014,
+      "sha256": "c35a4b69638f9c4dd4a0048e05a1747fe446856e245d8b0d513222b6ee5dc28b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7428.jpg",
+      "bytes": 9693,
+      "sha256": "d023f447573260a17906151816205c3c50c919ff95a4f3a70da29142d9ec32eb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7429.jpg",
+      "bytes": 9165,
+      "sha256": "5d86ca26cd996e6b194c00e0a505b716d67a05d89f602e17520d6ae216c275ba"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7430.jpg",
+      "bytes": 9670,
+      "sha256": "613e2c01ed9508d4f08e5d44cc3e80861e0430cf6e14e6e4c8d216e2e290a041"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7431.jpg",
+      "bytes": 10516,
+      "sha256": "dca6eaa04d4d3235900ff9a2ac41f5ce8bf150a125568178fe499e3d71c0d740"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7432.jpg",
+      "bytes": 10904,
+      "sha256": "f8030dfc1d83f3e5ec0d216adb1caa13322dab07c6349f02ba0d4fd5e86b79be"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7433.jpg",
+      "bytes": 11387,
+      "sha256": "648c6e2531e44337521636157c1013814c159797c9b21f9c6032566b6d4b1651"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12869/7434.jpg",
+      "bytes": 11554,
+      "sha256": "16cf7c321f96d84bfde361adb7a7d6e6debb02ae4a9c304b840f2a8a3e4f9ff2"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7427.jpg",
+      "bytes": 10106,
+      "sha256": "d31e7ed6922f6369f0bac62aa3e696299f3d12957e22e3e61ee0fb5b25025df2"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7428.jpg",
+      "bytes": 9767,
+      "sha256": "d4c216665e03a0f1c98ba7ed00bb3a6178ce66e6ff619d0e8368070364022404"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7429.jpg",
+      "bytes": 9494,
+      "sha256": "cb404838540190213084e371830e1c5c928663304c5a75c0e0c746d3e2f678f5"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7430.jpg",
+      "bytes": 9450,
+      "sha256": "a12bb362c7fe696ea81a6f4d4510a07ee9c185bf98f34386da9b72af9ba3be7f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7431.jpg",
+      "bytes": 10822,
+      "sha256": "764024a924a808a76a5a80bd266590dbb99bb64ce7e31b7fd0cb08a4ad48c2ce"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7432.jpg",
+      "bytes": 11072,
+      "sha256": "b8637d487b98f15058e5575f45bfcbb3c7a11d473f0009fd8e27ad5e2ecf4936"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7433.jpg",
+      "bytes": 11392,
+      "sha256": "54aeac42eec1932a92219973d4541a5062b1d669a9ec7709b3709d5d8199e6f7"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12870/7434.jpg",
+      "bytes": 12354,
+      "sha256": "3617f7e7fc67aeed8d54da051447fcce8e3295809e6fa788e3c9438c405f639b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7427.jpg",
+      "bytes": 10057,
+      "sha256": "8a7df922346b0c58f09099c0841ab70716f74599a5b5cd4ccad349618fc39e43"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7428.jpg",
+      "bytes": 9911,
+      "sha256": "8e270e0a53afbaeaecdfa222536824affa1bccab0508926f0ca9e32a2d62bd2c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7429.jpg",
+      "bytes": 10395,
+      "sha256": "ea53f17e2140d8630c8f6de7308acdecd033424114daf425f8fe23024b3db5ee"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7430.jpg",
+      "bytes": 10642,
+      "sha256": "f4b41756594da1c309c7e53aca4d9ec9c8ae832f533f931dca3e49afb1ce466f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7431.jpg",
+      "bytes": 12756,
+      "sha256": "8b690b7c8a14fdb5c36a96baaec4c2c8182cc19e8613e8fc2c12808cea95d605"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7432.jpg",
+      "bytes": 12034,
+      "sha256": "09c72894b5abfe99b72746d4677de1c470b1b5a9202f27cf235f24e5f548ab94"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7433.jpg",
+      "bytes": 13340,
+      "sha256": "1cf105e5c2d1c8e46c41cec745fcef05421b6a54b578032bf013c3aa4866512a"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12871/7434.jpg",
+      "bytes": 13620,
+      "sha256": "058dea0bc2e056c81e2145bed0aaf5a96426339fbd8672aa77ab7fd19193f147"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7427.jpg",
+      "bytes": 9245,
+      "sha256": "c537633ee8032f313e661a02d5e8bc1c1d3c9db948c942f21be9c31be8c86c21"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7428.jpg",
+      "bytes": 9969,
+      "sha256": "12d535fb812660c747f50217ead7cf6aee03e6150c1d95db562bcf1ce539dbff"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7429.jpg",
+      "bytes": 10731,
+      "sha256": "f6122fa0b07c2b6a698e141036529e9a6522bb6f8623f2012785d5e3f00a6700"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7430.jpg",
+      "bytes": 11038,
+      "sha256": "d79f9a44edf30e0d9588316f70fc553bb4e1270edd0f90311afd417f8a2d40c6"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7431.jpg",
+      "bytes": 11816,
+      "sha256": "21da878abfe4194104ae0ee8c8d8140ecd09dc278f73d22ffc8bd355b150593d"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7432.jpg",
+      "bytes": 12605,
+      "sha256": "47ac30d6a042f64fe1877504b40757fdb81202e329164d906510312fbb5ba1a0"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7433.jpg",
+      "bytes": 13275,
+      "sha256": "230300c49840c231b6b7646a4f3bf512a9c787d985cc837651feaa629a8e0253"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12872/7434.jpg",
+      "bytes": 12662,
+      "sha256": "ada12ca4335312d7213e12b54bef064a998ff2bc143fc0365fdababfb66c86a7"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7427.jpg",
+      "bytes": 8175,
+      "sha256": "32ed4e27227bdf8d9006a164a9cb7e3868a55eb75854dd84d1a887572082592f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7428.jpg",
+      "bytes": 8066,
+      "sha256": "1b88974853d1f3d3aaf4fd119e109ebc65a9951155d53af78751fad1bf9cee29"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7429.jpg",
+      "bytes": 7384,
+      "sha256": "b94c69fbfe3aa295a81c4dabc195849569e04c130836ef713ea821cd8b16601c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7430.jpg",
+      "bytes": 9579,
+      "sha256": "e1020df48a3150bf28f858e150f2c7531559ed29c566dba7be09e5e12f3470cd"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7431.jpg",
+      "bytes": 10821,
+      "sha256": "63a4e9b18ac75f042b57db794aea68a45a4a72b397537acc78c90766d1aa5191"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7432.jpg",
+      "bytes": 9856,
+      "sha256": "f530491e513f60f3485421785b71e8b74e1ec937236f38a664c407167987d12e"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7433.jpg",
+      "bytes": 11420,
+      "sha256": "9f4ccd3a8961cbf9a380586bfad026bbe0fe1e00033766e75748ee0eddc89e4f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12873/7434.jpg",
+      "bytes": 11793,
+      "sha256": "0f8e36932e2deb56c9c12c1257de855dd13c16429bf90d8a5c0fb66ea04bc22c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7427.jpg",
+      "bytes": 6825,
+      "sha256": "27d167d21910ed2fed917493a525b658ca9e2862b2a73330974dc369953c06e0"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7428.jpg",
+      "bytes": 8025,
+      "sha256": "b46cd38b7501c2722174c47e4fe0b172db909d3359eb8b123ba78fcce470dc2e"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7429.jpg",
+      "bytes": 7078,
+      "sha256": "9e486aa47547f070df29b6e9bf66b8c2ced7ac8de40c364cb1be4f0b9be83f1c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7430.jpg",
+      "bytes": 8034,
+      "sha256": "37badc1803f0e4e6b667d10ce8a8535ac5061a07f899eeb266a7e0f219e4baae"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7431.jpg",
+      "bytes": 8929,
+      "sha256": "051c65e46636f172aad7da5afad425cdca217d458ac2bc083cdabb9f0d89c368"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7432.jpg",
+      "bytes": 7587,
+      "sha256": "b70a6b84d7e8cb2195e6fc98c143e191221a9d3278e59ecb0c5383cce8a0361a"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7433.jpg",
+      "bytes": 9861,
+      "sha256": "948694844a76d56f7ce0e0513f4b28f442810ea9ada35581101f099614e8de09"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12874/7434.jpg",
+      "bytes": 9987,
+      "sha256": "4da700d52e7b657a8c44dc0c7553811f1d2edd3b0146ddfd9380fc48c63dd292"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7427.jpg",
+      "bytes": 6929,
+      "sha256": "3dcfe1da5f2c3f5283914d7e23f6d34407c05cc473e8c5db2c1f04550182da51"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7428.jpg",
+      "bytes": 6944,
+      "sha256": "ff0eae74f2f38bc90569a830b61bb16c524a77ad270de9e6170fb1e9bcde8043"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7429.jpg",
+      "bytes": 8394,
+      "sha256": "5686df7be988009e8a841b91d7bf6a24f00d699d27fc855637b40a1fb4ffb42e"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7430.jpg",
+      "bytes": 8089,
+      "sha256": "87d1b701a204f9ed70151cdcf165e2da90db3ae961159ec257e38ed866bb9fb4"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7431.jpg",
+      "bytes": 7647,
+      "sha256": "4cebcd269e4b0a809ff28e7cee32ab0340120860453ba589399108921dadb2e1"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7432.jpg",
+      "bytes": 9019,
+      "sha256": "953d0607fd687a7e017e0398a7944f5b9f14683b63ebf9fcbaddee87d287986a"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7433.jpg",
+      "bytes": 8380,
+      "sha256": "25d54060e71b68453c222ec1e658608f52b0209b45a8c2032ecaf6bf5c56e1b1"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12875/7434.jpg",
+      "bytes": 9710,
+      "sha256": "6ec601784137ff91d618e7b01131a57a4add04e9a865e63c2890282b484ef9f2"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7427.jpg",
+      "bytes": 5931,
+      "sha256": "e1b832ea3462de82a163786de135e9d0e5c6d3c0fe005d35088af473524f0246"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7428.jpg",
+      "bytes": 5414,
+      "sha256": "5bc3e2c2a34792376cc45bce731c151abbf3ba550d23b4a2fad1c54e660bfc15"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7429.jpg",
+      "bytes": 8520,
+      "sha256": "1c81122b181cb4c7aeeec3b4dcfaf384059c1f1696871ddab3cd23d46f05409a"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7430.jpg",
+      "bytes": 7041,
+      "sha256": "6ab7a01ca48f4f898fe2bb47e2c4f1e258e9780e5a5578dd3629f0f198cf3476"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7431.jpg",
+      "bytes": 7583,
+      "sha256": "a4ef963c95beeedb2845c56ad1db106a11494aa5fc6daa05e6eeea829826fb31"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7432.jpg",
+      "bytes": 8030,
+      "sha256": "c67557e21f495517e547d2542e52a7abfe8320774b8c153a4f20089bcad074ce"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7433.jpg",
+      "bytes": 8418,
+      "sha256": "902a19c7cbb3c46debbb570d0154a90ba043edf991165f84f6e59a135934125d"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12876/7434.jpg",
+      "bytes": 6080,
+      "sha256": "84b1c1aafe38b4472b789901135b330de9a8075814499de942042866d52be901"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7427.jpg",
+      "bytes": 8858,
+      "sha256": "fca156b5a37df9dc124aaff9e3d8ae0491c2497fe682f86afe113e92c6b8c53c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7428.jpg",
+      "bytes": 6237,
+      "sha256": "0f78686d22027e2f44b251b369e19e2573959c59135305a5e0ad1d52fab556cb"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7429.jpg",
+      "bytes": 5433,
+      "sha256": "9de97a308ebd00137681ef6a282e550a28e4cbf8edfcf5941f03e9f9389b208b"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7430.jpg",
+      "bytes": 9495,
+      "sha256": "19de2ba42f689395002eac8d8f7dc577966a27e57634788254cc77a209455e6e"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7431.jpg",
+      "bytes": 10414,
+      "sha256": "a08941c1c94d4f5c78aa1dad74fd510ff3a4a688fcf51ac58556b7097b433c47"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7432.jpg",
+      "bytes": 8794,
+      "sha256": "8e57ad61a6c64a173167b23d282c16cc163491a7011fbdd47f1d5120eab27178"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7433.jpg",
+      "bytes": 9797,
+      "sha256": "d335fc31e9b2f7b77051854c02c30afe711a9710f9ff05ff2615c56efa1e5124"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/14/12877/7434.jpg",
+      "bytes": 8178,
+      "sha256": "7b4c7ab240e611b549fbd70fd18e351cb1d1d816285efabb3ad00344f4e44a0f"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/8/201/116.jpg",
+      "bytes": 16088,
+      "sha256": "c519be3ecf79ec70c8712f00632ecc9b600d928d9b6cffb8d27f4d07ab3e061c"
+    },
+    {
+      "path": "vendor/satellite-eox-2016/9/402/232.jpg",
+      "bytes": 18029,
+      "sha256": "c8eccb0304bd9bbe6ae99005168834d4eac6a34fd7738ceabd2c18130bb6e25a"
+    }
+  ],
+  "dataDirectory": {
+    "fileCount": 19,
+    "geoJSONCount": 14,
+    "allBytesMatchHead": true,
+    "allFeatureCountsMatchHead": true,
+    "allPropertySchemasMatchRevision12": true,
+    "disallowedPersonalPropertyFieldFindings": [],
+    "files": [
+      {
+        "path": "data/buildings.geojson",
+        "bytes": 27674202,
+        "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+        "headSHA256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/catalog.json",
+        "bytes": 69061,
+        "sha256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+        "headSHA256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/cctv.geojson",
+        "bytes": 21188,
+        "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+        "headSHA256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/data-validation.json",
+        "bytes": 2401,
+        "sha256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+        "headSHA256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/education.geojson",
+        "bytes": 10198,
+        "sha256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+        "headSHA256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/election-source-lines.geojson",
+        "bytes": 46540,
+        "sha256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+        "headSHA256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/election.geojson",
+        "bytes": 46671,
+        "sha256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+        "headSHA256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/flood-evidence.json",
+        "bytes": 23147,
+        "sha256": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+        "headSHA256": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/health.geojson",
+        "bytes": 2133,
+        "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+        "headSHA256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/houses.geojson",
+        "bytes": 13323656,
+        "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+        "headSHA256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/metadata.json",
+        "bytes": 34190,
+        "sha256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+        "headSHA256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/municipality.geojson",
+        "bytes": 36585,
+        "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+        "headSHA256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/parcels.geojson",
+        "bytes": 30883759,
+        "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+        "headSHA256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/publicfacilities.geojson",
+        "bytes": 88645,
+        "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+        "headSHA256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/religion.geojson",
+        "bytes": 11526,
+        "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+        "headSHA256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/roads.geojson",
+        "bytes": 608961,
+        "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+        "headSHA256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/source-manifest.json",
+        "bytes": 48576,
+        "sha256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+        "headSHA256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/villages.geojson",
+        "bytes": 164944,
+        "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
+        "headSHA256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
+        "bytesMatchHead": true
+      },
+      {
+        "path": "data/waterways.geojson",
+        "bytes": 416511,
+        "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+        "headSHA256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+        "bytesMatchHead": true
+      }
+    ],
+    "geoJSONs": [
+      {
+        "path": "data/buildings.geojson",
+        "featureCount": 38847,
+        "headFeatureCount": 38847,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c"
+      },
+      {
+        "path": "data/cctv.geojson",
+        "featureCount": 50,
+        "headFeatureCount": 50,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6"
+      },
+      {
+        "path": "data/education.geojson",
+        "featureCount": 20,
+        "headFeatureCount": 20,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d"
+      },
+      {
+        "path": "data/election-source-lines.geojson",
+        "featureCount": 4,
+        "headFeatureCount": 4,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "boundaryStatus",
+          "id",
+          "label",
+          "sourceFolder",
+          "sourceRecord"
+        ],
+        "sha256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d"
+      },
+      {
+        "path": "data/election.geojson",
+        "featureCount": 3,
+        "headFeatureCount": 3,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "boundaryStatus",
+          "closureGapM",
+          "derivation",
+          "id",
+          "label",
+          "legalAuthorityVerified",
+          "number",
+          "sourceFolder",
+          "sourceRecordCount"
+        ],
+        "sha256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2"
+      },
+      {
+        "path": "data/health.geojson",
+        "featureCount": 4,
+        "headFeatureCount": 4,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5"
+      },
+      {
+        "path": "data/houses.geojson",
+        "featureCount": 28783,
+        "headFeatureCount": 28783,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "houseNumber",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49"
+      },
+      {
+        "path": "data/municipality.geojson",
+        "featureCount": 1,
+        "headFeatureCount": 1,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "boundaryStatus",
+          "id",
+          "label",
+          "sourceFolder"
+        ],
+        "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a"
+      },
+      {
+        "path": "data/parcels.geojson",
+        "featureCount": 40367,
+        "headFeatureCount": 40367,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "displayCRSStatus",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "taxStatus",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c"
+      },
+      {
+        "path": "data/publicfacilities.geojson",
+        "featureCount": 100,
+        "headFeatureCount": 100,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "sourceTypeCode",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602"
+      },
+      {
+        "path": "data/religion.geojson",
+        "featureCount": 24,
+        "headFeatureCount": 24,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed"
+      },
+      {
+        "path": "data/roads.geojson",
+        "featureCount": 713,
+        "headFeatureCount": 713,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "lengthSource",
+          "roadName",
+          "sourceFile",
+          "sourceFolder",
+          "sourceRecord",
+          "surface",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8"
+      },
+      {
+        "path": "data/villages.geojson",
+        "featureCount": 28,
+        "headFeatureCount": 28,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "boundaryStatus",
+          "female",
+          "id",
+          "label",
+          "male",
+          "name",
+          "number",
+          "populationDiscrepancy",
+          "populationReported",
+          "populationStatus",
+          "populationYearBE",
+          "sourceFolder",
+          "sourceRecordCount"
+        ],
+        "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe"
+      },
+      {
+        "path": "data/waterways.geojson",
+        "featureCount": 110,
+        "headFeatureCount": 110,
+        "featureCountMatchesHead": true,
+        "propertySchemaMatchesRevision12": true,
+        "propertyFields": [
+          "datasetId",
+          "electionId",
+          "electionIds",
+          "geometryDisplayRepair",
+          "id",
+          "insideMunicipality",
+          "label",
+          "sourceFolder",
+          "sourceRecord",
+          "sourceVersion",
+          "villageId",
+          "villageIds"
+        ],
+        "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18"
+      }
+    ],
+    "publicationMeaning": "Source house coordinates/numbers, CCTV locations and source geometries remain public static records under inherited authorization; this is not aggregate anonymization. Public parcel labels/provenance remain without ownership, deed or tax identifiers."
+  },
+  "uiIconSubset": {
+    "family": "Material Symbols Rounded",
+    "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+    "sourceRepository": "https://github.com/google/material-design-icons",
+    "assetCount": 37,
+    "allExactSourceHashesAndBytesMatch": true,
+    "allInlineGeometryMatchesExactSVG": true,
+    "allSVGsListed": true,
+    "license": "Apache-2.0",
+    "licenseFile": "assets/ui-icons/LICENSE.txt",
+    "licenseSHA256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+    "licenseHashVerified": true,
+    "canonicalDesignSystemPromotion": false,
+    "fullICON01ConformanceClaim": false
+  },
+  "welcomeMotif": {
+    "path": "assets/brand/conversation-welcome.svg",
+    "receipt": "assets/brand/conversation-welcome.receipt.json",
+    "sha256": "fa67237428dc510cb4e7bc15e86e3764e9911db8a5e26787cb7d40291a284ca4",
+    "bytes": 11610,
+    "exactReceiptHashAndByteParity": true,
+    "scriptsOrExternalRefsPresent": false,
+    "role": "One welcome/orientation illustration next to live text; not map marks, functional/data icons or proof of official state.",
+    "permission": "Prior exact-build owner permission + current owner-directed Sila identity/asset adoption; artifact-bounded, not an open license",
+    "openLicenseInferred": false
+  },
+  "satellite": {
+    "moduleSHA256": "022865e49d13d9e770487eb2282cf77912b1ec1f86f3c83169c7ced9c50c9905",
+    "contractHashMatchesModule": true,
+    "googleCityChat": {
+      "sourceTileURL": "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+      "sameLiteralInModule": true,
+      "addedKeyOrSessionToken": false,
+      "officialGoogleMapTilesAPI": false,
+      "licenseStatus": "not_verified",
+      "sourceCompatibility": "existing_citychat_google_hybrid_xyz",
+      "authorization": "Human owner explicitly requested reuse of the existing CityChat provider; no additional rights inferred.",
+      "localGoogleImageryTileFilesFound": false,
+      "noGoogleImageDownloadAuditMeaning": "No raw Google imagery tile package/cache is stored in the bundle. All newly added local imagery tiles are the 121 hash-verified EOX archive files. Two independently viewed QA composite screenshots contain Google basemap views loaded by the browser; these are not raw tile assets, and this audit does not establish separate screenshot or Google imagery reuse rights.",
+      "localGoogleBasemapQACompositeScreenshots": [
+        "screenshots/revision-1.3-mobile-en-light-points.jpg",
+        "screenshots/revision-1.3-satellite-th-zoom20.jpg"
+      ]
+    },
+    "eoxArchive": {
+      "explicitSeparateMode": "satellite-archive",
+      "fileCount": 121,
+      "bytes": 1505423,
+      "allFilesMatchInventoryHashAndBytes": true,
+      "allTileFilesListed": true,
+      "allOriginalSourceBytes": true,
+      "allSourceURLsEOX2016Layer": true,
+      "license": "CC BY 4.0",
+      "rightsEvidence": "Specific s2cloudless_3857 layer CC BY 4.0 declaration retained in official-capabilities evidence; inventory/contract retain source, copyright and attribution. No latest EOX NC product adopted.",
+      "inventory": "reference/satellite-tile-inventory.json"
+    }
+  },
+  "handoff": {
+    "human": "reference/platform-layout-handoff.md",
+    "machine": "reference/platform-layout-handoff.json",
+    "relativeLinkFindings": [],
+    "meaning": "Source-pinned integration plan for existing CityChat platform; no assertion that the prototype completes LOI, tax collection coverage, flood forecasting or production tenant entitlements."
+  },
+  "screenshots": [
+    {
+      "path": "screenshots/revision-1.3-desktop-th-dark-points.jpg",
+      "mediaType": "image/jpeg",
+      "extensionMatches": true,
+      "exifXMPIPTCCommentSegments": [],
+      "visibleContentReview": "Artifact-only Sila dataset/map UI; no browser/account chrome or incidental private document content. Independently viewed current image.",
+      "basemapInComposite": "OpenFreeMap",
+      "rawTilePackage": false
+    },
+    {
+      "path": "screenshots/revision-1.3-desktop-th-dark.jpg",
+      "mediaType": "image/jpeg",
+      "extensionMatches": true,
+      "exifXMPIPTCCommentSegments": [],
+      "visibleContentReview": "Artifact-only Sila dataset/map UI; no browser/account chrome or incidental private document content. Independently viewed current image.",
+      "basemapInComposite": "OpenFreeMap",
+      "rawTilePackage": false
+    },
+    {
+      "path": "screenshots/revision-1.3-desktop-th-light-points.jpg",
+      "mediaType": "image/jpeg",
+      "extensionMatches": true,
+      "exifXMPIPTCCommentSegments": [],
+      "visibleContentReview": "Artifact-only Sila dataset/map UI; no browser/account chrome or incidental private document content. Independently viewed current image.",
+      "basemapInComposite": "OpenFreeMap",
+      "rawTilePackage": false
+    },
+    {
+      "path": "screenshots/revision-1.3-mobile-en-light-points.jpg",
+      "mediaType": "image/jpeg",
+      "extensionMatches": true,
+      "exifXMPIPTCCommentSegments": [],
+      "visibleContentReview": "Artifact-only Sila dataset/map UI; no browser/account chrome or incidental private document content. Independently viewed current image.",
+      "basemapInComposite": "Google Hybrid",
+      "rawTilePackage": false
+    },
+    {
+      "path": "screenshots/revision-1.3-satellite-th-zoom20.jpg",
+      "mediaType": "image/jpeg",
+      "extensionMatches": true,
+      "exifXMPIPTCCommentSegments": [],
+      "visibleContentReview": "Artifact-only Sila dataset/map UI; no browser/account chrome or incidental private document content. Independently viewed current image.",
+      "basemapInComposite": "Google Hybrid",
+      "rawTilePackage": false
+    }
+  ],
+  "publicationCleanupVerified": [
+    "All three revision 1.3 static-check reports use public relative bundle paths after workstation-locator normalization; report result status was not changed.",
+    "All five revision 1.3 screenshots are correctly named .jpg and have no EXIF/XMP/IPTC/comment segments.",
+    "README link to completed qa/revision-1.3-browser-checks.json resolves; no pending receipt reference remains."
+  ],
+  "releaseBlockers": [],
+  "limitations": [
+    "The working checkout can continue changing while root completes browser QA; publicFiles hashes are a point-in-time snapshot. Recheck changed paths after any subsequent mutation.",
+    "No deployed-byte parity or live provider availability is asserted.",
+    "Source position, municipal/village/election legal boundaries and parcel CRS/legal use remain unverified as in revision 1.2.",
+    "No municipal open-reuse license or new Google API/imagery license is established by this audit.",
+    "Only new/changed public paths and unchanged processed-data parity were examined; historical QA was not rewritten."
+  ],
+  "browserEvidence": {
+    "receipt": "qa/revision-1.3-browser-checks.json",
+    "receiptSHA256": "e66a016cd2de41d45e60092d13ae582bdf2a9f39fc2f09341d403a17984748a5",
+    "meaning": "Root-owned actual browser coverage; this publication audit verifies public payload/hash and does not rerun or expand those claims."
+  },
+  "snapshotPhase": "Root notified all implementation/QA bytes settled; release manifest is to be generated after this audit."
+}

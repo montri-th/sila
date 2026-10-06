@@ -1,0 +1,644 @@
+{
+  "schemaVersion": "sila.citychat-platform-layout-handoff/1.0",
+  "revision": "1.3",
+  "createdOn": "2026-10-06",
+  "audience": [
+    "developer",
+    "intern",
+    "code_assistant"
+  ],
+  "artifactScope": "Platform migration specification and role-bounded asset/source audit; not a claim that this static prototype is merged into CityChat or authenticated",
+  "authority": {
+    "baseDocument": {
+      "path": "Landometer-Design-System-v0.9.7.md",
+      "version": "0.9.7",
+      "release": "v0.9.7-owner.1",
+      "colorSet": "color-srgb-10",
+      "sha256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96"
+    },
+    "addonDocument": {
+      "path": "CityChat-Add-on-v0.9.2-for-LDS-v0.9.7.md",
+      "version": "0.9.2",
+      "baseSha256": "d3085cbc0a50195f1cbf0c77b1d77c0d19b84364daf2948eb367348d65432d96",
+      "sha256": "345ef4054d7a646a73a8b369549c58c8b11d3190e39de5aa0f59704d6a3223ad"
+    },
+    "currentOwnerDirection": [
+      "Reuse CityChat Officer/CityMETER layout to help interns extend the sameplatform",
+      "Persistent breadcrumb",
+      "Native satellite at every user-supported zoom; disclose underlying source resolution",
+      "Meaningful contrast of markers on light maps",
+      "Decision-helping functionalicons/images; no inventedassets or decorativebrackets/left rails",
+      "Show every source house point at every zoom without clustering or aggregate marker/count badges; overlapping points remain selectable through source-record choices."
+    ]
+  },
+  "platformSource": {
+    "repository": "https://github.com/theshifters/landometer-citychat",
+    "commit": "02ce2238131a06a33743b213f7c1707c69708e2c",
+    "commitDate": "2026-10-02T15:43:11Z",
+    "remoteVerifiedOn": "2026-10-06",
+    "verification": "Read-only gh api repos/theshifters/landometer-citychat/commits?per_page=1 returned exactlocal HEAD; tracked snapshot clean. This doesnotestablish deployedproduction parity.",
+    "stack": {
+      "frontend": "Next15 Pages Router + React18 + TypeScript5.7 + MUI6 + ReactQuery5.66",
+      "map2D": "OpenLayers10.4",
+      "existingMap3D": "MapLibre5.6 +deck.gl",
+      "staticPrototype": "Leaflet +MapLibrebridge; do not copy standaloneapp as anewproduction platform"
+    },
+    "sourceTruthOverridesOldGuide": "Currentsource uses server/ (notold AGENT_GUIDE server-spring/ path). Sourceauthuses next-auth/OfficerCmGuard; inspectactualcomponentpaths rather than stale high-level docs."
+  },
+  "layout": {
+    "desktopOrder": [
+      "CityChat brand/header + truthfulOfficercontext whenauthenticated",
+      "mapleft/rightresizablepanel50percentinitial",
+      "rightstickybreadcrumb",
+      "myarea identityaction",
+      "data/chat switch onlywhenrealchatcapability",
+      "datasetselector grouped Land/Location/Living",
+      "place-firstsignal ≤3facts+source/limitation+oneusefulprimaryaction",
+      "detail/records/sourceviews"
+    ],
+    "mobile": [
+      "Visible compactbreadcrumb outsidescrollablelowercontent",
+      "Map+existingMobileDynamicPanel pattern; keep essentialplace/dataset context reachable",
+      "44px targets; no reducedfont workaround forlongThai"
+    ],
+    "state": [
+      "datasetId",
+      "scopeId",
+      "boundaryMode",
+      "viewport",
+      "selectedRecordId",
+      "sourceVersion",
+      "language",
+      "theme"
+    ],
+    "invariants": [
+      "Datasetchange retains scope",
+      "Recordselection doesnotmutatearea aggregate",
+      "Boundary/scopechange clears incompatible selection",
+      "Theme/languagechange keepseditedcontextaction drafts ifscope/dataset stable",
+      "Outside-mask follows actualmunicipalgeometry, never viewport rectangle",
+      "Parent-scope breadcrumb closes the selected record without changing scope or camera; record is aria-current until closed."
+    ],
+    "truthBoundary": "Prototype labels data/records/source tabs, notfictionalchat/backendreceipts; production mayuseactualexistingdata/chat surfaces onlywithauthoritativecasecontext"
+  },
+  "modules": [
+    {
+      "id": "officer-route",
+      "path": "web/src/pages/officer-citymeter/[[...breadcrumb]].tsx",
+      "purpose": "Keep the existing Officer route and CmScreenWrapper; dataset query d/data/dataset and server-resolved tenant scope.",
+      "decision": "reuse",
+      "requiredChange": "Resolve Sila canonical municipality ID from the server. Never reuse Saensuk route04200103 for Sila."
+    },
+    {
+      "id": "officer-auth",
+      "path": "web/src/modules/citymeter/officer/components/OfficerCmGuard.tsx",
+      "purpose": "Active-role rendering gate and server /context authority; client guard alone is not data security.",
+      "decision": "reuse",
+      "requiredChange": "Provision Sila context and per-organization entitlements; preserve 401/403 behavior, do not expose raw datasets on a public route."
+    },
+    {
+      "id": "shell",
+      "path": "web/src/modules/citymeter/base/CmMapLayout.tsx",
+      "purpose": "Desktop right resizable panel (50% initial width), map fit padding, desktop lower/hover panels; mobile dynamic panel and portals.",
+      "decision": "retain_principle",
+      "requiredChange": "Keep layout and state APIs. Use current0.9.7 surfaces/type/focus; do not copy old arbitrary colors/shadows."
+    },
+    {
+      "id": "composition",
+      "path": "web/src/modules/citymeter/base/CmScreen.tsx",
+      "purpose": "Compose breadcrumb→my area→data/chat→dataset→dataset content; map controls and selected/hovered feature state.",
+      "decision": "adapt_in_place",
+      "requiredChange": "Keep display data-first for Officer, organization-specific default dataset, persistent scope on dataset switch; no fake chat or account in public prototype."
+    },
+    {
+      "id": "map-controls",
+      "path": "web/src/modules/citymeter/base/CmMapContainer.tsx",
+      "purpose": "Search/zoom/layers composition slots and OpenLayers map host.",
+      "decision": "adapt_in_place",
+      "requiredChange": "Explicit basemap choice, meaningful names, conventional icons with labels, keyboard targets; avoid old outline-basemap invert filter."
+    },
+    {
+      "id": "breadcrumb",
+      "path": "web/src/modules/citymeter/base/components/CmNavigatorBreadcrumb.tsx",
+      "purpose": "Country/province/municipality/village path and navigateUpTo callback.",
+      "decision": "adapt_in_place",
+      "requiredChange": "Current source anchor href is undefined. Use real route href or semantic button; aria-current, 44px interaction, sticky visible trail in TH/EN at narrow/desktop widths."
+    },
+    {
+      "id": "dataset-menu",
+      "path": "web/src/modules/citymeter/base/components/CmDatasetDropdown.tsx",
+      "purpose": "Land/Location/Living groups and entitled datasets; all groups initially expanded.",
+      "decision": "reuse_then_extend",
+      "requiredChange": "Register Sila data and truthful per-organization names/status. Preserve accessibility and labels, no colored selected left rail."
+    },
+    {
+      "id": "dataset-config",
+      "path": "web/src/modules/citymeter/datasets.ts",
+      "purpose": "CmDatasetConfig, defaultBaseMapType/defaultDisplayMode, officerOnly/restricted checks, common plugin props.",
+      "decision": "adapt_in_place",
+      "requiredChange": "Use actual dataset capability/entitlement registry. Add data evidence provenance per organization; no code-only import creates municipal data."
+    },
+    {
+      "id": "plugin-registry",
+      "path": "web/src/modules/citymeter/base/datasetPlugins.tsx",
+      "purpose": "Partial plugin registry; floodimpact registered here, several other datasets still directly dispatched in CmScreen.",
+      "decision": "extend_small_scope",
+      "requiredChange": "Do not attempt a global registry refactor in fasttrack. Follow current module pattern and add only needed Sila extensions."
+    },
+    {
+      "id": "scope-state",
+      "path": "web/src/modules/citymeter/base/hooks/useMapViewState.ts",
+      "purpose": "lv0–lv3 navigation and detail/select modes; village supported at lv3.",
+      "decision": "adapt_in_place",
+      "requiredChange": "Map local v01–v28 to canonical server village IDs. Election is currently not a supported lv3 tile type: add a typed capability or keep explicitly derived overlay, never disguise as villages."
+    },
+    {
+      "id": "portals",
+      "path": "web/src/modules/citymeter/base/CmRenderPortal.tsx",
+      "purpose": "Existing named desktopRightPanel/desktopBottomPanel/desktopHoverPanel/mobileDynamicPanel/mobileFloatingPanel slots.",
+      "decision": "reuse",
+      "requiredChange": "Write React plugin panels into current portals; do not mount standalone DOM handlers inside React."
+    },
+    {
+      "id": "provenance",
+      "path": "web/src/modules/citymeter/shared-components/DatasetProvenanceNote.tsx",
+      "purpose": "Source/coverage/freshness/material limits near values.",
+      "decision": "reuse_then_rebind",
+      "requiredChange": "Bind current DS tokens and public plain-language source meaning; preserve null/zero state distinction."
+    },
+    {
+      "id": "lds-adapter",
+      "path": "web/src/theme/lds/index.ts",
+      "purpose": "Current repository adapter exports type/layout/icon/theme/map contracts.",
+      "decision": "migrate_exact_values",
+      "requiredChange": "Source explicitly pins LDS0.9.1 and color-srgb05. Preserve useful API names while replacing only selected Sila surface bindings with exact0.9.7 projections, then migrate remaining surfaces separately."
+    },
+    {
+      "id": "icon-renderer",
+      "path": "web/src/common/components/lds/LdsIcon.tsx",
+      "purpose": "Material Symbols Rounded FILL0/wght300/GRAD0 with label or decorative aria-hidden treatment.",
+      "decision": "retain_principle",
+      "requiredChange": "Do not treat glyphMap40 as current base approval registry. Bind exact product-owned extension hashes/rights/approval for missing glyphs; selection never changes FILL/weight."
+    },
+    {
+      "id": "http",
+      "path": "web/src/core/api/index.ts",
+      "purpose": "Authenticated JSON wrapper, value unwrapping and401 sign-out handling.",
+      "decision": "reuse",
+      "requiredChange": "server-apis.ts JSON calls use fetchJson with typed queryParams. Binary MVT keeps sanctioned map-utils descriptor/header pattern."
+    }
+  ],
+  "datasetMappings": [
+    {
+      "prototypeDatasetId": "houses",
+      "platformDatasetCode": "house",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-house/CmDatasetHousePlugin.tsx",
+      "sourceCount": 28783,
+      "mappedCount": 28783,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Source points at every zoom without clustering or count badges; overlapping points open source-record choices. No verified unique households or adjustment writes without official source/receipt."
+    },
+    {
+      "prototypeDatasetId": "buildings",
+      "platformDatasetCode": "building",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-building/CmDatasetBuildingPlugin.tsx",
+      "sourceCount": 38849,
+      "mappedCount": 38847,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Footprints only; no estimated population/height/tax amount. Organization-specific visible label must not promise missing attributes."
+    },
+    {
+      "prototypeDatasetId": "roads",
+      "platformDatasetCode": "road",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-road/CmDatasetRoadPlugin.tsx",
+      "sourceCount": 713,
+      "mappedCount": 713,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "713 segments are not unique roads, road surface/lanes or maintenance authority absent unless source supports them."
+    },
+    {
+      "prototypeDatasetId": "cctv",
+      "platformDatasetCode": "cctv",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-cctv/CmDatasetCctvPlugin.tsx",
+      "sourceCount": 51,
+      "mappedCount": 50,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "51source/50mapped; no livevideo or operational status."
+    },
+    {
+      "prototypeDatasetId": "parcels",
+      "platformDatasetCode": "landparcel",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-landparcel/CmDatasetLandparcelPlugin.tsx",
+      "sourceCount": 40368,
+      "mappedCount": 40367,
+      "sourceStatus": "inferred_control_validated",
+      "truthBoundary": "Use source-count/geometry mode; default PRICE/treasury comparison is unavailable. UNKNOWN source CRS and inferred display EPSG24048 remain explicit."
+    },
+    {
+      "prototypeDatasetId": "population",
+      "platformDatasetCode": "population",
+      "integrationKind": "existing_plugin",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-population/CmDatasetPopulationPlugin.tsx",
+      "sourceCount": 28,
+      "mappedCount": 28,
+      "sourceStatus": "needs_reconciliation",
+      "truthBoundary": "28village rows only; total55838 vs male+female55238 differ600 in v11. Do not invent age cohorts, reconcile silently or assign population to election areas."
+    },
+    {
+      "prototypeDatasetId": "education",
+      "platformDatasetCode": "landmark",
+      "integrationKind": "landmark_subtype",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-landmark/CmDatasetLandmarkPlugin.tsx",
+      "sourceCount": 20,
+      "mappedCount": 20,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Use source-supported education labels only; no quality/accessibility/reach inference."
+    },
+    {
+      "prototypeDatasetId": "health",
+      "platformDatasetCode": "landmark",
+      "integrationKind": "landmark_subtype",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-landmark/CmDatasetLandmarkPlugin.tsx",
+      "sourceCount": 4,
+      "mappedCount": 4,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Use source-supported health labels only; no capacity/availability inference."
+    },
+    {
+      "prototypeDatasetId": "religion",
+      "platformDatasetCode": "landmark",
+      "integrationKind": "landmark_subtype",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-landmark/CmDatasetLandmarkPlugin.tsx",
+      "sourceCount": 24,
+      "mappedCount": 24,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Use source-supported religion labels only."
+    },
+    {
+      "prototypeDatasetId": "publicfacilities",
+      "platformDatasetCode": "landmark",
+      "integrationKind": "landmark_geometry_extension",
+      "existingPluginPath": "web/src/modules/citymeter/dataset-landmark/CmDatasetLandmarkPlugin.tsx",
+      "sourceCount": 100,
+      "mappedCount": 100,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "100polygons, not100points; do not replace realgeometry by invented points or unmapped category meanings."
+    },
+    {
+      "prototypeDatasetId": "waterways",
+      "platformDatasetCode": null,
+      "integrationKind": "new_dataset_extension",
+      "existingPluginPath": null,
+      "sourceCount": 110,
+      "mappedCount": 110,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "110KMLplacemarks/112parts; shapes do not establish drainage capacity, flow, floodhazard."
+    },
+    {
+      "prototypeDatasetId": "municipality",
+      "platformDatasetCode": null,
+      "integrationKind": "boundary_mode",
+      "existingPluginPath": null,
+      "sourceCount": 1,
+      "mappedCount": 1,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "Supplied1polygon; legal version unverified."
+    },
+    {
+      "prototypeDatasetId": "villages",
+      "platformDatasetCode": null,
+      "integrationKind": "boundary_mode",
+      "existingPluginPath": null,
+      "sourceCount": 29,
+      "mappedCount": 28,
+      "sourceStatus": "ready_with_caveats",
+      "truthBoundary": "29source records unioned into28filename-grouped areas, retain source IDs."
+    },
+    {
+      "prototypeDatasetId": "election",
+      "platformDatasetCode": null,
+      "integrationKind": "derived_boundary_mode",
+      "existingPluginPath": null,
+      "sourceCount": 5,
+      "mappedCount": 3,
+      "sourceStatus": "derived_display",
+      "truthBoundary": "5source lines including1empty→3derived polygons. Not officialcertified; newtyped tiletype capability required forplatform drilldown."
+    },
+    {
+      "prototypeDatasetId": "flood",
+      "platformDatasetCode": null,
+      "integrationKind": "document_dataset_extension",
+      "existingPluginPath": null,
+      "sourceCount": 16,
+      "mappedCount": 0,
+      "sourceStatus": "document_evidence_only",
+      "truthBoundary": "Keep historical16-site plan separate from floodimpact metric. All16 lackverifiedcoordinates/currentrisk."
+    },
+    {
+      "prototypeDatasetId": "terrain",
+      "platformDatasetCode": null,
+      "integrationKind": "external_team_adapter",
+      "existingPluginPath": null,
+      "sourceCount": null,
+      "mappedCount": 0,
+      "sourceStatus": "external_team_pending",
+      "truthBoundary": "CityMETER GLO30/FABDEM source selection external and pending; not in5MD. No terrain heights/floodmodel before actualdata contract."
+    }
+  ],
+  "assets": {
+    "identityRegistry": "assets/brand/manifest.json",
+    "faviconRegistry": "assets/brand/favicon-formats.manifest.json",
+    "welcome": {
+      "file": "assets/brand/conversation-welcome.svg",
+      "receipt": "assets/brand/conversation-welcome.receipt.json",
+      "sha256": "fa67237428dc510cb4e7bc15e86e3764e9911db8a5e26787cb7d40291a284ca4",
+      "bytes": 11610,
+      "role": "welcome_illustration",
+      "motion": "none",
+      "fallback": "Liveorientationcopy remains; hidefaileddecorativeimage",
+      "prohibited": [
+        "mapmarker",
+        "dataseticon",
+        "metric/evidence",
+        "secondlogo",
+        "officialreceipt"
+      ]
+    },
+    "iconPolicy": {
+      "baseApprovedSubset": [
+        "open_in_new",
+        "menu",
+        "close",
+        "light_mode",
+        "dark_mode",
+        "contrast",
+        "groups"
+      ],
+      "repositoryGlyphMapHas40": "Developerallowlist notindependent approvalreceipt",
+      "productExtension": "Use current artifact-owned extensionmanifest from iconagent for exact officialsourcecommit/SVGaxes/hash/license/allowedroles; no globalLDSconformanceclaim",
+      "selection": "FILL0 wght300 GRAD0 unchanged; visiblelabel/semanticbackground/focuscue",
+      "preferredFunctionalMappings": {
+        "houses": "home",
+        "buildings": "apartment",
+        "roads": "route",
+        "cctv": "videocam",
+        "population": "groups",
+        "municipality": "location_city",
+        "villages": "holiday_village",
+        "election": "how_to_vote",
+        "waterways": "water",
+        "flood": "flood",
+        "terrain": "landscape",
+        "parcels": "grid_on",
+        "education": "school",
+        "health": "local_hospital",
+        "religion": "account_balance",
+        "publicfacilities": "location_on",
+        "documents": "assignment"
+      },
+      "mappingBoundary": "These glyphmeaning suggestions require perfileproductextension evidence. They are labels/categories, never proof ofrisk/tax/quality."
+    }
+  },
+  "basemapContract": {
+    "implementationOwner": "Parent runtime/basemap agent",
+    "streetRegistryRef": "reference/basemap-sources.json",
+    "satelliteContractRef": "reference/satellite-basemap-contract.json",
+    "satelliteHumanContractRef": "reference/satellite-basemap-contract.md",
+    "archiveTileInventoryRef": "reference/satellite-tile-inventory.json",
+    "initialBasemap": "street",
+    "initialDatasetId": "buildings",
+    "defaultBehaviorMeaning": "User requested the satellite source already used by CityChat, not a change to the initial basemap or dataset.",
+    "satelliteOption": {
+      "mode": "satellite",
+      "providerId": "googleCitychat",
+      "provider": "Google Hybrid",
+      "tileURL": "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+      "crossOrigin": "anonymous",
+      "sourceCommit": "02ce2238131a06a33743b213f7c1707c69708e2c",
+      "sourcePath": "web/src/modules/citymeter/base/CmScreen.tsx",
+      "sourceURLLine": 439,
+      "sourceNativeCapPath": "web/src/modules/citymeter/base/CmScreen-3d.tsx",
+      "sourceNativeCapLine": 306,
+      "clientNativeTileCap": 19,
+      "displayZoomRange": [
+        8,
+        20
+      ],
+      "overzoomAbove": 19,
+      "imageryDate": null,
+      "nominalResolutionM": null,
+      "sourceCompatibility": "existing_citychat_google_hybrid_xyz",
+      "officialGoogleMapTilesAPI": false,
+      "licenseStatus": "not_verified",
+      "authorization": "Owner explicitly requested source-compatible reuse of the current CityChat provider; this does not establish new third-party entitlements.",
+      "addedAPIKeyOrSessionToken": false,
+      "downloadedOrCachedGoogleImagery": false
+    },
+    "archiveOption": {
+      "mode": "satellite-archive",
+      "providerId": "eox2016",
+      "provider": "EOX Sentinel-2 cloudless",
+      "imageryDate": "2016/2017",
+      "nominalResolutionM": 10,
+      "clientNativeTileCap": 14,
+      "displayZoomRange": [
+        8,
+        20
+      ],
+      "overzoomAbove": 14,
+      "tileURL": "vendor/satellite-eox-2016/{z}/{x}/{y}.jpg",
+      "rightsEvidence": "Specific EOX2016 layer declaration CC BY 4.0; see source contract and tile inventory.",
+      "activation": "Explicit user choice only; never automatic fallback from Google.",
+      "coverage": "Prepared Sila municipality and nearby area only; outside cached coverage imagery may be absent without removing municipal data."
+    },
+    "satelliteAllZoom": "Keep the selected imagery visible at all supported display zooms. Native caps limit tile requests; overzoom enlarges existing pixels and does not create finer imagery or a new survey.",
+    "truthRequirements": [
+      "Visible provider attribution, imagery date and source resolution when known; unknown values stay null.",
+      "No CSS inversion/filter or colorizing analytical marks.",
+      "Truthful network/resource status and fallback labels; OpenFreeMap-to-OSM applies to street only.",
+      "Retain selected scope/camera on basemap/theme change.",
+      "Actual light/dark/satellite point/line/polygon/focus contrast review.",
+      "Neutral halo/stroke can improve contrast without changing analytical fill/LUT."
+    ]
+  },
+  "fasttrack": {
+    "totalMandays": 5,
+    "staff": [
+      "2interns"
+    ],
+    "eachInternMandays": 2.5,
+    "indicativeElapsedWorkingDays": 2.5,
+    "estimateType": "Bounded implementation timebox, conditionalonexistingrepo/dev/APIcredentials/environment and canonical IDs; externalresponse/review/deploy wait notincluded",
+    "scope": "SameplatformOfficerread-only pilot using existingprocesseddataandplugins plus smallmissingdataset adapters, selectedsurface0.9.7 binding and targetedQA",
+    "excluded": [
+      "DEMsourcecomparison/ingestion/3Dproduction",
+      "Taxsystem-of-recordintegration/reconciliation/fullcollectioncoverage",
+      "Hydrologicalforecast orpublicalertservice",
+      "Official/legalboundary certification",
+      "Fullproduct-wide0.9.1→0.9.7 migration",
+      "Newauth/chat/cases/persistence platform",
+      "FormalLOIacceptance simplybyprototypepublication"
+    ],
+    "workItems": [
+      {
+        "id": "FT-01",
+        "owner": "intern_A",
+        "effortMandays": 1.0,
+        "task": "Read exact pinned sources and patch Sila shell/current0.9.7 token adapter while preserving existing component API.",
+        "touch": [
+          "web/src/theme/lds/index.ts",
+          "web/src/theme/themePrimitives.ts",
+          "web/src/modules/citymeter/base/CmMapLayout.tsx",
+          "web/src/modules/citymeter/base/components/CmNavigatorBreadcrumb.tsx"
+        ],
+        "doneWhen": [
+          "Current pins/hashes resolve0.9.7+Addon0.9.2",
+          "TH/EN breadcrumb remains visible and keyboard-operable at390/1280",
+          "No bracket/coloredleft rail; logo/favicons use registeredrole bytes"
+        ]
+      },
+      {
+        "id": "FT-02",
+        "owner": "intern_B",
+        "effortMandays": 1.0,
+        "task": "Create source-version adapter/canonical municipality+village ID crosswalk and source-count parity from existing processed catalog.",
+        "touch": [
+          "web/src/modules/citymeter/datasets.ts",
+          "web/src/modules/citymeter/officer/server-types.ts",
+          "web/src/modules/citymeter/officer/server-apis.ts"
+        ],
+        "doneWhen": [
+          "Source vs mapped counts retain provenance/null values",
+          "Source CRSUNKNOWN is not overwritten by inferred display CRS",
+          "Server tenant/entitlement matches Sila before rendering restricted datasets"
+        ]
+      },
+      {
+        "id": "FT-03",
+        "owner": "intern_A",
+        "effortMandays": 1.0,
+        "task": "Reuse shell/portals/existing plugins for building/house/road/CCTV/parcel; show source house points at all zooms without clusters/count badges and add visible functional labels/icons + one welcome illustration.",
+        "touch": [
+          "web/src/modules/citymeter/base/CmScreen.tsx",
+          "web/src/modules/citymeter/base/components/CmDatasetDropdown.tsx",
+          "web/src/modules/citymeter/base/CmMapContainer.tsx",
+          "web/src/modules/citymeter/base/CmRenderPortal.tsx",
+          "web/src/modules/citymeter/dataset-building/",
+          "web/src/modules/citymeter/dataset-house/",
+          "web/src/modules/citymeter/dataset-landparcel/"
+        ],
+        "doneWhen": [
+          "Switchdataset retains scope and camera",
+          "Selectrecord does not alterarea aggregates",
+          "Parcelcount mode hides unavailable PRICE/valuation/taxclaims",
+          "Marker halo/stroke contrast verified on native light/dark/satellite surfaces",
+          "All source house points remain eligible at every zoom, without cluster/count badges; overlap picking presents source-record choices."
+        ]
+      },
+      {
+        "id": "FT-04",
+        "owner": "intern_B",
+        "effortMandays": 1.0,
+        "task": "Connect processedgeometry+boundary sourceadapter, truthful population/document/landmark views and scopeaggregate queries using existing endpoint conventions.",
+        "touch": [
+          "web/src/modules/citymeter/base/server-apis.ts",
+          "web/src/modules/citymeter/base/server-types.ts",
+          "web/src/modules/citymeter/base/hooks/useMapViewState.ts",
+          "web/src/modules/citymeter/dataset-population/",
+          "web/src/modules/citymeter/dataset-landmark/",
+          "Proposed small Sila source/document adapter module"
+        ],
+        "doneWhen": [
+          "House/building/parcel source-mapped parity checked",
+          "Intersection counts stay boundary scoped, notviewport scoped",
+          "Population v11difference visible; electionpopulationnull",
+          "Historic flood16sites remain document-only, currentFloodImpactnull"
+        ]
+      },
+      {
+        "id": "FT-05",
+        "owner": "intern_A",
+        "effortMandays": 0.5,
+        "task": "Targetedbrowser+keyboard test, responsive Thai/English and light/dark/satellite; fix actual failures.",
+        "touch": [
+          "web/e2e/pages/CityMeterDeepLinkPage.ts",
+          "web/e2e/tests/citymeter/deeplink.spec.ts",
+          "web/package.json"
+        ],
+        "doneWhen": [
+          "pnpm qc:type andqc:lint pass forchanged scope",
+          "Directlinks/back/forward/refresh retain supportedcontext",
+          "Overlapping source points are accessible through map record choices and the keyboard record list; no clusters/count badges at any supported zoom.",
+          "Actualrender390/1280 plus200%zoom, reducedmotion andtilefailure evidence recorded"
+        ]
+      },
+      {
+        "id": "FT-06",
+        "owner": "intern_B",
+        "effortMandays": 0.5,
+        "task": "Targetedsourceparity and permission checks, updateLOI evidence matrix for workactuallyprovided; devreview/deploy handoff.",
+        "touch": [
+          "server/src/main/kotlin/landometer/server/v3/datasets/officerCitymeter/",
+          "server/src/main/kotlin/landometer/server/v3/datasets/access/",
+          "docs/loi-data-promotion-runbook.md",
+          "CurrentprojectLOI implementation report"
+        ],
+        "doneWhen": [
+          "Anonymous/citizen/otherorganization cannot readrestricted data or export",
+          "MissingtaxSoR/denominator andDEM remain explicitdependencies",
+          "NoLOIitem is markedcomplete byprototypealone",
+          "Exactasset/source/runtime receipts accompanyreview"
+        ]
+      }
+    ]
+  },
+  "acceptanceAndRemainingGates": {
+    "sourceChecksCompleted": [
+      "Repositorysnapshot commit/remoteHEADparity6Oct",
+      "Currentbase/addonhashparity",
+      "Exactwelcomesource/receipt/XML/noexternalrefs/rasterreview"
+    ],
+    "notExecutedByThisAudit": [
+      "CityChat repositorybuild/unit/e2e",
+      "Prototype revision1.3browserQA",
+      "Deployedbyteparity",
+      "Officialmunicipalsource/data publiclicense review",
+      "FullLDSartifactconformance/completefaviconset/native/AAcertification"
+    ],
+    "testTruth": "Rootowns actualbrowser/releasereceipts; cite exactrevisionreceipts anddo notpromotehistorical1.1/1.2results to1.3",
+    "dependencies": [
+      "CanonicalSila municipality/village IDs+organizationentitlement",
+      "TaxSoR/sourceowner populationreference date",
+      "SourceCRS officialconfirmation forparcellegal/tax use",
+      "CurrentCityMETERDEMdataset contract fromexternalteam",
+      "LOI training/dashboard/GIS deliveryevidence mustremain no-less-than signedcommitments"
+    ]
+  },
+  "housePointDisplayContract": {
+    "datasetId": "houses",
+    "sourcePointCount": 28783,
+    "rendering": "Retain one point-layer entry per valid scoped source record at every supported display zoom. No application-level viewport filtering or display limit; native renderer viewport clipping is permitted.",
+    "coordinateAuthority": "Retain exact processed source coordinates; do not jitter, spread, substitute centroids or infer unique households.",
+    "clustering": false,
+    "aggregateMarkers": false,
+    "countBadges": false,
+    "overlapSelection": "Map picking opens a source-record choice list for overlapping candidates, with stable record IDs/source rows and house number when present; never silently choose the first record.",
+    "keyboardAlternative": "The record list/search provides keyboard access to the same eligible source records; point rendering must not be the only selection path.",
+    "scopeCounts": "Boundary intersection remains the aggregate authority; native viewport clipping and visual overlap do not change source/mapped counts or imply coverage.",
+    "acceptance": "At low and high zoom there are no cluster/count badges; each point retains source identity and overlapping candidates remain reachable.",
+    "runtimeReference": {
+      "module": "house-points.js",
+      "version": "2.0.0",
+      "displayMode": "individual_source_points",
+      "renderer": "Leaflet Canvas",
+      "viewportOnlyRendering": false,
+      "aggregationEnabled": false,
+      "displayLimit": null
+    }
+  }
+}

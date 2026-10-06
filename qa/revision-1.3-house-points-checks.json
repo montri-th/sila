@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "checks": 31,
+  "sourceRecords": 28783,
+  "displayMode": "individual_source_points",
+  "aggregationEnabled": false,
+  "scope": "source coordinate/count preservation and Canvas API integration with test doubles; not browser contrast/touch/performance"
+}
