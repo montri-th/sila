@@ -892,7 +892,9 @@
       button.setAttribute("aria-label", button.dataset.terrainMode === "3d" ? text("3D · หมุนดูรูปทรงภูมิประเทศ", "3D · rotate and tilt terrain") : text("2D · อ่านตำแหน่งและเลือกรายการ", "2D · inspect locations and records"));
     });
     $("terrain-view-help").textContent = S.mode === "3d"
-      ? text("ลากเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · right-drag to rotate/tilt · height is exaggerated to show form")
+      ? (TOUCH()
+        ? text("ลากนิ้วเดียวเพื่อเลื่อน · บิดสองนิ้วเพื่อหมุน ลากสองนิ้วขึ้นลงเพื่อเอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag one finger to pan · twist two fingers to rotate, slide them up or down to tilt · height is exaggerated to show form")
+        : text("ลากเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · right-drag to rotate/tilt · height is exaggerated to show form"))
       : text("อ่านตำแหน่งใน 2D · เปลี่ยนเป็น 3D เพื่อดูรูปทรงพื้นที่", "Inspect locations in 2D · switch to 3D to explore terrain form");
     const status = active ? terrainStateLabel() : "";
     if ($("terrain-view-status").textContent !== status) $("terrain-view-status").textContent = status;
