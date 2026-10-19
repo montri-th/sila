@@ -1883,6 +1883,20 @@
       S.taxResult = window.SilaTaxEngine.run(S.parcelTax, { strategies: S.taxStrategies, appraisalAdjPct: S.appraisalAdj });
     } catch (e) { console.error(e); S.taxResult = null; }
   }
+  /* Parcels matched to the municipal roll whose outline lies outside the boundary line: in city totals, not in the municipality list. */
+  function outsideTaxed() {
+    if (S.outsideTaxedCache) return S.outsideTaxedCache;
+    const fc = S.cache.get("data/parcels.geojson");
+    if (!fc || !S.taxResult) return null;
+    let n = 0, sum = 0;
+    for (const f of fc.features) {
+      if (f.properties.insideMunicipality !== false) continue;
+      const r = taxRow(f.properties.id);
+      if (r && r.assessed69 != null) { n++; sum += r.assessed69; }
+    }
+    S.outsideTaxedCache = { n, sum };
+    return S.outsideTaxedCache;
+  }
   function taxTotalsHTML() {
     const all = S.taxResult?.totals, sm = S.parcelTax?.summary, c = sm?.cityTotals;
     if (!all) return `<p class="small-note">${text("ยังเปิดข้อมูลภาษีรายแปลงไม่ได้ ลองโหลดหน้าใหม่", "Parcel tax data could not open; try reloading.")}</p>`;
@@ -1897,7 +1911,7 @@
       + (c ? box(text("ทั้งเมือง: รับชำระของปีภาษี 2569", "Whole city: 2569 tax received"), c.receiptsTaxYear2569, text(`บัญชีประเมิน ${moneyShort(c.assessedRegister2569)} · ลูกหนี้ ${num(c.debtors2569)} ราย ${moneyShort(c.debt2569)}`, `assessment register ${moneyShort(c.assessedRegister2569)} · ${num(c.debtors2569)} debtors ${moneyShort(c.debt2569)}`)) : "")
       + box(text(`ปี 2570 วิธีเดิม · ${where}`, `2570 current method · ${where}`), t.old70, adj)
       + box(text(`ปี 2570 ตามข้อเสนอ · ${where}`, `2570 with fixes · ${where}`), t.new70, t.old70 ? text(`ต่างจากวิธีเดิม ${t.new70 - t.old70 >= 0 ? "+" : ""}${moneyShort(t.new70 - t.old70)}`, `vs current method ${t.new70 - t.old70 >= 0 ? "+" : ""}${moneyShort(t.new70 - t.old70)}`) : "", true) + `</div>`
-      + (sm ? `<p class="small-note">${text(`จับคู่โฉนดกับแปลงได้ ${num(sm.parcelsOnRoll)} แปลง (เลขโฉนด ${num(sm.parcelsDeedMatched)} · ผ่านบ้านเลขที่ ${num(sm.parcelsHouseNoMatched)}) ภาษี 0 บาทแสดงเฉพาะโฉนดที่บัญชีพิสูจน์ว่ายกเว้นทั้งหมด`, `${num(sm.parcelsOnRoll)} parcels matched to titles (deed ${num(sm.parcelsDeedMatched)} · via house numbers ${num(sm.parcelsHouseNoMatched)}). A 0 THB tax appears only where the roll proves the title fully exempt.`)}</p>` : "")
+      + (sm ? `<p class="small-note">${text(`จับคู่โฉนดกับแปลงได้ ${num(sm.parcelsOnRoll)} แปลง (เลขโฉนด ${num(sm.parcelsDeedMatched)} · ผ่านบ้านเลขที่ ${num(sm.parcelsHouseNoMatched)}) ภาษี 0 บาทแสดงเฉพาะโฉนดที่บัญชีพิสูจน์ว่ายกเว้นทั้งหมด`, `${num(sm.parcelsOnRoll)} parcels matched to titles (deed ${num(sm.parcelsDeedMatched)} · via house numbers ${num(sm.parcelsHouseNoMatched)}). A 0 THB tax appears only where the roll proves the title fully exempt.`)}${(() => { const o = !vid ? outsideTaxed() : null; return o && o.n ? esc(text(` ยอดทั้งเมืองรวม ${num(o.n)} แปลงที่โฉนดอยู่ในบัญชีของเทศบาลแต่รูปแปลงอยู่นอกเส้นเขตเทศบาล (ภาษีปี 2569 ${money(o.sum, 2)}) แปลงเหล่านี้จึงไม่อยู่ในรายการและไฟล์ CSV ของขอบเขตเทศบาล`, ` The city totals include ${num(o.n)} parcels whose title is on the municipal roll but whose outline lies outside the municipal boundary line (2569 tax ${money(o.sum, 2)}), so they are not in the municipality list or its CSV.`)) : ""; })()}</p>` : "")
       + (c && c.assessedRegister2569 != null && c.receiptsTaxYear2569 != null && c.debt2569 != null ? `<p class="small-note">${(() => { const gap = c.assessedRegister2569 - c.receiptsTaxYear2569 - c.debt2569; return text(`บัญชีประเมินปี 2569 รวม ${moneyShort(c.assessedRegister2569)} สูงกว่ารับชำระรวมลูกหนี้ราว ${moneyShort(gap)} ไฟล์ที่ได้รับอธิบายส่วนต่างนี้ได้ไม่ครบ เช่น ชำระในชื่อผู้อื่น หรือใบแจ้งตีกลับ ควรกระทบยอดกับกองคลังก่อนใช้ตัวเลขนี้`, `The 2569 assessment register totals ${moneyShort(c.assessedRegister2569)}, about ${moneyShort(gap)} more than receipts plus arrears. The files received explain only part of the gap (for example payments under another name or returned notices); reconcile with the finance division before using it.`); })()}</p>` : "");
   }
   function strategyTableHTML() {
