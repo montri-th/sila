@@ -1219,7 +1219,7 @@
     return (
       searchInput() +
       (lf ? `<div class="filter-row"><span class="flag-chip">${esc(text(...lf.label))}</span><button type="button" class="quiet" data-clear-filter>${text("ล้างตัวกรอง", "Clear filter")}</button></div>` : "") +
-      `<div class="section-title"><h2>${text("รายการในขอบเขต", "Records in this boundary")}</h2><span>${num(list.length)} ${text("รายการ", "records")}</span></div><div class="area-list">${list
+      `<div class="section-title"><h2>${text("รายการในขอบเขต", "Records in this boundary")}</h2><span>${num(list.length)} ${text("รายการ", list.length === 1 ? "record" : "records")}</span></div><div class="area-list">${list
         .slice(0, S.page)
         .map(
           (f) =>
@@ -1724,7 +1724,7 @@
       add(text("ประเภทอาคาร", "Building type"), esc(sv(p.type) || text("ไม่มีในแบบสำรวจ", "Not in survey")));
       add(text("วัสดุ", "Material"), esc(sv(p.material)));
       add(text("จำนวนชั้น", "Floors"), p.floors ? num(p.floors) : null);
-      add(text("อายุอาคาร", "Building age"), p.age != null ? `${num(p.age)} ${text("ปี", "years")}` : null);
+      add(text("อายุอาคาร", "Building age"), p.age != null ? `${num(p.age)} ${text("ปี", Number(p.age) === 1 ? "year" : "years")}` : null);
       add(text("รูปอาคาร", "Footprint"), p.buildingId
         ? (p.buildingMatch === "near" ? text(`ติดรูปอาคาร #${num(Number(p.buildingId.slice(10)))} ห่าง ${num(p.buildingDistM, 1)} ม.`, `Beside footprint #${num(Number(p.buildingId.slice(10)))}, ${num(p.buildingDistM, 1)} m away`)
           : text(`อยู่ในรูปอาคาร #${num(Number(p.buildingId.slice(10)))}`, `Inside footprint #${num(Number(p.buildingId.slice(10)))}`))
@@ -1743,11 +1743,11 @@
       add(text("ประเภทอาคาร", "Building type"), esc(sv(p.type) || text("ไม่มีผลสำรวจ", "No survey")));
       add(text("จำนวนชั้น", "Floors"), p.floors ? num(p.floors) : null);
       add(text("วัสดุ", "Material"), esc(sv(p.material)));
-      add(text("อายุอาคาร", "Building age"), p.age != null ? `${num(p.age)} ${text("ปี", "years")}` : null);
+      add(text("อายุอาคาร", "Building age"), p.age != null ? `${num(p.age)} ${text("ปี", Number(p.age) === 1 ? "year" : "years")}` : null);
       add(text("การใช้ตามสำรวจ", "Surveyed use"), esc(sv(p.use)));
       add(text("พื้นที่หลังคา", "Roof area"), `${num(p.areaM2)} ${text("ตร.ม.", "m²")}`);
       add(text("มูลค่าอาคารประมาณ", "Estimated building value"), p.estValue != null ? money(p.estValue) : text("ยังคิดไม่ได้", "Not calculable"));
-      add(text("ตั้งอยู่บนแปลง", "Parcels under it"), p.parcelCount ? `${num(p.parcelCount)} ${text("แปลง", "parcels")}` : text("ไม่ตรงแปลงใด", "No parcel match"));
+      add(text("ตั้งอยู่บนแปลง", "Parcels under it"), p.parcelCount ? `${num(p.parcelCount)} ${text("แปลง", p.parcelCount === 1 ? "parcel" : "parcels")}` : text("ไม่ตรงแปลงใด", "No parcel match"));
     } else if (["taxmap", "appraisal"].includes(S.dataset)) {
       const a = parcelAttr(p.id), r = taxRow(p.id);
       add(text("รหัสแปลง", "Parcel code"), esc(p.code || "—"));
