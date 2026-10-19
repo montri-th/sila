@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.8",
-  "builtAtUtc": "2026-10-19T20:16:48.802874+00:00",
+  "builtAtUtc": "2026-10-19T20:39:11.589922+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 68185,
-      "sha256": "7397f8a488fdd5a4e6333d095066584c8abc742a9f7fa12245d5bc2a55379d60",
+      "bytes": 68562,
+      "sha256": "610d2e6de1b0bd857ff236aaf6a32e057cd86904768e0bc9c71880f8d4d1abaa",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 272004,
-      "sha256": "889feef00cf3be66f1b3ebfeb2717cb046e4cc2c20a427c29f4c8a620b44aa58",
+      "bytes": 274199,
+      "sha256": "36ba38c55f436a3fc9d5b6ba2ee8b204491667eef18f105c72243741e7d73e3f",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1010,8 +1010,8 @@
     },
     {
       "path": "fabdem-layer.js",
-      "bytes": 20099,
-      "sha256": "b7f79e83a198d615903f001d3d85c03f88d53d471a9a99e302a9c450a51c2ffc",
+      "bytes": 20277,
+      "sha256": "981591af8054ee2d7fb0e2a7d6f2c6635d36034490e1a2a22a423917c9c69754",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1045,16 +1045,16 @@
     },
     {
       "path": "index.html",
-      "bytes": 15249,
-      "sha256": "a98a0c8b046d17a33e7cd52931534019cf08c3d1f6b433936f3838039ab6ead9",
+      "bytes": 15257,
+      "sha256": "739cf4f86666d1969cff8f62ab9f79e1044d84530e217e2891dfcbc2e9ce1b98",
       "mimeTypes": [
         "text/html"
       ]
     },
     {
       "path": "map-layers.css",
-      "bytes": 11125,
-      "sha256": "c63c1deceb3e3609cbd2fc55ab5ac192e9a5375b75d4ae006b55777eca50dee8",
+      "bytes": 11533,
+      "sha256": "11ebd16cad5b2154edb028d8b32adc9cef62076ff886ae8416908a543ebec827",
       "mimeTypes": [
         "text/css"
       ]
@@ -1558,9 +1558,19 @@
       ]
     },
     {
+      "path": "qa/revision-1.8-browser-checks.json",
+      "bytes": 5337,
+      "sha256": "de83e04e33895453405cb1a2a5ecfa4dd45bfc583148c4752f99b82477c5b648",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "qa/revision-1.8-publication-audit.json",
-      "bytes": 3937,
-      "sha256": "479315a7c47dc2aa499aa6d1ccc75347b7725dface660a690d4459b46206e1e0",
+      "bytes": 3865,
+      "sha256": "0b48cee8f54679dd73e73ed23a8c378d1d7193fdb2ec2d2d28da0223443d1678",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1570,7 +1580,7 @@
     {
       "path": "qa/revision-1.8-terrain-fixtures.json",
       "bytes": 614,
-      "sha256": "1c651d52a8fc64dc33c9d4bcef1d74b6bb4ca22600d0bb35b655d1e4f47085a3",
+      "sha256": "ecc80c68455086f5fab38b26dbf146071814c8b8d8a2068aa3bca997baa7448e",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1580,7 +1590,7 @@
     {
       "path": "qa/revision-1.8-terrain3d-fixtures.json",
       "bytes": 925,
-      "sha256": "17da0eb5e326d9bcd900003ba7ffbc544274292440965bd39b2bb33296687204",
+      "sha256": "ae3deca90cf6c2b583554094f4dc385b8561e894636342d07db0e956a738df23",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1799,8 +1809,8 @@
     },
     {
       "path": "reference/tax-map-method.md",
-      "bytes": 15092,
-      "sha256": "3ef7c7492d8274743f6b9162b14cb5ca4f7aad99d9d344dc20eafee4898bc3e8",
+      "bytes": 15526,
+      "sha256": "cd4016c187484b7e7f58ac03a33d62df361d53596efe082b3d36e302f59e7fac",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1819,8 +1829,8 @@
     },
     {
       "path": "reference/terrain-contract.md",
-      "bytes": 15278,
-      "sha256": "3d73a51048597d40c0686fffedf6815f0e13608e55c1e4c490526016996b4fca",
+      "bytes": 15650,
+      "sha256": "cd049297ac976118935597c6129328e98724b228a91b980eeaaffc0353fdc7e7",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -2004,8 +2014,8 @@
     },
     {
       "path": "terrain-3d.js",
-      "bytes": 42064,
-      "sha256": "95f800484c0d09c285079fd51932ac6d54e0828906f0cfa32115ede362c8371f",
+      "bytes": 42223,
+      "sha256": "354394e6248c72d642968aec83c5e84a4c679b19236675f3ece8e3a2146ffd49",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
