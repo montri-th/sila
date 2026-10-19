@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="house-points.css" />
     <link rel="stylesheet" href="context-actions.css" />
     <link rel="stylesheet" href="platform-shell.css" />
+    <link rel="stylesheet" href="missions.css?v=1.7" />
+    <link rel="stylesheet" href="tax-calculator.css?v=1.7" />
     <link rel="stylesheet" href="assets/brand/citychat-motif-motion.css" />
     <link rel="stylesheet" href="assets/brand/citychat-header-logo.css" />
     <script type="module" src="assets/brand/citychat-header-logo.js"></script>
@@ -199,14 +201,27 @@
           <span>ขอนแก่น</span><span aria-hidden="true">›</span
           ><strong>เทศบาลเมืองศิลา</strong>
         </nav>
-        <button class="my-area" data-scope="sila"><span data-icon-role="houses"></span><span data-i18n="myArea">พื้นที่ของฉัน</span></button>
         <div class="inspector-heading">
           <div class="eyebrow" id="place-eyebrow">ขอนแก่น · ข้อมูลเทศบาล</div>
           <h1 id="place-title">เทศบาลเมืองศิลา</h1>
           <p id="place-description">
-            เริ่มจากรูปอาคาร เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้อง
+            เลือกงานที่จะทำ แล้วกดสิ่งที่อยากดู แผนที่และตัวเลขจะเปลี่ยนตาม
           </p>
         </div>
+        <section class="mission-area" aria-labelledby="mission-nav-label">
+          <p id="mission-nav-label" class="mission-nav-label" data-i18n="missionPrompt">วันนี้ทำงานด้านไหน</p>
+          <div id="mission-nav" class="mission-nav" role="group" aria-labelledby="mission-nav-label">
+            <button type="button" class="mission-tab" data-mission="tax" aria-pressed="true">ภาษี</button
+            ><button type="button" class="mission-tab" data-mission="flood" aria-pressed="false">น้ำท่วม</button
+            ><button type="button" class="mission-tab" data-mission="care" aria-pressed="false">ดูแลคน</button
+            ><button type="button" class="mission-tab" data-mission="works" aria-pressed="false">โยธา</button
+            ><button type="button" class="mission-tab" data-mission="area" aria-pressed="false">พื้นที่</button>
+          </div>
+          <div id="mission-card" class="mission-card" aria-live="polite">
+            <h2 id="mission-title">งานภาษีและรายได้</h2>
+            <p class="mission-benefit">ดูว่าข้อมูลภาษีมีอะไรแล้ว ตรวจแปลงและอาคารบนแผนที่ และคิดภาษีที่ควรเก็บทีละแปลง</p>
+          </div>
+        </section>
 <div class="inspector-dataset">          <button
             id="dataset-open"
             class="dataset-trigger"
@@ -214,19 +229,12 @@
           >
             <span id="dataset-icon" class="dataset-type-icon" aria-hidden="true"></span
             ><span
-              ><small data-i18n="dataset">ชุดข้อมูล</small
+              ><small data-i18n="dataset">กำลังดู</small
               ><strong id="dataset-title">รูปอาคาร</strong></span
+            ><span class="dataset-trigger-hint" data-i18n="allDatasets">ชุดข้อมูลทั้งหมด</span
             ><span class="chevron" aria-hidden="true">⌄</span>
           </button>
 </div>
-        <details class="orientation-card"><summary><span data-icon-role="info"></span><span data-i18n="workflowTitle">เริ่มจากพื้นที่ ไปสู่แผนงาน</span></summary><div class="orientation-content"><img id="conversation-art" src="assets/brand/conversation-welcome.svg" width="96" height="72" alt="" /><ol><li><span data-icon-role="boundaries"></span><span data-i18n="workflowArea">เลือกขอบเขต เพื่อรู้ว่ากำลังดูพื้นที่ใด</span></li><li><span data-icon-role="datasets"></span><span data-i18n="workflowData">เปลี่ยนชุดข้อมูล แล้วเปิดรายการที่สนใจ</span></li><li><span data-icon-role="plan"></span><span data-i18n="workflowPlan">ตรวจที่มา ก่อนนำไปวางแผนหรือสำรวจต่อ</span></li></ol></div></details>
-        <div class="purpose-actions" role="group" aria-label="หัวข้องาน">
-          <button data-purpose="flood" data-icon-role="flood" data-i18n="floodPurpose">
-            น้ำและแผนป้องกัน</button
-          ><button data-purpose="tax" data-icon-role="parcels" data-i18n="taxPurpose">
-            ที่ดินและสิ่งปลูกสร้าง
-          </button>
-        </div>
         <div id="context-actions"></div>
         <div id="record-detail" hidden></div>
         <div class="inspector-tabs" role="tablist" aria-label="มุมมองข้อมูล">
@@ -256,7 +264,7 @@
             aria-controls="tab-content"
             data-i18n="sources"
           >
-            แหล่งข้อมูล
+            ที่มาและข้อควรรู้
           </button>
         </div>
         <div
@@ -267,14 +275,10 @@
           tabindex="0"
         >
           <div class="initial-state">
-            <h2>ข้อมูลเมืองที่ตรวจสอบต่อได้</h2>
+            <h2>ข้อมูลเมืองสำหรับงานของเทศบาล</h2>
             <p>
-              เลือกหมู่บ้านบนแผนที่ หรือเปิดเมนูชุดข้อมูลเพื่อดูอาคาร ถนน
-              สถานที่ และแผนงาน
-            </p>
-            <p>
-              ข้อมูลแปลงที่ดินยังรอยืนยันระบบพิกัด ประชากรหมู่ 11
-              มีตัวเลขที่ต้องสอบทาน
+              เลือกงานด้านบน เช่น ภาษี น้ำท่วม หรือดูแลคน แล้วกดสิ่งที่อยากดู
+              หรือคลิกหมู่บ้านบนแผนที่เพื่อดูเฉพาะพื้นที่นั้น
             </p>
             <noscript
               ><p>
@@ -317,12 +321,12 @@
         ><input
           id="dataset-search"
           type="search"
-          placeholder="ค้นหาชุดข้อมูลหรือชื่อโฟลเดอร์"
+          placeholder="ค้นหา เช่น ภาษี ถนน น้ำ"
           autocomplete="off"
       /></label>
       <div id="dataset-catalog"></div>
       <div class="dialog-footnote" data-i18n="datasetFootnote">
-        จำนวนไฟล์ไม่ใช่จำนวนชุดข้อมูล แต่ละชั้นแสดงที่มาและข้อจำกัดของตัวเอง
+        ชุดเดียวกันอาจอยู่ในหลายงาน · ข้อควรรู้ของแต่ละชุดอยู่ในแท็บ ที่มาและข้อควรรู้
       </div>
     </dialog>
     <div id="toast" class="toast" role="status" hidden></div>
@@ -335,6 +339,8 @@
     <script src="public-aggregate.js"></script>
     <script src="fabdem-layer.js"></script>
     <script src="terrain-3d.js"></script>
-    <script src="app.js?v=1.6.1"></script>
+    <script src="missions.js?v=1.7"></script>
+    <script src="tax-calculator.js?v=1.7"></script>
+    <script src="app.js?v=1.7"></script>
   </body>
 </html>

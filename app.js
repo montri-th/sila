@@ -1,7 +1,8 @@
 /* Sila public preview. Source GIS and approved municipal aggregates; no production writes. */
 (() => {
   "use strict";
-  const PublicAggregates = window.SilaPublicAggregates || {ids:[],icons:{},valid:()=>false,get:()=>null,entries:()=>[],render:()=>"",localized:v=>String(v ?? "")};
+  const PublicAggregates = window.SilaPublicAggregates || {ids:[],icons:{},valid:()=>false,get:()=>null,entries:()=>[],render:()=>"",localized:v=>String(v ?? ""),valueLabel:m=>({number:m?.value ?? "—",state:""})};
+  const Missions = window.SilaMissions;
   const $ = (id) => document.getElementById(id);
   const esc = (s) =>
     String(s ?? "").replace(
@@ -23,6 +24,7 @@
     lang: "th",
     theme: "dark",
     dataset: "buildings",
+    mission: "tax",
     mode: "2d",
     boundary: "municipality",
     scope: { type: "municipality", id: "sila" },
@@ -73,7 +75,9 @@
     preview: ["ต้นแบบสำหรับเจ้าหน้าที่", "Officer preview"],
     lightTheme: ["พื้นสว่าง", "Light theme"],
     darkTheme: ["พื้นมืด", "Dark theme"],
-    dataset: ["ชุดข้อมูล", "Dataset"],
+    dataset: ["กำลังดู", "Showing"],
+    allDatasets: ["ชุดข้อมูลทั้งหมด", "All datasets"],
+    missionPrompt: ["วันนี้ทำงานด้านไหน", "What are you working on today?"],
     boundaries: ["ขอบเขตพื้นที่", "Area boundaries"],
     layers: ["ซ้อนชั้นข้อมูล", "Layers"],
     contextLayers: ["ข้อมูลประกอบแผนที่", "Context layers"],
@@ -82,18 +86,11 @@
     buildings: ["รูปอาคาร", "Building footprints"],
     basemap: ["พื้นหลัง", "Basemap"],
     settings: ["ตัวเลือก", "Options"],
-    myArea: ["พื้นที่ของฉัน", "My area"],
-    workflowTitle: ["เริ่มจากพื้นที่ ไปสู่แผนงาน", "From an area to a plan"],
-    workflowArea: ["เลือกขอบเขต เพื่อรู้ว่ากำลังดูพื้นที่ใด", "Choose a boundary to define your area"],
-    workflowData: ["เปลี่ยนชุดข้อมูล แล้วเปิดรายการที่สนใจ", "Choose a dataset and inspect a record"],
-    workflowPlan: ["ตรวจที่มา ก่อนนำไปวางแผนหรือสำรวจต่อ", "Check sources before planning or fieldwork"],
     back: ["ย้อนกลับ", "Back"],
     fit: ["ดูเต็มพื้นที่", "Fit area"],
-    floodPurpose: ["น้ำและแผนป้องกัน", "Water & prevention"],
-    taxPurpose: ["ที่ดินและสิ่งปลูกสร้าง", "Land & buildings"],
     overview: ["ภาพรวม", "Overview"],
     list: ["รายการ", "Records"],
-    sources: ["แหล่งข้อมูล", "Sources"],
+    sources: ["ที่มาและข้อควรรู้", "Sources & notes"],
     localPreview: [
       "ดูข้อมูลในต้นแบบนี้ · ยังไม่ได้เชื่อมระบบงานเทศบาล",
       "Local preview · municipal operations are not connected",
@@ -104,8 +101,8 @@
     close: ["ปิด", "Close"],
     searchDataset: ["ค้นหาชุดข้อมูล", "Search datasets"],
     datasetFootnote: [
-      "จำนวนไฟล์ไม่ใช่จำนวนชุดข้อมูล แต่ละชั้นแสดงที่มาและข้อจำกัดของตัวเอง",
-      "File count is not dataset count. Each layer has its own source and limitations.",
+      "ชุดเดียวกันอาจอยู่ในหลายงาน · ข้อควรรู้ของแต่ละชุดอยู่ในแท็บ ที่มาและข้อควรรู้",
+      "One dataset can serve several kinds of work · each dataset’s notes are in the Sources & notes tab",
     ],
   };
   const labels = {
@@ -123,9 +120,9 @@
     villages: ["ขอบเขต 28 หมู่บ้าน", "28 village boundaries"],
     municipality: ["ขอบเขตเทศบาล", "Municipal boundary"],
     election: ["เขตเลือกตั้ง 3 เขต", "3 electoral areas"],
-    parcels: ["แปลงที่ดิน / ความพร้อมภาษี", "Parcels & tax readiness"],
-    flood: ["น้ำท่วม / แผนแก้ไข 16 จุด", "Flood planning · 16 sites"],
-    terrain: ["ภูมิประเทศ · FABDEM", "Terrain · FABDEM"],
+    parcels: ["แปลงที่ดิน (แผนที่ภาษี)", "Parcels (tax map)"],
+    flood: ["แผนแก้น้ำท่วม 16 จุด", "Flood-fix plan · 16 sites"],
+    terrain: ["ภูมิประเทศ ที่สูงที่ต่ำ", "Terrain · high and low ground"],
   };
   const colors = {
     overview: "slate",
@@ -150,14 +147,7 @@
     animals: "slate",
     healthservices: "coral",
   };
-  const groupLabels = {
-    Land: ["ที่ดินและอาคาร", "Land & buildings"],
-    Infrastructure: ["โครงสร้างพื้นฐาน", "Infrastructure"],
-    Location: ["สถานที่และบริการ", "Places & services"],
-    Water: ["น้ำและแผนงาน", "Water & planning"],
-    Living: ["ผู้คน", "People"],
-    Boundaries: ["ขอบเขตพื้นที่", "Area boundaries"],
-  };
+
   const hints = {
     houses: [
       "หมุดจากข้อมูลที่อยู่ ไม่ใช่จำนวนครัวเรือนที่ยืนยันแล้ว",
@@ -207,20 +197,7 @@
     healthservices: ["ความพร้อมข้อมูลดูแลระยะยาว · ไม่มีรายการผู้ป่วย", "Long-term care data readiness · no patient records"],
     caregroups: ["กลุ่มตามบัญชีดูแลที่ได้รับ · ไม่ใช่ผู้ป่วยทั้งหมด", "Received care-cohort groups · not all municipal patients"],
   });
-  const statusLabels = {
-    ready_external_dem: ["เชื่อมข้อมูลภูมิประเทศภายนอก", "External terrain source connected"],
-    municipal_public_summary: ["สรุประดับเทศบาล", "Municipality-wide summary"],
-    ready_with_caveats: ["ข้อมูลต้นทาง", "Source data"],
-    needs_reconciliation: ["รอสอบทาน", "To reconcile"],
-    derived_display: ["ขอบเขตทดลอง", "Derived display"],
-    blocked_crs: ["รอระบบพิกัด", "CRS pending"],
-    inferred_control_validated: [
-      "พิกัดเทียบต้นทางแล้ว",
-      "Source controls compared",
-    ],
-    document_evidence_only: ["หลักฐานเอกสาร", "Document evidence"],
-    external_team_pending: ["กำลังจัดทำ", "In preparation"],
-  };
+
   const dataset = (id = S.dataset) =>
     id === "overview"
       ? {
@@ -362,6 +339,7 @@
     if (!S.ready) return;
     const u = new URL(location.href);
     u.search = new URLSearchParams({
+      mission: S.mission,
       dataset: S.dataset,
       boundary: S.boundary,
       scope: S.scope.type === "municipality" ? "sila" : S.scope.id,
@@ -380,6 +358,7 @@
     S.dataset = q.get("dataset") || "buildings";
     if (S.dataset !== "overview" && !dataset(S.dataset))
       S.dataset = "buildings";
+    S.mission = Missions ? Missions.missionFor(S.dataset, q.get("mission")) : "tax";
     S.mode = S.dataset === "terrain" && q.get("mode") === "3d" ? "3d" : "2d";
     S.boundary = BOUNDARY_TYPES[q.get("boundary")]
       ? q.get("boundary")
@@ -424,8 +403,8 @@
       option.textContent = text(type.th, type.en);
     });
     $("dataset-search").placeholder = text(
-      "ค้นหาชุดข้อมูลหรือชื่อโฟลเดอร์",
-      "Search a dataset or source folder",
+      "ค้นหา เช่น ภาษี ถนน น้ำ",
+      "Search, e.g. tax, road, water",
     );
     for (const option of $("basemap").options) option.textContent = text(...({street:["แผนที่ถนน", "Street map"],satellite:["ภาพดาวเทียม · CityChat", "Satellite · CityChat"],"satellite-archive":["ภาพเก่า 2016/2017 · EOX", "Archive 2016/2017 · EOX"],none:["เฉพาะข้อมูลพื้นที่", "Data only"]}[option.value]));
     $("basemap").value = S.basemap;
@@ -469,7 +448,7 @@
       .setAttribute("aria-label", text("มุมมองข้อมูล", "Data views"));
     document.querySelector(".map-workspace").setAttribute("aria-label",text("แผนที่ศิลา", "Sila map"));
     document.querySelector(".map-summary").setAttribute("aria-label",text("สรุปจากขอบเขตที่เลือก", "Summary of selected boundary"));
-    document.querySelector(".purpose-actions").setAttribute("aria-label",text("หัวข้องาน", "Work topics"));
+    $("dataset-open").setAttribute("aria-label", text(`กำลังดู ${label(S.dataset)} · เปิดรายการชุดข้อมูลทั้งหมด`, `Showing ${label(S.dataset)} · open all datasets`));
     document.querySelector(".snapshot-label").textContent=text("5 ต.ค. 2569", "5 Oct 2026");
     document.title = `${scopeLabel()} · ${label(S.dataset)} | CityChat CityMETER`;
   }
@@ -484,33 +463,65 @@
     for (const [id,role] of Object.entries(controls)) { const el=$(id); el.innerHTML=icon(role,{size:20})+`<span>${el.textContent}</span>`; }
     $("dataset-icon").innerHTML = datasetIcon(S.dataset,28);
   }
-  function renderCatalog() {
-    const q = $("dataset-search").value.trim().toLowerCase();
-    const rows = [dataset("overview"), ...S.catalog.datasets].filter((d) =>
-      [d.label, label(d.id), ...(d.sourceFolders || []), ...(d.searchTerms || [])]
-        .join(" ")
-        .toLowerCase()
-        .includes(q),
-    );
-    let html = "";
-    const groups = [
-      "Boundaries",
-      "Land",
-      "Living",
-      "Infrastructure",
-      "Location",
-      "Water",
-    ];
-    for (const g of groups) {
-      const list = rows.filter((d) => d.group === g);
-      if (!list.length) continue;
-      html += `<h3 class="dataset-group-title">${esc(text(...(groupLabels[g] || [g, g])))}</h3>`;
-      for (const d of list)
-        html += `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === S.dataset}"><span class="dataset-type-icon">${datasetIcon(d.id,28)}</span><span><strong>${esc(label(d.id))}</strong><small>${esc(text(...(hints[d.id] || statusLabels[d.status] || ["ข้อมูลจากเทศบาล", "Municipal source data"])))}</small></span><span class="number">${d.id === "terrain" && S.terrainSource ? num(S.terrainSource.maxNativeZoom) : num(d.count)}<small>${d.id === "terrain" ? text("ซูมต้นทาง", "native zoom") : d.id === "overview" ? text("หมู่บ้าน", "villages") : d.id === "flood" ? text("จุดในเอกสาร", "document sites") : d.publicAggregate ? text("ไฟล์ต้นทาง", d.count === 1 ? "source file" : "source files") : d.count == null ? text("รอข้อมูล", "pending") : text("รายการต้นทาง", "source rows")}</small></span></button>`;
+  /* Which summary figure a menu row shows for each city-wide summary, in plain units. */
+  const AGGREGATE_COUNT = {
+    tax: ["receipt_rows", "ใบเสร็จในไฟล์", "receipts on file"],
+    business: ["source_business_rows", "รายการกิจการ", "business records"],
+    animals: ["detail_dogs", "สุนัข", "dogs"],
+    caregroups: ["distinct_source_keys", "รายการในบัญชี", "list entries"],
+  };
+  /* Plain main count for a dataset row: what an officer counts, not source-file rows. */
+  function datasetCount(d) {
+    const agg = d.publicAggregate ? publicAggregate(d.id) : null;
+    if (agg) {
+      const pref = AGGREGATE_COUNT[d.id];
+      const m = pref ? agg.metrics.find((x) => x.id === pref[0] && x.value !== null) : null;
+      return m ? { value: num(m.value), unit: text(pref[1], pref[2]) } : { value: "—", unit: text("ดูยอดรวม", "see totals") };
     }
+    if (d.id === "terrain") return { value: "3D", unit: text("ภาพพื้นที่", "terrain view") };
+    if (d.id === "overview") return { value: num(S.metadata.villages.length), unit: text("หมู่บ้าน", "villages") };
+    if (d.id === "flood") return { value: num(S.docs?.sites?.length ?? d.count), unit: text("จุด", "sites") };
+    const n = d.insideMunicipalityCount ?? countFor(d.id, { type: "municipality", id: "sila" }) ?? d.count;
+    return { value: num(n), unit: text(...(Missions.unit[d.id] || ["รายการ", "records"])) };
+  }
+  function renderCatalog() {
+    const rows = [dataset("overview"), ...S.catalog.datasets];
+    const html = Missions.renderCatalog({
+      language: S.lang,
+      rows,
+      mission: S.mission,
+      dataset: S.dataset,
+      query: $("dataset-search").value.trim().toLowerCase(),
+      matches: (d, q) => [d.label, label(d.id), text(...(Missions.purpose[d.id] || ["", ""])), ...(d.sourceFolders || []), ...(d.searchTerms || [])].join(" ").toLowerCase().includes(q),
+      label,
+      count: datasetCount,
+      datasetIcon,
+      icon: window.SilaIcons.icon,
+    });
     $("dataset-catalog").innerHTML =
       html ||
-      `<p>${text("ไม่พบชุดข้อมูลที่ค้นหา", "No matching datasets")}</p>`;
+      `<p>${text("ไม่พบชุดข้อมูลที่ค้นหา ลองคำอื่น เช่น ภาษี ถนน น้ำ", "No matching datasets. Try another word, such as tax, road or water.")}</p>`;
+  }
+  function renderMissions() {
+    const nav = $("mission-nav"), card = $("mission-card");
+    if (!nav || !card || !Missions) return;
+    const focused = nav.contains(document.activeElement) ? document.activeElement.dataset.mission : null;
+    nav.innerHTML = Missions.renderNav(S.mission, { language: S.lang, icon: window.SilaIcons.icon });
+    card.innerHTML = Missions.renderCard(S.mission, {
+      language: S.lang,
+      dataset: S.dataset,
+      icon: window.SilaIcons.icon,
+      datasetIcon,
+      available: (id) => id === "overview" || Boolean(dataset(id)),
+    });
+    if (focused) nav.querySelector(`[data-mission="${focused}"]`)?.focus();
+  }
+  function setMission(id, push = true) {
+    if (!Missions?.byId(id) || id === S.mission) return;
+    S.mission = id;
+    renderMissions();
+    renderCatalog();
+    if (push) syncURL();
   }
   function renderHeader() {
     const aggregateMode = String(Boolean(publicAggregate()));
@@ -544,15 +555,15 @@
     $("place-description").textContent =
       S.scope.type === "municipality"
         ? text(
-            "เลือกพื้นที่ แล้วดูข้อมูลที่เกี่ยวข้องกับงานของคุณ",
-            "Choose an area and inspect the data relevant to your work",
+            "เลือกงานที่จะทำ แล้วกดสิ่งที่อยากดู แผนที่และตัวเลขจะเปลี่ยนตาม",
+            "Choose your work, then what you want to see. The map and figures follow.",
           )
         : text(
-            "ตัวเลขและรายการด้านล่างใช้ขอบเขตนี้ ไม่เปลี่ยนตามการเลื่อนแผนที่",
-            "Figures and records use this boundary, not the current map viewport",
+            "ตัวเลขด้านล่างนับเฉพาะพื้นที่นี้ · กดชื่อเทศบาลด้านบนเพื่อกลับไปดูทั้งเมือง",
+            "Figures below count this area only · select the municipality above to see the whole city",
           );
     if (publicAggregate()) {
-      $("place-description").textContent = S.dataset === "caregroups" ? text("ดูเฉพาะกลุ่มในบัญชีดูแลที่ได้รับ ไม่ใช่ผู้ป่วยทั้งหมด แผนที่เป็นบริบทและไม่เปลี่ยนยอดจากไฟล์", "Inspect the received care cohort, not all municipal patients. The map is context and does not change source counts.") : text("ดูยอดสรุปทั้งเทศบาล ขอบเขตแผนที่ที่เลือกเป็นเพียงบริบทและไม่เปลี่ยนยอด", "Inspect municipality-wide summaries. The selected map area is context and does not change these totals.");
+      $("place-description").textContent = S.dataset === "caregroups" ? text("ยอดรวมจากบัญชีดูแลที่เทศบาลส่งมา ไม่มีรายชื่อ และไม่แยกตามหมู่บ้าน", "Totals from the care lists supplied by the municipality, without names or village split") : text("ยอดรวมทั้งเทศบาล ไม่แยกตามหมู่บ้าน", "City-wide totals, not split by village");
       const received = new Date(S.publicSummary.sourceReceivedAt + "T00:00:00Z");
       if (Number.isFinite(received.getTime())) document.querySelector(".snapshot-label").textContent = received.toLocaleDateString(S.lang === "en" ? "en-GB" : "th-TH", {day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
     } else if (S.dataset === "terrain") {
@@ -570,121 +581,69 @@
         b.setAttribute("aria-selected", String(b.dataset.tab === S.tab)),
       );
     $("tab-content").setAttribute("aria-labelledby", "tab-" + S.tab);
-    document
-      .querySelectorAll("[data-purpose]")
-      .forEach((b) =>
-        b.setAttribute(
-          "aria-pressed",
-          String(
-            b.dataset.purpose === "flood"
-              ? ["flood", "waterways"].includes(S.dataset)
-              : ["tax", "parcels", "buildings", "houses"].includes(S.dataset),
-          ),
-        ),
-      );
+    renderMissions();
+  }
+  const unitOf = (id) => text(...(Missions?.unit[id] || ["รายการ", "records"]));
+  const purposeOf = (id) => text(...(Missions?.purpose[id] || ["ข้อมูลจากเทศบาล", "Municipal data"]));
+  /* Aggregate value for the map summary: large baht amounts read as millions. */
+  function aggregateItem(m) {
+    const unit = PublicAggregates.localized(m.unit, S.lang);
+    const name = PublicAggregates.localized(m.label, S.lang);
+    if (/^(บาท|THB)$/.test(unit) && Math.abs(m.value) >= 1e6)
+      return [`${(m.value / 1e6).toLocaleString("en-US", { maximumFractionDigits: 2 })} ${text("ล้าน", "M")}`, `${name} (${unit})`];
+    return [m.value, `${name} (${unit})`];
   }
   function renderSummary() {
     const c = countFor(S.dataset);
     let items;
-    if (publicAggregate())
-      items = [[dataset().count, text("ไฟล์ต้นทางที่ตรวจแล้ว", "Inspected source files")], [null, text("ยอดย่อยตามขอบเขตแผนที่", "Allocation to map area")], [null, text("ข้อมูลรายบุคคลบนเว็บ", "Individual data on this site")]];
-    else if (S.dataset === "terrain")
-      items = [[S.terrainSource?.maxNativeZoom ?? null, text("ซูมข้อมูลต้นทาง", "Native tile zoom")], [S.terrainSource ? 22 : null, text("ซูมแสดงผลสูงสุด", "Display zoom limit")], [null, text("ฐานอ้างอิงแนวดิ่ง", "Vertical datum")]];
+    const agg = publicAggregate();
+    if (agg) {
+      items = agg.metrics.filter((m) => m.value !== null && m.id !== "source_files").slice(0, 3).map(aggregateItem);
+      if (!items.length) items = [[dataset().count, text("ไฟล์ที่เทศบาลส่งมา", "files supplied")]];
+    } else if (S.dataset === "terrain") items = [];
     else if (S.dataset === "overview")
       items = [
+        [countFor("houses"), text("จุดบ้านเลขที่", "house points")],
+        [countFor("buildings"), text("อาคาร", "buildings")],
         [
           S.scope.type === "municipality" ? boundaries().length : 1,
-          S.boundary === "municipality"
-            ? text("ขอบเขตเทศบาลจากไฟล์", "source municipal boundary")
-            : S.boundary === "village"
-              ? text("หมู่บ้านจากไฟล์", "source villages")
-              : text("เขตแสดงผลจากเส้น", "derived areas"),
-        ],
-        [countFor("houses"), text("หมุดบ้านในขอบเขต", "house points in scope")],
-        [
-          countFor("buildings"),
-          text("รูปอาคารในขอบเขต", "footprints in scope"),
+          S.boundary === "village" ? text("หมู่บ้าน", "villages") : S.boundary === "election" ? text("เขตเลือกตั้ง", "electoral areas") : text("เขตเทศบาล", "municipality"),
         ],
       ];
     else if (S.dataset === "population")
       items = [
+        [populationFor(), text("คน", "people")],
         [
-          populationFor(),
-          text("คน ตามตัวเลขรวมต้นทาง", "people · source total"),
+          S.scope.type === "election" ? null : S.scope.type === "village" ? num(scopeData().male) : num(S.metadata.villages.reduce((a, v) => a + v.male, 0)),
+          text("ชาย", "male"),
         ],
         [
-          S.scope.type === "election"
-            ? null
-            : S.scope.type === "village"
-              ? num(scopeData().male)
-              : num(S.metadata.villages.reduce((a, v) => a + v.male, 0)),
-          text("ชาย ตามต้นทาง", "male · source"),
-        ],
-        [
-          S.scope.type === "election"
-            ? null
-            : S.scope.type === "village"
-              ? num(scopeData().female)
-              : num(S.metadata.villages.reduce((a, v) => a + v.female, 0)),
-          text("หญิง ตามต้นทาง", "female · source"),
+          S.scope.type === "election" ? null : S.scope.type === "village" ? num(scopeData().female) : num(S.metadata.villages.reduce((a, v) => a + v.female, 0)),
+          text("หญิง", "female"),
         ],
       ];
     else if (S.dataset === "flood")
       items = [
-        [
-          S.docs.sites.length,
-          text("จุดในเอกสารแผน", "sites in planning documents"),
-        ],
-        [null, text("พื้นที่น้ำท่วมปัจจุบัน", "current flooded area")],
-        [
-          S.docs.summary.estimateAvailableCount,
-          text("จุดที่อ่านประมาณการได้", "sites with clear estimates"),
-        ],
+        [S.docs.sites.length, text("จุดในแผนเดิม", "sites in the past plan")],
+        [S.docs.summary.estimateAvailableCount, text("จุดที่มีประมาณการงบ", "sites with a cost estimate")],
       ];
-    else if (S.dataset === "parcels")
-      items = [
-        [dataset().count, text("รูปแปลงในไฟล์ต้นทาง", "source parcel records")],
-        [
-          c,
-          text("รูปแปลงตัดขอบเขตที่เลือก", "parcel shapes intersecting scope"),
-        ],
-        [null, text("ความครอบคลุมทะเบียนภาษี", "tax register coverage")],
-      ];
-    else if (S.dataset === "terrain")
-      items = [
-        [null, text("ความสูงภูมิประเทศ", "terrain elevation")],
-        [null, text("dataset ที่พร้อมใช้", "available dataset")],
-        [null, text("source ที่เลือกแล้ว", "selected source")],
-      ];
-    else
-      items = [
-        [c, text("รายการในขอบเขต", "records in scope")],
-        [dataset().count, text("รายการต้นทางทั้งหมด", "all source records")],
-        [
-          dataset().mappedCount,
-          text("รายการที่มีรูป/พิกัด", "records with geometry"),
-        ],
-      ];
+    else items = [[c, `${unitOf(S.dataset)}${text("ในพื้นที่นี้", " in this area")}`]];
     $("summary-title").textContent = label(S.dataset);
-    $("summary-eyebrow").textContent = publicAggregate() ? S.dataset === "caregroups" ? text("กลุ่มดูแลจากบัญชีที่ได้รับ", "Received care cohort") : text("ข้อมูลสรุปทั้งเทศบาลเมืองศิลา", "Sila municipality-wide summary") : scopeLabel();
+    $("summary-eyebrow").textContent = agg ? text("ยอดรวมทั้งเทศบาลเมืองศิลา", "Sila city-wide totals") : scopeLabel();
     $("summary-metrics").innerHTML = items
       .map(
         ([v, k]) =>
           `<div><strong>${typeof v === "string" ? esc(v) : num(v)}</strong><span>${esc(k)}</span></div>`,
       )
       .join("");
-    $("summary-note").textContent =
-      publicAggregate() ? PublicAggregates.localized(publicAggregate().limitations, S.lang) : S.dataset === "terrain" ? text("เงาจาก FABDEM สำหรับอำเภอเมืองขอนแก่น ซูมใกล้เป็นการขยายภาพ ไม่เพิ่มรายละเอียด ไม่ใช่ระดับน้ำท่วม และยังไม่ยืนยันฐานอ้างอิงแนวดิ่ง", "FABDEM hillshade for Mueang Khon Kaen. Closer zoom enlarges the source; it adds no detail, is not flood depth, and has an unverified vertical datum.") : S.dataset === "overview"
-        ? text(
-            "นับรายการที่ตัดกับขอบเขตจากไฟล์ ไม่ใช่จำนวนครัวเรือนที่ยืนยันแล้ว",
-            "Records intersecting the supplied boundary; not verified unique households",
-          )
-        : hints[S.dataset]
-          ? text(...hints[S.dataset])
-          : text(
-              "นับรายการที่ตัดกับขอบเขต เส้นหรือรูปที่ข้ามพื้นที่อาจอยู่ในหลายหมู่บ้าน",
-              "Boundary-intersection count. Crossing features may appear in several villages",
-            );
+    $("summary-metrics").hidden = !items.length;
+    $("summary-note").textContent = agg
+      ? text("ยอดรวมจากไฟล์ที่เทศบาลส่งมา ไม่แยกตามหมู่บ้าน · อ่านความหมายแต่ละตัวเลขในแผงด้านขวา", "Totals from files supplied by the municipality, not split by village · each figure is explained in the panel")
+      : S.dataset === "terrain"
+        ? text("ใช้ดูรูปทรงที่สูงที่ต่ำประกอบการวางแผน ไม่ใช่ระดับน้ำท่วม", "Shows the shape of high and low ground for planning; not flood depth")
+        : S.dataset === "flood"
+          ? text("แผนเดิม พ.ศ. 2564–2567 ไม่ใช่สถานการณ์น้ำท่วมตอนนี้", "Past 2021–2024 plan, not current flooding")
+          : purposeOf(S.dataset);
   }
   const notice = (title, body) =>
     `<div class="notice"><strong>${esc(title)}</strong><p>${esc(body)}</p></div>`;
@@ -700,45 +659,32 @@
     return areas
       .map(
         (a, i) =>
-          `<button class="area-row" data-scope="${a.id}" aria-current="${S.scope.id === a.id}"><span><span class="area-name">${esc(areaLabel(a))}</span><span class="area-meta">${metric === "population" ? text("ตัวเลขต้นทาง ปี 2569", "Source figures · 2026") : esc(label(metric)) + " · " + text("รายการที่ตัดกับขอบเขต", "Boundary-intersection records")}${metric === "population" && a.populationDiscrepancy ? " · " + text("ตัวเลขรวมรอสอบทาน", "total to reconcile") : ""}</span><span class="area-track"><span class="area-bar" style="width:${vals[i] == null ? 0 : Math.round((vals[i] / max) * 100)}%;background:${categoryColor(metric)}"></span></span></span><span class="area-value">${num(vals[i])}<small>${metric === "population" ? text("คน", "people") : text("รายการ", "records")}</small></span></button>`,
+          `<button class="area-row" data-scope="${a.id}" aria-current="${S.scope.id === a.id}"><span><span class="area-name">${esc(areaLabel(a))}</span><span class="area-meta">${metric === "population" ? text("ตัวเลขปี 2569", "2026 figures") : esc(label(metric))}${metric === "population" && a.populationDiscrepancy ? " · " + text("ตัวเลขรวมรอเทศบาลยืนยัน", "total awaiting confirmation") : ""}</span><span class="area-track"><span class="area-bar" style="width:${vals[i] == null ? 0 : Math.round((vals[i] / max) * 100)}%;background:${categoryColor(metric)}"></span></span></span><span class="area-value">${num(vals[i])}<small>${metric === "population" ? text("คน", "people") : esc(unitOf(metric))}</small></span></button>`,
       )
       .join("");
   }
-  function publicUpdateLinks(ids = PublicAggregates.ids) {
-    const available = ids.filter(id => publicAggregate(id));
-    if (!available.length) return S.publicSummaryStatus === "unavailable" ? notice(text("ข้อมูลสรุปรอบใหม่ยังเปิดไม่สำเร็จ", "New public summaries could not be loaded"), text("ชั้นแผนที่เดิมยังใช้ได้ ลองโหลดหน้าใหม่เพื่อเปิดข้อมูลสรุป โดยสถานะนี้ไม่ได้หมายความว่าไม่มีข้อมูลเทศบาล", "Existing map layers remain usable. Reload to retry the summaries; this state does not mean municipal data is absent.")) : "";
-    return `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลเพิ่มสำหรับงานเทศบาล", "New evidence for municipal work")}</h2><span>${text("ข้อมูลสรุปจากไฟล์", "Source summaries")}</span></div><div class="aggregate-links">${available.map(id => `<button class="mini-action" data-dataset="${esc(id)}">${datasetIcon(id,20)}<span>${esc(label(id))}</span></button>`).join("")}</div><p class="inline-note">${text("เริ่มจากยอดสรุปและความพร้อมต้นทาง ข้อมูลรายบุคคลใช้ผ่านช่องทางเจ้าหน้าที่ที่ได้รับสิทธิ", "Start with summary evidence and source readiness. Individual data belongs in the authorized Officer workflow.")}</p></section>`;
-  }
+  /* One short pointer replaces stacked caveat boxes; details live in the sources tab. */
+  const notesLink = () =>
+    `<p class="inline-note notes-link">${text("ก่อนนำตัวเลขไปใช้ อ่าน", "Before using these figures, read")} <button type="button" class="text-button" data-open-tab="source">${text("ที่มาและข้อควรรู้", "sources and notes")}</button></p>`;
+
   function overviewContent() {
-    if (publicAggregate()) return (S.dataset === "healthservices" ? publicUpdateLinks(["caregroups"]) : "") + publicAggregateView("overview");
+    if (publicAggregate()) return publicAggregateView("overview");
     if (S.dataset === "flood") return floodContent();
-    if (S.dataset === "parcels") return publicUpdateLinks(["tax"]) + parcelContent();
+    if (S.dataset === "parcels") return parcelContent();
     if (S.dataset === "terrain") return terrainContent();
-    let html = ["overview", "buildings"].includes(S.dataset) ? publicUpdateLinks() : S.dataset === "health" ? publicUpdateLinks(["caregroups", "healthservices", "business", "animals"]) : "";
+    let html = "";
     if (S.boundary === "election")
-      html += notice(
-        text("ขอบเขตสำหรับแสดงผล", "Derived display boundary"),
-        text(
-          "ต่อรูปจากไฟล์เส้นเขตเลือกตั้ง ไม่ใช่การรับรองขอบเขตทางกฎหมาย และยังไม่มีประชากรแยกตามเขต",
-          "Joined from electoral boundary lines; legal authority is unverified. Electoral-area population is unavailable.",
-        ),
-      );
+      html += `<p class="inline-note">${text("เขตเลือกตั้งเป็นขอบเขตทดลองที่ต่อจากเส้นในไฟล์ ยังไม่มีประชากรแยกตามเขต", "Electoral areas are trial boundaries joined from source lines; no population by area yet")}</p>`;
     if (S.dataset === "population") html += populationNotice();
     if (S.dataset === "overview") {
-      html += `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลของพื้นที่นี้", "Data for this area")}</h2><span>${text("จากไฟล์ที่ได้รับ", "received files")}</span></div><div class="facts-grid">${fact(countFor("houses"), text("หมุดบ้านเลขที่", "House number points"))}${fact(countFor("buildings"), text("รูปอาคาร", "Building footprints"))}${fact(countFor("roads"), text("ช่วงถนนขึ้นทะเบียน", "Registered road segments"))}${fact(countFor("cctv"), text("ตำแหน่งกล้อง", "CCTV locations"))}</div><p class="inline-note">${text("รูปและหมุดอาจตัดหลายขอบเขต ไม่บวกยอดย่อยเป็นยอดเทศบาลโดยอัตโนมัติ", "Shapes may intersect multiple areas. Subtotals are not automatically additive.")}</p></section>`;
-      html += notice(
-        text("เริ่มจากคำถามของเทศบาล", "Start with the municipal question"),
-        text(
-          "น้ำและแผนป้องกัน: ดูแหล่งน้ำและแผนเดิม · ที่ดินและสิ่งปลูกสร้าง: ดูรูปอาคารและข้อมูลที่รอยืนยันเพื่อเชื่อมทะเบียนภาษี",
-          "Water: inspect water bodies and historical plans. Land and buildings: inspect footprints and data needed for tax reconciliation.",
-        ),
-      );
+      html += `<section class="panel-section"><div class="section-title"><h2>${text("ในพื้นที่นี้มี", "In this area")}</h2></div><div class="facts-grid">${fact(countFor("houses"), text("จุดบ้านเลขที่", "House number points"))}${fact(countFor("buildings"), text("อาคาร", "Buildings"))}${fact(countFor("roads"), text("ช่วงถนนขึ้นทะเบียน", "Registered road segments"))}${fact(countFor("cctv"), text("กล้อง CCTV", "CCTV cameras"))}</div>${notesLink()}</section>`;
     } else if (
       !["population", "villages", "municipality", "election"].includes(
         S.dataset,
       )
     ) {
-      html += `<section class="panel-section"><div class="section-title"><h2>${esc(label(S.dataset))}</h2><span class="status-label">${text(...(statusLabels[dataset().status] || ["ข้อมูลต้นทาง", "Source data"]))}</span></div><div class="facts-grid">${fact(countFor(S.dataset), text("รายการในขอบเขต", "In this boundary"))}${fact(dataset().count, text("ต้นทางทั้งหมด", "All source records"))}</div><p>${esc(text(...(hints[S.dataset] || ["รายการที่วางบนแผนที่ได้จากข้อมูลที่ได้รับ", "Mapped from received source files"])))}</p><button class="more-button" data-show-list>${text("ดูรายการในพื้นที่นี้", "Browse records in this area")}</button></section>`;
+      const chip = Missions?.status[dataset().status] ? `<span class="status-label">${esc(text(...Missions.status[dataset().status]))}</span>` : "";
+      html += `<section class="panel-section"><div class="section-title"><h2>${esc(label(S.dataset))}</h2>${chip}</div><p>${esc(purposeOf(S.dataset))}</p><div class="facts-grid">${fact(countFor(S.dataset), `${unitOf(S.dataset)}${text("ในพื้นที่นี้", " in this area")}`)}</div><button class="more-button" data-show-list>${text("ดูรายการในพื้นที่นี้", "Browse records in this area")}</button>${notesLink()}</section>`;
     }
     if (S.scope.type === "municipality") {
       const metric = [
@@ -757,42 +703,30 @@
             : (countFor(metric, { type: S.boundary, id: b.id }) ?? -1) -
               (countFor(metric, { type: S.boundary, id: a.id }) ?? -1),
         );
-      html += `<section class="panel-section"><div class="section-title"><h2>${text("เลือกพื้นที่เพื่อลงรายละเอียด", "Select an area to drill down")}</h2><span>${text("ตามขอบเขตไฟล์", "source boundaries")}</span></div><div class="area-list">${areaRows(sort, metric)}</div></section>`;
+      html += `<section class="panel-section"><div class="section-title"><h2>${text("ดูทีละพื้นที่", "Look at one area")}</h2><span>${text("กดชื่อเพื่อซูมเข้า", "select a name to zoom in")}</span></div><div class="area-list">${areaRows(sort, metric)}</div></section>`;
     } else {
       const place = scopeData();
-      html += `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลประกอบพื้นที่", "Area context")}</h2></div><div class="facts-grid">${fact(populationFor(), text("ประชากรตามตัวเลขรวม", "Reported population"), text("ปี 2569 · รอสอบทานที่มา", "2026 · source validation pending"))}${fact(place.areaKm2, text("พื้นที่จากรูปขอบเขต", "Calculated boundary area"), text("ตารางกิโลเมตร · ไม่ใช่พื้นที่ทางการ", "km² · not certified area"), 2)}</div><p class="inline-note">${text("เลือก dataset อื่นได้โดยยังอยู่ในพื้นที่นี้", "Switch datasets while staying in this area")}</p></section>`;
+      html += `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลพื้นที่นี้", "About this area")}</h2></div><div class="facts-grid">${fact(populationFor(), text("ประชากร", "Population"), text("ตัวเลขปี 2569", "2026 figure"))}${fact(place.areaKm2, text("ขนาดพื้นที่โดยประมาณ", "Approximate size"), text("ตารางกิโลเมตร วัดจากแผนที่", "km², measured from the map"), 2)}</div><p class="inline-note">${text("เปลี่ยนงานหรือชุดข้อมูลได้ โดยยังอยู่ในพื้นที่นี้", "You can switch work or data and stay in this area")}</p></section>`;
       if (S.scope.type === "village" && place.populationDiscrepancy)
         html += populationNotice();
     }
     return html;
   }
   function populationNotice() {
-    return notice(
-      text("ตัวเลขประชากรรอสอบทาน", "Population needs reconciliation"),
-      S.scope.type === "village"
-        ? text(
-            `หมู่ ${scopeData().number}: รวมต้นทาง ${num(scopeData().populationReported)} คน ชาย+หญิง ${num(scopeData().male + scopeData().female)} คน · วันอ้างอิงและเจ้าของข้อมูลยังต้องยืนยัน`,
-            `Village ${scopeData().number}: source total ${num(scopeData().populationReported)}; male + female ${num(scopeData().male + scopeData().female)}. Reference date and authority are unverified.`,
-          )
-        : text(
-            "รวมตามต้นทาง 55,838 คน เทียบกับชาย+หญิง 55,238 คน ต่างกัน 600 คนที่หมู่ 11 ยังไม่เลือกค่าหนึ่งเป็นประชากรทางการ",
-            "Reported total 55,838 versus male + female 55,238; a difference of 600 at village 11. Neither is a certified municipal total.",
-          ),
-    );
+    return `<p class="inline-note">${S.scope.type === "village"
+      ? text(
+          `หมู่ ${scopeData().number}: ยอดรวม ${num(scopeData().populationReported)} คน แต่ชายรวมหญิงได้ ${num(scopeData().male + scopeData().female)} คน รอเทศบาลยืนยัน`,
+          `Village ${scopeData().number}: total ${num(scopeData().populationReported)}, but male + female is ${num(scopeData().male + scopeData().female)}; awaiting confirmation`,
+        )
+      : text(
+          "ยอดรวม 55,838 คน แต่ชายรวมหญิงได้ 55,238 คน ต่างกัน 600 คนที่หมู่ 11 รอเทศบาลยืนยัน",
+          "Total 55,838, but male + female is 55,238; the 600 difference is in village 11 and awaits confirmation",
+        )}</p>`;
   }
   function floodContent() {
     return (
-      notice(
-        text(
-          "หลักฐานสำหรับวางแผน ไม่ใช่การแจ้งเตือน",
-          "Planning evidence, not a flood alert",
-        ),
-        text(
-          "เอกสารแผน พ.ศ. 2564–2567 มี 16 จุด ไม่มีพิกัด GIS ที่ตรวจยืนยันและไม่มีขอบเขตน้ำท่วมปัจจุบัน แผนที่จึงแสดงขอบเขตพื้นที่เดิม",
-          "The 2021–2024 plan has 16 sites, without validated site coordinates or a current flood footprint. The map retains the area boundaries.",
-        ),
-      ) +
-      `<section class="panel-section"><div class="facts-grid">${fact(16, text("จุดในเอกสารแผน", "Historical planning sites"))}${fact(null, text("น้ำท่วมปัจจุบัน", "Current flooding"), text("ยังไม่มีข้อมูลส่วนนี้", "No current evidence"))}</div></section><div class="section-title"><h2>${text("จุดและแนวทางในแผนเดิม", "Sites and proposals in the plan")}</h2><span>${text("ยังไม่กรองตามพิกัด", "not spatially filtered")}</span></div>` +
+      `<p class="inline-note flood-note">${text("แผนเดิม พ.ศ. 2564–2567 ใช้ประกอบการวางแผน ไม่ใช่การแจ้งเตือนน้ำท่วม จุดในแผนยังไม่มีพิกัดบนแผนที่", "Past 2021–2024 plan for planning use, not a flood alert. Plan sites are not yet pinned on the map.")}</p>` +
+      `<section class="panel-section"><div class="facts-grid">${fact(16, text("จุดในแผนเดิม", "Sites in the past plan"))}${fact(null, text("น้ำท่วมตอนนี้", "Flooding now"), text("ยังไม่มีข้อมูลส่วนนี้", "Not available"))}</div></section><div class="section-title"><h2>${text("ปัญหาและแนวทางแก้ในแผนเดิม", "Problems and fixes in the past plan")}</h2></div>` +
       S.docs.sites
         .map(
           (d) =>
@@ -801,37 +735,15 @@
         .join("")
     );
   }
+  /* Parcel caveats live in the sources tab; the overview keeps the task. */
+  const PARCEL_NOTES = [
+    ["ใช้ดูตำแหน่งประกอบงาน ยังไม่ใช่หลักฐานแนวเขตทางกฎหมาย ระบบพิกัดในไฟล์ต้นทางไม่ได้ระบุ จึงเทียบกับข้อมูลบ้านและอาคารแล้วรอเจ้าหน้าที่รับรอง", "For locating work only, not legal boundary evidence. The source file has no stated coordinate system; it was matched to house and building data and awaits official confirmation."],
+    ["ไฟล์ส่งมา 40,368 แปลง แสดงได้ 40,367 รูป · 1 รูปไม่มีพื้นที่ · 48 รูปปรับให้แสดงได้ โดยเก็บต้นฉบับไว้", "40,368 parcels supplied; 40,367 shown · 1 has no area · 48 were adjusted for display, with the originals kept."],
+    ["ก่อนใช้กับงานภาษี ต้องแก้รหัสแปลงว่าง 77 แปลง กลุ่มรหัสซ้ำ 47 กลุ่ม และเนื้อที่อ่านไม่ได้ 5,453 แปลง", "Before tax use, fix 77 blank parcel codes, 47 duplicate-code groups and 5,453 unreadable area values."],
+    ["ไม่มีชื่อเจ้าของหรือเลขผู้เสียภาษีบนเว็บ และยังไม่ได้จับคู่แปลงกับอาคารเป็นรายการเดียวกัน", "No owner names or taxpayer numbers on this site; parcels and buildings are not yet matched one-to-one."],
+  ];
   function parcelContent() {
-    return (
-      notice(
-        text(
-          "ดูรูปแปลงเพื่อวางแผนพื้นที่",
-          "Inspect parcels for area planning",
-        ),
-        text(
-          "พิกัดแปลงเทียบข้อมูลต้นทางแล้ว โดยใช้พิกัดอ้างอิงในข้อมูลบ้านและรูปอาคาร ระบบพิกัดในไฟล์ยังเป็น UNKNOWN จึงรอเจ้าหน้าที่รับรองก่อนใช้เป็นหลักฐานทางกฎหมายหรือภาษี",
-          "Parcel coordinates were compared against source house controls and building footprints. The source CRS remains UNKNOWN; formal confirmation is required for legal or tax use.",
-        ),
-      ) +
-      `<section class="panel-section"><div class="facts-grid">${fact(countFor("parcels"), text("รูปแปลงตัดขอบเขตนี้", "Parcel shapes intersecting this scope"))}${fact(null, text("ความครอบคลุมภาษี", "Tax coverage"), text("รอทะเบียนต้นทางและตัวหาร", "authoritative register pending"))}</div><button data-show-list class="more-button">${text("ตรวจรายการแปลงในพื้นที่นี้", "Inspect parcels in this scope")}</button></section>` +
-      notice(
-        text("แผนที่ใช้รูปแสดงผล", "Display geometry"),
-        text(
-          "ต้นทาง 40,368 รายการ แสดงได้ 40,367 รูป · 1 รูปไม่มีพื้นที่จึงไม่วาด · 48 รูปปรับ topology เพื่อแสดงผล ไม่มีชื่อเจ้าของหรือรหัสผู้เสียภาษี และยังไม่จับคู่แปลงกับอาคารเป็นรายการเดียวกัน",
-          "40,368 source rows; 40,367 display shapes. One zero-area shape is quarantined; 48 shapes were repaired for display. Owner and taxpayer identifiers are excluded. Parcels and buildings have no verified entity match.",
-        ),
-      ) +
-      notice(
-        text(
-          "ข้อมูลที่ต้องสอบทานก่อนงานภาษี",
-          "Reconcile before tax operations",
-        ),
-        text(
-          "รหัสแปลงว่าง 77 รายการ · 47 กลุ่มรหัสซ้ำ · ค่าพื้นที่อ่านไม่ได้ 5,453 รายการ ไม่ใช้รูปหรือค่าพื้นที่ยืนยันว่าอยู่ในทะเบียนภาษี",
-          "77 blank parcel codes; 47 duplicate-code groups; 5,453 unreadable area values. Geometry or area values do not prove tax registration.",
-        ),
-      )
-    );
+    return `<section class="panel-section"><p>${esc(purposeOf("parcels"))}</p><div class="facts-grid">${fact(countFor("parcels"), text("แปลงในพื้นที่นี้", "Parcels in this area"))}${fact(null, text("แปลงที่อยู่ในบัญชีภาษีแล้ว", "Parcels on the tax roll"), text("ยังไม่มีข้อมูลส่วนนี้", "Not available yet"))}</div><button data-show-list class="more-button">${text("ดูรายการแปลงในพื้นที่นี้", "List parcels in this area")}</button><button type="button" class="more-button" data-tool="tax-calculator">${text("คิดภาษีที่ควรเก็บของหนึ่งแปลง", "Work out the tax due for one parcel")}</button>${notesLink()}</section>`;
   }
   function terrainStateLabel() {
     if (S.mode === "3d") {
@@ -855,9 +767,11 @@
     return text(...(labels[S.terrainStatus.state] || ["ข้อมูล FABDEM พร้อมเชื่อมจาก CityMETER", "FABDEM source available from CityMETER"]));
   }
   function terrainContent() {
+    return `<section class="panel-section"><p>${text("ดูว่าตรงไหนสูง ตรงไหนต่ำ ช่วยคิดเรื่องทางน้ำและจุดที่น้ำอาจขัง ภาพนี้แสดงรูปทรงพื้นที่ ไม่ใช่ระดับน้ำท่วม", "See where ground is high or low to think about water paths and pooling. It shows land shape, not flood depth.")}</p><p id="terrain-state">${esc(terrainStateLabel())}</p><p>${text("กด 2D เหนือแผนที่เพื่ออ่านตำแหน่ง หรือกด 3D เพื่อหมุนและเอียงดู ตำแหน่งและระดับซูมจะตามกันเมื่อสลับ", "Choose 2D above the map to read locations, or 3D to rotate and tilt. Position and zoom carry over when you switch.")}</p>${notesLink()}</section>`;
+  }
+  function terrainSources() {
     const s = S.terrainSource;
-    return notice(text("ดูรูปทรงพื้นที่ประกอบการวางแผน", "Inspect terrain form for planning"), text("เงาภูมิประเทศ FABDEM ครอบคลุมอำเภอเมืองขอนแก่น ขอบเขตเทศบาลและหมู่บ้านยังใช้บริบทเดิม แสงช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม", "FABDEM hillshade covers Mueang Khon Kaen district while keeping the current municipal and village context. Shading reveals terrain form; it is not elevation colouring or flood risk.")) +
-      `<section class="panel-section"><p id="terrain-state">${esc(terrainStateLabel())}</p><p>${text("เลือก 2D เหนือแผนที่เพื่ออ่านตำแหน่ง หรือเลือก 3D เพื่อหมุนและเอียงดูรูปทรงพื้นที่ในหน้านี้ ตำแหน่งและระดับซูมจะตามกันเมื่อสลับมุมมอง", "Choose 2D above the map to inspect locations, or choose 3D to rotate and tilt the terrain here. Switching views keeps the same centre and zoom.")}</p><p class="inline-note">${text("3D แสดงภูมิประเทศกับขอบเขตบริบท ส่วนชั้นข้อมูลซ้อนและการเลือกรายการใช้ใน 2D ไม่มีการสร้างความสูงอาคารหรือระดับน้ำจากข้อมูลนี้", "3D shows terrain and boundary context. Context overlays and record selection remain in 2D; no building heights or water levels are inferred.")}</p></section>` +
+    return `<p class="inline-note">${text("เงาภูมิประเทศ FABDEM ครอบคลุมอำเภอเมืองขอนแก่น แสงช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม · 3D ไม่สร้างความสูงอาคารหรือระดับน้ำ", "FABDEM hillshade for Mueang Khon Kaen district. Shading shows form, not elevation colours or flood risk · 3D does not infer building heights or water levels.")}</p>` +
       `<dl class="source-dl"><dt>${text("ชุดข้อมูล", "Dataset")}</dt><dd>${esc(s?.dataset || "FABDEM")}</dd><dt>${text("รายละเอียดต้นทาง", "Source detail")}</dt><dd>${esc(s?.resolution || text("กำลังเปิดคำอธิบายต้นทาง", "Source description is loading"))}</dd><dt>${text("รุ่นไฟล์แสดงผล", "Tile build version")}</dt><dd>${esc(s?.version || "—")} · ${text("วันสร้าง tile ไม่ใช่วันสำรวจภูมิประเทศ", "Tile build date is not terrain survey date")}</dd><dt>${text("ระดับซูม", "Zoom")}</dt><dd>${text("ข้อมูลต้นทางถึงซูม", "Native source through zoom")} ${num(s?.maxNativeZoom)} · ${text("ขยายแสดงผลถึง 22 โดยไม่เพิ่มรายละเอียด", "Display overzoom through 22 adds no detail")}</dd><dt>${text("ฐานอ้างอิงแนวดิ่ง", "Vertical datum")}</dt><dd>${esc(s?.verticalDatum || text("ยังไม่ประกาศในคำอธิบายที่ได้รับ", "Not declared in the supplied source description"))}</dd><dt>${text("สิทธิ์และที่มา", "Rights and source")}</dt><dd>${esc(s?.attribution || "—")}${s?.sourceUrl ? ` · <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener">${text("ต้นทาง", "Source")}</a>` : ""}${s?.licenseUrl ? ` · <a href="${esc(s.licenseUrl)}" target="_blank" rel="noopener">${text("อ่านเงื่อนไข", "Read terms")}</a>` : ""}</dd></dl>`;
   }
   function renderTerrainControls() {
@@ -1032,19 +946,23 @@
         .slice(0, S.page)
         .map(
           (f) =>
-            `<button class="area-row" data-record="${esc(f.properties.id)}"><span class="area-name">${esc(f.properties.label || f.properties.id)}<span class="area-meta">${esc(f.properties.sourceFile || f.properties.sourceFolder)} · ${text("รายการ", "record")} ${f.properties.sourceRecord}${f.properties.villageIds?.length > 1 ? " · " + text("ตัดหลายหมู่บ้าน", "crosses villages") : ""}</span></span><span aria-hidden="true">›</span></button>`,
+            `<button class="area-row" data-record="${esc(f.properties.id)}"><span class="area-name">${esc(f.properties.label || f.properties.id)}<span class="area-meta">${esc(villageNamesOf(f).join(" · ") || text("ยังไม่ระบุหมู่บ้าน", "village not assigned"))}${f.properties.villageIds?.length > 1 ? " · " + text("อยู่บนเส้นแบ่งหลายหมู่บ้าน", "on a village dividing line") : ""}</span></span><span aria-hidden="true">›</span></button>`,
         )
         .join(
           "",
-        )}</div>${!list.length ? `<div class="empty-state"><h3>${text(S.search ? "ไม่พบรายการที่ค้นหา" : "ไม่พบรายการจากชั้นนี้ในขอบเขต", S.search ? "No matching records" : "No mapped records in this boundary")}</h3><p>${text("ไม่ใช่การยืนยันว่าไม่มีสิ่งนี้ในพื้นที่จริง", "This does not prove the real-world absence of these objects.")}</p></div>` : ""}${list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : ""}<p class="inline-note">${text("นับจากข้อมูลที่ได้รับ รายการในหลายพื้นที่ไม่ใช่รายการซ้ำที่ควรลบทิ้ง", "Counts use received data. Membership in several areas does not mean a duplicate should be deleted.")}</p><button class="more-button" data-export>${text("ดาวน์โหลดรายการที่ค้นหา · CSV", "Download matching records · CSV")}</button>`
+        )}</div>${!list.length ? `<div class="empty-state"><h3>${text(S.search ? "ไม่พบรายการที่ค้นหา" : "ไม่พบรายการจากชั้นนี้ในขอบเขต", S.search ? "No matching records" : "No mapped records in this boundary")}</h3><p>${text("ไม่พบในข้อมูลที่ได้รับ ไม่ได้แปลว่าในพื้นที่จริงไม่มี", "Not found in the supplied data; this does not mean none exist on the ground.")}</p></div>` : ""}${list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : ""}<p class="inline-note">${text("รายการที่อยู่บนเส้นแบ่งจะเห็นได้ในหลายหมู่บ้าน ไม่ใช่รายการซ้ำที่ต้องลบ", "Items on a dividing line appear in several villages; they are not duplicates to delete.")}</p><button class="more-button" data-export>${text("ดาวน์โหลดรายการที่ค้นหา · CSV", "Download matching records · CSV")}</button>`
     );
   }
+  const villageNamesOf = (f) => (f.properties.villageIds || []).map((id) => {
+    const v = S.metadata.villages.find((x) => x.id === id);
+    return v ? (S.lang === "en" ? `Village ${v.number}` : v.label) : id;
+  });
   function searchInput() {
     return `<label class="search-field list-search"><span class="sr-only">${text("ค้นหารายการ", "Search records")}</span><input type="search" id="record-search" placeholder="${text("ค้นหาชื่อ บ้านเลขที่ หรือหมู่บ้าน", "Search a name, house number or village")}" value="${esc(S.search)}"></label>`;
   }
   function sourcesContent() {
     if (publicAggregate()) return publicAggregateView("source");
-    if (S.dataset === "terrain") return terrainContent();
+    if (S.dataset === "terrain") return terrainSources();
     const d = dataset();
     const sourceFolders =
       S.dataset === "overview"
@@ -1052,7 +970,17 @@
         : S.catalog.folders.filter((f) =>
             (d.sourceFolders || []).includes(f.folder || f.title || f.name),
           );
-    return `<div class="section-title"><h2>${text("ข้อมูลที่ใช้ในมุมมองนี้", "Source for this view")}</h2><span class="status-label">${text(...(statusLabels[d.status] || ["ข้อมูลต้นทาง", "Source data"]))}</span></div><dl class="source-dl"><dt>${text("ความหมายของจำนวน", "Count meaning")}</dt><dd>${esc(text(...(hints[S.dataset] || ["จำนวนรายการจากไฟล์ ไม่ใช่จำนวนบุคคลหรือครัวเรือนที่ยืนยัน", "Source records, not verified unique people or households"])))}</dd><dt>${text("ขอบเขตคำนวณ", "Calculation scope")}</dt><dd>${esc(scopeLabel())} · ${["flood", "terrain"].includes(S.dataset) ? text("เป็นบริบทพื้นที่ที่เลือก ชุดนี้ยังไม่ได้จับคู่เชิงพื้นที่", "View context only; this dataset is not spatially assigned") : text("ใช้การตัดกับรูปขอบเขต ไม่ใช้กรอบที่มองเห็น", "Geometry intersection, not the viewport")}</dd><dt>${text("วันรับข้อมูล", "Data received")}</dt><dd>5 ${text("ตุลาคม 2569", "October 2026")} · ${text("ไม่ใช่วันสำรวจ", "not the survey date")}</dd><dt>${text("ที่มารูป/พิกัด", "Geometry source")}</dt><dd>${["flood", "terrain"].includes(S.dataset) ? text("ยังไม่มีรูป/พิกัดที่ยืนยันเพื่อแสดงผล", "No verified display geometry available") : (S.dataset === "parcels" ? text("ต้นทาง UNKNOWN · EPSG:24048 สำหรับแสดงผลจากการเทียบพิกัดต้นทาง · รอรับรอง", "Source UNKNOWN · display EPSG:24048 inferred from source controls · confirmation pending") : d.sourceCRS?.join(", ")) || text("ตามไฟล์ขอบเขตที่ได้รับ", "Received boundary files")} · ${text("ความแม่นยำภาคสนามยังไม่รับรอง", "field accuracy is unverified")}</dd><dt>${text("ข้อจำกัดสำคัญ", "Material limitations")}</dt><dd>${plainCaveats(d)}</dd></dl><section class="panel-section" style="margin-top:24px"><div class="section-title"><h2>${text("โฟลเดอร์ต้นทาง", "Source folders")}</h2><span>${num(sourceFolders.length)}</span></div>${sourceFolders.map((f) => `<a class="source-folder" target="_blank" rel="noopener" href="${esc(f.url || f.sourceUrl || "https://drive.google.com/drive/folders/" + f.id)}">${esc(f.folder || f.title || f.name)}<span>${num(f.fileCount ?? f.componentCount ?? f.inventoryComponents ?? f.files?.length)} ${text("ไฟล์ประกอบ", "file components")} · ${text("เปิดใน Google Drive", "open in Google Drive")}</span></a>`).join("")}${!sourceFolders.length && d.sourceUrl ? `<a class="mini-action" href="${esc(d.sourceUrl)}" target="_blank" rel="noopener">${text("เปิดต้นทาง", "Open source")}</a>` : ""}</section>${S.dataset === "flood" ? S.docs.documents.map((x) => `<article class="document-card"><h3>${esc(x.title)}</h3><p>${text("เอกสารประกอบการวางแผน ไม่ใช่สถานการณ์ปัจจุบัน", "Planning document, not current conditions")}</p><a href="${esc(x.url)}" target="_blank" rel="noopener">${text("อ่านเอกสารต้นฉบับ", "Read original document")}</a></article>`).join("") : ""}`;
+    const notes = plainCaveatList(d);
+    return `<section class="panel-section"><div class="section-title"><h2>${text("ข้อควรรู้ก่อนใช้", "Know before you use it")}</h2>${Missions?.status[d.status] ? `<span class="status-label">${esc(text(...Missions.status[d.status]))}</span>` : ""}</div><ul class="notes-list">${notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></section><div class="section-title"><h2>${text("ข้อมูลนี้มาจากไหน", "Where this data comes from")}</h2></div><dl class="source-dl"><dt>${text("ตัวเลขนับอะไร", "What is counted")}</dt><dd>${esc(text(...(hints[S.dataset] || ["จำนวนรายการจากไฟล์ ไม่ใช่จำนวนคนหรือครัวเรือนที่ยืนยันแล้ว", "Rows from the files, not verified people or households"])))}</dd><dt>${text("นับในพื้นที่ไหน", "Which area is counted")}</dt><dd>${esc(scopeLabel())} · ${["flood", "terrain"].includes(S.dataset) ? text("ชุดนี้ยังไม่ได้ผูกกับพื้นที่บนแผนที่", "This dataset is not tied to map areas yet") : text("นับสิ่งที่อยู่ในเส้นขอบเขต ไม่ขึ้นกับการเลื่อนแผนที่", "Counts what lies inside the boundary, regardless of map panning")}</dd><dt>${text("เทศบาลส่งข้อมูลเมื่อ", "Received from the municipality")}</dt><dd>5 ${text("ตุลาคม 2569", "October 2026")} · ${text("ไม่ใช่วันที่สำรวจ", "not the survey date")}</dd><dt>${text("ตำแหน่งบนแผนที่", "Map positions")}</dt><dd>${["flood", "terrain"].includes(S.dataset) ? text("ยังไม่มีตำแหน่งที่ตรวจแล้ว", "No checked positions yet") : (S.dataset === "parcels" ? text("ไฟล์ต้นทางไม่ระบุระบบพิกัด · ใช้ EPSG:24048 จากการเทียบกับข้อมูลบ้านและอาคาร · รอรับรอง", "Source coordinate system not stated · EPSG:24048 inferred from house and building data · awaiting confirmation") : d.sourceCRS?.join(", ")) || text("ตามไฟล์ขอบเขตที่ได้รับ", "Supplied boundary files")} · ${text("ยังไม่ได้ตรวจความแม่นยำในพื้นที่จริง", "field accuracy not yet checked")}</dd></dl><section class="panel-section" style="margin-top:24px"><div class="section-title"><h2>${text("โฟลเดอร์ต้นทาง", "Source folders")}</h2><span>${num(sourceFolders.length)}</span></div>${sourceFolders.map((f) => `<a class="source-folder" target="_blank" rel="noopener" href="${esc(f.url || f.sourceUrl || "https://drive.google.com/drive/folders/" + f.id)}">${esc(f.folder || f.title || f.name)}<span>${num(f.fileCount ?? f.componentCount ?? f.inventoryComponents ?? f.files?.length)} ${text("ไฟล์ประกอบ", "file components")} · ${text("เปิดใน Google Drive", "open in Google Drive")}</span></a>`).join("")}${!sourceFolders.length && d.sourceUrl ? `<a class="mini-action" href="${esc(d.sourceUrl)}" target="_blank" rel="noopener">${text("เปิดต้นทาง", "Open source")}</a>` : ""}</section>${S.dataset === "flood" ? S.docs.documents.map((x) => `<article class="document-card"><h3>${esc(x.title)}</h3><p>${text("เอกสารประกอบการวางแผน ไม่ใช่สถานการณ์ปัจจุบัน", "Planning document, not current conditions")}</p><a href="${esc(x.url)}" target="_blank" rel="noopener">${text("อ่านเอกสารต้นฉบับ", "Read original document")}</a></article>`).join("") : ""}`;
+  }
+  function plainCaveatList(d) {
+    const notes = [];
+    if (d.id === "parcels") notes.push(...PARCEL_NOTES.map((n) => text(...n)));
+    if (d.id === "population" || (d.id === "overview" && S.scope.type === "village" && scopeData()?.populationDiscrepancy)) notes.push(text("ยอดประชากรรวมกับชายรวมหญิงไม่เท่ากันที่หมู่ 11 (ต่างกัน 600 คน) รอเทศบาลยืนยันว่าใช้ค่าไหน", "Total population and male + female differ in village 11 (by 600); awaiting confirmation of which to use"));
+    if (d.id === "flood") notes.push(text("แผน พ.ศ. 2564–2567 มี 16 จุด ยังไม่มีพิกัดที่ตรวจแล้ว และไม่ใช่ขอบเขตน้ำท่วมตอนนี้", "The 2021–2024 plan lists 16 sites without checked positions; it is not a current flood extent"));
+    if (d.id === "overview") notes.push(text("บ้านหรืออาคารที่อยู่บนเส้นแบ่งอาจถูกนับในหลายหมู่บ้าน จึงไม่ควรบวกยอดหมู่บ้านเป็นยอดเทศบาล", "Houses or buildings on a dividing line may count in several villages, so village totals should not be added up as the city total"));
+    for (const line of plainCaveats(d)) if (!notes.includes(line)) notes.push(line);
+    return notes;
   }
   function plainCaveats(d) {
     const notes = [];
@@ -1060,31 +988,32 @@
     if (d.nullOrUnusableGeometryCount)
       notes.push(
         text(
-          `มี ${num(d.nullOrUnusableGeometryCount)} รายการที่ไม่มีรูป/พิกัดใช้งานได้`,
+          `มี ${num(d.nullOrUnusableGeometryCount)} รายการที่ไม่มีตำแหน่งให้แสดงบนแผนที่`,
           `${num(d.nullOrUnusableGeometryCount)} source records have no usable geometry`,
         ),
       );
     if (d.displayRepairCount)
       notes.push(
         text(
-          `ปรับรูปเพื่อแสดงผล ${num(d.displayRepairCount)} รายการ โดยเก็บต้นทางไว้`,
+          `ปรับรูป ${num(d.displayRepairCount)} รายการให้แสดงบนแผนที่ได้ โดยเก็บต้นฉบับไว้`,
           `${num(d.displayRepairCount)} geometries were repaired for display; source retained`,
         ),
       );
     if (d.id === "election" || S.boundary === "election")
       notes.push(
         text(
-          "ขอบเขตเลือกตั้งเป็นรูปแสดงผลที่ต่อจากเส้น ไม่ใช่ขอบเขตทางกฎหมายที่รับรอง",
+          "เขตเลือกตั้งเป็นขอบเขตทดลองที่ต่อจากเส้นในไฟล์ ไม่ใช่ขอบเขตทางกฎหมายที่รับรองแล้ว",
           "Electoral polygons are derived for display, not legally certified",
         ),
       );
-    return (
-      notes.map(esc).join("<br>") ||
-      text(
-        "วันที่สำรวจ ความครบถ้วน และเจ้าของข้อมูลยังต้องยืนยัน",
-        "Survey date, completeness and data authority remain to be validated",
-      )
-    );
+    if (!notes.length)
+      notes.push(
+        text(
+          "วันที่สำรวจ ความครบถ้วน และเจ้าของข้อมูลยังต้องยืนยันกับเทศบาล",
+          "Survey date, completeness and data ownership still need confirming with the municipality",
+        ),
+      );
+    return notes;
   }
   function renderPanel() {
     if (!S.ready) return;
@@ -1119,7 +1048,7 @@
       (id) => S.metadata.villages.find((v) => v.id === id)?.label || id,
     );
     el.hidden = false;
-    el.innerHTML = `<article class="record-card"><div class="record-title"><div><small>${esc(label(S.dataset))}</small><h2>${esc(p.label || p.id)}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><p>${text("เลือกหนึ่งรายการ ตัวเลขภาพรวมยังใช้ขอบเขตเดิม", "One record selected. Aggregates retain the area scope.")}</p><dl><dt>${text("รายการต้นทาง", "Source row")}</dt><dd>${num(p.sourceRecord)}</dd><dt>${text("ไฟล์", "File")}</dt><dd>${esc(source)}</dd><dt>${text("หมู่บ้านที่ตัด", "Village intersections")}</dt><dd>${esc(villageNames.join(" · ") || text("ยังไม่จับคู่ขอบเขต", "not assigned"))}</dd>${p.houseNumber ? `<dt>${text("บ้านเลขที่", "House number")}</dt><dd>${esc(p.houseNumber)}</dd>` : ""}${p.geometryDisplayRepair ? `<dt>${text("รูปแสดงผล", "Display shape")}</dt><dd>${text("มีการปรับรูปจากต้นทางเพื่อแสดงผล", "Repaired for display from retained source")}</dd>` : ""}</dl><button class="mini-action" data-focus-record>${text("ดูตำแหน่งรายการนี้", "Fit this record")}</button></article>`;
+    el.innerHTML = `<article class="record-card"><div class="record-title"><div><small>${esc(label(S.dataset))}</small><h2>${esc(p.label || p.id)}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><p>${text("ตัวเลขภาพรวมยังนับทั้งพื้นที่เดิม", "Area totals still count the whole area.")}</p><dl><dt>${text("อยู่ในหมู่บ้าน", "Village")}</dt><dd>${esc(villageNames.join(" · ") || text("ยังไม่ระบุหมู่บ้าน", "not assigned"))}</dd><dt>${text("ลำดับในไฟล์ต้นทาง", "Row in source file")}</dt><dd>${num(p.sourceRecord)} · ${esc(source)}</dd>${p.houseNumber ? `<dt>${text("บ้านเลขที่", "House number")}</dt><dd>${esc(p.houseNumber)}</dd>` : ""}${p.geometryDisplayRepair ? `<dt>${text("รูปแสดงผล", "Display shape")}</dt><dd>${text("มีการปรับรูปจากต้นทางเพื่อแสดงผล", "Repaired for display from retained source")}</dd>` : ""}</dl><button class="mini-action" data-focus-record>${text("ดูตำแหน่งรายการนี้", "Fit this record")}</button></article>`;
   }
   function initMap() {
     S.map = L.map("map", {
@@ -1711,9 +1640,17 @@
       if (ticket === S.ticket) $("map-loading").hidden = true;
     }
   }
+  function openTool(id, opener) {
+    if (id === "tax-calculator" && window.SilaTaxCalculator) {
+      window.SilaTaxCalculator.open({ language: S.lang, returnFocus: opener });
+      return;
+    }
+    toast(text("เครื่องมือนี้ยังเปิดไม่ได้ ลองโหลดหน้าใหม่", "This tool could not open. Try reloading the page."));
+  }
   async function setDataset(id, push = true) {
     S.pickIndex = null;
     if (id !== "overview" && !dataset(id)) return;
+    if (Missions) S.mission = Missions.missionFor(id, S.mission);
     if (id !== S.dataset) { hideTerrain3D(); S.mode = "2d"; S.terrain3DError = false; }
     S.dataset = id;
     S.record = null;
@@ -1861,6 +1798,25 @@
       if (!e.target.closest(".header-settings")) document.querySelector(".header-settings").open=false;
       const terrainMode = e.target.closest("[data-terrain-mode]");
       if (terrainMode) { setTerrainMode(terrainMode.dataset.terrainMode); return; }
+      const mission = e.target.closest("[data-mission]");
+      if (mission) {
+        setMission(mission.dataset.mission);
+        return;
+      }
+      const tool = e.target.closest("[data-tool]");
+      if (tool) {
+        openTool(tool.dataset.tool, tool);
+        return;
+      }
+      const openTab = e.target.closest("[data-open-tab]");
+      if (openTab) {
+        S.tab = openTab.dataset.openTab;
+        S.search = "";
+        S.page = 60;
+        renderPanel();
+        $("tab-" + S.tab)?.focus();
+        return;
+      }
       const d = e.target.closest("[data-dataset]");
       if (d) {
         $("dataset-dialog").close();
@@ -1926,9 +1882,6 @@
         });
       }
       if (e.target.closest("[data-export]")) exportCSV();
-      const purpose = e.target.closest("[data-purpose]");
-      if (purpose)
-        setDataset(purpose.dataset.purpose === "flood" ? "flood" : publicAggregate("tax") ? "tax" : "parcels");
     });
     document.addEventListener("input", (e) => {
       if (e.target.id === "record-search") {
@@ -2028,6 +1981,18 @@
         buttons[i].click();
         buttons[i].focus();
       });
+    $("mission-nav").addEventListener("keydown", (e) => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
+      const buttons = [...$("mission-nav").querySelectorAll("[data-mission]")];
+      let i = buttons.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault();
+      const n = buttons.length;
+      i = e.key === "Home" ? 0 : e.key === "End" ? n - 1 : (i + (["ArrowRight", "ArrowDown"].includes(e.key) ? 1 : -1) + n) % n;
+      const id = buttons[i].dataset.mission;
+      setMission(id);
+      $("mission-nav").querySelector(`[data-mission="${id}"]`)?.focus();
+    });
     $("terrain-mode-group").addEventListener("keydown", e => {
       if (!["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) return;
       const buttons = [...$("terrain-mode-group").querySelectorAll("button")];
@@ -2097,6 +2062,7 @@
   window.SilaExplorer = {
     getState: () => ({
       dataset: S.dataset,
+      mission: S.mission,
       mode: S.dataset === "terrain" ? S.mode : "2d",
       renderer: S.terrain3DVisible ? "3d" : "2d",
       terrain3DStatus: {...S.terrain3DStatus},
@@ -2129,6 +2095,7 @@
     }),
     selectScope,
     setDataset,
+    setMission,
     setTerrainMode,
     closeRecord,
   };

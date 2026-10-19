@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.6",
-  "builtAtUtc": "2026-10-19T13:27:27.034541+00:00",
+  "revision": "1.7",
+  "builtAtUtc": "2026-10-19T14:27:18.501682+00:00",
   "releaseDateBangkok": "2026-10-19",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -34,13 +34,13 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.6-browser-checks.json",
-  "publicationAudit": "qa/revision-1.6-publication-audit.json",
+  "browserReceipt": "qa/revision-1.7-browser-checks.json",
+  "publicationAudit": "qa/revision-1.7-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 47411,
-      "sha256": "9e54abdf990d5e35bc31ac27b186d337a17886acc30d864b71cca1dc1c31d483",
+      "bytes": 50670,
+      "sha256": "69e2420384ec03ac2fda7d0bca2d02cb499b3b28e9e2b2d50f6b3fba88464416",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 120221,
-      "sha256": "ddb4d5883fd76411c916fc0f0daafb8b8e0e549abf39c7180106cfdb5692d1cf",
+      "bytes": 116094,
+      "sha256": "77a61f20f90680b431cf5982c8ab77f05f87ddff3e9d3b82b65d321a6a4bf62a",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1006,8 +1006,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 17191,
-      "sha256": "0b26a6747a531c8f22b92ca042db2d36c552be53c6d440bb008de894e8bbf88a",
+      "bytes": 17240,
+      "sha256": "40ba9d5eb4641cb17beb60bb50b98b3b1ab62df75cebb3c156ce843c870e71ae",
       "mimeTypes": [
         "text/html"
       ]
@@ -1031,8 +1031,8 @@
     },
     {
       "path": "public-aggregate.js",
-      "bytes": 10584,
-      "sha256": "9349e4cb1714109ee7722403fd790e9006f86822e871217b44b2dd2e7ef186cb",
+      "bytes": 11371,
+      "sha256": "6cfe5cd00d463bf8aea1e75c7bdaf1c29fb3af1e94425eefbc0448b5e172909d",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1726,8 +1726,8 @@
     },
     {
       "path": "server.py",
-      "bytes": 2293,
-      "sha256": "c425aa1748e012fa5b68f8232ea998df199480c342cff6520b871d85852acc21",
+      "bytes": 2367,
+      "sha256": "e1c75b07c77e9c27faeeb7ddc7c5f0ef94b38e39dde04138b482ce6252e764e0",
       "mimeTypes": [
         "text/plain",
         "application/octet-stream"
@@ -3009,9 +3009,84 @@
       "mimeTypes": [
         "application/json"
       ]
+    },
+    {
+      "path": "missions.js",
+      "bytes": 17074,
+      "sha256": "bca2806fd962e3c054cf2ad6ec3010b9691282d68c4d8217e356e5eb5b0607a7",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "missions.css",
+      "bytes": 4125,
+      "sha256": "d66b263e29ca045cdda137402b06cf10fd73e2597f31daa5f7d440fe2b5dcd97",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "tax-calculator.js",
+      "bytes": 45190,
+      "sha256": "bab98b5ace4992784e046127fa1b0b665c9dea2f93f4e6946906a7db25597949",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "tax-calculator.css",
+      "bytes": 4205,
+      "sha256": "db23e9b23a0dceff0cd77c0ca56887f2aa18fc585390f92d7c2dcaa54693024d",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "qa/check-tax-calculator.cjs",
+      "bytes": 5590,
+      "sha256": "4f4e8781f80b87cf9446eba21606fca62b4c235c6e5778dcd9d6943c1bac0a01",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript",
+        "application/octet-stream",
+        "application/node"
+      ]
+    },
+    {
+      "path": "qa/revision-1.7-browser-checks.json",
+      "bytes": 8003,
+      "sha256": "5e34bf675ce9197190080e58c388c33b548eb7b718363b857f3d0a5603499402",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.7-publication-audit.json",
+      "bytes": 693,
+      "sha256": "7f5336398e37cecb5dc03d1c0ce0da84f5d720da6fb2b6dce53410b0e7510e94",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/tax-calculator-rules.md",
+      "bytes": 9746,
+      "sha256": "9228ade4763009f3c872e6953e575e149c405b05a5230c3ee6c4be177d047f3e",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
     }
   ],
-  "manifestScope": "All explicit previously published files plus reviewed inline3D renderer and revision1.6 QA files except self manifest. Screenshots and restricted sources remain outside repository.",
+  "manifestScope": "All explicit previously published files plus revision 1.7 mission navigation, officer tax calculator, rules note and QA files, except self manifest. Screenshots and restricted sources remain outside repository.",
   "releaseReadiness": "ready_with_bounded_manual_gates_provider_and_live_proof_separate",
   "housePointRendering": {
     "mode": "individual_source_points",
@@ -3039,8 +3114,8 @@
     "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.5",
-  "previousPublishedCommit": "78d7f4bc43b851226aced453e87fd0618b63d873",
+  "previousPublishedRevision": "1.6",
+  "previousPublishedCommit": "c737cec14608e779486737960d8bf08b71a1d546",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 3,
   "additionalMunicipalFilesInspectedThisUpdate": 6,
@@ -3076,10 +3151,31 @@
     "nativeApproxResolutionMetres": 30,
     "baselineDataFilesPreserved": 22
   },
-  "postReleaseStatusCorrection": {
-    "sourceParent": "b42b9e519a4d8c654ea9b71f44b85e4b41c7e2b8",
-    "appAssetQuery": "v=1.6.1",
-    "cached3DReentry": "retain_settled_status",
-    "actualLocalRegression": "qa/revision-1.6-browser-checks.json"
-  }
+  "missionNavigation": {
+    "module": "missions.js",
+    "styles": "missions.css",
+    "missions": [
+      "tax",
+      "flood",
+      "care",
+      "works",
+      "area"
+    ],
+    "urlParameter": "mission",
+    "datasetsMayRepeatAcrossMissions": true,
+    "caveatsLocation": "sources_and_notes_tab"
+  },
+  "officerTaxCalculator": {
+    "module": "tax-calculator.js",
+    "styles": "tax-calculator.css",
+    "rules": "reference/tax-calculator-rules.md",
+    "tests": "qa/check-tax-calculator.cjs",
+    "testChecks": 35,
+    "rulesCheckedOn": "2026-10-19",
+    "rateDecree": "Royal Decree on land and building tax rates B.E. 2564",
+    "buildingPriceSchedule": "Khon Kaen 2566-2569",
+    "inputsLeaveBrowser": false,
+    "officialAssessment": false
+  },
+  "dataFilesChangedThisRevision": 0
 }

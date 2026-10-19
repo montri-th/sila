@@ -1,0 +1,22 @@
+{
+ "schema": "sila-publication-audit/1.7",
+ "checkedOn": "2026-10-19",
+ "filesChangedOrAdded": [
+  "README.md",
+  "app.js",
+  "index.html",
+  "missions.css",
+  "missions.js",
+  "public-aggregate.js",
+  "qa/check-tax-calculator.cjs",
+  "qa/revision-1.7-browser-checks.json",
+  "reference/tax-calculator-rules.md",
+  "server.py",
+  "tax-calculator.css",
+  "tax-calculator.js"
+ ],
+ "dataFilesChanged": [],
+ "personalDataPatternHits": {},
+ "scope": "Regex scan of files changed in revision 1.7 for 13-digit numbers, mobile-phone-like numbers, 11-digit house codes and reversible case IDs. No new data files. The survey file with national ID numbers is not in this repository.",
+ "result": "pass"
+}
