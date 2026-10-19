@@ -706,8 +706,8 @@
       ];
       if (!village) items.splice(1, 0, [moneyShort(receipts), text("รับชำระปีภาษี 2569 ทั้งเมือง", "2569 receipts, whole city")]);
     } else if (S.dataset === "appraisal") {
-      const sm = S.parcelTax?.summary;
-      items = [[sm?.pricedParcels ?? null, text("แปลงที่มีราคาประเมิน", "parcels with an appraisal")], [sm?.medianPrice ?? null, text("ราคากลาง บาท/ตร.ว.", "median THB per sq wah")]];
+      const st = appraisalStats();
+      items = [[st.n, text("แปลงที่มีราคาประเมิน", "parcels with an appraisal")], [st.med, text("ราคากลาง บาท/ตร.ว.", "median THB per sq wah")]];
     } else if (S.dataset === "popgrid") {
       const t = S.popStructure?.totals;
       items = [[t?.t ?? null, text("คนในรายชื่อ", "listed people")], [t?.c ?? null, text("เด็กต่ำกว่า 15 ปี", "children under 15")], [t?.o ?? null, text("อายุประมาณ 42 ปีขึ้นไป", "about 42 and over")]];
@@ -1941,9 +1941,16 @@
     if (!rows.length) return "";
     return `<table class="data-table"><thead><tr><th>${text("หมู่บ้าน", "Village")}</th><th class="num">${text("แปลงที่มีราคา", "Priced parcels")}</th><th class="num">${text("ราคากลาง", "Median")}</th><th class="num">${text("สูงสุด", "Highest")}</th></tr></thead><tbody>${rows.map(({ x, n, med, max }) => `<tr><td><button type="button" data-scope="${esc(x.id)}">${esc(villageLabel(x))}</button></td><td class="num">${num(n)}</td><td class="num">${num(med)}</td><td class="num">${num(max)}</td></tr>`).join("")}</tbody></table><p class="small-note">${text("บาทต่อตารางวา · ราคากลางคือค่ามัธยฐานของแปลงที่จับคู่กับบัญชีได้ แปลงที่คร่อมหลายหมู่บ้านนับในหมู่บ้านที่มีพื้นที่มากที่สุด", "THB per square wah · the median of parcels matched to the roll; a parcel crossing villages counts in the village holding most of it")}</p>`;
   }
+  /* Appraisal count and median for the scope in view: a village uses its own matched parcels, otherwise the whole city. */
+  function appraisalStats() {
+    const vid = S.scope.type === "village" ? S.scope.id : null;
+    if (!vid) { const sm = S.parcelTax?.summary; return { n: sm?.pricedParcels ?? null, med: sm?.medianPrice ?? null, where: text("ทั้งเมือง", "whole city") }; }
+    const a = (S.parcelTax?.parcels || []).filter((p) => p.v === vid && p.price != null).map((p) => p.price).sort((m, n) => m - n);
+    return { n: a.length, med: a.length ? a[Math.floor(a.length / 2)] : null, where: scopeLabel() };
+  }
   function appraisalContent() {
-    const s = S.parcelTax?.summary, table = villagePriceTableHTML();
-    return `<section class="panel-section"><div class="facts-grid">${fact(s?.pricedParcels ?? null, text("แปลงที่มีราคาประเมิน", "Parcels with an appraisal"))}${fact(s?.medianPrice ?? null, text("ราคากลาง (มัธยฐาน) บาท/ตร.ว.", "Median THB per sq wah"))}</div><p class="small-note">${text("ราคาประเมินมาจากบัญชีที่เทศบาลใช้คิดภาษีปี 2569 แปลงที่ยังจับคู่กับบัญชีไม่ได้แสดงเป็นลายเส้นเทา ไม่ใช่ราคาเป็นศูนย์ กรมธนารักษ์มีกำหนดประกาศราคารอบ 2570–2573 วันที่ 1 ธ.ค. 2569", "Prices come from the roll the municipality used for 2569. Parcels not yet matched show grey hatching, not a zero price. The Treasury Department is due to publish 2570–2573 prices on 1 Dec 2569.")}</p></section>`
+    const st = appraisalStats(), table = villagePriceTableHTML();
+    return `<section class="panel-section"><div class="facts-grid">${fact(st.n, text(`แปลงที่มีราคาประเมิน · ${st.where}`, `Parcels with an appraisal · ${st.where}`))}${fact(st.med, text(`ราคากลาง (มัธยฐาน) บาท/ตร.ว. · ${st.where}`, `Median THB per sq wah · ${st.where}`))}</div><p class="small-note">${text("ราคาประเมินมาจากบัญชีที่เทศบาลใช้คิดภาษีปี 2569 แปลงที่ยังจับคู่กับบัญชีไม่ได้แสดงเป็นลายเส้นเทา ไม่ใช่ราคาเป็นศูนย์ กรมธนารักษ์มีกำหนดประกาศราคารอบ 2570–2573 วันที่ 1 ธ.ค. 2569", "Prices come from the roll the municipality used for 2569. Parcels not yet matched show grey hatching, not a zero price. The Treasury Department is due to publish 2570–2573 prices on 1 Dec 2569.")}</p></section>`
       + (table ? `<details class="supplement" open><summary>${text("ราคาประเมินรายหมู่บ้าน", "Appraisal by village")}</summary><div class="supplement-body">${table}</div></details>` : "") + notesLink();
   }
   function popgridContent() {

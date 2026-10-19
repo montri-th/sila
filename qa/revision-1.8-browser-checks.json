@@ -1,0 +1,248 @@
+{
+ "schema": "sila-browser-checks/1.8",
+ "checkedAtUtc": "2026-10-19T20:32:01.934811+00:00",
+ "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
+ "browser": "Chromium 141.0.7390.37",
+ "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
+ "basemap": "none (data only; external street tiles are not reachable from the test machine)",
+ "matrix": [
+  {
+   "case": "landing-dark-th",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "taxmap-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "taxmap-new70-adj10",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "taxmap-delta-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "appraisal-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "buildings-roll-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "buildings-registry-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "buildings-straddle",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "buildings-use-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "houses-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "popgrid",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "terrain-2d-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": true
+  },
+  {
+   "case": "terrain-3d-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": true
+  },
+  {
+   "case": "roads",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "overview",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "tablet-taxmap",
+   "viewport": "1024x768",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "phone-taxmap",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "phone-taxmap-record",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": false,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "phone-buildings-roll-en",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "phone-terrain-3d",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": true
+  },
+  {
+   "case": "small-phone-taxmap-light",
+   "viewport": "320x640",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  }
+ ],
+ "flows": {
+  "taxPopupAndParcelBuildings": {
+   "popupLeadsWithTax": true,
+   "summaryShows2570": true,
+   "buildingsListed": 4,
+   "gotoBuilding": true,
+   "buildingCardHasRoll": true,
+   "pageErrors": []
+  },
+  "debtorStatus": {
+   "cardShowsUnpaid": true,
+   "portfolioCode": true,
+   "debtorListRows47": true,
+   "pageErrors": []
+  },
+  "phoneLegendToggle": {
+   "collapsedHeight": 73,
+   "openHeight": 250,
+   "opens": true,
+   "pageErrors": []
+  },
+  "keyboardBuildingView": {
+   "focusKept": true,
+   "focusOutline": "solid 2px",
+   "legendHasUnmatchedGroup": true,
+   "pageErrors": []
+  }
+ },
+ "summary": {
+  "cases": 22,
+  "pageErrors": 0,
+  "horizontalOverflow": 0,
+  "flowsPassed": true
+ },
+ "notCovered": [
+  "real GPU rendering (checked on the live site separately)",
+  "screen readers",
+  "real phones",
+  "street basemap tiles"
+ ]
+}
