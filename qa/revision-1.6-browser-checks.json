@@ -248,6 +248,27 @@
         "renderer": "2d",
         "url": "http://127.0.0.1:8772/?dataset=terrain&boundary=municipality&scope=sila&lang=en&theme=light&basemap=street&mode=2d"
       }
+    },
+    {
+      "test": "root_cached_3d_reentry_status_regression",
+      "result": {
+        "mesh": {
+          "basemapState": "ready",
+          "bearing": "0",
+          "exaggeration": "1",
+          "latitude": "16.489077525020555",
+          "longitude": "102.84976617118578",
+          "pending": "0",
+          "pitch": "55.00000000000001",
+          "rendered": "16",
+          "triangles": "1162686",
+          "zoom": "12.5"
+        },
+        "mode": "3d",
+        "renderer": "3d",
+        "status": "แสดงภูมิประเทศ 3D แล้ว"
+      },
+      "scope": "ActualChrome local preview after ready3D→2D→3D; preserve settled controller state rather than overwrite to loading when core deduplicates unchanged status."
     }
   ],
   "additional_observed_checks": [
@@ -372,7 +393,15 @@
     "core_final_status_only_delta_runtime_retest": false,
     "note": "Final core patch separates basemapErrors from DEM state; parent notified this followed runtime captures. Current file hash is recorded for packaging, not a claim the final status-only patch was reloaded. Geometry/camera/colour unchanged per core owner; parent owns final delta/live check.",
     "packaging_core_after_root_status_callback_fix": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75",
-    "root_delta_review": "Two status-only corrections after runtime6bda8153; exact reversal reconstructs reviewed predecessor. Geometry/camera/colour unchanged; root owns final live runtime proof."
+    "root_delta_review": "Two status-only corrections after runtime6bda8153; exact reversal reconstructs reviewed predecessor. Geometry/camera/colour unchanged; root owns final live runtime proof.",
+    "root_status_only_core_fixes_reloaded_in_local_preview": true,
+    "root_cached_toggle_patch_tested": true,
+    "root_live_after_patch": "Separate release receipt; not inferred from local preview."
   },
-  "source_files_sha256_role": "Final packaging hashes; observed runtime binding is explicitly separated below."
+  "source_files_sha256_role": "Final packaging hashes; observed runtime binding is explicitly separated below.",
+  "root_final_preview_hashes": {
+    "app.js": "ddb4d5883fd76411c916fc0f0daafb8b8e0e549abf39c7180106cfdb5692d1cf",
+    "index.html": "0b26a6747a531c8f22b92ca042db2d36c552be53c6d440bb008de894e8bbf88a",
+    "terrain-3d.js": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75"
+  }
 }

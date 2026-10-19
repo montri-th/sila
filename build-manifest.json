@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.6",
-  "builtAtUtc": "2026-10-19T13:20:26.440928+00:00",
+  "builtAtUtc": "2026-10-19T13:27:27.034541+00:00",
   "releaseDateBangkok": "2026-10-19",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 120207,
-      "sha256": "61c521f650c15e560ef15abda18515d03f4eeb0a6979c9a329a78ccde68bdd53",
+      "bytes": 120221,
+      "sha256": "ddb4d5883fd76411c916fc0f0daafb8b8e0e549abf39c7180106cfdb5692d1cf",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1006,8 +1006,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 17189,
-      "sha256": "29c8ed4de05d7adf267082ff30a510148e08f8ec9de7e33ac32dae6eba95f579",
+      "bytes": 17191,
+      "sha256": "0b26a6747a531c8f22b92ca042db2d36c552be53c6d440bb008de894e8bbf88a",
       "mimeTypes": [
         "text/html"
       ]
@@ -2996,16 +2996,16 @@
     },
     {
       "path": "qa/revision-1.6-browser-checks.json",
-      "bytes": 13036,
-      "sha256": "177d19db2cb858740def98dfadd3a83a6839e8fa1e506c0f0ec1cd38ce409da7",
+      "bytes": 14298,
+      "sha256": "bfeeac9d58aea0a28e815a31300be845d3a53a8eabf1a40e53f28cf439c00160",
       "mimeTypes": [
         "application/json"
       ]
     },
     {
       "path": "qa/revision-1.6-publication-audit.json",
-      "bytes": 6590,
-      "sha256": "c132ffe78c81210cf3d24285862df757fbdad2154d6f6e927e3f31aca14ce4ba",
+      "bytes": 7123,
+      "sha256": "b77174bf4adc989e4bd21764cdd114aea3ab206e02364163734e36af5552ae0e",
       "mimeTypes": [
         "application/json"
       ]
@@ -3075,5 +3075,11 @@
     "meshDEMStateSeparateFromBasemap": true,
     "nativeApproxResolutionMetres": 30,
     "baselineDataFilesPreserved": 22
+  },
+  "postReleaseStatusCorrection": {
+    "sourceParent": "b42b9e519a4d8c654ea9b71f44b85e4b41c7e2b8",
+    "appAssetQuery": "v=1.6.1",
+    "cached3DReentry": "retain_settled_status",
+    "actualLocalRegression": "qa/revision-1.6-browser-checks.json"
   }
 }

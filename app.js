@@ -981,7 +981,7 @@
     if(mode===S.mode)return;
     if(mode==="2d")hideTerrain3D();
     S.mode=mode;S.terrain3DError=false;
-    if(mode==="3d"&&!S.terrain3DVisible)S.terrain3DStatus={state:"loading"};
+    if(mode==="3d"&&!S.terrain3DVisible&&!S.terrain3D)S.terrain3DStatus={state:"loading"};
     renderPanel();if(push)syncURL();
     if(mode==="2d")drawTerrain();
     await syncTerrainView();

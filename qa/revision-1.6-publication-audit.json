@@ -1,7 +1,7 @@
 {
   "schema": "sila-publication-audit/1.6",
   "revision": "1.6",
-  "auditedAtUtc": "2026-10-19T13:20:26.440928+00:00",
+  "auditedAtUtc": "2026-10-19T13:27:27.034541+00:00",
   "sourceBase": "78d7f4bc43b851226aced453e87fd0618b63d873",
   "status": "passed_with_bounded_scope",
   "releaseState": "source_ready_provider_and_live_proof_separate",
@@ -185,5 +185,13 @@
     "200% browser zoom, Thai130% magnification and actual reduced-motion emulation not verified."
   ],
   "runtimeSnapshotBinding": "Actual8-state Chrome matrix used core6bda8153; final error-state-only deltas reconstruct this snapshot exactly. Final core/source live verification remains release-owned.",
-  "privacy": "All22 prior authorized data files byte-identical; no raw tax/care records, patient coordinates, source case keys or DEM tiles added."
+  "privacy": "All22 prior authorized data files byte-identical; no raw tax/care records, patient coordinates, source case keys or DEM tiles added.",
+  "postPublicationStatusCorrection": {
+    "parentCommit": "b42b9e519a4d8c654ea9b71f44b85e4b41c7e2b8",
+    "problem": "Returning to already-ready3D overwrote UIstate toloading; unchanged controller status was correctly deduplicated and did not notify again.",
+    "fix": "Set initial loading only when no controller exists; retain settled state on cached entry.",
+    "actualPreviewRegression": "PASS ready3D→2D→3D with DEM pending0 and basemapready.",
+    "assetCache": "app.js?v=1.6.1",
+    "geometryOrDataChanged": false
+  }
 }
