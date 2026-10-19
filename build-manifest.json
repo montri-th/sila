@@ -48,8 +48,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 99148,
-      "sha256": "4cace8652fba286e5b60ead0fc7479dd41e4e3ffe13acfa3229c260878532b7b",
+      "bytes": 99163,
+      "sha256": "f014b1443c8baf5b543379f6000aac963cd42e0355de2f52979e6a3ca8a193d3",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -2844,5 +2844,10 @@
   "previousPublishedCommit": "928a42859776730cbd4503975b9aeeb693a98cfe",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 2,
-  "additionalMunicipalFilesInspectedThisUpdate": 11
+  "additionalMunicipalFilesInspectedThisUpdate": 11,
+  "postReviewCopyCorrection": {
+    "date": "2026-10-19",
+    "scope": "Parcel catalogue hint now distinguishes newly received tax registers from pending linkage/formal CRS certification. No data/geometry/layout change.",
+    "priorRuntimeReview": "qa/revision-1.4-browser-checks.json"
+  }
 }

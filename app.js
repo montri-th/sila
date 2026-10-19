@@ -172,8 +172,8 @@
       "Village figures for 2026 · reconciliation pending",
     ],
     parcels: [
-      "พิกัดเทียบต้นทางแล้ว · รอรับรองและทะเบียนภาษี",
-      "Source controls compared · formal CRS and tax register pending",
+      "ได้รับทะเบียนภาษีใหม่แล้ว · รอเชื่อมและรับรองพิกัด",
+      "New tax files received · linkage and formal CRS review pending",
     ],
     flood: [
       "แผน พ.ศ. 2564–2567 ไม่ใช่สถานการณ์ปัจจุบัน",
