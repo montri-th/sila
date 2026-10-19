@@ -1979,7 +1979,8 @@
   "houseNumberIncluded": true,
   "ownerTaxIdentifiersPhonesIncluded": false,
   "cctvStreamsIncluded": false,
-  "populationGrid": "aggregated 250 m cells; cells need >=10 people and >=3 households; counts 1-4 shown as <5; no per-house demographics"
+  "populationGrid": "aggregated 250 m cells; cells need >=10 people and >=3 households; counts 1-4 shown as <5; secondary suppression keeps every <5 at its full 1-4 range and no hidden count pinned under 5; no per-house demographics",
+  "surveyPoints": "house numbers only (surveyor notes removed); survey status not published; use grouped so empty homes cannot be singled out"
  },
  "dataCurrency": "Source upload2026-10-05 is not survey/reference date; dates differ bylayer.",
  "floodImpact": {

@@ -1255,7 +1255,7 @@
       villageSearchCache.set(ids, v);
     }
     const p = f.properties;
-    const en = S.lang === "en" ? " " + [p.type, p.use, p.material, p.status].map((x) => (x && SURVEY_EN[x]) || "").join(" ").toLowerCase() : "";
+    const en = S.lang === "en" ? " " + [p.type, p.use, p.material].map((x) => (x && SURVEY_EN[x]) || "").join(" ").toLowerCase() : "";
     return JSON.stringify(p).toLowerCase() + " " + v + en;
   }
   function searchInput(boundaryList = false) {
@@ -1307,7 +1307,7 @@
     popgrid: [
       ["นับจากรายชื่อสมาชิกในแบบสำรวจอาคาร 19 ต.ค. 2569 ซึ่งมีรายชื่อเพียงบางหลัง จึงไม่ใช่ประชากรทั้งหมด", "Counted from member lists in the 19 Oct 2026 building survey; only some houses have lists, so this is not the full population."],
       ["เด็กต่ำกว่า 15 ปีดูจากคำนำหน้า เด็กชาย/เด็กหญิง อายุ 15–42 และ 42 ปีขึ้นไปประมาณจากประเภทเลขบัตรประชาชน (เกิดก่อนหรือหลังปี 2527)", "Children under 15 come from the titles เด็กชาย/เด็กหญิง (boy/girl). The 15–42 and 42+ bands are estimated from the national ID type (born before or after 1984)."],
-      ["ช่องที่มีคนน้อยกว่า 10 คนหรือบ้านน้อยกว่า 3 หลังปิดตัวเลขทั้งหมด กลุ่มย่อยที่มี 1–4 คนแสดงเป็น <5 และเมื่อมีกลุ่มเดียวที่แสดงเป็น <5 จะปิดอีกกลุ่มหนึ่งด้วย เพื่อไม่ให้คำนวณย้อนจากยอดรวมได้ ไม่มีข้อมูลรายหลังบนเว็บนี้", "Cells with under 10 people or 3 households are hidden entirely. Groups of 1–4 show as <5, and when only one group is <5 a second group is hidden too, so it cannot be worked out from the total. There is no per-house data on this site."],
+      ["ช่องที่มีคนน้อยกว่า 10 คนหรือบ้านน้อยกว่า 3 หลังปิดตัวเลขทั้งหมด กลุ่มย่อยที่มี 1–4 คนแสดงเป็น <5 และปิดกลุ่มอื่นเพิ่มจนคำนวณย้อนจากยอดรวมไม่ได้ว่า <5 คือเท่าใด หรือกลุ่มที่ปิดมีน้อยกว่า 5 คน ไม่มีข้อมูลรายหลังบนเว็บนี้", "Cells with under 10 people or 3 households are hidden entirely. Groups of 1–4 show as <5, and more groups are hidden until neither a <5 nor a hidden group can be worked out from the totals. There is no per-house data on this site."],
     ],
     buildings: [["อาคารที่อยู่บนหลายแปลง: แปลงที่สองมีหลังคาตั้งแต่ 25% และ 20 ตร.ม. แผนที่แปลงกับรูปอาคารมาจากคนละชุดและอาจเหลื่อมกัน จึงเป็นสัญญาณให้ตรวจ ไม่ใช่ข้อสรุป", "Spanning parcels: a second parcel holds at least 25% and 20 m² of the roof. The parcel map and footprints come from different sources and can be offset, so this is a signal to check, not a finding."],
       ["มูลค่าอาคารประมาณจาก พื้นที่หลังคา × จำนวนชั้น × ราคากรมธนารักษ์ขอนแก่น 2566–2569 หักค่าเสื่อม ใช้จัดลำดับตรวจเท่านั้น", "Estimated value = roof area × floors × Khon Kaen Treasury price 2566–2569 less depreciation; for ordering checks only."],
@@ -1516,15 +1516,19 @@
     if (v === 0 && c.kind === "sequential") return { ...base, fillColor: c.colors[0], color: SilaScales.zeroOutline(c.scaleId, S.theme), weight: 1.4 };
     return { ...base, fillColor: classColor(v) };
   }
+  /* Published use is grouped so empty homes cannot be singled out: owner-occupied, other, vacant and blank are one group. */
   const USE_GROUPS = [
-    { id: "own", match: /อยู่เอง/, label: ["อยู่เอง", "Owner-occupied"], color: "mint" },
     { id: "rent", match: /เช่า|ผู้อื่น/, label: ["ให้เช่าหรือผู้อื่นใช้", "Rented or used by others"], color: "coral" },
     { id: "store", match: /จอด|เก็บ/, label: ["จอดรถหรือเก็บของ", "Parking or storage"], color: "sky" },
-    { id: "farm", match: /สวน|เลี้ยง/, label: ["เกษตรหรือเลี้ยงสัตว์", "Farming or livestock"], color: "lime" },
+    { id: "farm", match: /สวน|เลี้ยง|เกษตร/, label: ["เกษตรหรือเลี้ยงสัตว์", "Farming or livestock"], color: "lime" },
   ];
+  const USE_OTHER_LABEL = ["อยู่เอง อื่น ๆ หรือไม่ระบุ", "Owner-occupied, other or not stated"];
+  const surveyedBuilding = (p) => (p.surveyPoints || 0) > 0 || (p.registryNear || 0) > 0 || p.type != null || p.material != null || p.floors != null;
   const useGroup = (p) => {
     if (p.commercial) return { id: "commerce", label: ["มีชั้นที่ใช้ค้าขาย", "Has a commercial floor"], color: "yellow" };
-    return USE_GROUPS.find((g) => g.match.test(p.use || "")) || { id: "unknown", label: ["ไม่มีผลสำรวจการใช้", "No survey use"], color: null };
+    const g = USE_GROUPS.find((x) => x.match.test(p.use || ""));
+    if (g) return g;
+    return surveyedBuilding(p) ? { id: "other", label: USE_OTHER_LABEL, color: null, neutral: true } : { id: "unknown", label: ["ไม่มีหมุดสำรวจ", "No survey point"], color: null };
   };
   const catHex = (name) => S.tokens?.categoricalSeries.values.find((v) => v.name === name)?.[S.theme]?.fill || "#BFD4E7";
   function buildingStyle(f) {
@@ -1536,8 +1540,9 @@
     }
     if (S.buildingView === "use") {
       const g = useGroup(p);
-      return g.color ? { color: stroke, weight: 0.6, fill: true, fillColor: catHex(g.color), fillOpacity: 1, opacity: 1 }
-        : { color: S.theme === "light" ? "#8C968F" : "#46524F", weight: 0.6, fill: true, fillColor: SilaScales.hatch(S.theme) || "#3B4849", fillOpacity: 1, opacity: 1 };
+      if (g.color) return { color: stroke, weight: 0.6, fill: true, fillColor: catHex(g.color), fillOpacity: 1, opacity: 1 };
+      if (g.neutral) return { color: S.theme === "light" ? "#8C968F" : "#46524F", weight: 0.6, fill: true, fillColor: S.theme === "light" ? "#DCE1DD" : "#33403D", fillOpacity: 1, opacity: 1 };
+      return { color: S.theme === "light" ? "#8C968F" : "#46524F", weight: 0.6, fill: true, fillColor: SilaScales.hatch(S.theme) || "#3B4849", fillOpacity: 1, opacity: 1 };
     }
     if (S.buildingView === "roll") {
       const g = rollGroup(p);
@@ -1581,7 +1586,7 @@
   /* English for survey values (the survey records them in Thai); unknown values stay as recorded. */
   const SURVEY_EN = {
     "อยู่เอง": "Owner-occupied", "ตัวเอง": "Owner-occupied", "เช่า": "Rented", "จอดรถ": "Parking", "ผู้อื่นทำประโยชน์": "Used by others", "อื่น ๆ": "Other",
-    "เก็บของ": "Storage", "บ้านสวน เลี้ยงเป็ดไก่": "Garden house, poultry", "จุดแวะพัก": "Rest stop", "เลี้ยงวัว ควาย": "Cattle and buffalo",
+    "เก็บของ": "Storage", "ให้เช่าหรือผู้อื่นใช้": "Rented or used by others", "จอดรถหรือเก็บของ": "Parking or storage", "เกษตรหรือเลี้ยงสัตว์": "Farming or livestock", "บ้านสวน เลี้ยงเป็ดไก่": "Garden house, poultry", "จุดแวะพัก": "Rest stop", "เลี้ยงวัว ควาย": "Cattle and buffalo",
     "ตรวจสอบแล้ว/สำรวจแล้ว": "Checked / surveyed", "เพิ่มตำแหน่งใหม่": "New position added", "ไม่มีข้อมูล": "No data", "มีข้อมูล/ยังไม่ตรวจสอบ": "Data, not yet checked",
     "ตึก": "Masonry", "ครึ่งตึกครึ่งไม้": "Half masonry, half wood", "ไม้": "Wood", "สังกะสี": "Corrugated metal", "เต็นท์": "Tent",
     "ประเภทบ้านเดี่ยว": "Detached house", "ประเภทบ้านแถว (ทาวน์เฮาส์)": "Townhouse", "ประเภทตึกแถว": "Shophouse", "โรงจอดรถ": "Carport",
@@ -1731,9 +1736,9 @@
         ? (p.buildingMatch === "near" ? text(`ติดรูปอาคาร #${num(Number(p.buildingId.slice(10)))} ห่าง ${num(p.buildingDistM, 1)} ม.`, `Beside footprint #${num(Number(p.buildingId.slice(10)))}, ${num(p.buildingDistM, 1)} m away`)
           : text(`อยู่ในรูปอาคาร #${num(Number(p.buildingId.slice(10)))}`, `Inside footprint #${num(Number(p.buildingId.slice(10)))}`))
         : text(`ยังไม่มีรูปอาคาร${p.buildingDistM != null ? ` · รูปที่ใกล้สุดห่าง ${num(p.buildingDistM, p.buildingDistM < 100 ? 1 : 0)} ม.` : ""}`, `No footprint yet${p.buildingDistM != null ? ` · nearest is ${num(p.buildingDistM, p.buildingDistM < 100 ? 1 : 0)} m away` : ""}`));
-      add(text("การใช้ตามสำรวจ", "Surveyed use"), esc(sv(p.use) || text("ไม่มีในแบบสำรวจ", "Not in survey")));
+      add(text("การใช้ตามสำรวจ", "Surveyed use"), esc(sv(p.use) || text(...USE_OTHER_LABEL)));
       add(text("ชั้นที่ใช้ค้าขาย", "Commercial floor"), p.commercial ? text("มี", "Yes") : text("ไม่พบ", "None found"));
-      add(text("สถานะสำรวจ", "Survey status"), esc(sv(p.status)));
+      add(text("ตำแหน่งใหม่จากการสำรวจ", "New position from the survey"), p.newPoint ? text("ใช่ · อาจยังไม่อยู่ในบัญชี", "Yes · may be missing from the roll") : text("ไม่ใช่", "No"));
     } else if (S.dataset === "buildings") {
       if (p.houseNumbers?.length || p.surveyPoints) add(text("บ้านเลขที่ในอาคาร", "House numbers"), esc(houseNumbersText(p.houseNumbers, 12) || text("ไม่มีในแบบสำรวจ", "None in the survey")));
       if (p.roll) add(text("บัญชีสิ่งปลูกสร้าง", "Building roll"), esc(text(...(rollGroup(p)?.label || ["อาคารไม่ตรงแปลงใด", "No parcel under the building"]))) + (p.rollValue != null
@@ -1746,7 +1751,7 @@
       add(text("จำนวนชั้น", "Floors"), p.floors ? num(p.floors) : null);
       add(text("วัสดุ", "Material"), esc(sv(p.material)));
       add(text("อายุอาคาร", "Building age"), p.age != null ? `${num(p.age)} ${text("ปี", Number(p.age) === 1 ? "year" : "years")}` : null);
-      add(text("การใช้ตามสำรวจ", "Surveyed use"), esc(sv(p.use)));
+      add(text("การใช้ตามสำรวจ", "Surveyed use"), p.use ? esc(sv(p.use)) : surveyedBuilding(p) ? esc(text(...USE_OTHER_LABEL)) : null);
       add(text("พื้นที่หลังคา", "Roof area"), `${num(p.areaM2)} ${text("ตร.ม.", "m²")}`);
       add(text("มูลค่าอาคารประมาณ", "Estimated building value"), p.estValue != null ? money(p.estValue) : text("ยังคิดไม่ได้", "Not calculable"));
       add(text("ตั้งอยู่บนแปลง", "Parcels under it"), p.parcelCount ? `${num(p.parcelCount)} ${text("แปลง", p.parcelCount === 1 ? "parcel" : "parcels")}` : text("ไม่ตรงแปลงใด", "No parcel match"));
@@ -1840,7 +1845,7 @@
       const row = (fill, label) => `<div class="legend-class"><span class="legend-chip" style="background:${fill}"></span><span>${esc(label)}</span></div>`;
       return `<div class="legend-title">${text("หมุดทะเบียนบ้านต่ออาคาร", "House-register points per building")}</div><div class="legend-classes">${row(cls[2], text("4 หมุดขึ้นไป", "4 or more"))}${row(cls[1], text("2–3 หมุด", "2–3"))}${row(cls[0], text("1 หมุด", "1"))}<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("count", S.theme)}"></span><span>${text("ไม่พบหมุดสำรวจ (ไม่ทราบ ไม่ใช่ศูนย์)", "No survey point (unknown, not zero)")}</span></div><div class="legend-class"><span class="legend-chip" style="background:transparent;border:1.5px dashed ${dark}"></span><span>${text("ผูกจากหมุดที่อยู่ติดอาคาร ≤5 ม.", "Joined from a point ≤5 m away")}</span></div></div><div class="legend-unit">${text("นับหมุดจากแบบสำรวจอาคาร 19 ต.ค. 2569 · ไม่พบหมุด อาจเป็นอาคารประกอบ อาคารที่ไม่ได้อยู่อาศัย หรือยังไม่สำรวจ", "Points from the 19 Oct 2026 building survey · none found can mean an annex, a non-residential building or no survey yet")}</div>`;
     }
-    if (S.buildingView === "use") return `<div class="legend-title">${text("การใช้อาคารตามแบบสำรวจ", "Surveyed building use")}</div><div class="legend-classes">${[...[{ label: ["มีชั้นที่ใช้ค้าขาย", "Commercial floor"], color: "yellow" }], ...USE_GROUPS].map((g) => `<div class="legend-class"><span class="legend-chip" style="background:${catHex(g.color)}"></span><span>${esc(text(...g.label))}</span></div>`).join("")}<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${text("ไม่มีผลสำรวจการใช้", "No survey use")}</span></div></div><div class="legend-unit">${text("สีแยกประเภท ไม่ใช่ระดับความเสี่ยง", "Colours separate categories, not risk")}</div>`;
+    if (S.buildingView === "use") return `<div class="legend-title">${text("การใช้อาคารตามแบบสำรวจ", "Surveyed building use")}</div><div class="legend-classes">${[...[{ label: ["มีชั้นที่ใช้ค้าขาย", "Commercial floor"], color: "yellow" }], ...USE_GROUPS].map((g) => `<div class="legend-class"><span class="legend-chip" style="background:${catHex(g.color)}"></span><span>${esc(text(...g.label))}</span></div>`).join("")}<div class="legend-class"><span class="legend-chip" style="background:${S.theme === "light" ? "#DCE1DD" : "#33403D"};border:1px solid ${S.theme === "light" ? "#8C968F" : "#46524F"}"></span><span>${esc(text(...USE_OTHER_LABEL))}</span></div><div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${text("ไม่มีหมุดสำรวจ", "No survey point")}</span></div></div><div class="legend-unit">${text("สีแยกประเภท ไม่ใช่ระดับความเสี่ยง · ไม่แยกอยู่เองกับบ้านว่างรายหลัง เพื่อความปลอดภัยของบ้านที่ไม่มีคนอยู่", "Colours separate categories, not risk · owner-occupied and empty homes are not told apart, for the safety of empty homes")}</div>`;
     return "";
   }
 

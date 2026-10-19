@@ -1,9 +1,11 @@
 {
  "schema": "sila-publication-audit/1.8",
  "checkedOn": "2026-10-20",
+ "independentReview": "a separate reviewer scanned every tracked file, the screenshots and the public git history on 20 Oct 2026; its findings on the house layer, the population grid and road names are fixed in this release; surveyor notes remain in public git history before this release (owner decision pending)",
  "filesScanned": [
   "README.md",
   "app.js",
+  "build-manifest.json",
   "choropleth.js",
   "data/buildings.geojson",
   "data/catalog.json",
@@ -14,6 +16,7 @@
   "data/parcels.geojson",
   "data/population-grid.geojson",
   "data/population-structure.json",
+  "data/roads.geojson",
   "fabdem-layer.js",
   "index.html",
   "map-layers.css",
@@ -23,6 +26,7 @@
   "qa/check-public-aggregate.cjs",
   "qa/check-tax-engine.cjs",
   "qa/check-terrain-3d.cjs",
+  "qa/revision-1.8-browser-checks.json",
   "qa/revision-1.8-terrain-fixtures.json",
   "qa/revision-1.8-terrain3d-fixtures.json",
   "reference/lds-analytical-subset.json",
@@ -35,9 +39,10 @@
   "tax-engine.js",
   "terrain-3d.js"
  ],
- "filesChangedSinceMain": [
+ "filesChangedSincePublished17": [
   "README.md",
   "app.js",
+  "build-manifest.json",
   "choropleth.js",
   "data/buildings.geojson",
   "data/catalog.json",
@@ -48,6 +53,7 @@
   "data/parcels.geojson",
   "data/population-grid.geojson",
   "data/population-structure.json",
+  "data/roads.geojson",
   "fabdem-layer.js",
   "index.html",
   "map-layers.css",
@@ -57,6 +63,8 @@
   "qa/check-public-aggregate.cjs",
   "qa/check-tax-engine.cjs",
   "qa/check-terrain-3d.cjs",
+  "qa/revision-1.8-browser-checks.json",
+  "qa/revision-1.8-publication-audit.json",
   "qa/revision-1.8-terrain-fixtures.json",
   "qa/revision-1.8-terrain3d-fixtures.json",
   "reference/lds-analytical-subset.json",
@@ -99,6 +107,28 @@
  ],
  "personalDataPatternHits": {},
  "reviewedFalsePositives": {
+  "build-manifest.json": [
+   "thirteen_digit_number inside a SHA-256 hex string",
+   "thirteen_digit_number inside a SHA-256 hex string",
+   "thirteen_digit_number inside a SHA-256 hex string",
+   "thirteen_digit_number inside a SHA-256 hex string",
+   "thirteen_digit_number inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string",
+   "eleven_digit_house_code inside a SHA-256 hex string"
+  ],
+  "data/roads.geojson": [
+   "thai_person_title_with_name: road named after a resort (Naya Resort), not a person",
+   "thai_person_title_with_name: road named after a resort (Naya Resort), not a person"
+  ],
   "reference/terrain-palettes.json": [
    "eleven_digit_house_code inside a SHA-256 hex string"
   ]
@@ -111,12 +141,17 @@
   "tax-map parcel codes"
  ],
  "houseNumberNotesRemoved": "house-number fields keep house numbers only: other text typed by surveyors is removed, and a point without a number shows its survey point number",
- "withheldPerPoint": [
-  "some household-survey status values and some use values are published blank (null) per point, mixed with points that are blank in the source, so a blank does not reveal which value was withheld"
- ],
+ "surveyPointFields": "survey status is not published (only whether the survey added the position); use is published in groups (rented or used by others; parking or storage; farming or livestock) and owner-occupied, other and blank are one group, so empty homes cannot be singled out; vacant building type withheld",
+ "surveyAndGridChecks": {
+  "statusKeyPresent": 0,
+  "useOutsideGroups": 0,
+  "houseNumberWithAddressOrNote": 0,
+  "populationIntervalViolations": 0
+ },
  "aggregatedOnly": [
-  "population grid: 250 m cells shown only with >=10 listed people and >=3 households, with secondary suppression so a hidden cell cannot be worked out from village totals; groups of 1-4 shown as <5; no per-house age or sex"
+  "population grid and village table: 250 m cells shown only with >=10 listed people and >=3 households; groups of 1-4 shown as <5; secondary suppression hides further groups until an interval check finds no <5 narrowed below 1-4 and no hidden count pinned under 5; no per-house age or sex"
  ],
+ "roadNames": "bracketed personal aliases (a title and a name) after a few soi names removed; official names kept",
  "notPublished": [
   "names",
   "national ID numbers",

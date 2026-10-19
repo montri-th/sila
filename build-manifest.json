@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.8",
-  "builtAtUtc": "2026-10-19T20:52:53.831522+00:00",
+  "builtAtUtc": "2026-10-19T21:10:25.061343+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 68562,
-      "sha256": "610d2e6de1b0bd857ff236aaf6a32e057cd86904768e0bc9c71880f8d4d1abaa",
+      "bytes": 69141,
+      "sha256": "de84f7861a7969c0031234a1e79b257e8817a80c48511f9ba10af37ffa1af125",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 275432,
-      "sha256": "8734ce50ec6a5dc257e01aec756a97a815566482d1b65bf6021a3b925c1223a0",
+      "bytes": 277059,
+      "sha256": "86b88f60a80c6f98f3016a560a71a1c37cc7663676fbc4bb94142ba365cd0f99",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -750,8 +750,8 @@
     },
     {
       "path": "data/buildings.geojson",
-      "bytes": 33667628,
-      "sha256": "fc662d56baf6581dae5d5d4e30502b0d8b79d409811434152cc5170c54ee8ed2",
+      "bytes": 33391356,
+      "sha256": "6c7db649888386de6953befe16035b70215694e470e7e8e78f6eeac35e37a1d5",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -760,8 +760,8 @@
     },
     {
       "path": "data/catalog.json",
-      "bytes": 91451,
-      "sha256": "154d9b389753a507edf5822928daff57e09bb15271ad6b24ddcc750538a32c41",
+      "bytes": 92046,
+      "sha256": "b3de626d772201e3bd73978966f646654413a1edf27f2b23ecfd35656cc269f8",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -840,8 +840,8 @@
     },
     {
       "path": "data/houses.geojson",
-      "bytes": 17190032,
-      "sha256": "f2c9e2be6fdceb5b6120d9d399856b69fa9c5f82f19ec67c80dd58a5ff8402ff",
+      "bytes": 15429279,
+      "sha256": "f244cc0274d453951bb6f55442f50b6f83ce00c8e087be2526a51b0702d4ce9c",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -850,8 +850,8 @@
     },
     {
       "path": "data/metadata.json",
-      "bytes": 46301,
-      "sha256": "140a65fcd4015d71a2bf97ccd6699da87cfa27c968e35cda1c1b7ec7bd483ac9",
+      "bytes": 46540,
+      "sha256": "57c772a233fbe5da3d9f6c41a8c2dab9bd135c5d247b44e2200be06ff5faec2b",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -900,8 +900,8 @@
     },
     {
       "path": "data/population-grid.geojson",
-      "bytes": 449583,
-      "sha256": "2b5ccf6f1003db126b88450e5454d56b12913cf1c4f06f0af18bf91c54364ad7",
+      "bytes": 452338,
+      "sha256": "d2b8e3c73e7ac3d8029562f48d5014c7abbaf06639eda3fee1028fb2d728c7b5",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -910,8 +910,8 @@
     },
     {
       "path": "data/population-structure.json",
-      "bytes": 3396,
-      "sha256": "bd366f514eec89b7a8335b40172459bbfbff8bc38d78d7a01d3b1e52df96cd0b",
+      "bytes": 3575,
+      "sha256": "3db2e7204ae6338289a172a7b3b20c39a9b785a1b2fd6140bdc5114a2008932d",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -940,8 +940,8 @@
     },
     {
       "path": "data/roads.geojson",
-      "bytes": 608961,
-      "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+      "bytes": 608803,
+      "sha256": "7ca3750b78e4ddf17dd9e9e4cf8efc18e439352416b10c5be42bf62faab80286",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -1569,8 +1569,8 @@
     },
     {
       "path": "qa/revision-1.8-publication-audit.json",
-      "bytes": 3865,
-      "sha256": "0b48cee8f54679dd73e73ed23a8c378d1d7193fdb2ec2d2d28da0223443d1678",
+      "bytes": 6686,
+      "sha256": "b7a8eaae79da12b553927833adc5849472839c2df64a457b539581bac6efe240",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -3336,10 +3336,11 @@
     },
     "taxLinkage": {
       "parcelsMatched": 26678,
-      "deed": 22703,
-      "houseNumbers": 3975,
+      "matchedByDeedNumber": 22703,
+      "matchedByHouseNumbers": 3975,
       "parcelsWithTax2569": 26370,
-      "tax2569OnMapTHB": 21531649.98
+      "tax2569OnMapTHB": 21531649.98,
+      "taxedParcelsOutsideBoundaryLine": 59
     },
     "buildingRoll": {
       "onRoll": 11519,

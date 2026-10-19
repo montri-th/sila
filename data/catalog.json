@@ -22,6 +22,7 @@
    ],
    "caveats": [
     "Municipal building survey points received 19 Oct 2026. Only house number and building survey fields are published; surveyor notes typed into the house-number field are removed, and a point without a number shows its survey point number.",
+    "Survey status is not published, only whether the survey added the position. Use is published in groups: rented or used by others, parking or storage, farming or livestock; owner-occupied, other and blank are one group, so empty homes cannot be singled out.",
     "Names, national ID numbers, owner fields, photos, remarks and house-register codes are never published.",
     "Each point carries the footprint it was joined to (inside, or within 5 m on the same parcel); unmatched points carry the distance to the nearest outline."
    ],
@@ -90,7 +91,8 @@
     "Building footprints received 19 Oct 2026; survey attributes come from survey points inside each footprint, or within 5 m on the same parcel when none is inside.",
     "House-register join by position only: 25,769 points inside an outline, 428 within 5 m on the same parcel, 2,259 without a footprint.",
     "Estimated building value = footprint area x floors x Khon Kaen 2566-2569 price x (1 - depreciation); for ordering checks only, not an assessment.",
-    "A building is marked as spanning parcels when a second parcel holds at least 25% and 20 m2 of its footprint; map offsets can cause false flags."
+    "A building is marked as spanning parcels when a second parcel holds at least 25% and 20 m2 of its footprint; map offsets can cause false flags.",
+    "Use is published in the same groups as the survey points; owner-occupied, other and blank are one group."
    ],
    "insideMunicipalityCount": 38794,
    "scopeCountMethod": "actual geometry intersection with supplied boundary; crossing/overlap feature may be counted in multiple scopes",
@@ -154,7 +156,8 @@
     "EPSG:4326"
    ],
    "caveats": [
-    "713 source line segments; not 713 unique roads or verified municipal maintenance responsibility."
+    "713 source line segments; not 713 unique roads or verified municipal maintenance responsibility.",
+    "Bracketed personal aliases after a few soi names (a title and a name) are removed; the official name stays."
    ],
    "insideMunicipalityCount": 713,
    "scopeCountMethod": "actual geometry intersection with supplied boundary; crossing/overlap feature may be counted in multiple scopes",
@@ -1095,7 +1098,7 @@
    "sourceFolders": [],
    "caveats": [
     "250 m cells counted from member lists in the 19 Oct 2026 building survey; only some survey points carry a list, so this is not the full population.",
-    "A cell is shown only with at least 10 listed people and 3 households; groups of 1-4 people are shown as <5. No per-house demographics are published.",
+    "A cell is shown only with at least 10 listed people and 3 households; groups of 1-4 people are shown as <5, and more groups are hidden wherever a <5 could be narrowed or a small count worked out from the totals. No per-house demographics are published.",
     "Age bands 15-42 and 42+ are estimated from the national ID type and are approximate."
    ],
    "scopeCounts": {
