@@ -111,6 +111,8 @@
 .terrain-bar{height:12px;border-radius:3px;border:1px solid rgba(127,127,127,.45);margin:4px 0 2px}
 .terrain-bar-labels{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--secondary)}
 .legend-line.terrain-contour-sample{border-top:1.5px solid var(--primary);opacity:.8}
+/* Over height colours the contour ink is the same dark line in both themes; the sample sits on a neutral chip so it shows on dark panels too. */
+.legend-line.terrain-contour-sample.on-colour{width:28px;height:12px;border-top:0;border-radius:3px;opacity:1;background:linear-gradient(to bottom,transparent 5px,#182327 5px,#182327 7px,transparent 7px),#DDE2DE;box-shadow:inset 0 0 0 1px rgba(127,127,127,.45)}
 .summary-metrics strong .metric-unit{font-size:.55em;font-weight:600;font-family:"Bai Jamjuree",sans-serif;white-space:nowrap}
 @media(max-width:360px){.summary-metrics{gap:8px}.summary-metrics strong{font-size:19px}.summary-metrics>div{padding-right:4px}}
 @media(max-width:1100px){.map-stage.popup-open .map-legend{visibility:hidden}}

@@ -178,7 +178,9 @@
     const cache = new Map(), active = new Map(), queue = []; let wanted = new Set(), layer = null, lineDirty = true, map;
     // Height colour and contours (revision 1.8). Colours arrive as a palette from the host; nothing is invented here.
     let surface = {colorOn:false, colors:null, lo:0, hi:1, opacity:.85, interval:0, major:5, bands:0}, rampDirty = true;
-    const lineColour = () => theme === 'light' ? [24 / 255, 35 / 255, 39 / 255] : [241 / 255, 244 / 255, 239 / 255];
+    // Over the height colours (same HEX in both themes) contours use one dark ink in both themes; with shading only they follow the theme.
+    const inkLines = () => surface.colorOn || theme === 'light';
+    const lineColour = () => inkLines() ? [24 / 255, 35 / 255, 39 / 255] : [241 / 255, 244 / 255, 239 / 255];
     let resolveReady, rejectReady; const ready = new Promise((resolve, reject) => { resolveReady = resolve; rejectReady = reject; }); ready.catch(() => {});
     let lastStatus = '', lastEmission = null;
     function emit(state, extra = {}) {
@@ -316,7 +318,7 @@
             gl.uniform1i(this.uniforms.ramp, 1); gl.uniform1i(this.uniforms.colorOn, surface.colorOn && rampReady && !rampDirty ? 1 : 0);
             gl.uniform1f(this.uniforms.lo, Number(surface.lo) || 0); gl.uniform1f(this.uniforms.hi, Number(surface.hi) || 1); gl.uniform1f(this.uniforms.opacity, Number.isFinite(surface.opacity) ? surface.opacity : .85);
             gl.uniform1f(this.uniforms.pxRatio, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
-            gl.uniform1f(this.uniforms.lineAlpha, theme === 'light' ? 1 : 0.7);   // light lines on the shared data colours read stronger, so they are softer in dark theme
+            gl.uniform1f(this.uniforms.lineAlpha, inkLines() ? 1 : 0.7);   // light lines on shading only are softened in dark theme
             gl.uniform1f(this.uniforms.interval, surface.interval > 0 ? surface.interval : 0); gl.uniform1f(this.uniforms.major, surface.major || 5); gl.uniform1f(this.uniforms.band, surface.bands > 0 ? surface.bands : 0);
             const eq = surface.mapping === 'equalize' && Array.isArray(surface.quantiles) && surface.quantiles.length === 101;
             gl.uniform1i(this.uniforms.equalize, eq ? 1 : 0); if (eq) gl.uniform1fv(this.uniforms.q, new Float32Array(surface.quantiles)); gl.uniform3fv(this.uniforms.lineColor, lineColour());

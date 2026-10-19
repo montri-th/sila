@@ -136,7 +136,9 @@
     };
     const colour = !!(lut && Number.isFinite(lo) && Number.isFinite(hi) && span > 0);
     const interval = o.contourOn === false ? 0 : (o.interval > 0 ? o.interval : 0), major = interval * (o.major || 5), band = o.bands > 0 ? o.bands : 0;
-    const line = o.lineRGB || (dark ? [241, 244, 239] : [24, 35, 39]), opacity = Number.isFinite(o.opacity) ? o.opacity : 0.85;
+    // Over the height colours, lines use the same dark ink in both themes, as the colours themselves do; with shading only they follow the theme.
+    const ink = colour || !dark;
+    const line = o.lineRGB || (ink ? [24, 35, 39] : [241, 244, 239]), opacity = Number.isFinite(o.opacity) ? o.opacity : 0.85;
     const alt = Math.PI / 4, az = 315 * Math.PI / 180, flat = Math.sin(alt);
     const light = [Math.sin(az) * Math.cos(alt), Math.cos(az) * Math.cos(alt), Math.sin(alt)], shadeAlpha = dark ? 180 : 160;
     for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
@@ -162,7 +164,7 @@
         // Fade lines that would sit closer than about 2-5 px apart (steep banks), so dense steps never merge into a band.
         // Lines fade out where they would crowd: minor lines need about 10 px between them, major lines 8 px.
         const fadeMinor = Math.min(1, Math.max(0, (interval / g - 4) / 6)), fadeMajor = Math.min(1, Math.max(0, (major / g - 3) / 5));
-        const a = Math.max(Math.min(1, Math.max(0, 1.0 - dMinor)) * 0.5 * fadeMinor, Math.min(1, Math.max(0, 1.5 - dMajor)) * 0.85 * fadeMajor) * (dark ? 0.7 : 1);
+        const a = Math.max(Math.min(1, Math.max(0, 1.0 - dMinor)) * 0.5 * fadeMinor, Math.min(1, Math.max(0, 1.5 - dMajor)) * 0.85 * fadeMajor) * (ink ? 1 : 0.7);
         if (a > 0) {
           const base = A / 255, la = a, outA = la + base * (1 - la);
           R = (line[0] * la + R * base * (1 - la)) / outA; G = (line[1] * la + G * base * (1 - la)) / outA; B = (line[2] * la + B * base * (1 - la)) / outA; A = outA * 255;
