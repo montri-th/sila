@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.8",
-  "builtAtUtc": "2026-10-19T21:12:33.663825+00:00",
+  "builtAtUtc": "2026-10-19T21:20:00.044923+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 69141,
-      "sha256": "de84f7861a7969c0031234a1e79b257e8817a80c48511f9ba10af37ffa1af125",
+      "bytes": 69405,
+      "sha256": "32e2b28676c92459d21921111ba8f2ac77eeb21940055b9fb0bc26b480a68d52",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 277059,
-      "sha256": "86b88f60a80c6f98f3016a560a71a1c37cc7663676fbc4bb94142ba365cd0f99",
+      "bytes": 277656,
+      "sha256": "f1c52012502019a8161bb8088d851c709c93a122d7695851ef0b3e18aeb62fc1",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1560,7 +1560,7 @@
     {
       "path": "qa/revision-1.8-browser-checks.json",
       "bytes": 5337,
-      "sha256": "de83e04e33895453405cb1a2a5ecfa4dd45bfc583148c4752f99b82477c5b648",
+      "sha256": "df1a900ed30e9c0e21bb67839522a3f712244c0f2c2b0c3b8109ea857c0c4af4",
       "mimeTypes": [
         "application/json",
         "application/geo+json",

@@ -1,6 +1,6 @@
 {
  "schema": "sila-browser-checks/1.8",
- "checkedAtUtc": "2026-10-19T20:32:01.934811+00:00",
+ "checkedAtUtc": "2026-10-19T21:12:51.812758+00:00",
  "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
  "browser": "Chromium 141.0.7390.37",
  "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
