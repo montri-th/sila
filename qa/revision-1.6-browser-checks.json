@@ -1,0 +1,378 @@
+{
+  "schema": "sila.inline3d.browser-review.v1",
+  "as_of": "2026-10-19",
+  "status": "pass_with_bounded_scope",
+  "source_files_sha256": {
+    "app.js": "61c521f650c15e560ef15abda18515d03f4eeb0a6979c9a329a78ccde68bdd53",
+    "index.html": "29c8ed4de05d7adf267082ff30a510148e08f8ec9de7e33ac32dae6eba95f579",
+    "styles.css": "1d3bdf314c1b7591ae06d6b247bb155158ad2fb95fe21e6160e7bf882da15571",
+    "server.py": "c425aa1748e012fa5b68f8232ea998df199480c342cff6520b871d85852acc21",
+    "terrain-3d.js": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75"
+  },
+  "owned_files": [
+    "app.js",
+    "index.html",
+    "styles.css",
+    "server.py"
+  ],
+  "browser": "Chrome actual UI via CUA",
+  "viewport_reset": true,
+  "visual_review": {
+    "initial_matrix": [
+      "TH dark",
+      "TH light",
+      "EN dark",
+      "EN light"
+    ],
+    "widths_css_px": [
+      1440,
+      390
+    ],
+    "initial_states": 8,
+    "actual_screenshots_opened": true,
+    "final_bounded_recheck": [
+      "desktop TH dark: final themed navigation controls, basemap ready, pending 0",
+      "narrow TH light: final reserved status height, themed controls, basemap ready, pending 0",
+      "narrow TH dark orbit: actual pitch 65°, bearing changed, basemap ready, pending 0"
+    ],
+    "superseded_note": "Initial narrow TH dark/light captures reached valid DEM mesh before basemap paint. Narrow TH light was replaced after settled basemapReady. Narrow TH dark initial image is superseded for readiness by narrow-th-dark-orbit-3d.png. No basemap completeness is inferred from DEM ready alone.",
+    "no_global_horizontal_overflow": true
+  },
+  "interaction_checks": [
+    {
+      "test": "deep_link_3d_desktop_th_dark",
+      "camera": {
+        "bearing": "0",
+        "latitude": "16.489207613470054",
+        "longitude": "102.84971228089465",
+        "pitch": "55.00000000000001",
+        "zoom": "12.75"
+      },
+      "mode": "3d",
+      "overflow": false,
+      "renderer": "3d",
+      "status": "แสดงภูมิประเทศ 3D แล้ว",
+      "url": "?dataset=terrain&boundary=municipality&scope=sila&lang=th&theme=dark&basemap=street&mode=3d"
+    },
+    {
+      "test": "camera_3d_to_2d",
+      "before": {
+        "bearing": "1.1279583333333676",
+        "latitude": "16.489207613468636",
+        "longitude": "102.84971228089739",
+        "pitch": "65",
+        "zoom": "12.75"
+      },
+      "after": {
+        "camera": {
+          "basemapRenderer": "openfreemap-vector",
+          "basemapStatus": "ready",
+          "basemapTheme": "dark",
+          "latitude": "16.489207613470054",
+          "longitude": "102.84971228089465",
+          "terrain3dState": "ready",
+          "terrainState": "loading",
+          "zoom": "12.75"
+        },
+        "layersEnabled": true,
+        "mode": "2d",
+        "renderer": "2d",
+        "url": "?dataset=terrain&boundary=municipality&scope=sila&lang=th&theme=dark&basemap=street&mode=2d"
+      }
+    },
+    {
+      "test": "keyboard_2d_to_3d_pitch_bearing",
+      "camera": {
+        "bearing": "1.1279583333333676",
+        "latitude": "16.489207613470054",
+        "longitude": "102.84971228089465",
+        "pitch": "65",
+        "zoom": "12.75"
+      },
+      "mode": "3d",
+      "pressed": [
+        {
+          "focused": false,
+          "pressed": "false",
+          "tabIndex": -1,
+          "value": "2d"
+        },
+        {
+          "focused": true,
+          "pressed": "true",
+          "tabIndex": 0,
+          "value": "3d"
+        }
+      ],
+      "renderer": "3d",
+      "status": "กำลังเพิ่มรายละเอียดภูมิประเทศ 3D"
+    },
+    {
+      "test": "controlled_constructor_failure_falls_back",
+      "result": {
+        "leafletVisibility": "visible",
+        "renderer": "2d",
+        "retryEnabled": true,
+        "status": "กลับมาแสดง 2D แล้ว · เลือก 3D เพื่อลองเปิดอีกครั้ง",
+        "url": "http://127.0.0.1:8773/?dataset=terrain&boundary=municipality&scope=sila&lang=th&theme=dark&basemap=street&mode=2d"
+      }
+    },
+    {
+      "test": "keyboard_Home",
+      "result": {
+        "focus": "2d",
+        "renderer": "2d",
+        "url": "http://127.0.0.1:8772/?dataset=terrain&boundary=municipality&scope=sila&lang=th&theme=light&basemap=street&mode=2d"
+      }
+    },
+    {
+      "test": "keyboard_End",
+      "result": {
+        "focus": "3d",
+        "renderer": "3d",
+        "url": "http://127.0.0.1:8772/?dataset=terrain&boundary=municipality&scope=sila&lang=th&theme=light&basemap=street&mode=3d"
+      }
+    },
+    {
+      "test": "latest_core_keyboard_orbit_settled",
+      "result": {
+        "controls": [
+          {
+            "background": "rgb(32, 41, 45)",
+            "color": "rgb(241, 244, 239)"
+          },
+          {
+            "background": "rgb(32, 41, 45)",
+            "color": "rgb(241, 244, 239)"
+          },
+          {
+            "background": "rgb(32, 41, 45)",
+            "color": "rgb(241, 244, 239)"
+          }
+        ],
+        "meta": {
+          "basemapState": "ready",
+          "bearing": "4.043173335370965",
+          "exaggeration": "1",
+          "latitude": "16.48910974080981",
+          "longitude": "102.84991642182536",
+          "pending": "0",
+          "pitch": "65",
+          "rendered": "20",
+          "triangles": "1419450",
+          "zoom": "11.75"
+        },
+        "overflow": false,
+        "state": "ready",
+        "status": "แสดงภูมิประเทศ 3D แล้ว"
+      }
+    },
+    {
+      "test": "final_core_orbit_to_2d_camera",
+      "source3D": {
+        "basemapState": "ready",
+        "bearing": "0",
+        "exaggeration": "1",
+        "latitude": "16.489207613470043",
+        "longitude": "102.84971228089466",
+        "pending": "0",
+        "pitch": "65",
+        "rendered": "16",
+        "triangles": "1162686",
+        "zoom": "12.75"
+      },
+      "result2D": {
+        "camera": {
+          "basemapRenderer": "openfreemap-vector",
+          "basemapStatus": "ready",
+          "basemapTheme": "dark",
+          "latitude": "16.489207613470054",
+          "longitude": "102.84971228089465",
+          "terrain3dState": "ready",
+          "terrainState": "ready",
+          "zoom": "12.75"
+        },
+        "overlaysEnabled": true,
+        "renderer": "2d"
+      }
+    },
+    {
+      "test": "final_narrow_TH_light_settled",
+      "result": {
+        "controls": [
+          {
+            "background": "rgb(252, 252, 250)",
+            "color": "rgb(24, 35, 39)"
+          },
+          {
+            "background": "rgb(252, 252, 250)",
+            "color": "rgb(24, 35, 39)"
+          },
+          {
+            "background": "rgb(252, 252, 250)",
+            "color": "rgb(24, 35, 39)"
+          }
+        ],
+        "height": 844,
+        "meta": {
+          "basemapState": "ready",
+          "bearing": "0",
+          "exaggeration": "1",
+          "latitude": "16.489109740809916",
+          "longitude": "102.84991642182548",
+          "pending": "0",
+          "pitch": "55.00000000000001",
+          "rendered": "12",
+          "triangles": "1132036",
+          "zoom": "11.75"
+        },
+        "overflow": false,
+        "state": "ready",
+        "status": "แสดงภูมิประเทศ 3D แล้ว",
+        "width": 390
+      }
+    },
+    {
+      "test": "nonterrain_mode3d_normalizes_2d",
+      "result": {
+        "canvas3DHidden": true,
+        "modeControlsHidden": true,
+        "renderer": "2d",
+        "url": "http://127.0.0.1:8772/?dataset=buildings&boundary=municipality&scope=sila&lang=en&theme=light&basemap=street&mode=2d"
+      }
+    },
+    {
+      "test": "invalid_mode_normalizes_2d",
+      "result": {
+        "mode2DPressed": "true",
+        "renderer": "2d",
+        "url": "http://127.0.0.1:8772/?dataset=terrain&boundary=municipality&scope=sila&lang=en&theme=light&basemap=street&mode=2d"
+      }
+    }
+  ],
+  "additional_observed_checks": [
+    {
+      "test": "browser back and forward",
+      "result": "mode URL, selected 2D/3D control and active renderer followed browser history; observed earlier in same actual Chrome session"
+    },
+    {
+      "test": "failure retry",
+      "result": "Clicking enabled 3D retry on controlled constructor-failure fixture attempted initialization and returned to usable 2D again."
+    }
+  ],
+  "failure_scope": "Controlled constructor rejection served only for terrain-3d.js on isolated loopback 8773; all other requests used production preview allowlist. This is not an actual GPU-loss or provider-outage injection.",
+  "limitations": [
+    "No full WCAG or cross-browser certification.",
+    "200% Chrome shortcut attempted but CSS viewport/DPR did not change; 200% zoom not verified.",
+    "Thai 130% font scaling and actual reduced-motion preference emulation not performed.",
+    "No 3D feature picking or context overlay rendering is implemented; UI explains and disables overlays in 3D while 2D return restores controls.",
+    "No public or production release performed by this reviewer."
+  ],
+  "screenshots": [
+    {
+      "path": "screenshots/controlled-failure-2d-recovery.png",
+      "pixel_dimensions": [
+        1710,
+        851
+      ],
+      "sha256": "67005e4c56f41a8057c3c9a86b56233b4c8f012bcbfa7d21494f71654f13b319",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/desktop-en-dark-3d.png",
+      "pixel_dimensions": [
+        1440,
+        1000
+      ],
+      "sha256": "2b167d9d842cced5127ccd91a874689a77f3801a39eaaf0ba4b7d5a2bd54f296",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/desktop-en-light-3d.png",
+      "pixel_dimensions": [
+        1440,
+        1000
+      ],
+      "sha256": "405efd5e40684c0f7079cb5820f8a3e6431b6625555ef7f4a54e801635d4c0f6",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/desktop-th-dark-3d.png",
+      "pixel_dimensions": [
+        1440,
+        1000
+      ],
+      "sha256": "6ede64a5a6a5b7c8ad046c64e2f8f655bf90481519f6e72a61e7e4f6aabda5e3",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/desktop-th-light-3d.png",
+      "pixel_dimensions": [
+        1440,
+        1000
+      ],
+      "sha256": "66bdca4ea9316009925d665bf858494f7d4211469f6b1f669e15aa8f4db21cb6",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/narrow-en-dark-3d.png",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "cdd6a528f34313bacd42ef1bee3842e1a5f2513873990e0a098fe39b32891ca5",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/narrow-en-light-3d.png",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "ec95fd78de1bced65bc776068457dee01ee637e9c7b0358c97a2447dea35d752",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/narrow-th-dark-3d.png",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "9b8c14e89c005b5d80874d8ba46d4a458bbb7c37faf83c25c7edabc9aeb6a2b4",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/narrow-th-dark-orbit-3d.png",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "76217b0193c6a8b43545059b634e4ea8699d3ddf73459b2cbad78f49dfde2225",
+      "archivedOutsideRepository": true
+    },
+    {
+      "path": "screenshots/narrow-th-light-3d.png",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "adc17972b4f3824cac1cb9e4e7996f2d77265415bffdb2f462b7b56ea34cedf6",
+      "archivedOutsideRepository": true
+    }
+  ],
+  "syntax_checks": {
+    "app_js_node_check": "pass",
+    "server_py_compile_without_bytecode": "pass"
+  },
+  "privacy": "Only already-public source municipality/context and terrain appear in screenshots; no raw tax/care records or credentials.",
+  "snapshot_binding": {
+    "owned_UI_files": "Final app/index/styles/server bytes were reviewed in final bounded captures.",
+    "core_runtime_tested_snapshot_sha256_prefix": "6bda8153",
+    "core_final_file_sha256": "64ab03ee870d1456dd3c7395f028269794da44812de5629d0feff2aaa44ca911",
+    "core_final_status_only_delta_runtime_retest": false,
+    "note": "Final core patch separates basemapErrors from DEM state; parent notified this followed runtime captures. Current file hash is recorded for packaging, not a claim the final status-only patch was reloaded. Geometry/camera/colour unchanged per core owner; parent owns final delta/live check.",
+    "packaging_core_after_root_status_callback_fix": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75",
+    "root_delta_review": "Two status-only corrections after runtime6bda8153; exact reversal reconstructs reviewed predecessor. Geometry/camera/colour unchanged; root owns final live runtime proof."
+  },
+  "source_files_sha256_role": "Final packaging hashes; observed runtime binding is explicitly separated below."
+}

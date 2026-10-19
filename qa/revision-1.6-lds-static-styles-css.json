@@ -1,0 +1,12 @@
+{
+  "releaseRef": "v0.9.7-owner.1",
+  "status": "PASS",
+  "scope": "Static registered Story/Location literal-color, prohibited-alias, locally linked CSS and governed numeric-value state checks only. Full source truth, role correctness, actual contrast, dynamic rendering, layout and accessibility remain manual/rendered gates.",
+  "files": [
+    "/Users/montri/.codex/.chatgpt-projects/g-p-69e8ec0f0f188191bda9c76f917fb5c0/outputs/sila-publish/styles.css"
+  ],
+  "uniqueColors": 42,
+  "problems": [],
+  "warnings": [],
+  "fullConformance": false
+}

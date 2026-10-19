@@ -23,6 +23,7 @@
     lang: "th",
     theme: "dark",
     dataset: "buildings",
+    mode: "2d",
     boundary: "municipality",
     scope: { type: "municipality", id: "sila" },
     tab: "overview",
@@ -41,6 +42,13 @@
     terrainCoverage: null,
     terrainLayer: null,
     terrainStatus: { state: "not_loaded" },
+    terrain3D: null,
+    terrain3DInit: null,
+    terrain3DStatus: { state: "not_loaded" },
+    terrain3DCamera: null,
+    terrain3DVisible: false,
+    terrain3DError: false,
+    terrain3DGeneration: 0,
     cache: new Map(),
     inflight: new Map(),
     map: null,
@@ -360,6 +368,7 @@
       lang: S.lang,
       theme: S.theme,
       basemap: S.basemap,
+      mode: S.dataset === "terrain" ? S.mode : "2d",
     });
     if (S.record)
       u.searchParams.set("record", S.record.properties?.id || S.record.id);
@@ -371,6 +380,7 @@
     S.dataset = q.get("dataset") || "buildings";
     if (S.dataset !== "overview" && !dataset(S.dataset))
       S.dataset = "buildings";
+    S.mode = S.dataset === "terrain" && q.get("mode") === "3d" ? "3d" : "2d";
     S.boundary = BOUNDARY_TYPES[q.get("boundary")]
       ? q.get("boundary")
       : "municipality";
@@ -421,6 +431,8 @@
     $("basemap").value = S.basemap;
     document.querySelector(".header-settings > summary").setAttribute("aria-label",text("ตัวเลือกภาษาและธีม", "Language and theme options"));
     $("basemap").setAttribute("aria-label", text("พื้นหลังแผนที่", "Map background"));
+    $("terrain-mode-group").setAttribute("aria-label", text("มุมมองภูมิประเทศ", "Terrain view"));
+    $("terrain-3d").setAttribute("aria-label", text("ภูมิประเทศสามมิติ · อำเภอเมืองขอนแก่น", "3D terrain · Mueang Khon Kaen district"));
     $("panel-splitter").setAttribute("aria-label", text("ปรับขนาดแผนที่และข้อมูล", "Resize map and data panels"));
     renderInterfaceIcons();
     $("map").setAttribute(
@@ -506,6 +518,7 @@
     document.body.dataset.publicAggregate = aggregateMode;
     if (aggregateModeChanged && S.map) requestAnimationFrame(() => S.map.invalidateSize({pan:false}));
     applyLocale();
+    renderTerrainControls();
     $("dataset-title").textContent = label(S.dataset);
     window.SilaContextActions.render({
       mount: $("context-actions"),
@@ -821,6 +834,18 @@
     );
   }
   function terrainStateLabel() {
+    if (S.mode === "3d") {
+      if (S.terrain3DStatus.state === "ready" && S.terrain3DStatus.basemapState === "loading") return text("ภูมิประเทศ 3D พร้อม · กำลังเติมภาพพื้นหลัง", "3D terrain ready · loading the basemap");
+      if (S.terrain3DStatus.state === "ready" && S.terrain3DStatus.basemapState === "partial") return text("ภูมิประเทศ 3D พร้อม · ภาพพื้นหลังยังไม่ครบ", "3D terrain ready · basemap partially available");
+      const states = {
+        loading: S.terrain3DVisible ? ["กำลังเพิ่มรายละเอียดภูมิประเทศ 3D", "Loading additional 3D terrain detail"] : ["กำลังเปิด 3D · ยังดูแผนที่ 2D ต่อได้", "Loading 3D · the 2D map remains available"],
+        ready: ["แสดงภูมิประเทศ 3D แล้ว", "3D terrain is ready"],
+        partial: ["แสดงภูมิประเทศ 3D ได้บางส่วน · พื้นที่ที่ไม่มีข้อมูลเว้นว่างไว้", "3D terrain is partially available · missing areas remain empty"],
+        error: ["3D ยังเปิดไม่ได้ · เลือก 2D เพื่อดูพื้นที่ต่อ", "3D is unavailable · choose 2D to continue"],
+      };
+      return text(...(states[S.terrain3DStatus.state] || states.loading));
+    }
+    if (S.terrain3DError) return text("กลับมาแสดง 2D แล้ว · เลือก 3D เพื่อลองเปิดอีกครั้ง", "Showing 2D · select 3D to try again");
     const labels = {
       loading: ["กำลังเปิดเงาภูมิประเทศ", "Loading terrain hillshade"],
       ready: ["เปิดเงาภูมิประเทศแล้ว", "Terrain hillshade loaded"],
@@ -831,10 +856,135 @@
   }
   function terrainContent() {
     const s = S.terrainSource;
-    const link = s?.external3DUrl || "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain";
     return notice(text("ดูรูปทรงพื้นที่ประกอบการวางแผน", "Inspect terrain form for planning"), text("เงาภูมิประเทศ FABDEM ครอบคลุมอำเภอเมืองขอนแก่น ขอบเขตเทศบาลและหมู่บ้านยังใช้บริบทเดิม แสงช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม", "FABDEM hillshade covers Mueang Khon Kaen district while keeping the current municipal and village context. Shading reveals terrain form; it is not elevation colouring or flood risk.")) +
-      `<section class="panel-section"><p id="terrain-state" role="status">${esc(terrainStateLabel())}</p><a class="mini-action" href="${esc(link)}" target="_blank" rel="noopener">${text("เปิดภูมิประเทศ 3D ใน CityMETER", "Open CityMETER 3D terrain")}</a><p class="inline-note">${text("เปิดแยกแท็บโดยคงแผนที่หน้านี้ไว้ หากหน้า 3D เลือก source อื่นอยู่ ให้เลือก FABDEM ในหน้านั้น", "Opens a separate tab while keeping this map. Select FABDEM in the 3D page if another source is active.")}</p></section>` +
+      `<section class="panel-section"><p id="terrain-state">${esc(terrainStateLabel())}</p><p>${text("เลือก 2D เหนือแผนที่เพื่ออ่านตำแหน่ง หรือเลือก 3D เพื่อหมุนและเอียงดูรูปทรงพื้นที่ในหน้านี้ ตำแหน่งและระดับซูมจะตามกันเมื่อสลับมุมมอง", "Choose 2D above the map to inspect locations, or choose 3D to rotate and tilt the terrain here. Switching views keeps the same centre and zoom.")}</p><p class="inline-note">${text("3D แสดงภูมิประเทศกับขอบเขตบริบท ส่วนชั้นข้อมูลซ้อนและการเลือกรายการใช้ใน 2D ไม่มีการสร้างความสูงอาคารหรือระดับน้ำจากข้อมูลนี้", "3D shows terrain and boundary context. Context overlays and record selection remain in 2D; no building heights or water levels are inferred.")}</p></section>` +
       `<dl class="source-dl"><dt>${text("ชุดข้อมูล", "Dataset")}</dt><dd>${esc(s?.dataset || "FABDEM")}</dd><dt>${text("รายละเอียดต้นทาง", "Source detail")}</dt><dd>${esc(s?.resolution || text("กำลังเปิดคำอธิบายต้นทาง", "Source description is loading"))}</dd><dt>${text("รุ่นไฟล์แสดงผล", "Tile build version")}</dt><dd>${esc(s?.version || "—")} · ${text("วันสร้าง tile ไม่ใช่วันสำรวจภูมิประเทศ", "Tile build date is not terrain survey date")}</dd><dt>${text("ระดับซูม", "Zoom")}</dt><dd>${text("ข้อมูลต้นทางถึงซูม", "Native source through zoom")} ${num(s?.maxNativeZoom)} · ${text("ขยายแสดงผลถึง 22 โดยไม่เพิ่มรายละเอียด", "Display overzoom through 22 adds no detail")}</dd><dt>${text("ฐานอ้างอิงแนวดิ่ง", "Vertical datum")}</dt><dd>${esc(s?.verticalDatum || text("ยังไม่ประกาศในคำอธิบายที่ได้รับ", "Not declared in the supplied source description"))}</dd><dt>${text("สิทธิ์และที่มา", "Rights and source")}</dt><dd>${esc(s?.attribution || "—")}${s?.sourceUrl ? ` · <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener">${text("ต้นทาง", "Source")}</a>` : ""}${s?.licenseUrl ? ` · <a href="${esc(s.licenseUrl)}" target="_blank" rel="noopener">${text("อ่านเงื่อนไข", "Read terms")}</a>` : ""}</dd></dl>`;
+  }
+  function renderTerrainControls() {
+    const active = S.dataset === "terrain";
+    $("terrain-view-controls").hidden = !active;
+    if (active) document.body.dataset.terrainView = S.mode;
+    else delete document.body.dataset.terrainView;
+    document.querySelectorAll("[data-terrain-mode]").forEach(button => {
+      const selected = button.dataset.terrainMode === S.mode;
+      button.setAttribute("aria-pressed", String(selected));
+      button.tabIndex = selected ? 0 : -1;
+      button.setAttribute("aria-label", button.dataset.terrainMode === "3d" ? text("3D · หมุนดูรูปทรงภูมิประเทศ", "3D · rotate and tilt terrain") : text("2D · อ่านตำแหน่งและเลือกรายการ", "2D · inspect locations and records"));
+    });
+    $("terrain-view-help").textContent = S.mode === "3d"
+      ? text("ลากเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · หรือ Shift + ลูกศร", "Drag to pan · right-drag to rotate/tilt · or Shift + arrows")
+      : text("อ่านตำแหน่งใน 2D · เปลี่ยนเป็น 3D เพื่อดูรูปทรงพื้นที่", "Inspect locations in 2D · switch to 3D to explore terrain form");
+    const status = active ? terrainStateLabel() : "";
+    if ($("terrain-view-status").textContent !== status) $("terrain-view-status").textContent = status;
+    const overlaysDisabled = active && S.mode === "3d";
+    $("layers-open").disabled = overlaysDisabled;
+    $("layers-open").title = overlaysDisabled ? text("ชั้นข้อมูลซ้อนเปิดใช้ในมุมมอง 2D", "Context overlays are available in 2D") : "";
+    if (overlaysDisabled) { $("layer-options").hidden = true; $("layers-open").setAttribute("aria-expanded", "false"); }
+  }
+  function terrainCamera2D() {
+    try { const c = S.map.getCenter(); return {center:[c.lng,c.lat],zoom:S.map.getZoom()}; }
+    catch (_) { const b = scopeData().bbox; return {center:[(b[0]+b[2])/2,(b[1]+b[3])/2],zoom:13}; }
+  }
+  function validTerrainCamera(camera) {
+    const zoom = camera?.zoom ?? camera?.zoomLeafletCompatible;
+    return camera && Array.isArray(camera.center) && camera.center.length === 2 && camera.center.every(Number.isFinite) && Number.isFinite(zoom)
+      ? {...camera,zoom} : null;
+  }
+  function hideTerrain3D(syncCamera = true) {
+    if (syncCamera && S.terrain3D && (S.mode === "3d" || S.terrain3DVisible)) {
+      let camera = null;
+      try { camera = validTerrainCamera(S.terrain3D.getCamera()); } catch (_) {}
+      if (camera) {
+        S.terrain3DCamera = camera;
+        const snap = S.map.options.zoomSnap;
+        try { S.map.options.zoomSnap = 0; S.map.setView([camera.center[1],camera.center[0]],camera.zoom,{animate:false}); }
+        finally { S.map.options.zoomSnap = snap; }
+      }
+    }
+    try { S.terrain3D?.hide(); } catch (_) {}
+    S.terrain3DVisible = false;
+    $("terrain-3d").hidden = true;
+    document.querySelector(".map-stage").dataset.renderer = "2d";
+    S.map?.invalidateSize({pan:false});
+  }
+  function showTerrain3D() {
+    if (S.dataset !== "terrain" || S.mode !== "3d") return;
+    const becameVisible = !S.terrain3DVisible;
+    S.terrain3DVisible = true;
+    $("terrain-3d").hidden = false;
+    document.querySelector(".map-stage").dataset.renderer = "3d";
+    if (S.terrainLayer) { S.map.removeLayer(S.terrainLayer); S.terrainLayer = null; }
+    if (becameVisible) S.terrain3D?.resize();
+    renderTerrainControls();
+  }
+  function terrain3DFailed() {
+    if (S.dataset !== "terrain" || S.mode !== "3d") return;
+    hideTerrain3D();
+    S.terrain3DGeneration++;
+    try { S.terrain3D?.destroy(); } catch (_) {}
+    S.terrain3D = null; S.terrain3DInit = null;
+    S.mode = "2d"; S.terrain3DError = true; S.terrain3DStatus = {state:"error"};
+    renderPanel(); drawTerrain(); syncURL(true);
+    toast(text("เปิด 3D ไม่สำเร็จ · กลับมาใช้ 2D แล้ว ลอง 3D ได้อีกครั้ง", "3D could not open · 2D is restored. You can retry 3D."));
+  }
+  function terrainBoundaryContext() {
+    const fc = geoForBoundary();
+    return {boundary: S.scope.type === "municipality" ? fc : {...fc,features:fc.features.filter(f=>f.properties.id===S.scope.id)},municipality:S.cache.get("data/municipality.geojson")};
+  }
+  async function syncTerrainView() {
+    if (S.dataset !== "terrain" || S.mode !== "3d") { hideTerrain3D(); return; }
+    $("terrain-3d").hidden = false;
+    if (S.terrain3D) {
+      if (!S.terrain3DVisible) S.terrain3D.setCamera({...S.terrain3DCamera,...terrainCamera2D()});
+      S.terrain3D.setTheme(S.theme); S.terrain3D.setBasemap(S.basemap); S.terrain3D.setBoundaries(terrainBoundaryContext());
+      S.terrain3D.show();
+      S.terrain3D.ready.then(showTerrain3D).catch(()=>{});
+      return;
+    }
+    if (S.terrain3DInit) return S.terrain3DInit;
+    if (!window.SilaTerrain3D?.create || !S.terrainSource || !S.terrainCoverage) { terrain3DFailed(); return; }
+    const generation = ++S.terrain3DGeneration;
+    S.terrain3DStatus = {state:"loading"}; renderTerrainControls();
+    const pending = window.SilaTerrain3D.create({
+      container:$("terrain-3d"),source:S.terrainSource,coverage:S.terrainCoverage,tokens:S.tokens,
+      camera:{...S.terrain3DCamera,...terrainCamera2D()},theme:S.theme,basemap:S.basemap,...terrainBoundaryContext(),
+      onCameraChange:camera=>{
+        if(generation!==S.terrain3DGeneration)return;
+        const c=validTerrainCamera(camera);if(!c)return;
+        S.terrain3DCamera=c;
+        Object.assign($("terrain-3d").dataset,{longitude:String(c.center[0]),latitude:String(c.center[1]),zoom:String(c.zoom),pitch:String(c.pitch),bearing:String(c.bearing)});
+      },
+      onStatus:status=>{
+        if(generation!==S.terrain3DGeneration)return;
+        S.terrain3DStatus=status; $("map").dataset.terrain3dState=status.state;
+        for(const key of ["pending","rendered","triangles","exaggeration"])if(Number.isFinite(status[key]))$("terrain-3d").dataset[key]=String(status[key]);
+        if(status.basemapState)$("terrain-3d").dataset.basemapState=status.basemapState;
+        if(S.dataset!=="terrain"||S.mode!=="3d")return;
+        if(status.state==="error"&&status.fatal){terrain3DFailed();return;}
+        if(status.state==="ready"||status.state==="partial"&&status.triangles>0)showTerrain3D();
+        renderTerrainControls(); const node=$("terrain-state");if(node)node.textContent=terrainStateLabel();drawLegend();
+      }
+    }).then(controller=>{
+      if(generation!==S.terrain3DGeneration){controller.destroy();return;}
+      S.terrain3D=controller;
+      controller.ready.then(()=>{if(generation===S.terrain3DGeneration)showTerrain3D();}).catch(()=>{if(generation===S.terrain3DGeneration)terrain3DFailed();});
+      if(S.dataset==="terrain"&&S.mode==="3d"){
+        if(!S.terrain3DVisible)controller.setCamera({...S.terrain3DCamera,...terrainCamera2D()});
+        controller.show();controller.resize();
+      }else controller.hide();
+    }).catch(()=>{if(generation===S.terrain3DGeneration)terrain3DFailed();}).finally(()=>{if(S.terrain3DInit===pending)S.terrain3DInit=null;});
+    S.terrain3DInit=pending;
+    return pending;
+  }
+  async function setTerrainMode(mode, push = true) {
+    if(S.dataset!=="terrain"||!["2d","3d"].includes(mode))return;
+    if(mode===S.mode)return;
+    if(mode==="2d")hideTerrain3D();
+    S.mode=mode;S.terrain3DError=false;
+    if(mode==="3d"&&!S.terrain3DVisible)S.terrain3DStatus={state:"loading"};
+    renderPanel();if(push)syncURL();
+    if(mode==="2d")drawTerrain();
+    await syncTerrainView();
   }
   function recordsContent() {
     if (publicAggregate()) return publicAggregateView("list");
@@ -1010,9 +1160,13 @@
     S.map.on("zoomend", () => {
       $("map").dataset.zoom = String(S.map.getZoom());
     });
+    S.map.on("moveend", () => {
+      const c=S.map.getCenter();
+      Object.assign($("map").dataset,{longitude:String(c.lng),latitude:String(c.lat),zoom:String(S.map.getZoom())});
+    });
     const context=document.querySelector(".map-context");
     new ResizeObserver(()=>{$("basemap-caption").style.top=Math.max(62,context.offsetTop+context.offsetHeight+8)+"px";}).observe(context);
-    new ResizeObserver(() => S.map.invalidateSize({ pan: false })).observe(
+    new ResizeObserver(() => {S.map.invalidateSize({ pan: false });S.terrain3D?.resize();}).observe(
       $("map"),
     );
   }
@@ -1092,6 +1246,7 @@
         animate: false,
       },
     );
+    if (S.dataset === "terrain" && S.mode === "3d" && S.terrain3D) S.terrain3D.setCamera({...S.terrain3DCamera,...terrainCamera2D()});
   }
   function geoForBoundary() {
     return S.cache.get(BOUNDARY_TYPES[S.boundary].file);
@@ -1287,6 +1442,7 @@
     return main;
   }
   function drawTerrain() {
+    if (S.mode === "3d" && S.terrain3DVisible) { drawLegend(); return; }
     if (!S.terrainSource || !S.terrainCoverage || !window.SilaFabdem?.createLayer) {
       S.terrainStatus = { state: "error" };
       drawLegend();
@@ -1305,6 +1461,7 @@
           if (S.dataset !== "terrain" || !changed) return;
           const node = $("terrain-state");
           if (node) node.textContent = terrainStateLabel();
+          renderTerrainControls();
           drawLegend();
         },
       }).addTo(S.map);
@@ -1479,7 +1636,7 @@
   function drawLegend() {
     if (S.dataset === "terrain") {
       const legend = S.terrainSource?.legend;
-      $("map-legend").innerHTML = `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div><div class="legend-description">${esc(legend?.[S.lang] || text("เงาภูมิประเทศจาก FABDEM ไม่ใช่สีระดับความสูงหรือความเสี่ยง", "FABDEM hillshade is not elevation or risk colouring"))}</div><div class="legend-description">${esc(terrainStateLabel())}</div>`;
+      $("map-legend").innerHTML = `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div><div class="legend-description">${esc(S.mode === "3d" ? text("3D · รูปทรงพื้นที่ ไม่ใช่ความเสี่ยงน้ำท่วม", "3D · terrain form, not flood risk") : legend?.[S.lang] || text("เงาภูมิประเทศจาก FABDEM ไม่ใช่สีระดับความสูงหรือความเสี่ยง", "FABDEM hillshade is not elevation or risk colouring"))}</div><div class="legend-description">${esc(terrainStateLabel())}</div>`;
       $("map-context-text").textContent = scopeLabel() + " · " + text("FABDEM เฉพาะอำเภอเมืองขอนแก่น", "FABDEM within Mueang Khon Kaen district only");
       return;
     }
@@ -1538,6 +1695,8 @@
       await drawOverlays(ticket);
       if (ticket !== S.ticket) return;
       if (fit && interactionRevision === S.interactionRevision) fitScope();
+      await syncTerrainView();
+      if (ticket !== S.ticket) return;
       if (!S.tileFailed) $("map-error").hidden = true;
       renderPanel();
     } catch (e) {
@@ -1555,6 +1714,7 @@
   async function setDataset(id, push = true) {
     S.pickIndex = null;
     if (id !== "overview" && !dataset(id)) return;
+    if (id !== S.dataset) { hideTerrain3D(); S.mode = "2d"; S.terrain3DError = false; }
     S.dataset = id;
     S.record = null;
     S.choice = null;
@@ -1699,6 +1859,8 @@
     $("dataset-search").addEventListener("input", renderCatalog);
     document.addEventListener("click", (e) => {
       if (!e.target.closest(".header-settings")) document.querySelector(".header-settings").open=false;
+      const terrainMode = e.target.closest("[data-terrain-mode]");
+      if (terrainMode) { setTerrainMode(terrainMode.dataset.terrainMode); return; }
       const d = e.target.closest("[data-dataset]");
       if (d) {
         $("dataset-dialog").close();
@@ -1866,8 +2028,18 @@
         buttons[i].click();
         buttons[i].focus();
       });
+    $("terrain-mode-group").addEventListener("keydown", e => {
+      if (!["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) return;
+      const buttons = [...$("terrain-mode-group").querySelectorAll("button")];
+      const active = buttons.indexOf(document.activeElement);
+      if (active < 0) return;
+      e.preventDefault();
+      const next = e.key === "Home" ? 0 : e.key === "End" ? 1 : (active + 1) % 2;
+      buttons[next].click(); buttons[next].focus();
+    });
     window.addEventListener("popstate", () => {
       const previousScope = S.scope.id;
+      hideTerrain3D();
       fromURL();
       renderPanel();
       renderCatalog();
@@ -1925,6 +2097,9 @@
   window.SilaExplorer = {
     getState: () => ({
       dataset: S.dataset,
+      mode: S.dataset === "terrain" ? S.mode : "2d",
+      renderer: S.terrain3DVisible ? "3d" : "2d",
+      terrain3DStatus: {...S.terrain3DStatus},
       publicSummaryStatus: S.publicSummaryStatus,
       publicAggregateScope: publicAggregate() ? S.dataset === "caregroups" ? "received_source_cohort" : "municipality" : null,
       datasetCount: S.catalog?.datasets.length ?? 0,
@@ -1934,7 +2109,9 @@
       tab: S.tab,
       loaded: [...S.cache.keys()],
       camera: S.map
-        ? { center: S.map.getCenter(), zoom: S.map.getZoom() }
+        ? S.terrain3DVisible && S.terrain3D && validTerrainCamera(S.terrain3D.getCamera())
+          ? (()=>{const c=validTerrainCamera(S.terrain3D.getCamera());return {center:{lat:c.center[1],lng:c.center[0]},zoom:c.zoom,pitch:c.pitch,bearing:c.bearing};})()
+          : { center: S.map.getCenter(), zoom: S.map.getZoom() }
         : null,
       count: countFor(S.dataset),
       featureCount: currentFeatures().length,
@@ -1952,6 +2129,7 @@
     }),
     selectScope,
     setDataset,
+    setTerrainMode,
     closeRecord,
   };
   start();

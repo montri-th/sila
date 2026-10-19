@@ -1,6 +1,6 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "1.5"
+artifact_revision: "1.6"
 updated_on: "2026-10-19"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
@@ -12,9 +12,9 @@ catalog_dataset_count: 16
 additional_municipal_summary_views: 5
 runtime_dataset_count: 21
 additional_source_received_on: "2026-10-19"
-release_state: local_review_pending
-published_revision_before_update: "1.4"
-published_commit_before_update: "444970a59e58764195aed54a931479711ab362f5"
+release_state: source_release_provider_attestation_separate
+published_revision_before_update: "1.5"
+published_commit_before_update: "78d7f4bc43b851226aced453e87fd0618b63d873"
 additional_view: area_overview
 release_mode: owner_authorized_static_prototype
 publish_repository: montri-th/sila
@@ -29,7 +29,17 @@ municipal_writes: false
 # ศิลา · CityChat CityMETER สำหรับเจ้าหน้าที่
 
 
-## Revision1.5 · กลุ่มดูแล ข้อมูลภาษี และภูมิประเทศ
+## Revision 1.6 · สลับภูมิประเทศ 2D / 3D ในหน้าเดียว
+
+เลือกชุด **ภูมิประเทศ** แล้วกด **3D** เหนือแผนที่เพื่อหมุน/เอียงดูความสูง FABDEM จริงในเว็บศิลา กด **2D** เพื่อกลับมุมมองเดิม ไม่ต้องเปิด CityMETER อีกแท็บ ทั้งสองมุมมองใช้ FABDEM V1-2 เฉพาะอำเภอเมืองขอนแก่น รหัส 4001 และรักษาพื้นที่สรุปที่เลือกไว้
+
+[เปิด 3D](https://montri-th.github.io/sila/?dataset=terrain&mode=3d&lang=th) · [เปิด 2D](https://montri-th.github.io/sila/?dataset=terrain&mode=2d&lang=th) · [วิธีแสดงผลและข้อจำกัด](reference/terrain-contract.md) · [Machine contract](reference/terrain-contract.json)
+
+ความสูงต้นทางประมาณ 30 ม. การซูมหรือเอียงไม่เพิ่มความละเอียด ค่าไม่มีข้อมูลเว้นโปร่ง ไม่แทนด้วยศูนย์ ถ้าโหลด 3D ไม่สำเร็จกลับใช้ 2D ได้ พร้อมลองใหม่ การดูรายละเอียดรายการและชั้น GIS ประกอบใช้ใน 2D แยกจากฉากภูมิประเทศ ไม่สร้างความสูงอาคารหรือระดับน้ำ
+
+คงชุดข้อมูลเดิมทั้ง 22 ไฟล์ รวม summary ภาษี/กลุ่มดูแลและ geometry ทุก byte เพิ่มเฉพาะ renderer, ปุ่มและสถานะ, สัญญาการทำงานและหลักฐานตรวจ ไม่คัดลอก DEM มา host เว็บ ผลเผยแพร่ให้ยึด commit/build และ live-byte receipt แยกจากผลตรวจในเครื่อง
+
+## Revision 1.5 · ข้อมูลที่คงไว้และประวัติรุ่นก่อน
 
 GISเดิม16ชุด + summary5มุมมอง =21ชุดและภาพรวม คง default รูปอาคาร จุดบ้านทั้งหมดแบบไม่ cluster และจุดสถานพยาบาลเดิม4จุด แหล่งที่ตรวจครอบคลุม17โฟลเดอร์ ไม่นับแบบ7/8ที่ส่งออกซ้ำเป็นไฟล์ใหม่
 
@@ -37,7 +47,7 @@ GISเดิม16ชุด + summary5มุมมอง =21ชุดและภ
 
 ภาษีแสดงแบบ1/2/3/4/7/8และ candidate linkage จากคีย์ประกอบ แถวกำกวมเก็บรอทวน ไม่อ้างผลต่างเนื้อที่เป็นภาษีผิดหรือเงินเพิ่ม ไฟล์ภาษีใช้งาน10ไฟล์ โดย7/8ส่งออกซ้ำมีค่าพร้อมชนิดข้อมูลตรงของเดิมทุกช่อง จึงนับครั้งเดียว ยอดรับ23,074,139.17บาทตามช่วงในไฟล์ยังรวมหลายปีภาษี/ส่วนเพิ่ม ไม่ใช่เงินที่โครงการทำให้เก็บเพิ่ม
 
-ภูมิประเทศเดิมเชื่อมเงา FABDEM V1-2 บนแผนที่เดิม เฉพาะอำเภอเมืองขอนแก่น source tile `z12-20261007` ไม่คัดลอก DEM ไป host เว็บ Native zoom12 / display zoom22 ขยายข้อมูลประมาณ30ม.โดยไม่เพิ่มรายละเอียด เงาขาวดำช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม ฐานอ้างอิงแนวดิ่ง/ความแม่นยำยังไม่ประกาศ มี loading/ready/partial/error/no-dataโปร่งใส แยกศูนย์จริง เปิด [3D route อำเภอ4001](https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain) เป็นอีกแท็บ; เลือก FABDEM ในต้นทางหาก source อื่น active
+ภูมิประเทศเดิมเชื่อมเงา FABDEM V1-2 บนแผนที่เดิม เฉพาะอำเภอเมืองขอนแก่น source tile `z12-20261007` ไม่คัดลอก DEM ไป host เว็บ Native zoom12 / display zoom22 ขยายข้อมูลประมาณ30ม.โดยไม่เพิ่มรายละเอียด เงาขาวดำช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม ฐานอ้างอิงแนวดิ่ง/ความแม่นยำยังไม่ประกาศ มี loading/ready/partial/error/no-dataโปร่งใส แยกศูนย์จริง ใน revision 1.6 สลับ 2D/3D ได้ในหน้าเดียวตามสัญญาภูมิประเทศด้านบน
 
 Public เป็น aggregate-only ไม่มีชื่อ เลขสิทธิ เลขประเมิน รายการลูกหนี้ ผู้ป่วย พิกัดรายบุคคลหรือ raw download ยอดไม่เปลี่ยนตามหมู่บ้าน/เขตเลือกตั้งที่เลือกบนแผนที่ งานรายบุคคลต้องผ่านระบบเจ้าหน้าที่ที่ยืนยันสิทธิจริง เว็บ static นี้ยังไม่มี authentication หรือเขียนข้อมูลเทศบาล
 
@@ -79,7 +89,7 @@ python3 server.py
 4. เปลี่ยน dataset ในขอบเขตเดิม หรือเปิด **ซ้อนชั้นข้อมูล** เพื่อประกอบกับถนน ลำห้วย และรูปอาคาร
 5. เปิด **แหล่งข้อมูล** เพื่อดูที่มา ความหมายของจำนวน CRS และข้อจำกัด; dataset GIS รองรับค้นหาและดาวน์โหลด CSV ของรายการที่กรองในขอบเขตปัจจุบัน
 
-URL เก็บ dataset, ประเภทขอบเขต, พื้นที่, ภาษา, ธีม และรายการที่เลือก การเลื่อนหรือซูมแผนที่อย่างเดียวไม่เปลี่ยนขอบเขตคำนวณ การเลือกรายการเดียวไม่เปลี่ยนตัวเลขภาพรวม ขอบเขตและข้อมูลหลักยังใช้ได้เมื่อ tile ภายนอกโหลดไม่ได้; เลือก **เฉพาะข้อมูลพื้นที่** เพื่อปิด basemap
+URL เก็บ dataset, ประเภทขอบเขต, พื้นที่, ภาษา, ธีม, รายการที่เลือก และ mode 2D/3D ของภูมิประเทศ การเลื่อนหรือซูมแผนที่อย่างเดียวไม่เปลี่ยนขอบเขตคำนวณ การเลือกรายการเดียวไม่เปลี่ยนตัวเลขภาพรวม ขอบเขตและข้อมูลหลักยังใช้ได้เมื่อ tile ภายนอกโหลดไม่ได้; เลือก **เฉพาะข้อมูลพื้นที่** เพื่อปิด basemap
 
 อ้างอิง Yolk 1.7.5 / workspace-map 1.7 / map-boundary-appearance 1.7.4: แผนที่อยู่ต่อเนื่อง, dataset คงเดิมเมื่อเข้า/ออกพื้นที่, แยก hover / พื้นที่ / รายการ, ใช้ขอบเขตจริงและไม่ลงสีเต็มในพื้นที่ที่เลือก ลำดับสำหรับศิลาคือ **เทศบาล → หมู่บ้านหรือเขตเลือกตั้ง → รายการ** ไม่เดาว่าหมู่บ้านอยู่ในเขตเลือกตั้งใด ดูสัญญาพฤติกรรมของศิลาที่ [drilldown contract](reference/drilldown-contract.json)
 
@@ -184,6 +194,7 @@ Pipeline ที่รันจริงคืออ่าน source geometry แ
 | ไฟล์ | หน้าที่ |
 |---|---|
 | `index.html`, `styles.css`, `app.js` | map workspace, dataset/scope/record state, TH/EN, theme, URL/history, CSV |
+| `terrain-3d.js`, `fabdem-layer.js` | พื้นผิว 3D และเงา 2D เฉพาะอำเภอ 4001; สัญญาใน `reference/terrain-contract.*` |
 | `server.py` | preview แบบ loopback |
 | `data/catalog.json`, `metadata.json`, `*.geojson` | บัญชี dataset, จำนวนต่อขอบเขต, รูป WGS84 และ quality flags |
 | `reference/document-catalog.json` | เอกสาร 16 จุด พร้อม source/page/งบและความขัดกัน |

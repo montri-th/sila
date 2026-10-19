@@ -1,0 +1,189 @@
+{
+  "schema": "sila-publication-audit/1.6",
+  "revision": "1.6",
+  "auditedAtUtc": "2026-10-19T13:20:26.440928+00:00",
+  "sourceBase": "78d7f4bc43b851226aced453e87fd0618b63d873",
+  "status": "passed_with_bounded_scope",
+  "releaseState": "source_ready_provider_and_live_proof_separate",
+  "changedExistingFiles": [
+    "README.md",
+    "app.js",
+    "docs/data-update-20261019.md",
+    "index.html",
+    "reference/terrain-contract.json",
+    "reference/terrain-contract.md",
+    "server.py",
+    "styles.css",
+    "build-manifest.json"
+  ],
+  "newCandidateFiles": [
+    "terrain-3d.js",
+    "qa/check-terrain-3d.cjs",
+    "qa/revision-1.6-terrain3d-fixtures.json",
+    "qa/revision-1.6-lds-static-terrain-3d-js.json",
+    "qa/revision-1.6-lds-static-app-js.json",
+    "qa/revision-1.6-lds-static-styles-css.json",
+    "qa/revision-1.6-browser-checks.json",
+    "qa/revision-1.6-publication-audit.json"
+  ],
+  "baselineData": [
+    {
+      "path": "data/buildings.geojson",
+      "bytes": 27674202,
+      "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+      "unchanged": true
+    },
+    {
+      "path": "data/catalog.json",
+      "bytes": 69061,
+      "sha256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+      "unchanged": true
+    },
+    {
+      "path": "data/cctv.geojson",
+      "bytes": 21188,
+      "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+      "unchanged": true
+    },
+    {
+      "path": "data/data-validation.json",
+      "bytes": 2401,
+      "sha256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+      "unchanged": true
+    },
+    {
+      "path": "data/education.geojson",
+      "bytes": 10198,
+      "sha256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+      "unchanged": true
+    },
+    {
+      "path": "data/election-source-lines.geojson",
+      "bytes": 46540,
+      "sha256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+      "unchanged": true
+    },
+    {
+      "path": "data/election.geojson",
+      "bytes": 46671,
+      "sha256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+      "unchanged": true
+    },
+    {
+      "path": "data/flood-evidence.json",
+      "bytes": 23147,
+      "sha256": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+      "unchanged": true
+    },
+    {
+      "path": "data/health.geojson",
+      "bytes": 2133,
+      "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+      "unchanged": true
+    },
+    {
+      "path": "data/houses.geojson",
+      "bytes": 13323656,
+      "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+      "unchanged": true
+    },
+    {
+      "path": "data/metadata.json",
+      "bytes": 34190,
+      "sha256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+      "unchanged": true
+    },
+    {
+      "path": "data/municipal-summary.json",
+      "bytes": 55549,
+      "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
+      "unchanged": true
+    },
+    {
+      "path": "data/municipality.geojson",
+      "bytes": 36585,
+      "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+      "unchanged": true
+    },
+    {
+      "path": "data/parcels.geojson",
+      "bytes": 30883759,
+      "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+      "unchanged": true
+    },
+    {
+      "path": "data/publicfacilities.geojson",
+      "bytes": 88645,
+      "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+      "unchanged": true
+    },
+    {
+      "path": "data/religion.geojson",
+      "bytes": 11526,
+      "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+      "unchanged": true
+    },
+    {
+      "path": "data/roads.geojson",
+      "bytes": 608961,
+      "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+      "unchanged": true
+    },
+    {
+      "path": "data/source-manifest.json",
+      "bytes": 48576,
+      "sha256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+      "unchanged": true
+    },
+    {
+      "path": "data/terrain-coverage.geojson",
+      "bytes": 31928,
+      "sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
+      "unchanged": true
+    },
+    {
+      "path": "data/terrain-source.json",
+      "bytes": 2657,
+      "sha256": "9aca4e714bd6660431caebf41381aabde0d70ccbea49212eab6f24acc122e507",
+      "unchanged": true
+    },
+    {
+      "path": "data/villages.geojson",
+      "bytes": 164944,
+      "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
+      "unchanged": true
+    },
+    {
+      "path": "data/waterways.geojson",
+      "bytes": 416511,
+      "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+      "unchanged": true
+    }
+  ],
+  "checks": {
+    "baselineDataByteParity22": true,
+    "samePublicDataAndAccessMode": true,
+    "rawDEMRehosted": false,
+    "newPersonalDataIntroduced": false,
+    "samePage2D3D": true,
+    "district4001Only": true,
+    "nativePixelCentreAndConservativeNodataGeometry26Fixtures": true,
+    "independentGeometryCameraChecks21": true,
+    "finalStatusOnlyDeltaReviewed": true,
+    "exactApprovedAssetsRetained": true,
+    "stagedBytesAndLiveChecks": "Root owns subsequent stage/commit/provider/live attestation, not proved by this source-only file."
+  },
+  "validation": {
+    "geometryReceipt": "qa/revision-1.6-terrain3d-fixtures.json",
+    "browserReceipt": "qa/revision-1.6-browser-checks.json",
+    "authoredStaticLDS": "PASS for app.js/styles.css/terrain-3d.js, bounded color/alias/value-state scope",
+    "fullIndexStaticLDS": "FAIL only unchanged third-party MapLibre CSS colors/compositing. Existing vendor bytes retained; actual authored controls themed and visually reviewed. No full conformance claim.",
+    "fullDesignSystemConformance": false
+  },
+  "openManualGates": [
+    "Physical mobile/GPU and cross-browser testing not performed.",
+    "200% browser zoom, Thai130% magnification and actual reduced-motion emulation not verified."
+  ],
+  "runtimeSnapshotBinding": "Actual8-state Chrome matrix used core6bda8153; final error-state-only deltas reconstruct this snapshot exactly. Final core/source live verification remains release-owned.",
+  "privacy": "All22 prior authorized data files byte-identical; no raw tax/care records, patient coordinates, source case keys or DEM tiles added."
+}

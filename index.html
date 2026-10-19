@@ -27,8 +27,9 @@
     />
     <link rel="stylesheet" href="assets/fonts.css" />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="vendor/maplibre-gl/maplibre-gl.css" />
     <link rel="stylesheet" href="basemap.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=1.6" />
     <link rel="stylesheet" href="house-points.css" />
     <link rel="stylesheet" href="context-actions.css" />
     <link rel="stylesheet" href="platform-shell.css" />
@@ -115,6 +116,14 @@
           <label class="basemap-picker"><span data-i18n="basemap">พื้นหลัง</span><select id="basemap" aria-label="พื้นหลังแผนที่">
             <option value="street">แผนที่ถนน</option><option value="satellite">ภาพดาวเทียม · CityChat</option><option value="satellite-archive">ภาพเก่า 2016/2017 · EOX</option><option value="none">เฉพาะข้อมูลพื้นที่</option>
           </select></label>
+          <div id="terrain-view-controls" class="terrain-view-controls" hidden>
+            <div id="terrain-mode-group" class="terrain-mode-group" role="group" aria-label="มุมมองภูมิประเทศ">
+              <button type="button" data-terrain-mode="2d" aria-pressed="true" tabindex="0">2D</button>
+              <button type="button" data-terrain-mode="3d" aria-pressed="false" tabindex="-1">3D</button>
+            </div>
+            <span id="terrain-view-help" class="terrain-view-help"></span>
+            <span id="terrain-view-status" class="terrain-view-status" role="status" aria-live="polite"></span>
+          </div>
         </div>
         <div class="map-stage">
           <div
@@ -123,6 +132,7 @@
             role="region"
             aria-label="แผนที่โต้ตอบ เลือกหมู่บ้านเพื่อลงรายละเอียด"
           ></div>
+          <div id="terrain-3d" class="terrain-3d" role="region" aria-label="ภูมิประเทศสามมิติ" hidden></div>
           <div id="layer-options" class="layer-options" hidden>
             <h3 data-i18n="contextLayers">ข้อมูลประกอบแผนที่</h3>
             <label
@@ -324,6 +334,7 @@
     <script src="ui-icons.js"></script>
     <script src="public-aggregate.js"></script>
     <script src="fabdem-layer.js"></script>
-    <script src="app.js"></script>
+    <script src="terrain-3d.js"></script>
+    <script src="app.js?v=1.6"></script>
   </body>
 </html>

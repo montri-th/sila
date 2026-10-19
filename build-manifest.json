@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.5",
-  "builtAtUtc": "2026-10-19T11:47:57.098449+00:00",
+  "revision": "1.6",
+  "builtAtUtc": "2026-10-19T13:20:26.440928+00:00",
   "releaseDateBangkok": "2026-10-19",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -34,13 +34,13 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.5-browser-checks.json",
-  "publicationAudit": "qa/revision-1.5-publication-audit.json",
+  "browserReceipt": "qa/revision-1.6-browser-checks.json",
+  "publicationAudit": "qa/revision-1.6-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 44950,
-      "sha256": "80934db324a466498164cf86bd941d75f4ec35b074a3fe1a6de6bbb685f77ef4",
+      "bytes": 47411,
+      "sha256": "9e54abdf990d5e35bc31ac27b186d337a17886acc30d864b71cca1dc1c31d483",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 107675,
-      "sha256": "3daf71b3d0049902911dbf42b1ba166ae27075245964221c8cbced8f7bfab89d",
+      "bytes": 120207,
+      "sha256": "61c521f650c15e560ef15abda18515d03f4eeb0a6979c9a329a78ccde68bdd53",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -961,8 +961,8 @@
     },
     {
       "path": "docs/data-update-20261019.md",
-      "bytes": 19227,
-      "sha256": "bb790a2d165a4d37a139e5811f9e27f089eb038c8eea2395887a39892e70f36f",
+      "bytes": 19694,
+      "sha256": "2c11332600a1aeb2ade0fa1c68145bbe1ef982f825aed04b17998470fcf4149d",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1006,8 +1006,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 16263,
-      "sha256": "c07956438f97e10ac5ba367cf185588f2529b6fd2934862913ca4a9920f1227c",
+      "bytes": 17189,
+      "sha256": "29c8ed4de05d7adf267082ff30a510148e08f8ec9de7e33ac32dae6eba95f579",
       "mimeTypes": [
         "text/html"
       ]
@@ -1584,8 +1584,8 @@
     },
     {
       "path": "reference/terrain-contract.json",
-      "bytes": 5192,
-      "sha256": "e44ba80b993451713caf6da20524e5b259f03060d4c67b9a0b83d9ab9f4b3f77",
+      "bytes": 8344,
+      "sha256": "11cf5a7249fc197bd6ae1e2591f842dfced211093dd264bdd9531f7e2fbc6b04",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1594,8 +1594,8 @@
     },
     {
       "path": "reference/terrain-contract.md",
-      "bytes": 4897,
-      "sha256": "cab4fa20105c411a4267801958082fe023fcc2da02e35190600ea8993ca6aab5",
+      "bytes": 9542,
+      "sha256": "2322389a0edfcd46b3ce0a846c36eb17546ce845d14285eb5d8fa79f434808b3",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1726,8 +1726,8 @@
     },
     {
       "path": "server.py",
-      "bytes": 2258,
-      "sha256": "f5f5cd9748511f15a01eb4fca6191e13e36389e7ab2cd9873457eb188a1aa120",
+      "bytes": 2293,
+      "sha256": "c425aa1748e012fa5b68f8232ea998df199480c342cff6520b871d85852acc21",
       "mimeTypes": [
         "text/plain",
         "application/octet-stream"
@@ -1735,8 +1735,8 @@
     },
     {
       "path": "styles.css",
-      "bytes": 28168,
-      "sha256": "18d4e9089e3ac40c41fa7d1c48aa4fc156e0d407efe960ee52025d555bff1981",
+      "bytes": 30441,
+      "sha256": "1d3bdf314c1b7591ae06d6b247bb155158ad2fb95fe21e6160e7bf882da15571",
       "mimeTypes": [
         "text/css"
       ]
@@ -2942,10 +2942,77 @@
       "mimeTypes": [
         "image/jpeg"
       ]
+    },
+    {
+      "path": "terrain-3d.js",
+      "bytes": 32081,
+      "sha256": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "qa/check-terrain-3d.cjs",
+      "bytes": 6949,
+      "sha256": "20f41de1bbf25ee43f65e0f24db1b7cec044710c82f624793cd79011e3945d6c",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-terrain3d-fixtures.json",
+      "bytes": 904,
+      "sha256": "bfc48e1df0829f01b31fbdcd76089a1e0d0841c1979ef54ffe03d22469a5e640",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-lds-static-terrain-3d-js.json",
+      "bytes": 550,
+      "sha256": "048f15afeb4e1e17f0c186b1fd332960d7694ae663147c36ecfb26546cf63e26",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-lds-static-app-js.json",
+      "bytes": 543,
+      "sha256": "44d6cbe6e43efb3e3d6a3ee29d5bff233b519370d56cc2f7d5de6f7628c783d3",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-lds-static-styles-css.json",
+      "bytes": 548,
+      "sha256": "523ee12a9ff3e1386051145a9d29725ae4ca2f056246b99dd594bfe47eb81ceb",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-browser-checks.json",
+      "bytes": 13036,
+      "sha256": "177d19db2cb858740def98dfadd3a83a6839e8fa1e506c0f0ec1cd38ce409da7",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-1.6-publication-audit.json",
+      "bytes": 6590,
+      "sha256": "c132ffe78c81210cf3d24285862df757fbdad2154d6f6e927e3f31aca14ce4ba",
+      "mimeTypes": [
+        "application/json"
+      ]
     }
   ],
-  "manifestScope": "All explicit previously published files plus approved revision1.5 additions except this self manifest. Screenshots are archived outside repository. Source files reviewed by root; hosting/live attestation is separate.",
-  "releaseReadiness": "root_staged_review_passed_provider_proof_separate",
+  "manifestScope": "All explicit previously published files plus reviewed inline3D renderer and revision1.6 QA files except self manifest. Screenshots and restricted sources remain outside repository.",
+  "releaseReadiness": "ready_with_bounded_manual_gates_provider_and_live_proof_separate",
   "housePointRendering": {
     "mode": "individual_source_points",
     "aggregationEnabled": false,
@@ -2972,8 +3039,8 @@
     "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.4",
-  "previousPublishedCommit": "444970a59e58764195aed54a931479711ab362f5",
+  "previousPublishedRevision": "1.5",
+  "previousPublishedCommit": "78d7f4bc43b851226aced453e87fd0618b63d873",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 3,
   "additionalMunicipalFilesInspectedThisUpdate": 6,
@@ -2997,6 +3064,16 @@
     "verticalDatum": null,
     "commercialPermissionVerified": false,
     "rawDEMRehosted": false,
-    "runtimeCatalogOverrideOnly": true
+    "runtimeCatalogOverrideOnly": true,
+    "inline3D": true,
+    "module": "terrain-3d.js",
+    "modeParameter": "mode=2d|3d",
+    "samePage": true,
+    "external3DTabRequired": false,
+    "pixelRegistration": "native_cell_centres",
+    "nodata3D": "geometry_absent",
+    "meshDEMStateSeparateFromBasemap": true,
+    "nativeApproxResolutionMetres": 30,
+    "baselineDataFilesPreserved": 22
   }
 }

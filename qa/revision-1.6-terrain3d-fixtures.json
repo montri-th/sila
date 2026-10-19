@@ -1,0 +1,14 @@
+{
+  "schema": "sila-inline-terrain3d-fixtures/1.0",
+  "checkedOn": "2026-10-19",
+  "checks": 26,
+  "passed": 26,
+  "failed": 0,
+  "scope": "Independent deterministic decoding, valid-cell geometry, cell-centred registration, conservative polygon/hole clip, neighbour seam, Mercator scale/precision, zoom handoff and bounded native district tile selection. Synthetic DEM values only; no browser/framebuffer/orbit/texture attestation.",
+  "moduleSHA256": "47bf513a9c3b674b171b1f36d143f1dff28adb624a2f530c42d50da88c08ca75",
+  "testsSHA256": "20f41de1bbf25ee43f65e0f24db1b7cec044710c82f624793cd79011e3945d6c",
+  "coverageSHA256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
+  "separateBrowserReceipt": "revision-1.6-browser-checks.json",
+  "browserAttestation": "This geometry receipt does not attest browser rendering; read the separate browser receipt.",
+  "rawDEMRehosted": false
+}

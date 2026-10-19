@@ -1,13 +1,13 @@
 {
-  "schema": "sila-external-terrain-contract/1.0",
-  "revision": "1.5",
+  "schema": "sila-inline-terrain-contract/2.0",
+  "revision": "1.6",
   "preparedOn": "2026-10-19",
-  "publicationState": "source_contract_checked_provider_and_live_proof_separate",
+  "publicationState": "source_contract_provider_and_runtime_proof_separate",
   "sourceMetadata": "data/terrain-source.json",
   "coverageMetadata": "data/terrain-coverage.geojson",
   "module": "fabdem-layer.js",
   "factory": "SilaFabdem.createLayer({coverage,source,theme,pane,onStatus})",
-  "productRole": "Neutral hillshade for terrain form inspection; not an elevation colour scale, flood depth or flood-risk classification.",
+  "productRole": "Inline 2D hillshade and true-elevation 3D mesh for terrain form inspection; not flood depth, risk classification or surveyed design levels.",
   "source": {
     "schema_version": "1.0",
     "dataset_id": "FABDEM-V1-2",
@@ -61,7 +61,8 @@
       "en": "FABDEM terrain shading — relief lighting, not elevation or risk colours",
       "overzoom_th": "ต้นทางประมาณ 30 ม.; การซูมใกล้ขยายภาพเดิม ไม่เพิ่มรายละเอียด"
     },
-    "inspected_date": "2026-10-19"
+    "inspected_date": "2026-10-19",
+    "external3DFieldsRole": "Retained source metadata/provenance only; primary UI uses inline3D rather than navigating to this route."
   },
   "scope": {
     "districtCode": "4001",
@@ -72,7 +73,7 @@
       103.02077,
       16.636692
     ],
-    "renderRule": "Fetch only viewport-intersecting district tiles; clip district polygon holes; outside district transparent. Existing Sila outside mask retained.",
+    "renderRule": "FABDEM district4001 only. 2D clips raster; 3D omits no-data cells and every native cell touched by the district boundary, leaving a conservative empty edge band. No terrain is generated outside verified coverage.",
     "mapFilterMeaning": "Map scope and village boundaries remain context; no new demographic or flood aggregation."
   },
   "runtimeCatalog": {
@@ -83,27 +84,78 @@
     "rule": "Override only in memory when both approved terrain metadata files load; retain historical catalogue bytes."
   },
   "display": {
-    "mapInstance": "existing persistent Leaflet map",
+    "mapInstance": "Persistent Leaflet 2D plus inline MapLibre6.12 3D controller, shared geographic camera; no iframe or external3D navigation.",
     "nativeZoom": 12,
     "maxDisplayZoom": 22,
     "overzoomAddsDetail": false,
     "legend": "neutral hillshade, no numerical elevation domain",
     "heightColourRamp": false,
-    "lightAzimuthDegrees": 315,
-    "lightAltitudeDegrees": 45,
-    "missingValue": "alpha0 transparent, not measured zero",
-    "outsideCoverage": "transparent, no AWS fallback",
-    "sourceFailure": "loading/partial/error state; boundary layers remain usable"
+    "missingValue": "alpha0 → geometry absent; never zero or RGB-only native DEM decoding",
+    "outsideCoverage": "No mesh; ordinary basemap remains context only.",
+    "sourceFailure": "Keep 2D usable while3D loads; failed3D restores2D with a retry action.",
+    "lightAzimuthDegrees2D": 315,
+    "lightAltitudeDegrees2D": 45
   },
   "limitations": [
     "Vertical datum, vertical accuracy and survey acquisition date remain unknown.",
     "Tile build date2026-10-07 is not survey acquisition date.",
     "CC BY-NC-SA4.0 stated in source; commercial permission not verified.",
-    "External3D route d=terrain alone does not prove upstream FABDEM is selected.",
-    "Display zoom22 enlarges source pixels; native resolution remains approximately30m."
+    "Display zoom22 enlarges source pixels; native resolution remains approximately30m.",
+    "The 3D view does not add detail to the approximately30m source.",
+    "A conservative unrendered band may remain at district boundaries or unavailable neighbouring samples.",
+    "Projective basemap texture support and real rendering must be verified separately; a fallback is not new elevation data.",
+    "3D shows terrain and selected boundary context; GIS record inspection remains in2D."
   ],
   "rawDEMRehosted": false,
   "rawDEMDownloadExport": false,
-  "automatedReceipt": "qa/revision-1.5-terrain-fixtures.json",
-  "browserReceipt": "qa/revision-1.5-browser-checks.json"
+  "automatedReceipt": "../qa/revision-1.6-terrain3d-fixtures.json",
+  "browserReceipt": "../qa/revision-1.6-browser-checks.json",
+  "inline3DModule": "terrain-3d.js",
+  "inline3DFactory": "SilaTerrain3D.create({container,source,coverage,camera,theme,basemap,boundary,municipality,onStatus,onCameraChange})",
+  "modes": {
+    "queryParameter": "mode",
+    "allowed": [
+      "2d",
+      "3d"
+    ],
+    "default": "2d",
+    "dataset": "terrain only; nonterrain and unsupported values use2d",
+    "samePage": true,
+    "external3DTabRequired": false,
+    "reloadBackForwardRestoresMode": true,
+    "camera": {
+      "inputAndOutputZoom": "Leaflet-compatible8–22",
+      "mapLibreZoomOffset": -1,
+      "pitchDegrees": [
+        0,
+        75
+      ],
+      "centreAndZoomSharedOnSwitch": true,
+      "scopeIsNotViewport": true,
+      "sceneNavigationBounds": "District4001 bounding box plus0.15degrees context margin; entering from outside this extent can constrain the3D camera."
+    },
+    "contextOverlays": "Available in2D; disabled with explanation in3D. Existing selection retained.",
+    "recordPicking3D": false,
+    "inventedBuildingHeights": false,
+    "status": {
+      "meshState": "not_loaded|loading|ready|partial|error",
+      "basemapState": "not_requested|loading|ready|partial",
+      "basemapReadiness": "MapLibre isStyleLoaded() && areTilesLoaded(), refreshed by idle; mesh readiness does not imply basemap tiles are ready.",
+      "fallback": "First valid mesh may appear while basemap is loading; neutral surface is explicit fallback. Fatal3D failure restores2D with retry."
+    }
+  },
+  "mesh": {
+    "encoding": "Terrarium256RGBA",
+    "pixelRegistration": "Cellcentres: (pixelIndex+0.5)/256 within native tile. Query sampling follows same grid.",
+    "nativeZoom": 12,
+    "neighbourStitch": "Connect only available, alpha-valid neighbouring source samples. Unavailable border support remains an empty strip.",
+    "boundaryPolicy": "Conservative whole-cell omission; no boundary-crossing triangles or filled holes.",
+    "nodataPolicy": "No geometry through alpha0/missing samples; no extrapolation to zero.",
+    "precision": "Tile-local Mercator origin; latitude-specific metre conversion.",
+    "basemap": "Current-frame projective reprojection when available; neutral surface for offscreen/failed texture support.",
+    "heightColourRamp": false,
+    "defaultVerticalExaggeration": 1,
+    "noRegionalAccuracyClaim": true,
+    "lighting": "Neutral relief shading with normalized local vector[-0.5,-0.5,1]; does not encode elevation or flood risk."
+  }
 }
