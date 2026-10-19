@@ -55,10 +55,11 @@ const fallbackLayer=api.create({features:[fixtures[0]],color:'#7BD0A3',strokeCol
 const actual=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/houses.geojson'),'utf8')).features;
 const actualBefore=JSON.stringify(actual);
 const full=api.create({features:actual,color:'#7BD0A3',strokeColor:'#182327',interactive:false});const actualMap=map(8);full.onAdd(actualMap);
-ok(actual.length===28783&&full.getDisplayState().renderedPointCount===28783,'all 28,783 source points materialized at overview zoom');
-ok(full._renderer._container.attributes['data-house-point-count']==='28783','actual full package count exposed on owned Canvas');
+/* Revision 1.8 survey points: 28,456 records in Building_point received 19 Oct 2026 (earlier 5 Oct package had 28,783). */
+ok(actual.length===28456&&full.getDisplayState().renderedPointCount===28456,'all 28,456 source points materialized at overview zoom');
+ok(full._renderer._container.attributes['data-house-point-count']==='28456','actual full package count exposed on owned Canvas');
 ok(full._markers.every((m,i)=>m.latlng[0]===actual[i].geometry.coordinates[1]&&m.latlng[1]===actual[i].geometry.coordinates[0]),'full actual source coordinate parity');
 const refs=full._markers.slice();actualMap.zoom=20;handlers.get(actualMap).fn.call(full);
-ok(full.getDisplayState().renderedPointCount===28783&&full._markers.every((m,i)=>m===refs[i]),'actual full count persists at detailed zoom');
+ok(full.getDisplayState().renderedPointCount===28456&&full._markers.every((m,i)=>m===refs[i]),'actual full count persists at detailed zoom');
 ok(JSON.stringify(actual)===actualBefore,'actual source package remains unchanged');full.onRemove(actualMap);
 console.log(JSON.stringify({status:'passed',checks,sourceRecords:actual.length,displayMode:'individual_source_points',aggregationEnabled:false,scope:'source coordinate/count preservation and Canvas API integration with test doubles; not browser contrast/touch/performance'},null,2));

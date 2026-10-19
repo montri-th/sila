@@ -1,7 +1,7 @@
 /* Sila officer tax calculator: tax due for ONE parcel under the Land and Building Tax Act B.E. 2562.
  * Load before app.js. Inputs stay in this browser tab: nothing is sent, stored or logged.
  * Rules checked on 2026-10-19 (see RULES.sources). Building prices: Khon Kaen schedule 2566–2569.
- * window.SilaTaxCalculator = {open({language, returnFocus}), compute(input), RULES, PRICES}
+ * window.SilaTaxCalculator = {open({language, returnFocus, prefill}), compute(input), RULES, PRICES}
  */
 (function (root) {
   'use strict';
@@ -240,7 +240,7 @@
       + `<label class="tc-field tc-small"><span>${T('ไร่', 'Rai')}</span><input name="rai" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></label>`
       + `<label class="tc-field tc-small"><span>${T('งาน', 'Ngan')}</span><input name="ngan" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></label>`
       + `<label class="tc-field tc-small"><span>${T('ตร.วา', 'Sq. wah')}</span><input name="wah" type="number" inputmode="decimal" min="0" step="any" placeholder="0"></label>`
-      + `</div><p class="tc-hint">${T('ถ้ามีแปลงติดกันของเจ้าของคนเดียวกัน ให้รวมเนื้อที่และมูลค่าเป็นแปลงเดียว (ม.42)', 'Combine adjoining parcels of the same owner into one (s.42)')}</p></fieldset>`
+      + `</div><p class="tc-hint">${T('ถ้ามีแปลงติดกันของเจ้าของคนเดียวกัน ให้รวมเนื้อที่และมูลค่าเป็นแปลงเดียว (ม.42 วรรคสอง)', 'Combine adjoining parcels of the same owner into one (s.42 para 2)')}</p></fieldset>`
       + `<div id="tc-buildings">${buildingRow(0)}</div><button type="button" class="tc-add" data-add-building>${T('เพิ่มอาคาร', 'Add a building')}</button>`
       + `<p class="tc-hint">${T('รั้ว ถนน และลาน ได้รับยกเว้น ไม่ต้องใส่', 'Fences, roads and yards are exempt; leave them out')}</p>`
       + `<details class="tc-more"><summary>${T('เพิ่มเติม: ลดภาษีเฉพาะกรณี และเทียบกับยอดเดิม', 'More: special reductions and comparing with the current bill')}</summary>`
@@ -370,11 +370,23 @@
     update();
   }
 
+  /* Optional prefill from a map parcel: land price, area, use, other-use share and the 2569 tax to compare.
+     Buildings are left for the officer to enter, since the roll gives only their total value. */
+  function applyPrefill(form, p) {
+    if (!form || !p) return;
+    const set = (name, v) => { const el = form.querySelector(`[name=${name}]`); if (el && v != null && v !== '') { el.value = String(v); if (el.tagName === 'DETAILS') el.open = true; } };
+    if (p.use) { const r = form.querySelector(`[name=use][value=${p.use}]`); if (r) r.checked = true; }
+    if (p.owner) set('owner', p.owner);
+    for (const k of ['landPricePerWah', 'rai', 'ngan', 'wah', 'otherSharePct', 'previousTax']) set(k, p[k]);
+    if (p.previousTax != null) { const det = form.querySelector('[name=previousTax]')?.closest('details'); if (det) det.open = true; }
+  }
+
   function open(options = {}) {
     state = {lang: options.language === 'en' ? 'en' : 'th', returnFocus: options.returnFocus || document.activeElement};
     const d = ensureDialog();
     d.lang = state.lang;
     render(d);
+    if (options.prefill) { applyPrefill(d.querySelector('#tc-form'), options.prefill); d._update?.(); }
     if (!d.open) d.showModal();
     d.querySelector('select, input')?.focus();
   }

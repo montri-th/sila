@@ -1,0 +1,125 @@
+{
+  "schema": "sila-terrain-palettes-1",
+  "revision": "1.8",
+  "layer": "terrain (FABDEM height colour) only",
+  "ldsStatus": "Exception to LDS 0.9.7: LDS has 20 analytical scales and none for land elevation (the water scale is for water level/depth). Used at the owner’s request in chat on 2026-10-20 (asked for OH3-style height colours and several easy-to-read sets) for the terrain layer only.",
+  "themes": "same HEX on light and dark surfaces; no dark-mode formula or inversion",
+  "mapping": {
+    "default": "equalize: each colour covers a similar share of the area in view (101 in-view percentiles from 0.5 to 99.5); linear in metres available",
+    "bands": "on by default: one colour per contour interval, sampled at the band middle",
+    "reasonForDefault": "Sila is mostly flat (half of the municipal area is below about 160 m by FABDEM); linear colours leave most low ground in one colour, equal-area colours separate it. Owner asked on 2026-10-20 for an easy, realistic default with several sets to choose from.",
+    "lockable": true,
+    "interpolation": "linear between listed stops in sRGB, 256-step lookup"
+  },
+  "contours": {
+    "steps_m": [
+      0.05,
+      0.1,
+      0.2,
+      0.5,
+      1,
+      2,
+      5,
+      10
+    ],
+    "default": "finest step with at most 100 lines across the in-view relief (1st-99th percentile)",
+    "manualHardLimit": 200,
+    "major": "every 5th line",
+    "densityFade": "minor lines fade out below about 10 CSS px apart (gone at 4 px), major lines below 8 px (gone at 3 px); dark theme draws the light lines at 70% strength; 3D measures spacing in CSS pixels"
+  },
+  "source": {
+    "name": "OH3 Dynamic Elevation Map palettes as implemented in the CityMETER terrain viewer",
+    "url": "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain",
+    "retrievedOn": "2026-10-20",
+    "bundleFile": "[[...breadcrumb]]-7576d455dfd6986b.js",
+    "bundleSha256": "b631b1cfd04b204e3c836a82718718f702ca08811605280bd6e0440bdc43751f"
+  },
+  "palettes": {
+    "oh3-relief-lowland": {
+      "label": "Natural, lowland (site default)",
+      "sourceLabel": "Derived: first 7 stops of OH3 Dynamic Elevation Map relief (Imhof-style tint), without the grey and white peak tints",
+      "colors": [
+        "#1D6B3C",
+        "#4E9A4A",
+        "#98C46C",
+        "#E3DD98",
+        "#DCB36F",
+        "#BB7F4B",
+        "#8E5B3D"
+      ],
+      "siteDefault": true
+    },
+    "oh3-rainbow": {
+      "label": "OH3 rainbow",
+      "sourceLabel": "OH3 Dynamic Elevation Map, rainbow (default)",
+      "colors": [
+        "#0000FF",
+        "#0058FF",
+        "#00A5FF",
+        "#00D9FF",
+        "#33F4A5",
+        "#88FE0F",
+        "#CBFF00",
+        "#FFF100",
+        "#FFAE00",
+        "#FF7700",
+        "#FF4F00"
+      ]
+    },
+    "oh3-viridis": {
+      "label": "OH3 viridis",
+      "sourceLabel": "OH3 Dynamic Elevation Map, viridis",
+      "colors": [
+        "#440154",
+        "#482878",
+        "#3E4A89",
+        "#31688E",
+        "#26828E",
+        "#1F9E89",
+        "#35B779",
+        "#6ECE58",
+        "#B5DE2B",
+        "#FDE725"
+      ]
+    },
+    "oh3-relief": {
+      "label": "OH3 relief",
+      "sourceLabel": "OH3 Dynamic Elevation Map, relief (Imhof-style tint)",
+      "colors": [
+        "#1D6B3C",
+        "#4E9A4A",
+        "#98C46C",
+        "#E3DD98",
+        "#DCB36F",
+        "#BB7F4B",
+        "#8E5B3D",
+        "#A89285",
+        "#F5F2EF"
+      ]
+    },
+    "oh3-shc": {
+      "label": "OH3 shc",
+      "sourceLabel": "OH3 Dynamic Elevation Map, shc",
+      "colors": [
+        "#207A5C",
+        "#46A54E",
+        "#96C652",
+        "#E4D86C",
+        "#EAAA50",
+        "#D87648",
+        "#B07282",
+        "#F2F0EE"
+      ]
+    },
+    "oh3-gray": {
+      "label": "OH3 gray",
+      "sourceLabel": "OH3 Dynamic Elevation Map, gray",
+      "colors": [
+        "#202020",
+        "#F4F4F4"
+      ]
+    }
+  },
+  "accuracyNote": "FABDEM mean absolute vertical error about 1.12 m in built-up areas and 2.88 m in forest (Hawker et al. 2022, https://www.fathom.global/academic-papers/a-30-m-global-map-of-elevation-with-forests-and-buildings-removed/); contours finer than 1 m show model form, not surveyed levels.",
+  "notFloodRisk": true
+}

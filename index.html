@@ -29,12 +29,13 @@
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="vendor/maplibre-gl/maplibre-gl.css" />
     <link rel="stylesheet" href="basemap.css" />
-    <link rel="stylesheet" href="styles.css?v=1.6" />
+    <link rel="stylesheet" href="styles.css?v=1.8" />
     <link rel="stylesheet" href="house-points.css" />
     <link rel="stylesheet" href="context-actions.css" />
     <link rel="stylesheet" href="platform-shell.css" />
-    <link rel="stylesheet" href="missions.css?v=1.7" />
-    <link rel="stylesheet" href="tax-calculator.css?v=1.7" />
+    <link rel="stylesheet" href="missions.css?v=1.8" />
+    <link rel="stylesheet" href="tax-calculator.css?v=1.8" />
+    <link rel="stylesheet" href="map-layers.css?v=1.8" />
     <link rel="stylesheet" href="assets/brand/citychat-motif-motion.css" />
     <link rel="stylesheet" href="assets/brand/citychat-header-logo.css" />
     <script type="module" src="assets/brand/citychat-header-logo.js"></script>
@@ -123,6 +124,7 @@
               <button type="button" data-terrain-mode="2d" aria-pressed="true" tabindex="0">2D</button>
               <button type="button" data-terrain-mode="3d" aria-pressed="false" tabindex="-1">3D</button>
             </div>
+            <div id="terrain-exaggeration" class="terrain-exaggeration" hidden><label id="terrain-exaggeration-label" for="terrain-exaggeration-input">ขยายความสูง</label><input id="terrain-exaggeration-input" type="range" min="0" max="1000" step="5" value="777" /><output id="terrain-exaggeration-value" for="terrain-exaggeration-input">×20</output><button type="button" id="terrain-auto" class="terrain-auto" aria-pressed="true">อัตโนมัติ</button></div>
             <span id="terrain-view-help" class="terrain-view-help"></span>
             <span id="terrain-view-status" class="terrain-view-status" role="status" aria-live="polite"></span>
           </div>
@@ -208,34 +210,13 @@
             เลือกงานที่จะทำ แล้วกดสิ่งที่อยากดู แผนที่และตัวเลขจะเปลี่ยนตาม
           </p>
         </div>
-        <section class="mission-area" aria-labelledby="mission-nav-label">
-          <p id="mission-nav-label" class="mission-nav-label" data-i18n="missionPrompt">วันนี้ทำงานด้านไหน</p>
-          <div id="mission-nav" class="mission-nav" role="group" aria-labelledby="mission-nav-label">
-            <button type="button" class="mission-tab" data-mission="tax" aria-pressed="true">ภาษี</button
-            ><button type="button" class="mission-tab" data-mission="flood" aria-pressed="false">น้ำท่วม</button
-            ><button type="button" class="mission-tab" data-mission="care" aria-pressed="false">ดูแลคน</button
-            ><button type="button" class="mission-tab" data-mission="works" aria-pressed="false">โยธา</button
-            ><button type="button" class="mission-tab" data-mission="area" aria-pressed="false">พื้นที่</button>
-          </div>
-          <div id="mission-card" class="mission-card" aria-live="polite">
-            <h2 id="mission-title">งานภาษีและรายได้</h2>
-            <p class="mission-benefit">ดูว่าข้อมูลภาษีมีอะไรแล้ว ตรวจแปลงและอาคารบนแผนที่ และคิดภาษีที่ควรเก็บทีละแปลง</p>
+        <section id="layer-picker" class="layer-picker" aria-label="เลือกงานและแผนที่">
+          <div class="selector-row">
+            <label class="selector"><span>งาน</span><select id="mission-select"><option>ภาษีและรายได้</option></select></label>
+            <label class="selector selector-wide"><span>แผนที่</span><select id="layer-select"><option>ภาษีที่ดินรายแปลง</option></select></label>
           </div>
         </section>
-<div class="inspector-dataset">          <button
-            id="dataset-open"
-            class="dataset-trigger"
-            aria-haspopup="dialog"
-          >
-            <span id="dataset-icon" class="dataset-type-icon" aria-hidden="true"></span
-            ><span
-              ><small data-i18n="dataset">กำลังดู</small
-              ><strong id="dataset-title">รูปอาคาร</strong></span
-            ><span class="dataset-trigger-hint" data-i18n="allDatasets">ชุดข้อมูลทั้งหมด</span
-            ><span class="chevron" aria-hidden="true">⌄</span>
-          </button>
-</div>
-        <div id="context-actions"></div>
+        <section id="layer-controls" class="layer-controls" aria-live="polite"></section>
         <div id="record-detail" hidden></div>
         <div class="inspector-tabs" role="tablist" aria-label="มุมมองข้อมูล">
           <button
@@ -302,33 +283,6 @@
         </footer>
       </aside>
     </main>
-    <dialog
-      id="dataset-dialog"
-      class="dataset-dialog"
-      aria-labelledby="dataset-dialog-title"
-    >
-      <div class="dialog-heading">
-        <div>
-          <small data-i18n="cityData">CITY DATA</small>
-          <h2 id="dataset-dialog-title" data-i18n="chooseDataset">
-            เลือกชุดข้อมูล
-          </h2>
-        </div>
-        <button class="quiet" id="dataset-close" data-i18n="close">ปิด</button>
-      </div>
-      <label class="search-field"
-        ><span class="sr-only" data-i18n="searchDataset">ค้นหาชุดข้อมูล</span
-        ><input
-          id="dataset-search"
-          type="search"
-          placeholder="ค้นหา เช่น ภาษี ถนน น้ำ"
-          autocomplete="off"
-      /></label>
-      <div id="dataset-catalog"></div>
-      <div class="dialog-footnote" data-i18n="datasetFootnote">
-        ชุดเดียวกันอาจอยู่ในหลายงาน · ข้อควรรู้ของแต่ละชุดอยู่ในแท็บ ที่มาและข้อควรรู้
-      </div>
-    </dialog>
     <div id="toast" class="toast" role="status" hidden></div>
     <script src="vendor/leaflet/leaflet.js"></script>
     <script src="basemap.js"></script>
@@ -337,10 +291,12 @@
     <script src="context-actions.js"></script>
     <script src="ui-icons.js"></script>
     <script src="public-aggregate.js"></script>
-    <script src="fabdem-layer.js"></script>
-    <script src="terrain-3d.js"></script>
-    <script src="missions.js?v=1.7"></script>
-    <script src="tax-calculator.js?v=1.7"></script>
-    <script src="app.js?v=1.7"></script>
+    <script src="fabdem-layer.js?v=1.8"></script>
+    <script src="terrain-3d.js?v=1.8"></script>
+    <script src="choropleth.js?v=1.8"></script>
+    <script src="missions.js?v=1.8"></script>
+    <script src="tax-calculator.js?v=1.8"></script>
+    <script src="tax-engine.js?v=1.8"></script>
+    <script src="app.js?v=1.8"></script>
   </body>
 </html>

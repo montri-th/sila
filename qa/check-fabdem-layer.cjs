@@ -42,6 +42,27 @@ const coverage=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/terrain-c
 check('district 4001 only',()=>assert.equal(coverage.properties.district_code,'4001'));
 check('real district covers probe tile centre',()=>assert.ok(t.pointInCoverage([102.83,16.45],t.polygonsOf(coverage))));
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const receipt={schema_version:'1.0',date:'2026-10-19',scope:'bounded deterministic math/geometry/no-data fixtures; no browser or full regional DEM coverage attestation',checks,passed:checks,failed:0,files:{module_sha256:hash(path.join(__dirname,'../fabdem-layer.js')),coverage_sha256:hash(path.join(__dirname,'../data/terrain-coverage.geojson')),tests_sha256:hash(__filename)},browser_qa:'qa/revision-1.5-browser-checks.json',raw_dem_tiles_packaged:0};
-fs.writeFileSync(path.join(__dirname,'revision-1.5-terrain-fixtures.json'),JSON.stringify(receipt,null,2)+'\n');
+/* Receipts are written for the current revision; earlier revision receipts stay as they were published. */
+const receipt={schema_version:'1.0',revision:'1.8',date:'2026-10-20',scope:'bounded deterministic math/geometry/no-data fixtures; no browser or full regional DEM coverage attestation',checks,passed:checks,failed:0,files:{module_sha256:hash(path.join(__dirname,'../fabdem-layer.js')),coverage_sha256:hash(path.join(__dirname,'../data/terrain-coverage.geojson')),tests_sha256:hash(__filename)},browser_qa:'qa/revision-1.8-browser-checks.json',raw_dem_tiles_packaged:0};
+fs.writeFileSync(path.join(__dirname,'revision-1.8-terrain-fixtures.json'),JSON.stringify(receipt,null,2)+'\n');
 console.log(JSON.stringify({checks,passed:checks,failed:0}));
+/* Revision 1.8: height colour and contour rendering (synthetic heights only). */
+{
+  const T = require('../fabdem-layer.js')._test, assert = require('node:assert/strict');
+  const lut = T.rampLUT(['#0000FF', '#FF0000']);
+  assert.deepEqual([...lut.slice(0, 3)], [0, 0, 255]); assert.deepEqual([...lut.slice(765, 768)], [255, 0, 0]);
+  // 8 x 8 plane rising 1 m per pixel eastward at 1 m per pixel: colour stretched 0..7, contour every 2 m.
+  const w = 8, hgt = new Float32Array(w * w).map((_, i) => i % w);
+  const out = T.renderTerrain(hgt, w, w, 1, {lut: T.rampLUT(['#000000', '#FFFFFF']), lo: 0, hi: 7, interval: 2, major: 5, opacity: 1, theme: 'light'});
+  assert.ok(out[(3 * w + 1) * 4 + 3] > 0, 'interior pixels are drawn');
+  const px = (x) => out[(3 * w + x) * 4];
+  assert.ok(px(5) > px(3) || px(4) === px(2), 'brighter eastward away from contour lines');
+  // A no-data neighbour leaves the pixel transparent, never zero height.
+  const holes = hgt.slice(); holes[3 * w + 3] = NaN;
+  const out2 = T.renderTerrain(holes, w, w, 1, {lut, lo: 0, hi: 7, interval: 0});
+  assert.equal(out2[(3 * w + 3) * 4 + 3], 0); assert.equal(out2[(3 * w + 4) * 4 + 3], 0);
+  // Colour off falls back to neutral hillshade alpha only.
+  const out3 = T.renderTerrain(hgt, w, w, 1, {colorOn: false, lut, lo: 0, hi: 7});
+  assert.ok(out3[(3 * w + 3) * 4] === 0 || out3[(3 * w + 3) * 4] === 255);
+  console.log(JSON.stringify({surfaceChecks: 6, passed: 6}));
+}

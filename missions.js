@@ -1,196 +1,121 @@
-/* Sila officer missions: datasets grouped by municipal work, in plain language.
- * Load before app.js. No data, no personal records: labels, purposes and routing only.
- * A dataset may serve several missions. Caveats stay in each dataset's "ที่มาและข้อควรรู้" tab.
+/* Sila officer missions v2: every selectable item is a map layer.
+ * Data that cannot be drawn on the map is folded into a layer of the same mission
+ * as supplementary information. Load before app.js. No data, no personal records.
  */
 (function (root) {
   'use strict';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const pick = (pair, lang) => Array.isArray(pair) ? (lang === 'en' ? pair[1] : pair[0]) : String(pair ?? '');
 
+  /* Map layers an officer can choose. `supplements` are non-map summaries shown with the layer. */
+  const LAYERS = Object.freeze({
+    taxmap: {label: ['ภาษีที่ดินรายแปลง', 'Land tax by parcel'], kind: 'parcel-choropleth',
+      benefit: ['ดูภาษีที่ประเมินปี 2569 ของแต่ละแปลง เทียบกับภาษีปี 2570 ที่คาดไว้ ทั้งวิธีเดิมและตามข้อเสนอ', 'Compare each parcel’s 2569 assessed tax with 2570 estimates under the current method and with proposed fixes'],
+      supplements: ['tax'], tools: ['tax-calculator']},
+    appraisal: {label: ['ราคาประเมินที่ดินรายแปลง', 'Land appraisal by parcel'], kind: 'parcel-choropleth',
+      benefit: ['ดูราคาประเมินที่ดิน บาทต่อตารางวา ทีละแปลงตามขอบโฉนด', 'See the land appraisal price in baht per square wah for each parcel']},
+    buildings: {label: ['อาคาร บ้านเลขที่ และบัญชีภาษี', 'Buildings, house numbers and the tax roll'], kind: 'polygons',
+      benefit: ['ดูอาคารทุกหลัง บ้านเลขที่ในอาคาร อยู่ในบัญชีภาษีหรือยัง และอาคารที่คร่อมหลายแปลง', 'See every building with its house numbers, whether it is on the tax roll, and buildings that span several parcels'],
+      supplements: ['business']},
+    houses: {label: ['หมุดบ้านที่สำรวจ', 'Surveyed house points'], kind: 'points',
+      benefit: ['หาบ้านเลขที่ ดูผลสำรวจอาคาร แล้วไปยังรูปอาคารที่ผูกได้', 'Find a house number, see its building survey and go to its footprint']},
+    terrain: {label: ['ที่สูงที่ต่ำ 2D และ 3D', 'High and low ground in 2D and 3D'], kind: 'terrain',
+      benefit: ['ดูรูปทรงที่สูงที่ต่ำ ช่วยคิดเรื่องทางน้ำและจุดที่น้ำอาจขัง', 'See the shape of high and low ground to think about water paths and pooling'],
+      supplements: ['flood']},
+    waterways: {label: ['ลำห้วยและแหล่งน้ำ', 'Streams and water bodies'], kind: 'polygons',
+      benefit: ['ดูทางน้ำบนแผนที่ พร้อมแผนแก้น้ำท่วมเดิม 16 จุด', 'See waterways on the map with the past 16-site flood plan'],
+      supplements: ['flood']},
+    popgrid: {label: ['คนในพื้นที่ แยกเพศและอายุ', 'People by sex and age'], kind: 'grid-choropleth',
+      benefit: ['ดูว่าเด็ก คนอายุประมาณ 15–42 ปี และ 42 ปีขึ้นไป กระจุกตรงไหน เป็นช่องละ 250 เมตร นับจากบ้านที่มีรายชื่อในแบบสำรวจเท่านั้น', 'See where children and people aged about 15–42 and 42+ cluster, in 250 m cells, counted only from houses with survey member lists'],
+      supplements: ['caregroups', 'healthservices', 'animals']},
+    population: {label: ['ประชากรรายหมู่บ้าน', 'Population by village'], kind: 'village-choropleth',
+      benefit: ['ดูจำนวนประชากรแต่ละหมู่บ้าน ปี 2569', 'See each village’s population for 2569 (2026)'],
+      supplements: ['caregroups']},
+    health: {label: ['สถานพยาบาล', 'Health facilities'], kind: 'points',
+      benefit: ['ดูตำแหน่งสถานพยาบาล พร้อมความพร้อมข้อมูลงานดูแล', 'See health facilities with the readiness of care data'],
+      supplements: ['healthservices', 'caregroups']},
+    education: {label: ['สถานศึกษา', 'Schools'], kind: 'points', benefit: ['ดูตำแหน่งสถานศึกษา', 'See school locations']},
+    roads: {label: ['ถนนขึ้นทะเบียน', 'Registered roads'], kind: 'lines', benefit: ['ดูถนนที่ขึ้นทะเบียนทางหลวงในเทศบาล', 'See registered road segments']},
+    cctv: {label: ['กล้อง CCTV', 'CCTV cameras'], kind: 'points', benefit: ['ดูตำแหน่งกล้อง CCTV ที่ได้รับ', 'See supplied CCTV locations']},
+    publicfacilities: {label: ['สาธารณูปการ', 'Public facilities'], kind: 'polygons', benefit: ['ดูพื้นที่สาธารณูปการบนแผนที่', 'See public facility areas']},
+    religion: {label: ['ศาสนสถาน', 'Religious places'], kind: 'points', benefit: ['ดูตำแหน่งศาสนสถาน', 'See religious places']},
+    overview: {label: ['ขอบเขตและภาพรวมพื้นที่', 'Boundaries and area overview'], kind: 'boundaries',
+      benefit: ['ดูขอบเขตเทศบาล 28 หมู่บ้าน หรือ 3 เขตเลือกตั้ง แล้วเลือกพื้นที่เพื่อดูตัวเลข', 'See the municipality, 28 villages or 3 electoral areas, then choose an area']},
+  });
+
   const MISSIONS = Object.freeze([
-    {
-      id: 'tax', icon: 'parcels',
-      short: ['ภาษี', 'Tax'],
-      label: ['งานภาษีและรายได้', 'Tax and revenue'],
-      unit: ['กองคลัง · งานจัดเก็บรายได้', 'Finance division · revenue'],
-      benefit: ['ดูว่าข้อมูลภาษีมีอะไรแล้ว ตรวจแปลงและอาคารบนแผนที่ และคิดภาษีที่ควรเก็บทีละแปลง',
-                'See which tax records exist, check parcels and buildings on the map, and work out the tax due for one parcel'],
-      tasks: [
-        {dataset: 'tax', label: ['ดูยอดรับชำระและแบบภาษีที่มี', 'See receipts and tax forms on file']},
-        {dataset: 'parcels', label: ['ดูแปลงที่ดินบนแผนที่', 'See parcels on the map']},
-        {dataset: 'buildings', label: ['ดูอาคารบนแผนที่', 'See buildings on the map']},
-        {tool: 'tax-calculator', label: ['คิดภาษีที่ควรเก็บของหนึ่งแปลง', 'Work out the tax due for one parcel']},
-        {dataset: 'business', label: ['ดูกิจการที่ขอใบอนุญาตไว้', 'See licensed businesses']},
-        {dataset: 'houses', label: ['หาบ้านเลขที่บนแผนที่', 'Find a house number on the map']},
-      ],
-    },
-    {
-      id: 'flood', icon: 'flood',
-      short: ['น้ำท่วม', 'Flood'],
-      label: ['งานน้ำท่วมและภัยพิบัติ', 'Flood and disaster'],
-      unit: ['งานป้องกันและบรรเทาสาธารณภัย', 'Disaster prevention and relief'],
-      benefit: ['ดูจุดที่เคยวางแผนแก้น้ำท่วม ทางน้ำ ที่สูงที่ต่ำ และถนนที่ใช้เข้าพื้นที่',
-                'See past flood-fix sites, waterways, high and low ground, and access roads'],
-      tasks: [
-        {dataset: 'flood', label: ['ดูแผนแก้น้ำท่วม 16 จุด', 'See the 16 flood-fix sites']},
-        {dataset: 'waterways', label: ['ดูลำห้วยและแหล่งน้ำ', 'See streams and water bodies']},
-        {dataset: 'terrain', label: ['ดูที่สูงที่ต่ำแบบ 3D', 'See high and low ground in 3D']},
-        {dataset: 'roads', label: ['ดูถนนที่ใช้เข้าพื้นที่', 'See access roads']},
-        {dataset: 'caregroups', label: ['ดูจำนวนผู้รับการดูแล (ยอดรวม)', 'See care recipients (totals only)']},
-        {dataset: 'cctv', label: ['ดูตำแหน่งกล้อง CCTV', 'See CCTV locations']},
-      ],
-    },
-    {
-      id: 'care', icon: 'population',
-      short: ['ดูแลคน', 'Care'],
-      label: ['งานดูแลกลุ่มเปราะบางและสาธารณสุข', 'Care and public health'],
-      unit: ['กองสาธารณสุข · กองสวัสดิการสังคม', 'Public health · social welfare'],
-      benefit: ['ดูจำนวนผู้รับการดูแลแยกกลุ่ม สถานพยาบาล และงานบริการสัตว์ เพื่อวางรอบเยี่ยมบ้านและบริการ',
-                'See care recipients by group, health facilities and animal services to plan home visits and services'],
-      tasks: [
-        {dataset: 'caregroups', label: ['ดูจำนวนผู้รับการดูแลแยกกลุ่ม', 'See care recipients by group']},
-        {dataset: 'healthservices', label: ['ดูความพร้อมข้อมูลงานดูแล', 'See care data readiness']},
-        {dataset: 'health', label: ['ดูสถานพยาบาลบนแผนที่', 'See health facilities on the map']},
-        {dataset: 'animals', label: ['ดูจำนวนสุนัขแมวเพื่อวางรอบวัคซีน', 'See dog and cat counts for vaccination rounds']},
-        {dataset: 'population', label: ['ดูประชากรแต่ละหมู่บ้าน', 'See population by village']},
-      ],
-    },
-    {
-      id: 'works', icon: 'roads',
-      short: ['โยธา', 'Works'],
-      label: ['งานโยธาและบริการสาธารณะ', 'Public works and services'],
-      unit: ['กองช่าง', 'Engineering division'],
-      benefit: ['ดูถนน กล้อง และสถานที่สาธารณะ เพื่อวางแผนซ่อม ติดตั้ง และดูแลพื้นที่',
-                'See roads, cameras and public places to plan repairs, installation and upkeep'],
-      tasks: [
-        {dataset: 'roads', label: ['ดูถนนที่ขึ้นทะเบียน', 'See registered roads']},
-        {dataset: 'publicfacilities', label: ['ดูพื้นที่สาธารณูปการ', 'See public facility areas']},
-        {dataset: 'cctv', label: ['ดูตำแหน่งกล้อง CCTV', 'See CCTV locations']},
-        {dataset: 'education', label: ['ดูสถานศึกษา', 'See schools']},
-        {dataset: 'religion', label: ['ดูศาสนสถาน', 'See religious places']},
-        {dataset: 'buildings', label: ['ดูอาคารบนแผนที่', 'See buildings on the map']},
-      ],
-    },
-    {
-      id: 'area', icon: 'boundaries',
-      short: ['พื้นที่', 'Area'],
-      label: ['ข้อมูลพื้นฐานพื้นที่', 'Area basics'],
-      unit: ['สำนักปลัด · ใช้ได้ทุกกอง', 'Clerk’s office · all divisions'],
-      benefit: ['ดูขอบเขตเทศบาล หมู่บ้าน เขตเลือกตั้ง และประชากรแต่ละหมู่บ้าน',
-                'See the municipal boundary, villages, electoral areas and population by village'],
-      tasks: [
-        {dataset: 'overview', label: ['ดูภาพรวม 28 หมู่บ้าน', 'See all 28 villages']},
-        {dataset: 'population', label: ['ดูประชากรแต่ละหมู่บ้าน', 'See population by village']},
-        {dataset: 'villages', label: ['ดูขอบเขตหมู่บ้าน', 'See village boundaries']},
-        {dataset: 'election', label: ['ดูเขตเลือกตั้ง 3 เขต', 'See the 3 electoral areas']},
-        {dataset: 'municipality', label: ['ดูขอบเขตเทศบาล', 'See the municipal boundary']},
-        {dataset: 'houses', label: ['หาบ้านเลขที่บนแผนที่', 'Find a house number on the map']},
-      ],
-    },
+    {id: 'tax', icon: 'parcels', label: ['ภาษีและรายได้', 'Tax and revenue'], layers: ['taxmap', 'appraisal', 'buildings', 'houses']},
+    {id: 'flood', icon: 'flood', label: ['น้ำท่วมและภัยพิบัติ', 'Flood and disaster'], layers: ['terrain', 'waterways', 'popgrid', 'roads', 'cctv']},
+    {id: 'care', icon: 'population', label: ['ดูแลคนและสาธารณสุข', 'Care and public health'], layers: ['popgrid', 'population', 'health', 'education']},
+    {id: 'works', icon: 'roads', label: ['โยธาและบริการสาธารณะ', 'Public works and services'], layers: ['roads', 'publicfacilities', 'cctv', 'education', 'religion', 'buildings']},
+    {id: 'area', icon: 'boundaries', label: ['ข้อมูลพื้นฐานพื้นที่', 'Area basics'], layers: ['overview', 'population', 'houses', 'buildings', 'appraisal']},
   ]);
 
-  /* What each dataset helps an officer do (shown instead of caveats in menus). */
-  const PURPOSE = Object.freeze({
-    overview: ['ภาพรวมจำนวนบ้าน อาคาร และถนน ของทั้ง 28 หมู่บ้าน', 'Houses, buildings and roads across all 28 villages'],
-    houses: ['หาบ้านเลขที่และดูตำแหน่งบนแผนที่', 'Find a house number and see where it is'],
-    buildings: ['ดูรูปอาคารทุกหลังบนแผนที่', 'See every building outline on the map'],
-    parcels: ['ดูแปลงบนแผนที่ภาษี และเปิดรายการแปลงในพื้นที่', 'See parcels on the tax map and list them by area'],
-    tax: ['ดูยอดรับชำระ ลูกหนี้ และแบบภาษีที่เทศบาลมีอยู่', 'See receipts, arrears and the tax forms on file'],
-    business: ['ดูกิจการที่ขอใบอนุญาต แยกตามประเภท', 'See licensed businesses by type'],
-    flood: ['อ่านปัญหาและแนวทางแก้ของ 16 จุดในแผนเดิม', 'Read the problem and proposed fix for 16 planned sites'],
-    waterways: ['ดูลำห้วยและแหล่งน้ำบนแผนที่', 'See streams and water bodies on the map'],
-    terrain: ['ดูที่สูงที่ต่ำของพื้นที่ แบบ 2D และ 3D', 'See high and low ground in 2D and 3D'],
-    roads: ['ดูถนนที่ขึ้นทะเบียนทางหลวงในเทศบาล', 'See registered road segments'],
-    cctv: ['ดูตำแหน่งกล้อง CCTV ที่ได้รับ', 'See supplied CCTV locations'],
-    caregroups: ['ดูจำนวนผู้รับการดูแลแยกตามกลุ่ม ไม่มีรายชื่อ', 'See care recipients by group, without names'],
-    healthservices: ['ดูว่าข้อมูลงานดูแลระยะยาวพร้อมใช้แค่ไหน', 'See how ready the long-term care data is'],
-    health: ['ดูตำแหน่งสถานพยาบาล', 'See health facility locations'],
-    animals: ['ดูจำนวนสุนัขและแมวเพื่อวางรอบวัคซีน', 'See dog and cat counts for vaccination rounds'],
-    population: ['ดูจำนวนประชากรแต่ละหมู่บ้าน', 'See population by village'],
-    publicfacilities: ['ดูพื้นที่สาธารณูปการบนแผนที่', 'See public facility areas'],
-    education: ['ดูตำแหน่งสถานศึกษา', 'See school locations'],
-    religion: ['ดูตำแหน่งศาสนสถาน', 'See religious places'],
-    villages: ['ดูขอบเขตและเลือกดูทีละหมู่บ้าน', 'See and choose village boundaries'],
-    municipality: ['ดูขอบเขตเทศบาลที่ได้รับ', 'See the supplied municipal boundary'],
-    election: ['ดูเขตเลือกตั้ง 3 เขต (ขอบเขตทดลอง)', 'See the 3 electoral areas (trial boundary)'],
+  /* Earlier dataset ids (bookmarks) and where they now live. */
+  const LEGACY = Object.freeze({
+    tax: {layer: 'taxmap', mission: 'tax'}, parcels: {layer: 'appraisal'}, business: {layer: 'buildings', mission: 'tax'},
+    flood: {layer: 'waterways', mission: 'flood'}, caregroups: {layer: 'popgrid', mission: 'care'},
+    healthservices: {layer: 'health', mission: 'care'}, animals: {layer: 'popgrid', mission: 'care'},
+    villages: {layer: 'overview', boundary: 'village'}, election: {layer: 'overview', boundary: 'election'},
+    municipality: {layer: 'overview', boundary: 'municipality'},
   });
 
-  /* Plain unit for the main count of each dataset. */
+  /* Plain titles for folded, non-map summaries. */
+  const SUPPLEMENT_TITLES = Object.freeze({
+    tax: ['ภาพรวมไฟล์ภาษีปี 2569 ทั้งเทศบาล', 'Tax files for 2569, whole municipality'],
+    business: ['กิจการที่ได้รับข้อมูล (ยอดรวม)', 'Businesses on file (totals)'],
+    flood: ['แผนแก้น้ำท่วมเดิม 16 จุด', 'Past flood-fix plan, 16 sites'],
+    caregroups: ['กลุ่มผู้รับการดูแลตามบัญชี (ยอดรวม)', 'Care recipients on the lists (totals)'],
+    healthservices: ['ความพร้อมข้อมูลงานดูแล', 'Care data readiness'],
+    animals: ['สุนัขและแมว (ยอดรวม)', 'Dogs and cats (totals)'],
+  });
+
   const UNIT = Object.freeze({
-    overview: ['หมู่บ้าน', 'villages'], houses: ['จุด', 'points'], buildings: ['อาคาร', 'buildings'], parcels: ['แปลง', 'parcels'],
-    roads: ['ช่วงถนน', 'segments'], cctv: ['กล้อง', 'cameras'], education: ['แห่ง', 'places'], health: ['แห่ง', 'places'],
-    religion: ['แห่ง', 'places'], publicfacilities: ['พื้นที่', 'areas'], waterways: ['แหล่งน้ำ', 'features'],
-    population: ['หมู่บ้าน', 'villages'], villages: ['หมู่บ้าน', 'villages'], municipality: ['เขต', 'boundary'],
-    election: ['เขต', 'areas'], flood: ['จุด', 'sites'],
+    taxmap: ['แปลง', 'parcels'], appraisal: ['แปลง', 'parcels'], overview: ['หมู่บ้าน', 'villages'], houses: ['จุด', 'points'],
+    buildings: ['อาคาร', 'buildings'], parcels: ['แปลง', 'parcels'], roads: ['ช่วงถนน', 'segments'], cctv: ['กล้อง', 'cameras'],
+    education: ['แห่ง', 'places'], health: ['แห่ง', 'places'], religion: ['แห่ง', 'places'], publicfacilities: ['พื้นที่', 'areas'],
+    waterways: ['แหล่งน้ำ', 'features'], population: ['หมู่บ้าน', 'villages'], popgrid: ['ช่อง', 'cells'], terrain: ['ภาพ', 'view'],
   });
 
-  /* Only states an officer must notice; ordinary source data shows no chip. */
+  const PURPOSE = Object.freeze(Object.fromEntries(Object.entries(LAYERS).map(([id, l]) => [id, l.benefit])));
+
   const STATUS = Object.freeze({
     needs_reconciliation: ['มีตัวเลขรอตรวจ', 'Figures to check'],
     derived_display: ['ขอบเขตทดลอง', 'Trial boundary'],
-    document_evidence_only: ['จากเอกสารแผนเดิม', 'From past plan documents'],
-    municipal_public_summary: ['ยอดรวมทั้งเทศบาล', 'City-wide totals'],
     ready_external_dem: ['ข้อมูลภายนอก', 'External data'],
-    external_team_pending: ['กำลังจัดทำ', 'In preparation'],
   });
 
   const byId = id => MISSIONS.find(m => m.id === id) || null;
-  const datasetsOf = mission => mission.tasks.filter(t => t.dataset).map(t => t.dataset);
-  function missionFor(datasetId, preferred) {
+  const layersOf = id => (byId(id) || MISSIONS[0]).layers;
+  const layer = id => LAYERS[id] || null;
+  function resolve(datasetId) {
+    if (LAYERS[datasetId]) return {layer: datasetId};
+    if (LEGACY[datasetId]) return {...LEGACY[datasetId]};
+    return null;
+  }
+  function missionFor(layerId, preferred) {
     const pref = byId(preferred);
-    if (pref && (datasetsOf(pref).includes(datasetId))) return pref.id;
-    const first = MISSIONS.find(m => datasetsOf(m).includes(datasetId));
+    if (pref && pref.layers.includes(layerId)) return pref.id;
+    const first = MISSIONS.find(m => m.layers.includes(layerId));
     return first ? first.id : (pref ? pref.id : MISSIONS[0].id);
   }
 
-  /* Segmented selector: changes the panel view; never submits anything. */
-  function renderNav(current, opts) {
-    const lang = opts.language, icon = opts.icon;
-    return MISSIONS.map((m, i) => {
-      const on = m.id === current;
-      return `<button type="button" class="mission-tab" data-mission="${esc(m.id)}" aria-pressed="${on}" tabindex="${on ? 0 : -1}" aria-label="${esc(pick(m.label, lang))}">`
-        + `${icon(m.icon, {size: 20})}<span>${esc(pick(m.short, lang))}</span>${on ? `<span class="mission-check" aria-hidden="true">${icon('done', {size: 16})}</span>` : ''}</button>`;
+  /* Two compact native selects: work, then the map layer within that work. */
+  function renderSelectors(state, opts) {
+    const lang = opts.language;
+    const mission = byId(state.mission) || MISSIONS[0];
+    const missionOptions = MISSIONS.map(m => `<option value="${esc(m.id)}"${m.id === mission.id ? ' selected' : ''}>${esc(pick(m.label, lang))}</option>`).join('');
+    const layerOptions = mission.layers.filter(id => opts.available ? opts.available(id) : true).map(id => {
+      const count = opts.count ? opts.count(id) : '';
+      return `<option value="${esc(id)}"${id === state.layer ? ' selected' : ''}>${esc(pick(LAYERS[id].label, lang))}${count ? ` · ${esc(count)}` : ''}</option>`;
     }).join('');
+    const current = LAYERS[state.layer];
+    return `<div class="selector-row">`
+      + `<label class="selector"><span>${esc(lang === 'en' ? 'Work' : 'งาน')}</span><select id="mission-select">${missionOptions}</select></label>`
+      + `<label class="selector selector-wide"><span>${esc(lang === 'en' ? 'Map' : 'แผนที่')}</span><select id="layer-select">${layerOptions}</select></label>`
+      + `</div>${current ? `<p class="selector-benefit">${esc(pick(current.benefit, lang))}</p>` : ''}`;
   }
 
-  function renderCard(missionId, opts) {
-    const m = byId(missionId) || MISSIONS[0];
-    const lang = opts.language, icon = opts.icon, available = opts.available || (() => true);
-    const rows = m.tasks.filter(t => t.tool || available(t.dataset)).map(t => {
-      const current = t.dataset && t.dataset === opts.dataset;
-      const attr = t.tool ? `data-tool="${esc(t.tool)}"` : `data-dataset="${esc(t.dataset)}"`;
-      const glyph = t.tool ? icon('plan', {size: 20}) : opts.datasetIcon(t.dataset, 20);
-      return `<li><button type="button" class="mission-task" ${attr}${current ? ' aria-current="true"' : ''}>`
-        + `<span class="mission-task-icon" aria-hidden="true">${glyph}</span><span class="mission-task-label">${esc(pick(t.label, lang))}</span>`
-        + `${current ? `<span class="mission-task-state">${esc(lang === 'en' ? 'Showing' : 'กำลังดู')}</span>` : `<span class="mission-task-go" aria-hidden="true">${icon('next', {size: 18})}</span>`}`
-        + `</button></li>`;
-    }).join('');
-    return `<h2 id="mission-title">${esc(pick(m.label, lang))}</h2><p class="mission-unit">${esc(pick(m.unit, lang))}</p>`
-      + `<p class="mission-benefit">${esc(pick(m.benefit, lang))}</p><ul class="mission-tasks" aria-labelledby="mission-title">${rows}</ul>`;
-  }
-
-  /* Dataset menu grouped by mission; the current mission comes first. */
-  function renderCatalog(opts) {
-    const lang = opts.language, rows = opts.rows, current = opts.mission, q = (opts.query || '').trim();
-    const row = d => {
-      const chip = STATUS[d.status] ? `<span class="dataset-chip">${esc(pick(STATUS[d.status], lang))}</span>` : '';
-      const count = opts.count(d);
-      return `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === opts.dataset}">`
-        + `<span class="dataset-type-icon">${opts.datasetIcon(d.id, 28)}</span>`
-        + `<span><strong>${esc(opts.label(d.id))}</strong><small>${esc(pick(PURPOSE[d.id] || ['ข้อมูลจากเทศบาล', 'Municipal data'], lang))}</small>${chip}</span>`
-        + `<span class="number">${count.value}<small>${esc(count.unit)}</small></span></button>`;
-    };
-    if (q) {
-      const list = rows.filter(d => opts.matches(d, q));
-      return list.length ? `<h3 class="dataset-group-title">${esc(lang === 'en' ? 'Search results' : 'ผลการค้นหา')}</h3>${list.map(row).join('')}` : '';
-    }
-    const order = [byId(current), ...MISSIONS.filter(m => m.id !== current)].filter(Boolean);
-    return order.map(m => {
-      const list = datasetsOf(m).map(id => rows.find(d => d.id === id)).filter(Boolean);
-      if (!list.length) return '';
-      return `<section class="dataset-mission"><h3 class="dataset-group-title">${opts.icon(m.icon, {size: 20})}<span>${esc(pick(m.label, lang))}</span></h3>${list.map(row).join('')}</section>`;
-    }).join('');
-  }
-
-  root.SilaMissions = Object.freeze({missions: MISSIONS, purpose: PURPOSE, unit: UNIT, status: STATUS, byId, missionFor, renderNav, renderCard, renderCatalog, pick});
+  root.SilaMissions = Object.freeze({missions: MISSIONS, layers: LAYERS, legacy: LEGACY, supplementTitles: SUPPLEMENT_TITLES,
+    purpose: PURPOSE, unit: UNIT, status: STATUS, byId, layersOf, layer, resolve, missionFor, renderSelectors, pick});
 })(typeof window === 'undefined' ? globalThis : window);

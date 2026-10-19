@@ -154,8 +154,32 @@
     "precision": "Tile-local Mercator origin; latitude-specific metre conversion.",
     "basemap": "Current-frame projective reprojection when available; neutral surface for offscreen/failed texture support.",
     "heightColourRamp": false,
-    "defaultVerticalExaggeration": 1,
+    "defaultVerticalExaggeration": "automatic",
     "noRegionalAccuracyClaim": true,
-    "lighting": "Neutral relief shading with normalized local vector[-0.5,-0.5,1]; does not encode elevation or flood risk."
+    "lighting": "Neutral relief shading: illumination 0.5 + 0.62 * max(0, n . normalize(-0.6, -0.6, 0.55)); does not encode elevation or flood risk.",
+    "verticalExaggeration": {
+      "revision": "1.8",
+      "parity": "CityMETER terrain viewer (landometer.com/v3/citymeter-3d): logarithmic slider, one decimal under 10, automatic rule and default target",
+      "range": [
+        0.5,
+        50
+      ],
+      "slider": "log scale 0-1000; ex = round(0.5 * exp(ln(100) * v / 1000)); one decimal under 10, whole numbers from 10",
+      "automatic": {
+        "defaultOn": true,
+        "targetShareOfViewWidth": 0.15,
+        "targetRange": [
+          0.05,
+          0.3
+        ],
+        "relief": "99th minus 1st percentile of measured heights on a 24 x 24 grid across the current view; unknown cells skipped, never zero",
+        "formula": "ex = clamp(target * viewWidthMetres / relief, 1, 50); no value when relief < 0.5 m",
+        "updateThreshold": "apply only when the value changes by more than 5%"
+      },
+      "manual": "moving the slider switches automatic off; URL parameter ex keeps a manual value, ext keeps a non-default target",
+      "reasonForAutomaticDefault": "Sila is fairly flat: about 60 m of relief (1st-99th percentile) across about 13 km, so CityMETER's fixed default of 1.5x looks almost flat; automatic 15% gives about 34x for the whole-city view",
+      "boundaryLine": "drawn 2 m plus 1 m per exaggeration step above the exaggerated surface, sampled every 40 m",
+      "notTrueHeight": true
+    }
   }
 }

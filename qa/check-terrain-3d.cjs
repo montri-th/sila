@@ -42,6 +42,20 @@ check('world viewport requests only22 district-intersecting native12 tiles',()=>
 check('outside viewport makes no DEM requests',()=>assert.equal(t.wantedTiles([0,0,1,1],h.polygonsOf(coverage)).length,0));
 check('real district native grid build is bounded',()=>{const ps=h.polygonsOf(coverage),cs=t.wantedTiles([102.8,16.4,102.9,16.6],ps);assert.ok(cs.length<22);const m=t.buildMesh(pixels(256),256,256,cs[0],ps);assert.ok(m.triangles<=130050);});
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const receipt={schema:'sila-inline-terrain3d-fixtures/1.0',checkedOn:'2026-10-19',checks,passed:checks,failed:0,scope:'Independent deterministic decoding, valid-cell geometry, cell-centred registration, conservative polygon/hole clip, neighbour seam, Mercator scale/precision, zoom handoff and bounded native district tile selection. Synthetic DEM values only; no browser/framebuffer/orbit/texture attestation.',moduleSHA256:sha(path.join(__dirname,'../terrain-3d.js')),testsSHA256:sha(__filename),coverageSHA256:sha(path.join(__dirname,'../data/terrain-coverage.geojson')),separateBrowserReceipt:'revision-1.6-browser-checks.json',browserAttestation:'This geometry receipt does not attest browser rendering; read the separate browser receipt.',rawDEMRehosted:false};
-fs.writeFileSync(path.join(__dirname,'revision-1.6-terrain3d-fixtures.json'),JSON.stringify(receipt,null,2)+'\n');
+/* Receipts are written for the current revision; earlier revision receipts stay as they were published. */
+const receipt={schema:'sila-inline-terrain3d-fixtures/1.0',revision:'1.8',checkedOn:'2026-10-20',checks,passed:checks,failed:0,scope:'Independent deterministic decoding, valid-cell geometry, cell-centred registration, conservative polygon/hole clip, neighbour seam, Mercator scale/precision, zoom handoff and bounded native district tile selection. Synthetic DEM values only; no browser/framebuffer/orbit/texture attestation.',moduleSHA256:sha(path.join(__dirname,'../terrain-3d.js')),testsSHA256:sha(__filename),coverageSHA256:sha(path.join(__dirname,'../data/terrain-coverage.geojson')),separateBrowserReceipt:'revision-1.8-browser-checks.json',browserAttestation:'This geometry receipt does not attest browser rendering; read the separate browser receipt.',rawDEMRehosted:false};
+fs.writeFileSync(path.join(__dirname,'revision-1.8-terrain3d-fixtures.json'),JSON.stringify(receipt,null,2)+'\n');
 console.log(JSON.stringify({checks,passed:checks,failed:0}));
+/* Revision 1.8: CityMETER-style vertical exaggeration helpers. */
+{
+  const T = require('../terrain-3d.js').exaggeration, assert = require('node:assert/strict');
+  assert.equal(T.min, 0.5); assert.equal(T.max, 50); assert.equal(T.defaultTarget, 0.15);
+  assert.equal(T.sliderToEx(0), 0.5); assert.equal(T.sliderToEx(1000), 50); assert.equal(T.sliderToEx(500), 5);
+  assert.equal(T.sliderToEx(T.exToSlider(34)), 34); assert.equal(T.roundEx(3.14159), 3.1); assert.equal(T.roundEx(12.6), 13);
+  assert.equal(T.autoValue(59.4, 13310, 0.15), 34);           // Sila municipality view
+  assert.equal(T.autoValue(9.9, 3860, 0.15), 50);             // capped at 50
+  assert.equal(T.autoValue(2000, 10000, 0.15), 1);            // never below 1 in automatic mode
+  assert.equal(T.autoValue(0.2, 1000, 0.15), null);           // relief under 0.5 m: no automatic value
+  assert.equal(T.autoValue(null, 1000, 0.15), null);          // unknown relief is not zero
+  console.log(JSON.stringify({exaggerationChecks: 11, passed: 11}));
+}

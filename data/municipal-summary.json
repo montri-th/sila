@@ -285,8 +285,8 @@
         }
       ],
       "privacy": {
-        "th": "ไม่เผยรายชื่อ เลขสิทธิ เลขใบประเมิน หรือยอดภาษีรายบุคคล",
-        "en": "No names, title numbers, assessment IDs or individual tax amounts exposed."
+        "th": "ยอดรวมนี้ไม่มีรายชื่อ เลขสิทธิ หรือเลขใบประเมิน ภาษีรายแปลงดูได้ที่แผนที่ภาษีรายแปลงโดยไม่มีชื่อ",
+        "en": "This summary has no names, title numbers or assessment IDs; per-parcel tax is on the tax map, without names."
       },
       "breakdowns": [
         {

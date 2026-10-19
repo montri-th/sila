@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "revision": "1.8",
+  "date": "2026-10-20",
+  "scope": "bounded deterministic math/geometry/no-data fixtures; no browser or full regional DEM coverage attestation",
+  "checks": 21,
+  "passed": 21,
+  "failed": 0,
+  "files": {
+    "module_sha256": "b7f79e83a198d615903f001d3d85c03f88d53d471a9a99e302a9c450a51c2ffc",
+    "coverage_sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
+    "tests_sha256": "955dcd2f2358490505a2ffa8f23b3f817a183d7daa4541d35ed9bc52a3899132"
+  },
+  "browser_qa": "qa/revision-1.8-browser-checks.json",
+  "raw_dem_tiles_packaged": 0
+}
