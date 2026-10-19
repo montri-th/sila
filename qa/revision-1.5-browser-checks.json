@@ -1,0 +1,1272 @@
+{
+  "schemaVersion": "sila-browser-review-1.5",
+  "revision": "1.5",
+  "reviewedAtUtc": "2026-10-19T11:47:57.098449+00:00",
+  "status": "passed_with_bounded_coverage",
+  "releaseState": "local_candidate_not_published",
+  "approvedPublicSummary": {
+    "path": "data/municipal-summary.json",
+    "bytes": 55549,
+    "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c"
+  },
+  "sourcePins": {
+    "lds": "v0.9.7-owner.1 / color-srgb-10",
+    "citychatAddon": "0.9.2"
+  },
+  "sourceFiles": [
+    {
+      "path": "app.js",
+      "bytes": 107675,
+      "sha256": "3daf71b3d0049902911dbf42b1ba166ae27075245964221c8cbced8f7bfab89d"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 28168,
+      "sha256": "18d4e9089e3ac40c41fa7d1c48aa4fc156e0d407efe960ee52025d555bff1981"
+    },
+    {
+      "path": "public-aggregate.js",
+      "bytes": 10584,
+      "sha256": "9349e4cb1714109ee7722403fd790e9006f86822e871217b44b2dd2e7ef186cb"
+    },
+    {
+      "path": "context-actions.js",
+      "bytes": 23291,
+      "sha256": "22100b0cb76beccee5130fae174fe108d20b3fe702ffb0f667833e2d67c2b5b5"
+    },
+    {
+      "path": "basemap.js",
+      "bytes": 18176,
+      "sha256": "49a25481eb6f405bdb508e9e3bc0a84fe0da57a0a6970c09c3492f23b85d9ba7"
+    },
+    {
+      "path": "fabdem-layer.js",
+      "bytes": 10830,
+      "sha256": "8613f60008db6a2481b44be1337f1fd8f7054ab7500c8cc7a85aaa735de05d35"
+    },
+    {
+      "path": "index.html",
+      "bytes": 16263,
+      "sha256": "c07956438f97e10ac5ba367cf185588f2529b6fd2934862913ca4a9920f1227c"
+    },
+    {
+      "path": "server.py",
+      "bytes": 2258,
+      "sha256": "f5f5cd9748511f15a01eb4fca6191e13e36389e7ab2cd9873457eb188a1aa120"
+    },
+    {
+      "path": "data/municipal-summary.json",
+      "bytes": 55549,
+      "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c"
+    },
+    {
+      "path": "data/terrain-source.json",
+      "bytes": 2657,
+      "sha256": "9aca4e714bd6660431caebf41381aabde0d70ccbea49212eab6f24acc122e507"
+    },
+    {
+      "path": "data/terrain-coverage.geojson",
+      "bytes": 31928,
+      "sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e"
+    }
+  ],
+  "reviewedAggregateStates": [
+    {
+      "stem": "caregroups-th-dark-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "3 ไฟล์",
+        "194 รหัส",
+        "4 กลุ่ม",
+        "— ราย"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "กลุ่มเปราะบางและผู้รับการดูแล",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "caregroups-th-light-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "3 ไฟล์",
+        "194 รหัส",
+        "4 กลุ่ม",
+        "— ราย"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "กลุ่มเปราะบางและผู้รับการดูแล",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "caregroups-en-dark-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "3 files",
+        "194 source keys",
+        "4 groups",
+        "— people"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Vulnerable groups and care recipients",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "caregroups-en-light-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "3 files",
+        "194 source keys",
+        "4 groups",
+        "— people"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Vulnerable groups and care recipients",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "tax-th-dark-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "10 ไฟล์",
+        "7,741 รายการ",
+        "23,074,139.17 บาท",
+        "— บาท",
+        "39,361 แถว",
+        "3,317 กลุ่ม"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "ภาษีที่ดินและสิ่งปลูกสร้าง",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "tax-th-light-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "10 ไฟล์",
+        "7,741 รายการ",
+        "23,074,139.17 บาท",
+        "— บาท",
+        "39,361 แถว",
+        "3,317 กลุ่ม"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "ภาษีที่ดินและสิ่งปลูกสร้าง",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "tax-en-dark-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "10 files",
+        "7,741 rows",
+        "23,074,139.17 THB",
+        "— THB",
+        "39,361 rows",
+        "3,317 groups"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Land and building tax",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "tax-en-light-desktop",
+      "documentWidth": 1440,
+      "metricTexts": [
+        "10 files",
+        "7,741 rows",
+        "23,074,139.17 THB",
+        "— THB",
+        "39,361 rows",
+        "3,317 groups"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 1440,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 671,
+          "width": 671
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 671,
+          "width": 671
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Land and building tax",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "caregroups-th-dark-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "3 ไฟล์",
+        "194 รหัส",
+        "4 กลุ่ม",
+        "— ราย"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "กลุ่มเปราะบางและผู้รับการดูแล",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "caregroups-th-light-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "3 ไฟล์",
+        "194 รหัส",
+        "4 กลุ่ม",
+        "— ราย"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "กลุ่มเปราะบางและผู้รับการดูแล",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "caregroups-en-dark-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "3 files",
+        "194 source keys",
+        "4 groups",
+        "— people"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Vulnerable groups and care recipients",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "caregroups-en-light-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "3 files",
+        "194 source keys",
+        "4 groups",
+        "— people"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 4,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Vulnerable groups and care recipients",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "tax-th-dark-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "10 ไฟล์",
+        "7,741 รายการ",
+        "23,074,139.17 บาท",
+        "— บาท",
+        "39,361 แถว",
+        "3,317 กลุ่ม"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "ภาษีที่ดินและสิ่งปลูกสร้าง",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "tax-th-light-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "10 ไฟล์",
+        "7,741 รายการ",
+        "23,074,139.17 บาท",
+        "— บาท",
+        "39,361 แถว",
+        "3,317 กลุ่ม"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 ต.ค. 2569",
+      "pageTitle": "ภาษีที่ดินและสิ่งปลูกสร้าง",
+      "ready": true,
+      "theme": "light"
+    },
+    {
+      "stem": "tax-en-dark-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "10 files",
+        "7,741 rows",
+        "23,074,139.17 THB",
+        "— THB",
+        "39,361 rows",
+        "3,317 groups"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Land and building tax",
+      "ready": true,
+      "theme": "dark"
+    },
+    {
+      "stem": "tax-en-light-narrow",
+      "documentWidth": 390,
+      "metricTexts": [
+        "10 files",
+        "7,741 rows",
+        "23,074,139.17 THB",
+        "— THB",
+        "39,361 rows",
+        "3,317 groups"
+      ],
+      "noRawLinks": true,
+      "scrollWidth": 390,
+      "selectedDataset": "true",
+      "tableWidths": [
+        {
+          "rows": 6,
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "rows": 5,
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "date": "19 Oct 2026",
+      "pageTitle": "Land and building tax",
+      "ready": true,
+      "theme": "light"
+    }
+  ],
+  "latestEnglishSpacingRecheck": [
+    {
+      "dataset": "caregroups",
+      "theme": "light",
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "note": "Use the supplied cohort for group and service review; confirm definitions before planning group-specific care.",
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "note": "Terms overlap: do not sum as people, prevalence or confirmed diagnoses. An absent term is not a negative clinical finding.",
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "width": 390
+    },
+    {
+      "dataset": "caregroups",
+      "theme": "dark",
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "note": "Use the supplied cohort for group and service review; confirm definitions before planning group-specific care.",
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "note": "Terms overlap: do not sum as people, prevalence or confirmed diagnoses. An absent term is not a negative clinical finding.",
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "width": 390
+    },
+    {
+      "dataset": "tax",
+      "theme": "light",
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "note": "Appraisal, asset inventory and tax calculations serve different jobs; none alone certifies an effective assessment.",
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "note": "The earlier deed-number guess is retired. Corroborating keys are used and ambiguous rows remain held.",
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "width": 390
+    },
+    {
+      "dataset": "tax",
+      "theme": "dark",
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "note": "Appraisal, asset inventory and tax calculations serve different jobs; none alone certifies an effective assessment.",
+          "scrollWidth": 358,
+          "width": 358
+        },
+        {
+          "note": "The earlier deed-number guess is retired. Corroborating keys are used and ambiguous rows remain held.",
+          "scrollWidth": 358,
+          "width": 358
+        }
+      ],
+      "width": 390
+    }
+  ],
+  "aggregateLayoutFindings": {
+    "blockingOverlapFound": false,
+    "documentHorizontalOverflowFound": false,
+    "tableOverflowFound": false,
+    "notes": "Actual TH/EN text, units, four/six care rows and six/five tax rows were inspected in desktop and390px light/dark captures. Latest payload changes only English spacing; four English narrow states were recaptured and reviewed."
+  },
+  "terrainStates": [
+    {
+      "lang": "en",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "canvases": 9,
+      "date": "19 Oct 2026",
+      "externalLink": [
+        "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain"
+      ],
+      "scrollWidth": 1440,
+      "state": "Terrain hillshade loaded",
+      "screenshot": "terrain-en-dark-desktop-final.jpg"
+    },
+    {
+      "lang": "th",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "canvases": 9,
+      "date": "19 ต.ค. 2569",
+      "externalLink": [
+        "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain"
+      ],
+      "scrollWidth": 390,
+      "state": "กำลังเปิดเงาภูมิประเทศ",
+      "screenshot": "terrain-th-light-narrow-final.jpg",
+      "sourceScreenshot": "terrain-th-light-narrow-source-final.jpg"
+    },
+    {
+      "lang": "th",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "canvases": 9,
+      "date": "19 ต.ค. 2569",
+      "externalLink": [
+        "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain"
+      ],
+      "scrollWidth": 390,
+      "state": "กำลังเปิดเงาภูมิประเทศ",
+      "screenshot": "terrain-th-dark-narrow-final.jpg",
+      "sourceScreenshot": "terrain-th-dark-narrow-source-final.jpg"
+    },
+    {
+      "lang": "en",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "canvases": 9,
+      "date": "19 Oct 2026",
+      "externalLink": [
+        "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain"
+      ],
+      "scrollWidth": 390,
+      "state": "Loading terrain hillshade",
+      "screenshot": "terrain-en-light-narrow-final.jpg",
+      "sourceScreenshot": "terrain-en-light-narrow-source-final.jpg"
+    },
+    {
+      "lang": "en",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "canvases": 9,
+      "date": "19 Oct 2026",
+      "externalLink": [
+        "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain"
+      ],
+      "scrollWidth": 390,
+      "state": "Loading terrain hillshade",
+      "screenshot": "terrain-en-dark-narrow-final.jpg",
+      "sourceScreenshot": "terrain-en-dark-narrow-source-final.jpg"
+    }
+  ],
+  "terrainFindings": {
+    "loadedHillshadeActuallyVisible": true,
+    "desktopThaiLightAndEnglishDarkReviewed": true,
+    "narrowThaiEnglishLightDarkSourceTextReviewed": true,
+    "loadingToReadyProgressObserved": true,
+    "sourceDate": "2026-10-19",
+    "external3DRoute": "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain",
+    "nativeZoom": 12,
+    "displayZoomLimit": 22,
+    "verticalDatum": null,
+    "noElevationOrFloodRiskColours": true,
+    "samePersistentMapImplementation": true,
+    "cameraReview": "Dataset switching and theme switching observed. Same boundary SVG viewBox after terrain return/theme; buildings panel changes map height so SVG viewBox alone does not measure exact centre/zoom. Source transition keeps fit:false. Exact centre/zoom live verification remains root-owned.",
+    "untestedRuntimeStates": [
+      "forced externalDEM outage",
+      "all source tiles across district",
+      "manual zoom22 regional accuracy"
+    ]
+  },
+  "functionalChecks": [
+    "caregroups found by Thai patient search; catalogue has21datasets plusoverview",
+    "caregroups totals unchanged when map context changed betweenv26 andmunicipality",
+    "unknown patient census and incremental tax gain remain null/dash",
+    "no new individual row links or raw source downloads",
+    "terrain source/license/external3D links visible; source12/display22 explanation and unknown datum visible"
+  ],
+  "archiveEvidenceDirectory": "sila-pds-update-20261019/research/site-qa-captures (handoff archive; not public raw data)",
+  "archiveEvidence": [
+    {
+      "file": "capture-metrics.json",
+      "bytes": 10282,
+      "sha256": "94b6260a20b97c2292b1f3ec2f4144622ec7c41930b0e14267190eb36b1b6c6c"
+    },
+    {
+      "file": "caregroups-en-dark-desktop-facts.jpg",
+      "bytes": 121599,
+      "sha256": "f3ff7d4db5723fc0f6fb5befaa03bdb57316112cb46ba8603af1c5d98efe6023"
+    },
+    {
+      "file": "caregroups-en-dark-desktop-overview.jpg",
+      "bytes": 114773,
+      "sha256": "d11e7bbca33afa0adfdec0568e1103061124ee13eeeff8b9ed88772097196067"
+    },
+    {
+      "file": "caregroups-en-dark-desktop-table1-end.jpg",
+      "bytes": 112003,
+      "sha256": "5bc21af7755c0f6d9386cbef5dc31b829af29675b4a04ee7e283961f7363ab63"
+    },
+    {
+      "file": "caregroups-en-dark-desktop-table2-end.jpg",
+      "bytes": 125084,
+      "sha256": "12099e30da89d56a8743762dad313dca3e6965d27bd30a2ce1a4f4c89cd14392"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-facts.jpg",
+      "bytes": 40833,
+      "sha256": "8cf5a034bf759a3c29c15b40aba4dc8d072329012dcbc4baf68f4de4a80b8803"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-overview.jpg",
+      "bytes": 37415,
+      "sha256": "2f34b6635d8c1c6e0fcf6c205177b5326e38aae1d3f3c56277c644ea5db61651"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table1-end.jpg",
+      "bytes": 44847,
+      "sha256": "0bcbfaee750f842edf7bbe873c61ff5bdda80d6ccf1f9a11eb153c8a9039db07"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table1-latest.jpg",
+      "bytes": 45673,
+      "sha256": "0a1afb7c9574ee76498049129439adc78266587e109c8a76876ee9f641a45b73"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table1-mid.jpg",
+      "bytes": 45618,
+      "sha256": "e8c576b8c085f8e2b36e2c9b4b9b46ccd4fbece17f2eb16ecacfba7bee9d6b34"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table2-end.jpg",
+      "bytes": 51728,
+      "sha256": "4f2586ae5c4fb8d1c640904d52453a18e7ae7b9be87a0bea62496fc2e7783c1f"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table2-latest.jpg",
+      "bytes": 47728,
+      "sha256": "cc8e86ea905c0cbb3bcaf24b2d1e1630fe8fb65a58f98c679060b2ca973cfbc3"
+    },
+    {
+      "file": "caregroups-en-dark-narrow-table2-mid.jpg",
+      "bytes": 47728,
+      "sha256": "cc8e86ea905c0cbb3bcaf24b2d1e1630fe8fb65a58f98c679060b2ca973cfbc3"
+    },
+    {
+      "file": "caregroups-en-light-desktop-facts.jpg",
+      "bytes": 119315,
+      "sha256": "bff5e672b575744eff963d27de070a8757e1688c3f6bed9032adb0e462a401ae"
+    },
+    {
+      "file": "caregroups-en-light-desktop-overview.jpg",
+      "bytes": 112300,
+      "sha256": "b9af77a4e6217b0035c886a0ce220f64f4206e411a7c2c3fe13d2ed04f893502"
+    },
+    {
+      "file": "caregroups-en-light-desktop-table1-end.jpg",
+      "bytes": 109100,
+      "sha256": "ec975e211618d6cf310d17dcab96320efdddc11a306796171187c7c90de4c6d4"
+    },
+    {
+      "file": "caregroups-en-light-desktop-table2-end.jpg",
+      "bytes": 122580,
+      "sha256": "a2f801c744162bf67a2e1051df7a2318f9ef796c856f3e29a4184655b8d75422"
+    },
+    {
+      "file": "caregroups-en-light-narrow-facts.jpg",
+      "bytes": 39106,
+      "sha256": "9d299266ca626d3b1e295827acf784d86469255aa651c8f1fe6ae698a6f68ad3"
+    },
+    {
+      "file": "caregroups-en-light-narrow-overview.jpg",
+      "bytes": 37600,
+      "sha256": "903a262913a3d9ccda0d01ca422da785f66157aad941f956bfafb9f33bc6c1ac"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table1-end.jpg",
+      "bytes": 42029,
+      "sha256": "fdd2d73c109fad77a8ea6491640edffaeda74f3eb1ad602d0632f1d7a64f3617"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table1-latest.jpg",
+      "bytes": 42896,
+      "sha256": "5a30ccd2b67fb85624b5b6a2d5f78f93577b7112af5e2bcec2fb0115ef7dd136"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table1-mid.jpg",
+      "bytes": 42855,
+      "sha256": "209c6ab183ad609413735fa5138187021c11a068d9ffc7d75fbde5ce60a24ffd"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table2-end.jpg",
+      "bytes": 49029,
+      "sha256": "19d8f8c1a54bdbe3f3dceca39fc5e333d19468626a8bc9fecc8a1e907ac2e595"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table2-latest.jpg",
+      "bytes": 44794,
+      "sha256": "ab1a30af6d73c4cd90cfddb5ddc95f5e331d8e0c6a268770e591362b4589a75a"
+    },
+    {
+      "file": "caregroups-en-light-narrow-table2-mid.jpg",
+      "bytes": 44794,
+      "sha256": "ab1a30af6d73c4cd90cfddb5ddc95f5e331d8e0c6a268770e591362b4589a75a"
+    },
+    {
+      "file": "caregroups-search-patients-th-light-narrow.jpg",
+      "bytes": 38139,
+      "sha256": "773acd19c9cb764a95967f34c345ec2c117aca1a45de479bf8cffca9f4a933d9"
+    },
+    {
+      "file": "caregroups-th-dark-desktop-facts.jpg",
+      "bytes": 120123,
+      "sha256": "51caa0049daab6890a0ca056cbc0d105a89e8ec62fa8ba6b950e42c12e60cf00"
+    },
+    {
+      "file": "caregroups-th-dark-desktop-groups.jpg",
+      "bytes": 122632,
+      "sha256": "e799c8956163ca30c082049f394268b436de6b18bd4bf4506eac3d0675e7d8ad"
+    },
+    {
+      "file": "caregroups-th-dark-desktop-overview.jpg",
+      "bytes": 115994,
+      "sha256": "3f4965ca87e70f087129c6c8a7cc1c486dacc4cd3667ce181e9915c127eee87f"
+    },
+    {
+      "file": "caregroups-th-dark-desktop-table1-end.jpg",
+      "bytes": 120790,
+      "sha256": "53d37ae3ccaac1604b3251d345bf157c1b38c4f147ad3856675857a4c7699cd0"
+    },
+    {
+      "file": "caregroups-th-dark-desktop-table2-end.jpg",
+      "bytes": 124609,
+      "sha256": "7b00ef5d5aa21116968cb83a1f47e2c21c860ccf7f4bec5a28b10a8f020c236a"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-facts.jpg",
+      "bytes": 39476,
+      "sha256": "700964f8de8f306cd1ac60defca9fe60d681a8d80ff825cc398849caa1a9abf3"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-overview.jpg",
+      "bytes": 38081,
+      "sha256": "54e7d890acbc6f74cb9704d6c825de8a4553f4aaf4e70cabf85be7dc35ad64c3"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-table1-end.jpg",
+      "bytes": 50687,
+      "sha256": "5ecd9e79dcb49f0847936cac36ee46a5c797b9d8563eb22d158e3abb8b4c7049"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-table1-mid.jpg",
+      "bytes": 48245,
+      "sha256": "bad634b75c836465fc9333beedc12c06e3debb5232b75d2bf83741fc87aa18c7"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-table2-end.jpg",
+      "bytes": 54798,
+      "sha256": "3e9e1cc348d0b6a551dab7f8527361bad2d8b7812080330a07664bd00e12c192"
+    },
+    {
+      "file": "caregroups-th-dark-narrow-table2-mid.jpg",
+      "bytes": 48353,
+      "sha256": "1c67c512b4060ee65fca5666d0627b14f7f289c629980622ed3c7d86eeb47676"
+    },
+    {
+      "file": "caregroups-th-light-desktop-facts.jpg",
+      "bytes": 117917,
+      "sha256": "fd1a550c12439d458043140b6ec14c6d7a8d94aa66689117891f8ad5596ce2fb"
+    },
+    {
+      "file": "caregroups-th-light-desktop-overview.jpg",
+      "bytes": 111028,
+      "sha256": "e30b5cf8dc69719d3c51a96451045aed6d030d7b86e94fc12e3bb3b9ebd3f3da"
+    },
+    {
+      "file": "caregroups-th-light-desktop-table1-end.jpg",
+      "bytes": 117909,
+      "sha256": "4d38943ef6a1c1f7e0b3ee70dff0cb5f642f4067b1204c10a19d07c088b714be"
+    },
+    {
+      "file": "caregroups-th-light-desktop-table2-end.jpg",
+      "bytes": 122346,
+      "sha256": "84bb1a33355b81c99552040a3285923f9f607948db8e2fd4ffc80a455cf664ee"
+    },
+    {
+      "file": "caregroups-th-light-narrow-facts.jpg",
+      "bytes": 37790,
+      "sha256": "a4460ac2dbbad252eecec851b910d20f65fd6698ba639f9773932934db6bdc52"
+    },
+    {
+      "file": "caregroups-th-light-narrow-overview.jpg",
+      "bytes": 37817,
+      "sha256": "013028ebc76ba92a1ede941d5f434c60cabe92997e4bd426aa0f7f8ca7c71b27"
+    },
+    {
+      "file": "caregroups-th-light-narrow-table1-end.jpg",
+      "bytes": 47654,
+      "sha256": "7db641da07f21354583ff1429f2af38289efae736a94dc49bdb9ddcc01e42933"
+    },
+    {
+      "file": "caregroups-th-light-narrow-table1-mid.jpg",
+      "bytes": 45229,
+      "sha256": "69427aaab43d53fd3c01658779f798b42b33b67fbc6cd60c82572dc12694718f"
+    },
+    {
+      "file": "caregroups-th-light-narrow-table2-end.jpg",
+      "bytes": 51764,
+      "sha256": "0020d647558985179392f986be9b6813512addfbb9c1aa5bedb3bf2c59847109"
+    },
+    {
+      "file": "caregroups-th-light-narrow-table2-mid.jpg",
+      "bytes": 45529,
+      "sha256": "56f9c4452714a8bc2af9d5df03be580835b8a558cd21c4dda3753ffc6c9762b3"
+    },
+    {
+      "file": "final-english-metrics.json",
+      "bytes": 2062,
+      "sha256": "14286d47737fc81fd0c8222e9d6d903acf0b8e410d107a4830a04185b530b44a"
+    },
+    {
+      "file": "tax-en-dark-desktop-facts.jpg",
+      "bytes": 123165,
+      "sha256": "6924c9dcc3789428cd6c770b8acc55a8b867db4e648d80d1741ef599d2e3df0f"
+    },
+    {
+      "file": "tax-en-dark-desktop-overview.jpg",
+      "bytes": 116579,
+      "sha256": "b71a40e858a443e96517382864fe263a4ed6d0c0ddb92c6075b74a5ff43bafd0"
+    },
+    {
+      "file": "tax-en-dark-desktop-table1-end.jpg",
+      "bytes": 118762,
+      "sha256": "40a3cdb781ff8f64e44a2c52c6bb6b748330a940ef77611ad13b5c778e631ec1"
+    },
+    {
+      "file": "tax-en-dark-desktop-table2-end.jpg",
+      "bytes": 120788,
+      "sha256": "3a1239de9db887f2f01528781cadc0ba8de8197e177995e840112850764aaf8e"
+    },
+    {
+      "file": "tax-en-dark-narrow-facts.jpg",
+      "bytes": 44944,
+      "sha256": "2d0ff85a1d4c7f8b93b3dcd32379739582f5641ed9d10be16910cfed34aa023b"
+    },
+    {
+      "file": "tax-en-dark-narrow-overview.jpg",
+      "bytes": 35779,
+      "sha256": "c352212195895416a0d0051790e9191a56b9f187a68f5d7646879988530d43ac"
+    },
+    {
+      "file": "tax-en-dark-narrow-table1-end.jpg",
+      "bytes": 48171,
+      "sha256": "741c20e5856065da1af1cd6e3229860dd05613e1cb7bf3efae5eb31778204e18"
+    },
+    {
+      "file": "tax-en-dark-narrow-table1-latest.jpg",
+      "bytes": 49065,
+      "sha256": "f80ad793e38b72bd88b4eb1a1366d429d4d6029c1d100cfe55770298ccc6293a"
+    },
+    {
+      "file": "tax-en-dark-narrow-table1-mid.jpg",
+      "bytes": 48929,
+      "sha256": "946a963838d376dc4cffc9537df1751eadd2f72aa4b26dfdc02313a8e7b5df03"
+    },
+    {
+      "file": "tax-en-dark-narrow-table2-end.jpg",
+      "bytes": 50270,
+      "sha256": "f52fa45fad3e03644b77851b747a0d8dfba6650ed09c4c19ece329d8b7a24d1c"
+    },
+    {
+      "file": "tax-en-dark-narrow-table2-latest.jpg",
+      "bytes": 48011,
+      "sha256": "40d09cfd0bf855541be55dbae1a899d73dbfcd1cf7a7502fa1daca22394b6da2"
+    },
+    {
+      "file": "tax-en-dark-narrow-table2-mid.jpg",
+      "bytes": 47964,
+      "sha256": "14735756b58b3dc44ed2fbc4ef5cf8639e20c94134f6a3d4bea356e8fcf6f88b"
+    },
+    {
+      "file": "tax-en-light-desktop-facts.jpg",
+      "bytes": 121591,
+      "sha256": "d973e799bf447f47c7a47b36fb0745885f0ed46e75476020f076cf59d6660de1"
+    },
+    {
+      "file": "tax-en-light-desktop-overview.jpg",
+      "bytes": 112744,
+      "sha256": "c0ac7cb658b5849566fef59a456f8a278fc00c705f2d1a796e6e3ca382a93d82"
+    },
+    {
+      "file": "tax-en-light-desktop-table1-end.jpg",
+      "bytes": 115548,
+      "sha256": "efa54184928a817f891c6c20f7f3d3c64ebf4588d1009fe8c674684a32cefbcf"
+    },
+    {
+      "file": "tax-en-light-desktop-table2-end.jpg",
+      "bytes": 118301,
+      "sha256": "78de44da77e459b796042ee569f09a261cd5034aebc9365a25a65decd7a99637"
+    },
+    {
+      "file": "tax-en-light-narrow-facts.jpg",
+      "bytes": 42981,
+      "sha256": "c3d164dd69322db4afa3e9d24c12868600c9bbe4fb2d82077be7434dac94aba0"
+    },
+    {
+      "file": "tax-en-light-narrow-overview.jpg",
+      "bytes": 35676,
+      "sha256": "8848566f449cfcfda33f345bee7d7eed3ebbcc4068f97979d9d01bf47b825684"
+    },
+    {
+      "file": "tax-en-light-narrow-table1-end.jpg",
+      "bytes": 45411,
+      "sha256": "4c8c0d050601badc1ae057d49fa584e1e2322ad38d178bb6b46252ad07ce5f5c"
+    },
+    {
+      "file": "tax-en-light-narrow-table1-latest.jpg",
+      "bytes": 46325,
+      "sha256": "68726de56963ac3ac40ff8b5bfcdb4d5aa110605dcab12d1044bc08901ada52f"
+    },
+    {
+      "file": "tax-en-light-narrow-table1-mid.jpg",
+      "bytes": 46240,
+      "sha256": "0903c0803f6d5fac7ca96051cbbe459ae5434f31f65a271e5797fc8da951ad93"
+    },
+    {
+      "file": "tax-en-light-narrow-table2-end.jpg",
+      "bytes": 47945,
+      "sha256": "0d14321b8d6064f5f75ea7ffb688ecc39a08acccf52c79b67fc745498d6d285e"
+    },
+    {
+      "file": "tax-en-light-narrow-table2-latest.jpg",
+      "bytes": 45628,
+      "sha256": "58beed894269a0a4163a9f8de4847e27b22860004c45ceae9115579ec618dad2"
+    },
+    {
+      "file": "tax-en-light-narrow-table2-mid.jpg",
+      "bytes": 45576,
+      "sha256": "a3c9d50ab878ee5a1f0089f0bbc4cb7419d1ecc48d7eba794cfde4068d8252a7"
+    },
+    {
+      "file": "tax-th-dark-desktop-facts.jpg",
+      "bytes": 125885,
+      "sha256": "727090f856e0d0e372cb420d4b80ac0d1d474dbcdbc8fa6aa0a988bc8658f2d1"
+    },
+    {
+      "file": "tax-th-dark-desktop-overview.jpg",
+      "bytes": 115965,
+      "sha256": "c1326f1c01a6446ab81495cffe5a3a7a78572288834ab1efb14b134b80a5c927"
+    },
+    {
+      "file": "tax-th-dark-desktop-table1-end.jpg",
+      "bytes": 115485,
+      "sha256": "e2eec3c141013fdf4629140c8454ff80ada123c172365d9b3bb854933d089d67"
+    },
+    {
+      "file": "tax-th-dark-desktop-table2-end.jpg",
+      "bytes": 116070,
+      "sha256": "88a8c58e5fa339a6d8db378c9ba6cd0541a3812786e7808488dd0bc2c9a6e539"
+    },
+    {
+      "file": "tax-th-dark-narrow-facts.jpg",
+      "bytes": 41749,
+      "sha256": "993c2cb5fcf4da1ee3b547b6afa2f2516c0e3fe15b8a7f4203b11181a1d383f1"
+    },
+    {
+      "file": "tax-th-dark-narrow-overview.jpg",
+      "bytes": 21673,
+      "sha256": "fcebdf3daa7d07dda34e66b8c5a3608cd660933e8f4b82e73d7899f52d7aaa82"
+    },
+    {
+      "file": "tax-th-dark-narrow-table1-end.jpg",
+      "bytes": 45893,
+      "sha256": "92c7305b91c79766e3ffe40437a48373dbc53fa4b920aab8a786689e85fc3b75"
+    },
+    {
+      "file": "tax-th-dark-narrow-table1-mid.jpg",
+      "bytes": 46946,
+      "sha256": "231257ac57028abe7780c2df359fe8cb14851c08f39dc5a5512560b9557f277d"
+    },
+    {
+      "file": "tax-th-dark-narrow-table2-end.jpg",
+      "bytes": 48851,
+      "sha256": "45d128134f5ea6317aff938ee7b93fb4dca961bff3e5012027b34c4690e97edc"
+    },
+    {
+      "file": "tax-th-dark-narrow-table2-mid.jpg",
+      "bytes": 44233,
+      "sha256": "29339640995a63d0add55e38e2e0a58afce39bfce7fa411d681509d5b9ee8ce4"
+    },
+    {
+      "file": "tax-th-light-desktop-facts.jpg",
+      "bytes": 124188,
+      "sha256": "8a42f18e84702456a8d97d125e2d5342c3c36d4bf6e6d88c57905a1e979764ff"
+    },
+    {
+      "file": "tax-th-light-desktop-overview.jpg",
+      "bytes": 111388,
+      "sha256": "fa7839c597b0a5033b00a2d8349c0375b5aafe5345962fa467a07c764f47b27d"
+    },
+    {
+      "file": "tax-th-light-desktop-table1-end.jpg",
+      "bytes": 113281,
+      "sha256": "a320888e7ee69299a7690e7c67a5af1e182c984dcd0e059a2da527b7de906283"
+    },
+    {
+      "file": "tax-th-light-desktop-table2-end.jpg",
+      "bytes": 114598,
+      "sha256": "987ce38c2519c0accb3db262aa5677387f56f05d9c02f42e5710f9c226af60c4"
+    },
+    {
+      "file": "tax-th-light-narrow-facts.jpg",
+      "bytes": 39940,
+      "sha256": "e6ae73285241558e08dad2cc438bc2994b9ccc1a5ac3572561ead4605987f7e0"
+    },
+    {
+      "file": "tax-th-light-narrow-overview.jpg",
+      "bytes": 36734,
+      "sha256": "611f3b370eacf07084d04e158d7b529bcd2910dea4a4a912797f0732d13f20de"
+    },
+    {
+      "file": "tax-th-light-narrow-table1-end.jpg",
+      "bytes": 43387,
+      "sha256": "a60d8cc3d87fd8ed67e06fd5885ef730645f733075ce0246ae7616a2a6d05afb"
+    },
+    {
+      "file": "tax-th-light-narrow-table1-mid.jpg",
+      "bytes": 44594,
+      "sha256": "3b7d3030119f008bee816555c8b10bb48744da8bba7f3f25b4de90af7adfe4d1"
+    },
+    {
+      "file": "tax-th-light-narrow-table2-end.jpg",
+      "bytes": 46466,
+      "sha256": "e48e2d10e4319b2f5929480fdb7de62fd09aaf9644b4abf065c17339ff35456c"
+    },
+    {
+      "file": "tax-th-light-narrow-table2-mid.jpg",
+      "bytes": 42253,
+      "sha256": "bc9fef0c1060ca67659cfabbcf5427c4898815d2da99c6292463f94feaea9744"
+    },
+    {
+      "file": "terrain-camera-switch.json",
+      "bytes": 197,
+      "sha256": "ab1cd432c7a6b19653c6de7ae7331d1953c6b274dcfad91a24ba7af45a9c6050"
+    },
+    {
+      "file": "terrain-en-dark-desktop-final.jpg",
+      "bytes": 111742,
+      "sha256": "ae422a83d3d927c5751443756b5cea60c30ab961903811aef371abc44a5ea405"
+    },
+    {
+      "file": "terrain-en-dark-narrow-final.jpg",
+      "bytes": 32017,
+      "sha256": "51fbdd599a9e6f3b0041f70fd93863e4fc614eef87051fe809e6ccff39e63aba"
+    },
+    {
+      "file": "terrain-en-dark-narrow-source-final.jpg",
+      "bytes": 45271,
+      "sha256": "9424a9ced460ad361048e8004bca7ca96f40e85c7636825b3c20877740d1533d"
+    },
+    {
+      "file": "terrain-en-light-narrow-final.jpg",
+      "bytes": 34616,
+      "sha256": "40d71aacde5e42f7bac585f12d983e4dcb5c75101f38668dea4a70b7499bcb6d"
+    },
+    {
+      "file": "terrain-en-light-narrow-source-final.jpg",
+      "bytes": 43227,
+      "sha256": "a0796bbdc9e634c11f1a6c26bc897ec33c718e65322c7f6e8c0254c3bf41ff69"
+    },
+    {
+      "file": "terrain-th-dark-narrow-final.jpg",
+      "bytes": 32680,
+      "sha256": "bfdcea1cbdb8100d2c812fc56dddacb04acbf817d407a8dd3f76a17b9ffd4f34"
+    },
+    {
+      "file": "terrain-th-dark-narrow-source-final.jpg",
+      "bytes": 44950,
+      "sha256": "89f741257b8ca5830542e83472d85056749fe02b244090b01b646c45cb6f63c7"
+    },
+    {
+      "file": "terrain-th-light-desktop-final.jpg",
+      "bytes": 112919,
+      "sha256": "92c1b56deef37ef3dcc700299e73fbf518d79e8ac9375e0388c445399542963a"
+    },
+    {
+      "file": "terrain-th-light-desktop-loaded.jpg",
+      "bytes": 115340,
+      "sha256": "2b75e46d214de85c90a786401682fa52a40f129a6bc3ad8e199451612093f5dd"
+    },
+    {
+      "file": "terrain-th-light-narrow-final.jpg",
+      "bytes": 33425,
+      "sha256": "5f87dade22f1e8df3cc91b29eeb2e34a450f72063bc68305e3ab3fae04f11f0d"
+    },
+    {
+      "file": "terrain-th-light-narrow-source-final.jpg",
+      "bytes": 42636,
+      "sha256": "e385aba507359370c8d22f54ea4e6719dd118d47693bcc00d4013f580697d991"
+    },
+    {
+      "file": "terrain-viewport-metrics.json",
+      "bytes": 2106,
+      "sha256": "6357c6aecbddc09659213a5a70c3d8724ac3ef0cc07b1b9f93564138c166432e"
+    }
+  ],
+  "limitations": [
+    "Not a full WCAG/contrast or performance certificate.",
+    "No clinical or identity verification of the care cohort.",
+    "No production authentication, municipal writes or platform integration certification.",
+    "External FABDEM commercial permission and vertical datum remain unverified.",
+    "This local receipt does not attest commit/push/production deployment."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "sila.satellite_basemap_contract/1.1",
-  "checkedOn": "2026-10-06",
+  "checkedOn": "2026-10-19",
   "implementationVersion": "SilaBasemap 1.2.0",
   "purpose": "Offer street/satellite/none at every app zoom while preserving Leaflet camera, selected dataset/scope, geometry and analytical colours.",
   "defaultSatellite": {
@@ -13,7 +13,7 @@
     "clientNativeTileCap": 19,
     "displayZoomRange": [
       8,
-      20
+      22
     ],
     "overzoomAbove": 19,
     "nativeCapMeaning": "Client request cap inherited from existing repo 3D source configuration; this does not certify availability or source resolution for every location.",
@@ -190,7 +190,7 @@
     ],
     "displayZoomRange": [
       8,
-      20
+      22
     ],
     "overzoomAbove": 14,
     "resolutionIncreasesAboveNative": false,
@@ -221,5 +221,13 @@
     "mode": "satellite-archive",
     "defaultEnabled": false,
     "explicitOptionEnabled": true
+  },
+  "displayZoomUpdate": {
+    "revision": "1.5",
+    "reason": "Persistent map display limit expanded to22 for external FABDEM; existing basemap native caps unchanged.",
+    "resolutionIncrease": false
+  },
+  "validation": {
+    "currentModuleSHA256": "49a25481eb6f405bdb508e9e3bc0a84fe0da57a0a6970c09c3492f23b85d9ba7"
   }
 }

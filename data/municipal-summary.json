@@ -16,18 +16,18 @@
       "metrics": [
         {
           "id": "source_files",
-          "value": 6,
+          "value": 10,
           "label": {
-            "th": "ไฟล์ภาษีที่ได้รับรอบใหม่",
-            "en": "New tax source files"
+            "th": "ไฟล์ภาษีที่มีใช้งาน",
+            "en": "Tax source files in use"
           },
           "unit": {
             "th": "ไฟล์",
             "en": "files"
           },
           "note": {
-            "th": "มีบัญชีประเมิน รับชำระ ลูกหนี้ ภ.ด.ส.7/8 และประกาศ",
-            "en": "Assessment, payment, debtor, PDS7/8 and notice sources received."
+            "th": "แบบ ภ.ด.ส.6แบบ และบัญชีประเมิน รับชำระ ลูกหนี้ ประกาศอีก4ไฟล์ ไม่บวกสำเนา ภ.ด.ส.7/8 เดิมซ้ำ",
+            "en": "Six PDS forms plus four assessment/payment/debt/notice files; earlier PDS 7/8 copies are not added again."
           },
           "sourceIds": [
             "TAX-ASSESS-69",
@@ -35,7 +35,11 @@
             "TAX-DEBT-69",
             "TAX-PDS7-69",
             "TAX-PDS8-69",
-            "TAX-NOTICE-69"
+            "TAX-NOTICE-69",
+            "TAX-PDS1",
+            "TAX-PDS2",
+            "TAX-PDS3",
+            "TAX-PDS4"
           ]
         },
         {
@@ -100,7 +104,7 @@
           "value": 39361,
           "label": {
             "th": "แถวเริ่มรายการที่ดินใน ภ.ด.ส.7",
-            "en": "Land record starts in PDS7"
+            "en": "Land record starts in PDS 7"
           },
           "unit": {
             "th": "แถว",
@@ -119,7 +123,7 @@
           "value": 3317,
           "label": {
             "th": "กลุ่มห้องชุดใน ภ.ด.ส.8",
-            "en": "Condominium unit groups in PDS8"
+            "en": "Condominium unit groups in PDS 8"
           },
           "unit": {
             "th": "กลุ่ม",
@@ -143,7 +147,7 @@
           },
           "periodLabel": {
             "th": "ปีภาษี 2569",
-            "en": "Tax year BE2569"
+            "en": "Tax year BE 2569"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -156,7 +160,7 @@
           },
           "periodLabel": {
             "th": "1 เม.ย.–30 ก.ย.2569; ปีภาษีหลายปี",
-            "en": "1 Apr–30 Sep 2026; receipts labelled tax years BE2566–2569"
+            "en": "1 Apr–30 Sep 2026; receipts labelled tax years BE 2566–2569"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -169,7 +173,7 @@
           },
           "periodLabel": {
             "th": "ปี 2569; วันตัดยอดยังต้องรับรอง",
-            "en": "File labelled BE2569; accounting cutoff requires confirmation"
+            "en": "File labelled BE 2569; accounting cutoff requires confirmation"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -181,8 +185,8 @@
             "en": "Land and building assessment form"
           },
           "periodLabel": {
-            "th": "ไฟล์รับ 19 ต.ค.2569",
-            "en": "Received 19 Oct 2026; table tax year not printed"
+            "th": "รับฉบับส่งใหม่19ต.ค.2569; ทุกค่าเซลล์ตรงฉบับก่อน ยังไม่รับรองปีภาษี",
+            "en": "Re-export received 19 Oct 2026; all stored cell values match prior copy; tax year remains unverified"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -194,8 +198,8 @@
             "en": "Condominium assessment form"
           },
           "periodLabel": {
-            "th": "ไฟล์รับ 19 ต.ค.2569",
-            "en": "Received 19 Oct 2026; table tax year not printed"
+            "th": "รับฉบับส่งใหม่19ต.ค.2569; ทุกค่าเซลล์ตรงฉบับก่อน ยังไม่รับรองปีภาษี",
+            "en": "Re-export received 19 Oct 2026; all stored cell values match prior copy; tax year remains unverified"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -208,7 +212,59 @@
           },
           "periodLabel": {
             "th": "ปี 2569",
-            "en": "File labelled BE2569"
+            "en": "File labelled BE 2569"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS1",
+          "label": {
+            "th": "ภ.ด.ส.1 ที่ดินและสิ่งปลูกสร้าง: ราคาประเมิน",
+            "en": "PDS 1 Land/building appraisal"
+          },
+          "periodLabel": {
+            "th": "รับ 19 ต.ค.2569; ไม่พบปีภาษีพิมพ์ในหัวตาราง",
+            "en": "Received 19 Oct 2026; tax year not printed in table header"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS2",
+          "label": {
+            "th": "ภ.ด.ส.2 ห้องชุด: ราคาประเมิน",
+            "en": "PDS 2 Condominium appraisal"
+          },
+          "periodLabel": {
+            "th": "รับ 19 ต.ค.2569; ไม่พบปีภาษีพิมพ์ในหัวตาราง",
+            "en": "Received 19 Oct 2026; tax year not printed in table header"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS3",
+          "label": {
+            "th": "ภ.ด.ส.3 บัญชีรายการที่ดินและสิ่งปลูกสร้าง",
+            "en": "PDS 3 Land/building inventory"
+          },
+          "periodLabel": {
+            "th": "รับ 19 ต.ค.2569; ไม่พบปีภาษีพิมพ์ในหัวตาราง",
+            "en": "Received 19 Oct 2026; tax year not printed in table header"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS4",
+          "label": {
+            "th": "ภ.ด.ส.4 บัญชีรายการห้องชุด",
+            "en": "PDS 4 Condominium inventory"
+          },
+          "periodLabel": {
+            "th": "รับ 19 ต.ค.2569; ไม่พบปีภาษีพิมพ์ในหัวตาราง",
+            "en": "Received 19 Oct 2026; tax year not printed in table header"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -224,14 +280,256 @@
           "en": "Review canceled and duplicated assessments, then reconcile receipt allocations."
         },
         {
-          "th": "เจ้าหน้าที่ใช้ชุดจำกัดสิทธิเชื่อมทรัพย์กับใบประเมิน",
-          "en": "Use the restricted Officer package to link assets to assessments."
+          "th": "ตรวจคิวจาก ภ.ด.ส.3 ที่มีเลขเอกสารสิทธิ หน้าสำรวจ และเลขที่ดินร่วมกัน ก่อนยืนยันใบประเมิน",
+          "en": "Review the PDS 3 document/survey/land-number candidates, then confirm the effective assessment."
         }
       ],
       "privacy": {
         "th": "ไม่เผยรายชื่อ เลขสิทธิ เลขใบประเมิน หรือยอดภาษีรายบุคคล",
         "en": "No names, title numbers, assessment IDs or individual tax amounts exposed."
-      }
+      },
+      "breakdowns": [
+        {
+          "id": "pds-form-coverage",
+          "label": {
+            "th": "แบบข้อมูลภาษีที่มีแล้ว",
+            "en": "Available tax forms"
+          },
+          "note": {
+            "th": "ดูให้ตรงหน้าที่ของแบบ: ราคาประเมิน ทะเบียนทรัพย์ และตารางคำนวณยังไม่ใช่ใบประเมินฉบับที่มีผล",
+            "en": "Appraisal, asset inventory and tax calculations serve different jobs; none alone certifies an effective assessment."
+          },
+          "rows": [
+            {
+              "id": "pds1",
+              "value": 39361,
+              "label": {
+                "th": "ภ.ด.ส.1 · ราคาประเมินที่ดิน/อาคาร",
+                "en": "PDS 1 · Land/building appraisal"
+              },
+              "unit": {
+                "th": "แถวเริ่มที่ดิน",
+                "en": "land starts"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS1"
+              ]
+            },
+            {
+              "id": "pds3",
+              "value": 39361,
+              "label": {
+                "th": "ภ.ด.ส.3 · ทะเบียนที่ดิน/อาคาร",
+                "en": "PDS 3 · Land/building inventory"
+              },
+              "unit": {
+                "th": "แถวเริ่มที่ดิน",
+                "en": "land starts"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS3"
+              ]
+            },
+            {
+              "id": "pds7",
+              "value": 39361,
+              "label": {
+                "th": "ภ.ด.ส.7 · ตารางคำนวณภาษีที่ดิน/อาคาร",
+                "en": "PDS 7 · Land/building tax calculation"
+              },
+              "unit": {
+                "th": "แถวเริ่มที่ดิน",
+                "en": "land starts"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS7-69"
+              ]
+            },
+            {
+              "id": "pds2",
+              "value": 3317,
+              "label": {
+                "th": "ภ.ด.ส.2 · ราคาประเมินห้องชุด",
+                "en": "PDS 2 · Condominium appraisal"
+              },
+              "unit": {
+                "th": "กลุ่มห้องชุด",
+                "en": "unit groups"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS2"
+              ]
+            },
+            {
+              "id": "pds4",
+              "value": 3317,
+              "label": {
+                "th": "ภ.ด.ส.4 · ทะเบียนห้องชุด",
+                "en": "PDS 4 · Condominium inventory"
+              },
+              "unit": {
+                "th": "กลุ่มห้องชุด",
+                "en": "unit groups"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS4"
+              ]
+            },
+            {
+              "id": "pds8",
+              "value": 3317,
+              "label": {
+                "th": "ภ.ด.ส.8 · ตารางคำนวณภาษีห้องชุด",
+                "en": "PDS 8 · Condominium tax calculation"
+              },
+              "unit": {
+                "th": "กลุ่มห้องชุด",
+                "en": "unit groups"
+              },
+              "note": {
+                "th": "เป็นหน่วยของแบบเดียวกันหลายฉบับ ห้ามบวกเป็นทรัพย์เพิ่ม",
+                "en": "The forms describe overlapping source entities; their counts must not be added."
+              },
+              "sourceIds": [
+                "TAX-PDS8-69"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pds-reconciliation",
+          "label": {
+            "th": "ความพร้อมการเชื่อมแบบ",
+            "en": "Form reconciliation readiness"
+          },
+          "note": {
+            "th": "ยุติวิธีเดิมที่นำช่องหน้าสำรวจไปจับเป็นโฉนด ใช้คีย์รองและพักความกำกวมไว้",
+            "en": "The earlier deed-number guess is retired. Corroborating keys are used and ambiguous rows remain held."
+          },
+          "rows": [
+            {
+              "id": "land_unique_bridge",
+              "value": 38763,
+              "label": {
+                "th": "ภ.ด.ส.3→7: หน้าสำรวจ+เนื้อที่ไม่ซ้ำ",
+                "en": "PDS 3→7: unique survey+area"
+              },
+              "unit": {
+                "th": "คู่ผู้สมัคร",
+                "en": "candidate pairs"
+              },
+              "note": {
+                "th": "ไม่ใช้ลำดับแถวอย่างเดียว ยังต้องรับรองตัวตน/ปี/รุ่นประเมิน",
+                "en": "Independent key+area candidate matches; identity, year and effective assessment still require confirmation."
+              },
+              "sourceIds": [
+                "TAX-PDS3",
+                "TAX-PDS7-69"
+              ]
+            },
+            {
+              "id": "land_duplicate_hold",
+              "value": 79,
+              "label": {
+                "th": "แถวคีย์ซ้ำที่พักไว้",
+                "en": "Rows held for duplicate keys"
+              },
+              "unit": {
+                "th": "แถว",
+                "en": "rows"
+              },
+              "note": {
+                "th": "ไม่มีการเลือกคู่ที่กำกวมอัตโนมัติ",
+                "en": "No automatic choice among ambiguous records."
+              },
+              "sourceIds": [
+                "TAX-PDS3",
+                "TAX-PDS7-69"
+              ]
+            },
+            {
+              "id": "land_missing_hold",
+              "value": 519,
+              "label": {
+                "th": "แถวคีย์ไม่ครบ/เนื้อที่ไม่เป็นบวก",
+                "en": "Rows without a usable key/positive area"
+              },
+              "unit": {
+                "th": "แถว",
+                "en": "rows"
+              },
+              "note": {
+                "th": "พักไว้พร้อมเหตุ ไม่ลบและไม่แทนข้อมูลขาดเป็นศูนย์",
+                "en": "Held with reasons; not deleted or treated as measured zero."
+              },
+              "sourceIds": [
+                "TAX-PDS3",
+                "TAX-PDS7-69"
+              ]
+            },
+            {
+              "id": "condo_key_bridge",
+              "value": 3317,
+              "label": {
+                "th": "ภ.ด.ส.4→8: ทะเบียนอาคารชุด+ห้อง",
+                "en": "PDS 4→8: registration+unit"
+              },
+              "unit": {
+                "th": "คู่ผู้สมัคร",
+                "en": "candidate pairs"
+              },
+              "note": {
+                "th": "จับคู่คีย์ได้ แต่ยังไม่เชื่อมใบประเมินที่มีผล",
+                "en": "Source keys match; effective assessment linkage is still unverified."
+              },
+              "sourceIds": [
+                "TAX-PDS4",
+                "TAX-PDS8-69"
+              ]
+            },
+            {
+              "id": "condo_area_difference",
+              "value": 240,
+              "label": {
+                "th": "คู่ห้องชุดที่พื้นที่ต่างกัน",
+                "en": "Matched units with differing areas"
+              },
+              "unit": {
+                "th": "คู่",
+                "en": "pairs"
+              },
+              "note": {
+                "th": "เป็นคิวทวนความหมาย/พื้นที่ ไม่ใช่จำนวนห้องที่ประเมินภาษีผิด",
+                "en": "Area/definition review candidates; not confirmed tax errors."
+              },
+              "sourceIds": [
+                "TAX-PDS4",
+                "TAX-PDS8-69"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "business",
@@ -245,8 +543,8 @@
           "id": "source_files",
           "value": 1,
           "label": {
-            "th": "ไฟล์ต้นทางรอบใหม่",
-            "en": "New source files"
+            "th": "ไฟล์ต้นทางที่ได้รับ",
+            "en": "Received source files"
           },
           "unit": {
             "th": "ไฟล์",
@@ -327,7 +625,7 @@
           },
           "periodLabel": {
             "th": "ชื่อไฟล์ระบุ 2570; ปีและสถานะใบอนุญาตยังไม่รับรอง",
-            "en": "Filename indicates BE2570; permit period and validity not certified"
+            "en": "Filename indicates BE 2570; permit period and validity not certified"
           },
           "status": "validated-aggregate",
           "publicDownload": false
@@ -364,8 +662,8 @@
           "id": "source_files",
           "value": 1,
           "label": {
-            "th": "ไฟล์ต้นทางรอบใหม่",
-            "en": "New source files"
+            "th": "ไฟล์ต้นทางที่ได้รับ",
+            "en": "Received source files"
           },
           "unit": {
             "th": "ไฟล์",
@@ -446,7 +744,7 @@
           },
           "periodLabel": {
             "th": "ปี 2569; มีรายละเอียดและสรุปรอบ 1/2 ห้ามรวมข้ามรอบ",
-            "en": "BE2569; detail and round1/2 summaries must not be added"
+            "en": "BE 2569; detail and round 1/2 summaries must not be added"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -474,8 +772,8 @@
     {
       "id": "healthservices",
       "label": {
-        "th": "ความพร้อมข้อมูลดูแลระยะยาว",
-        "en": "Long-term care data readiness"
+        "th": "ความพร้อมระบบบริการดูแล",
+        "en": "Care-service workflow readiness"
       },
       "scope": "municipality",
       "metrics": [
@@ -483,16 +781,16 @@
           "id": "source_files",
           "value": 3,
           "label": {
-            "th": "ไฟล์ข้อมูลดูแลระยะยาวที่ได้รับ",
-            "en": "Received long-term care files"
+            "th": "ไฟล์ต้นทางที่ได้รับ",
+            "en": "Received source files"
           },
           "unit": {
             "th": "ไฟล์",
             "en": "files"
           },
           "note": {
-            "th": "รวม 7 แผ่นงาน ไม่แสดงจำนวนหรือภาวะสุขภาพรายบุคคล",
-            "en": "Seven sheets in total; no individual counts or health conditions disclosed."
+            "th": "7แผ่นงาน; ยอดตามกลุ่มแสดงในชุดกลุ่มเปราะบางและผู้รับการดูแล",
+            "en": "Seven sheets; category counts are shown in the separate care-groups dataset."
           },
           "sourceIds": [
             "HEALTH-LTC"
@@ -528,7 +826,7 @@
           },
           "periodLabel": {
             "th": "ชื่อไฟล์ปี 2570 รอบ 1; บางหัวตารางมีทั้ง 2569 และ 2570 รอรับรอง cohort",
-            "en": "Filenames indicate BE2570 round1; some title zones include BE2569 and2570; cohort confirmation pending"
+            "en": "Filenames indicate BE 2570 round 1; some title zones include BE 2569 and 2570; cohort confirmation pending"
           },
           "status": "content-inspected",
           "publicDownload": false
@@ -539,6 +837,10 @@
         "en": "Dataset inventory only; no service-recipient records or geographic health caseload."
       },
       "nextSteps": [
+        {
+          "th": "เปิดชุดกลุ่มเปราะบางและผู้รับการดูแลเพื่อดูยอดตามประเภทในทะเบียน",
+          "en": "Open Vulnerable groups and care recipients for source-based category counts."
+        },
         {
           "th": "รับรองรอบข้อมูลและกำหนดสิทธิผู้ดูแลก่อนเชื่อมระบบงาน",
           "en": "Confirm cohort periods and health-role permissions before operational integration."
@@ -552,6 +854,419 @@
         "th": "ไม่เชื่อมข้อมูลสุขภาพรายบุคคลเข้าคิวภาษีหรือเผยเป็นหมุดบนเว็บ",
         "en": "Individual health records are not linked to tax queues or published as map points."
       }
+    },
+    {
+      "id": "caregroups",
+      "label": {
+        "th": "กลุ่มเปราะบางและผู้รับการดูแล",
+        "en": "Vulnerable groups and care recipients"
+      },
+      "scope": "municipality",
+      "coverage": "supplied_service_cohort_only",
+      "searchTerms": [
+        "กลุ่มเปราะบาง",
+        "ผู้ป่วย",
+        "LTC",
+        "care",
+        "vulnerable"
+      ],
+      "metrics": [
+        {
+          "id": "source_files",
+          "value": 3,
+          "label": {
+            "th": "ไฟล์ดูแลที่นำมาสรุป",
+            "en": "Care files summarized"
+          },
+          "unit": {
+            "th": "ไฟล์",
+            "en": "files"
+          },
+          "note": {
+            "th": "อ่านครบ7แผ่นงาน แยกชีตที่ซ้ำก่อนรวม",
+            "en": "Seven sheets read; overlapping lists deduplicated before combining."
+          },
+          "sourceIds": [
+            "CARE-LTC-1",
+            "CARE-LTC-2",
+            "CARE-LTC-3"
+          ]
+        },
+        {
+          "id": "distinct_source_keys",
+          "value": 194,
+          "label": {
+            "th": "รายการหลังตัดซ้ำตามรหัสต้นทาง",
+            "en": "Distinct recorded recipient keys"
+          },
+          "unit": {
+            "th": "รหัส",
+            "en": "source keys"
+          },
+          "note": {
+            "th": "ไม่ใช่194คนที่ยืนยันตัวตนแล้ว และไม่ใช่ผู้ป่วยทั้งหมดของเมือง",
+            "en": "Not 194 identity-verified people and not all municipal patients."
+          },
+          "sourceIds": [
+            "CARE-LTC-1",
+            "CARE-LTC-2",
+            "CARE-LTC-3"
+          ]
+        },
+        {
+          "id": "recorded_care_groups",
+          "value": 4,
+          "label": {
+            "th": "กลุ่มดูแลที่มีข้อมูลจริง",
+            "en": "Recorded care groups"
+          },
+          "unit": {
+            "th": "กลุ่ม",
+            "en": "groups"
+          },
+          "note": {
+            "th": "เก็บรหัส1–4ตามที่ระบุ ไม่แปลงADLเป็นประเภทผู้ป่วยเอง",
+            "en": "Retains source codes 1–4; ADL is not converted into patient classifications."
+          },
+          "sourceIds": [
+            "CARE-LTC-1",
+            "CARE-LTC-2",
+            "CARE-LTC-3"
+          ]
+        },
+        {
+          "id": "current_patient_census",
+          "value": null,
+          "label": {
+            "th": "จำนวนผู้ป่วยปัจจุบันทั้งเทศบาล",
+            "en": "Current municipality-wide patient census"
+          },
+          "unit": {
+            "th": "ราย",
+            "en": "people"
+          },
+          "note": {
+            "th": "ชุดที่ได้รับเป็นทะเบียนบริการบางส่วนและหลายช่วงข้อมูล ยังไม่ใช่สำมะโนผู้ป่วย",
+            "en": "Received service lists cover limited cohorts and periods, not a patient census."
+          },
+          "sourceIds": [
+            "CARE-LTC-1",
+            "CARE-LTC-2",
+            "CARE-LTC-3"
+          ]
+        }
+      ],
+      "breakdowns": [
+        {
+          "id": "care-group-counts",
+          "label": {
+            "th": "ประเภทกลุ่มดูแลในทะเบียน",
+            "en": "Recorded care-group categories"
+          },
+          "note": {
+            "th": "ใช้วางคิวทวนกลุ่มและภาระบริการจากชุดที่ได้รับ รอรับรองรายละเอียดของรหัสก่อนออกแบบบริการเฉพาะ",
+            "en": "Use the supplied cohort for group and service review; confirm definitions before planning group-specific care."
+          },
+          "rows": [
+            {
+              "id": "care-group-1",
+              "value": 70,
+              "label": {
+                "th": "กลุ่ม 1 ตามทะเบียน",
+                "en": "Recorded group 1"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
+                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "care-group-2",
+              "value": 55,
+              "label": {
+                "th": "กลุ่ม 2 ตามทะเบียน",
+                "en": "Recorded group 2"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
+                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "care-group-3",
+              "value": 23,
+              "label": {
+                "th": "กลุ่ม 3 ตามทะเบียน",
+                "en": "Recorded group 3"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
+                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "care-group-4",
+              "value": 46,
+              "label": {
+                "th": "กลุ่ม 4 ตามทะเบียน",
+                "en": "Recorded group 4"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
+                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "condition-source-terms",
+          "label": {
+            "th": "ประเภทข้อความที่บันทึกในช่องโรคประจำตัว",
+            "en": "Recorded condition terms"
+          },
+          "note": {
+            "th": "รหัสเดียวพบได้หลายคำ ห้ามบวกเป็นจำนวนคน ไม่ใช่อัตราป่วยหรือการวินิจฉัยที่ยืนยัน และคำที่ไม่ปรากฏไม่ได้แปลว่าไม่มีโรค",
+            "en": "Terms overlap: do not sum as people, prevalence or confirmed diagnoses. An absent term is not a negative clinical finding."
+          },
+          "rows": [
+            {
+              "id": "recorded-HT",
+              "value": 90,
+              "label": {
+                "th": "HT · คำที่บันทึกในต้นทาง",
+                "en": "HT · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "recorded-DM",
+              "value": 65,
+              "label": {
+                "th": "DM · คำที่บันทึกในต้นทาง",
+                "en": "DM · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "recorded-STROKE",
+              "value": 13,
+              "label": {
+                "th": "STROKE · คำที่บันทึกในต้นทาง",
+                "en": "STROKE · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "recorded-DLP",
+              "value": 12,
+              "label": {
+                "th": "DLP · คำที่บันทึกในต้นทาง",
+                "en": "DLP · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "recorded-CKD",
+              "value": 10,
+              "label": {
+                "th": "CKD · คำที่บันทึกในต้นทาง",
+                "en": "CKD · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            },
+            {
+              "id": "recorded-CVA",
+              "value": 10,
+              "label": {
+                "th": "CVA · คำที่บันทึกในต้นทาง",
+                "en": "CVA · recorded source term"
+              },
+              "unit": {
+                "th": "รหัสต้นทาง",
+                "en": "source keys"
+              },
+              "note": {
+                "th": "นับรหัสที่พบข้อความนี้อย่างน้อยหนึ่งครั้ง ไม่อนุมานการวินิจฉัย",
+                "en": "Source keys with this term at least once; no inferred or clinically confirmed diagnosis."
+              },
+              "sourceIds": [
+                "CARE-LTC-1",
+                "CARE-LTC-2",
+                "CARE-LTC-3"
+              ]
+            }
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "CARE-LTC-1",
+          "label": {
+            "th": "ทะเบียนดูแล: บ้านโนนม่วง",
+            "en": "Care register: Ban Non Muang"
+          },
+          "periodLabel": {
+            "th": "หัวเรื่อง2570; ไม่รับรองสถานะผู้รับบริการปัจจุบัน",
+            "en": "TitleBE 2570; current service status not certified"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "CARE-LTC-2",
+          "label": {
+            "th": "ทะเบียนดูแล: หนองกุง",
+            "en": "Care register: Nong Kung"
+          },
+          "periodLabel": {
+            "th": "มีข้อความ2569/2570; ช่วงอ้างอิงต้องรับรอง",
+            "en": "BE 2569/2570 text coexists; cohort period requires confirmation"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "CARE-LTC-3",
+          "label": {
+            "th": "ทะเบียนดูแล: ศิลา",
+            "en": "Care register: Sila"
+          },
+          "periodLabel": {
+            "th": "มีทั้งรุ่นเก่า/ใหม่และแผ่นรวม ห้ามบวกทุกชีต",
+            "en": "Old/new and combined lists overlap; sheet totals must not be added"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        }
+      ],
+      "limitations": {
+        "th": "สรุปเฉพาะทะเบียนดูแลที่ศิลาให้มา ยังไม่ใช่ผู้เปราะบาง/ผู้ป่วยทั้งหมดของเมือง ไม่แจกแจงเป็นยอดหมู่บ้านที่เลือกบนแผนที่",
+        "en": "Only the supplied Sila care cohort; not all vulnerable residents or patients. Totals are not allocated to the selected village."
+      },
+      "nextSteps": [
+        {
+          "th": "ให้ทีมสุขภาพรับรองความหมายกลุ่ม1–4และช่วงข้อมูลก่อนจัดบริการ",
+          "en": "Have the health team confirm group 1–4 definitions and cohort periods before service planning."
+        },
+        {
+          "th": "เตรียมกำลังคนและอุปกรณ์ตามกลุ่มที่ยืนยัน แยกแผนความถี่เยี่ยมออกจากผลเยี่ยมที่ทำแล้ว",
+          "en": "Plan staff/equipment against confirmed groups; keep planned visit frequency separate from completed visits."
+        },
+        {
+          "th": "เชื่อมทะเบียนผู้พิการและผู้ป่วยประเภทอื่นเมื่อได้รับ ไม่อนุมานกลุ่มที่ไม่มีแหล่งข้อมูล",
+          "en": "Add disability and other patient registries when received; do not infer unsupported groups."
+        }
+      ],
+      "privacy": {
+        "th": "แสดงเฉพาะยอดรวมที่ผ่านการคัดเลือก ไม่มีรายชื่อ รหัสบุคคล หมุดบ้าน หรือการแบ่งกลุ่มโรครายหมู่บ้าน/หน่วยบริการ",
+        "en": "Selected broad aggregates only; no names, personal keys, home points or condition-by-village/provider cross-tabs."
+      }
     }
-  ]
+  ],
+  "revision": "3.1",
+  "sourceBatch": "pds-20261019-0940",
+  "carePublicationScope": "supplied-service-cohort-only; no provider/village intersections",
+  "publicationReview": {
+    "careCounts": "Only combined broad source-key counts selected. Each published care group/condition-term count is at least10; no small-cell labels, provider/village intersections or complementary totals of unpublished terms.",
+    "careThresholdIsLegalGuarantee": false,
+    "noHealthToTaxJoin": true,
+    "noPatientRowExports": true,
+    "taxZeroDoesNotReplaceUnknown": true
+  }
 }

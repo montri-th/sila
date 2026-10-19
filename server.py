@@ -5,8 +5,8 @@ from urllib.parse import unquote, urlsplit
 import argparse
 
 ROOT = Path(__file__).resolve().parent
-FILES = {"", "index.html", "app.js", "styles.css", "README.md", "basemap.js", "basemap.css", "house-points.js", "house-points.css", "map-pick.js", "context-actions.js", "context-actions.css", "favicon.ico", "platform-shell.css", "ui-icons.js", "public-aggregate.js"}
-PREFIXES = ("assets/", "vendor/", "data/", "reference/")
+FILES = {"", "index.html", "app.js", "styles.css", "README.md", "basemap.js", "basemap.css", "house-points.js", "house-points.css", "map-pick.js", "context-actions.js", "context-actions.css", "favicon.ico", "platform-shell.css", "ui-icons.js", "public-aggregate.js", "fabdem-layer.js"}
+PREFIXES = ("assets/", "vendor/", "data/", "reference/", "docs/")
 
 class PreviewHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):

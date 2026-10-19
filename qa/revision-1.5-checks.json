@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "sila-revision-1.5-test-checks/1.0",
+  "checkedAtUtc": "2026-10-19T11:47:57.098449+00:00",
+  "status": "passed",
+  "syntax": [
+    "app.js",
+    "public-aggregate.js",
+    "context-actions.js",
+    "basemap.js",
+    "fabdem-layer.js",
+    "server.py (AST)"
+  ],
+  "fixtures": {
+    "publicAggregateLanguageTabCombinations": 30,
+    "terrainMathGeometryNoData": 21,
+    "individualHousePointPreservation": 31,
+    "geometryMapPicking": 24
+  },
+  "boundaries": "No full regional DEM, native-mobile touch/performance, clinical verification or WCAG claim.",
+  "originalGIS19ByteParity": true,
+  "originalCatalogDatasets": 16,
+  "runtimeDatasetsWithSummary": 21,
+  "defaultDataset": "buildings",
+  "allHousePointsNoCluster": true,
+  "sourceFiles": [
+    {
+      "path": "app.js",
+      "bytes": 107675,
+      "sha256": "3daf71b3d0049902911dbf42b1ba166ae27075245964221c8cbced8f7bfab89d"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 28168,
+      "sha256": "18d4e9089e3ac40c41fa7d1c48aa4fc156e0d407efe960ee52025d555bff1981"
+    },
+    {
+      "path": "public-aggregate.js",
+      "bytes": 10584,
+      "sha256": "9349e4cb1714109ee7722403fd790e9006f86822e871217b44b2dd2e7ef186cb"
+    },
+    {
+      "path": "context-actions.js",
+      "bytes": 23291,
+      "sha256": "22100b0cb76beccee5130fae174fe108d20b3fe702ffb0f667833e2d67c2b5b5"
+    },
+    {
+      "path": "basemap.js",
+      "bytes": 18176,
+      "sha256": "49a25481eb6f405bdb508e9e3bc0a84fe0da57a0a6970c09c3492f23b85d9ba7"
+    },
+    {
+      "path": "fabdem-layer.js",
+      "bytes": 10830,
+      "sha256": "8613f60008db6a2481b44be1337f1fd8f7054ab7500c8cc7a85aaa735de05d35"
+    },
+    {
+      "path": "index.html",
+      "bytes": 16263,
+      "sha256": "c07956438f97e10ac5ba367cf185588f2529b6fd2934862913ca4a9920f1227c"
+    },
+    {
+      "path": "server.py",
+      "bytes": 2258,
+      "sha256": "f5f5cd9748511f15a01eb4fca6191e13e36389e7ab2cd9873457eb188a1aa120"
+    },
+    {
+      "path": "data/municipal-summary.json",
+      "bytes": 55549,
+      "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c"
+    },
+    {
+      "path": "data/terrain-source.json",
+      "bytes": 2657,
+      "sha256": "9aca4e714bd6660431caebf41381aabde0d70ccbea49212eab6f24acc122e507"
+    },
+    {
+      "path": "data/terrain-coverage.geojson",
+      "bytes": 31928,
+      "sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e"
+    }
+  ]
+}

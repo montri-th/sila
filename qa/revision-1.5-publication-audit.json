@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "sila-publication-audit-1.5",
+  "revision": "1.5",
+  "auditedAtUtc": "2026-10-19T11:47:57.098449+00:00",
+  "status": "passed_with_bounded_scope",
+  "releaseState": "local_candidate_not_published",
+  "sourceHead": "444970a59e58764195aed54a931479711ab362f5",
+  "approvedPublicSummary": {
+    "path": "data/municipal-summary.json",
+    "bytes": 55549,
+    "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c"
+  },
+  "changedExistingFiles": [
+    "README.md",
+    "app.js",
+    "basemap.js",
+    "context-actions.js",
+    "data/municipal-summary.json",
+    "docs/data-update-20261019.md",
+    "index.html",
+    "public-aggregate.js",
+    "qa/check-public-aggregate.cjs",
+    "reference/public-summary-contract.json",
+    "reference/public-summary-contract.md",
+    "reference/satellite-basemap-contract.json",
+    "reference/satellite-basemap-contract.md",
+    "server.py",
+    "styles.css",
+    "build-manifest.json"
+  ],
+  "newCandidateFiles": [
+    "data/terrain-coverage.geojson",
+    "data/terrain-source.json",
+    "fabdem-layer.js",
+    "reference/terrain-contract.json",
+    "reference/terrain-contract.md",
+    "qa/check-fabdem-layer.cjs",
+    "qa/revision-1.5-terrain-fixtures.json",
+    "qa/revision-1.5-browser-checks.json",
+    "qa/revision-1.5-checks.json",
+    "qa/revision-1.5-lds-static-app-js.json",
+    "qa/revision-1.5-lds-static-public-aggregate-js.json",
+    "qa/revision-1.5-lds-static-styles-css.json",
+    "qa/revision-1.5-publication-audit.json"
+  ],
+  "checks": {
+    "approvedPayloadExactBytes": true,
+    "originalTrackedDataByteParity19": true,
+    "originalGISDatasetCount16": true,
+    "runtimeDatasetCount21": true,
+    "legacyFourRequiredPayloadCompatible": true,
+    "optionalCareCohortView": true,
+    "unknownIncrementalTaxGainIsNull": true,
+    "careCurrentPatientCensusIsNull": true,
+    "careCountIsSourceKeysNotVerifiedPeople": true,
+    "careKeywordsNotConfirmedDiagnosesOrPrevalence": true,
+    "noSmallCellNamesOrComplementaryTotals": true,
+    "noProviderVillageCrossTabs": true,
+    "noCareTaxJoinOrPatientMap": true,
+    "publicPayloadHasNoRawUrls": true,
+    "individualSourceRowsAvailable": false,
+    "rawSourceDownloadsAvailable": false,
+    "newPersonalIdentifiersOrPreciseMedicalCoordinatesExcluded": true,
+    "deterministicTaxCaseAndExactCatalogRowLocatorsExcluded": true,
+    "syntheticAuthenticationClaim": false,
+    "municipalWriteClaim": false,
+    "newCommercialLicenseClaim": false,
+    "rawDEMRehosted": false,
+    "terrainDistrictClipAndNoDataFixtures21": true,
+    "terrainActualHillshadeLoaded": true,
+    "terrainNativeZoom12Display22NoExtraDetail": true
+  },
+  "existingData": [
+    {
+      "path": "data/buildings.geojson",
+      "bytes": 27674202,
+      "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/catalog.json",
+      "bytes": 69061,
+      "sha256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/cctv.geojson",
+      "bytes": 21188,
+      "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/data-validation.json",
+      "bytes": 2401,
+      "sha256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/education.geojson",
+      "bytes": 10198,
+      "sha256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/election-source-lines.geojson",
+      "bytes": 46540,
+      "sha256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/election.geojson",
+      "bytes": 46671,
+      "sha256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/flood-evidence.json",
+      "bytes": 23147,
+      "sha256": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/health.geojson",
+      "bytes": 2133,
+      "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/houses.geojson",
+      "bytes": 13323656,
+      "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/metadata.json",
+      "bytes": 34190,
+      "sha256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/municipality.geojson",
+      "bytes": 36585,
+      "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/parcels.geojson",
+      "bytes": 30883759,
+      "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/publicfacilities.geojson",
+      "bytes": 88645,
+      "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/religion.geojson",
+      "bytes": 11526,
+      "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/roads.geojson",
+      "bytes": 608961,
+      "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/source-manifest.json",
+      "bytes": 48576,
+      "sha256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/villages.geojson",
+      "bytes": 164944,
+      "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "data/waterways.geojson",
+      "bytes": 416511,
+      "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+      "unchangedFromHead": true
+    }
+  ],
+  "sourceCounts": {
+    "sourceFolders": 17,
+    "baseGISFolders": 14,
+    "additionalMunicipalFolders": 3,
+    "functionalMunicipalFiles": 15,
+    "taxFunctionalFiles": 10,
+    "newFolderReceivedFiles": 6,
+    "newFunctionalTaxForms": 4,
+    "sameContentPDS7And8Reexports": 2
+  },
+  "financialMeaning": "Receipt cash23,074,139.17THB covers source interval, tax years and unsplit charges; not project gain/annual assessment/overdue balance/collection rate. Candidate key or area differences are not tax errors.",
+  "privacyRule": "Only approved aggregate payload and district terrain metadata added; prior authorized GIS exposure retained. No individual care/tax keys, names, raw spreadsheets, case hashes, catalogue row locators or Officer queues in new public files.",
+  "holdBeforePublication": [
+    "Root staged review of explicit files and payload.",
+    "Root alone performs commit/push/live release attestation."
+  ]
+}

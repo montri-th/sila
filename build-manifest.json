@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.4",
-  "builtAtUtc": "2026-10-19T08:18:48.681187+00:00",
+  "revision": "1.5",
+  "builtAtUtc": "2026-10-19T11:47:57.098449+00:00",
   "releaseDateBangkok": "2026-10-19",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -25,21 +25,22 @@
     "tax",
     "business",
     "animals",
-    "healthservices"
+    "healthservices",
+    "caregroups"
   ],
-  "sourceFolders": 16,
+  "sourceFolders": 17,
   "municipalOpenReuseLicenseVerified": false,
   "productionAuthenticationConnected": false,
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.4-browser-checks.json",
-  "publicationAudit": "qa/revision-1.4-publication-audit.json",
+  "browserReceipt": "qa/revision-1.5-browser-checks.json",
+  "publicationAudit": "qa/revision-1.5-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 41897,
-      "sha256": "4fe89ea24106777db9be6db6260c6606e1317cb300a109de0bc5d16c128459b7",
+      "bytes": 44950,
+      "sha256": "80934db324a466498164cf86bd941d75f4ec35b074a3fe1a6de6bbb685f77ef4",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -48,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 99163,
-      "sha256": "f014b1443c8baf5b543379f6000aac963cd42e0355de2f52979e6a3ca8a193d3",
+      "bytes": 107675,
+      "sha256": "3daf71b3d0049902911dbf42b1ba166ae27075245964221c8cbced8f7bfab89d",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -714,8 +715,8 @@
     },
     {
       "path": "basemap.js",
-      "bytes": 18145,
-      "sha256": "022865e49d13d9e770487eb2282cf77912b1ec1f86f3c83169c7ced9c50c9905",
+      "bytes": 18176,
+      "sha256": "49a25481eb6f405bdb508e9e3bc0a84fe0da57a0a6970c09c3492f23b85d9ba7",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -731,8 +732,8 @@
     },
     {
       "path": "context-actions.js",
-      "bytes": 22959,
-      "sha256": "4dba28a2fb1615fa7f71a06e95e9209ac42ca03cf4affb1728a5fc5370e37609",
+      "bytes": 23291,
+      "sha256": "22100b0cb76beccee5130fae174fe108d20b3fe702ffb0f667833e2d67c2b5b5",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -850,13 +851,13 @@
     },
     {
       "path": "data/municipal-summary.json",
+      "bytes": 55549,
+      "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
       "mimeTypes": [
         "application/json",
-        "text/plain",
+        "application/geo+json",
         "application/octet-stream"
-      ],
-      "bytes": 22985,
-      "sha256": "616f6c8bd97379684c91bd8d92e55d78fa694e3fa678f39aed3870b11ba2221d"
+      ]
     },
     {
       "path": "data/municipality.geojson",
@@ -919,6 +920,26 @@
       ]
     },
     {
+      "path": "data/terrain-coverage.geojson",
+      "bytes": 31928,
+      "sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
+      "mimeTypes": [
+        "application/geo+json",
+        "application/json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "data/terrain-source.json",
+      "bytes": 2657,
+      "sha256": "9aca4e714bd6660431caebf41381aabde0d70ccbea49212eab6f24acc122e507",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "data/villages.geojson",
       "bytes": 164944,
       "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
@@ -940,13 +961,22 @@
     },
     {
       "path": "docs/data-update-20261019.md",
+      "bytes": 19227,
+      "sha256": "bb790a2d165a4d37a139e5811f9e27f089eb038c8eea2395887a39892e70f36f",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
         "application/octet-stream"
-      ],
-      "bytes": 9880,
-      "sha256": "78b4c724ce58f030b36a5489cd47dc386920ab949125470efd1cf6595727770c"
+      ]
+    },
+    {
+      "path": "fabdem-layer.js",
+      "bytes": 10830,
+      "sha256": "8613f60008db6a2481b44be1337f1fd8f7054ab7500c8cc7a85aaa735de05d35",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
     },
     {
       "path": "favicon.ico",
@@ -976,8 +1006,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 16219,
-      "sha256": "761e1bd595000eb4563354cfd4bec256e01b037353d052c5ffb70c730e059d69",
+      "bytes": 16263,
+      "sha256": "c07956438f97e10ac5ba367cf185588f2529b6fd2934862913ca4a9920f1227c",
       "mimeTypes": [
         "text/html"
       ]
@@ -1001,12 +1031,23 @@
     },
     {
       "path": "public-aggregate.js",
+      "bytes": 10584,
+      "sha256": "9349e4cb1714109ee7722403fd790e9006f86822e871217b44b2dd2e7ef186cb",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
-      ],
-      "bytes": 8650,
-      "sha256": "7ec6248e75b632f8b42d59e2804cc27fe4913f6c700babb1467d7ceee1deb761"
+      ]
+    },
+    {
+      "path": "qa/check-fabdem-layer.cjs",
+      "bytes": 4314,
+      "sha256": "a5e26566136ba1bf907405749beb4e3c9d5b28f78dde61ccf36248dbc0151928",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript",
+        "application/octet-stream",
+        "application/node"
+      ]
     },
     {
       "path": "qa/check-house-points.cjs",
@@ -1032,13 +1073,14 @@
     },
     {
       "path": "qa/check-public-aggregate.cjs",
+      "bytes": 6436,
+      "sha256": "fbd3d084af193be0c47e77215f5c1f23b49d0d555d0abe4a8726fcade9c28ed4",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
-        "application/octet-stream"
-      ],
-      "bytes": 3274,
-      "sha256": "a0f77ae287cc5898a1e372c2e74458d0dd5ae008d27109f31eb63b0024205204"
+        "application/octet-stream",
+        "application/node"
+      ]
     },
     {
       "path": "qa/context-actions-semantic-checks.json",
@@ -1262,23 +1304,93 @@
     },
     {
       "path": "qa/revision-1.4-browser-checks.json",
+      "bytes": 17827,
+      "sha256": "19f1aac649553b4ee498053c38504667dc1fa8775c78f7f14a09e3d1ccdd67bc",
       "mimeTypes": [
         "application/json",
-        "text/plain",
+        "application/geo+json",
         "application/octet-stream"
-      ],
-      "bytes": 17827,
-      "sha256": "19f1aac649553b4ee498053c38504667dc1fa8775c78f7f14a09e3d1ccdd67bc"
+      ]
     },
     {
       "path": "qa/revision-1.4-publication-audit.json",
+      "bytes": 6015,
+      "sha256": "1fbc3d0a463d8bfb44b991355111e40a46912add6021a6486bebf8eec71e474d",
       "mimeTypes": [
         "application/json",
-        "text/plain",
+        "application/geo+json",
         "application/octet-stream"
-      ],
-      "bytes": 6015,
-      "sha256": "1fbc3d0a463d8bfb44b991355111e40a46912add6021a6486bebf8eec71e474d"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-browser-checks.json",
+      "bytes": 38426,
+      "sha256": "0c5521ef14e526762b2b2caa56a9babc52a5a27eef88a5ebc51b8c12902042e9",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-checks.json",
+      "bytes": 2443,
+      "sha256": "88b4f8cf903ddda950a297befe525637e78447ff85c8243f49127663f48b907d",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-lds-static-app-js.json",
+      "bytes": 446,
+      "sha256": "47b661db01850f9e852d161615b26003ede67a8095030a5dd5591b0f115cc218",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-lds-static-public-aggregate-js.json",
+      "bytes": 459,
+      "sha256": "f6bd3972259a39057234fd1ebdf7201b28f98225dbf6d7b9fa8c2957872b2694",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-lds-static-styles-css.json",
+      "bytes": 451,
+      "sha256": "d83d548237371b0ee8d361286724bbd5470ad3c9186bf3cfa1218ad1c7d3d25b",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-publication-audit.json",
+      "bytes": 7259,
+      "sha256": "07416ba864dcb6b45376b130aa7e886e6a544bc92c83306ea8afed49871523fa",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.5-terrain-fixtures.json",
+      "bytes": 593,
+      "sha256": "975bb04f6e11e48ec9aad2d5fdd982229f21e5e303a78180538659ec5c8a507e",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
     },
     {
       "path": "qa/verifier-fixture-checks.json",
@@ -1412,28 +1524,28 @@
     },
     {
       "path": "reference/public-summary-contract.json",
+      "bytes": 4167,
+      "sha256": "6688ed1f0b9b3f4626be458740186694babd5f4ef9ea5832c01f4e86b180d7f4",
       "mimeTypes": [
         "application/json",
-        "text/plain",
+        "application/geo+json",
         "application/octet-stream"
-      ],
-      "bytes": 1685,
-      "sha256": "9474bba703d17a49bf5a6b9b961cb88e02081f4a6eeb9037824c8303677630d3"
+      ]
     },
     {
       "path": "reference/public-summary-contract.md",
+      "bytes": 11517,
+      "sha256": "01d7fc428db576068c1791897bfddfee817b4ed21734133fe6911b7339db87fb",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
         "application/octet-stream"
-      ],
-      "bytes": 7858,
-      "sha256": "7bc86ac898e66e01eca0bc88d77fcee183b6c47e0c9c01cb75917545bfface07"
+      ]
     },
     {
       "path": "reference/satellite-basemap-contract.json",
-      "bytes": 11716,
-      "sha256": "c1b6c74069cc8a4e74989fc48c3871329c6bef13bb746cd8cc4229fd50f091ff",
+      "bytes": 12039,
+      "sha256": "dbae7bc6a8df2c5ad3a947e6303d20cbf372f35197dce9061927eed00474ff02",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1442,8 +1554,8 @@
     },
     {
       "path": "reference/satellite-basemap-contract.md",
-      "bytes": 7289,
-      "sha256": "a111887139b2dda2c45d83cafa9ad1daf5cc8e07a9cc1a355b845a3e69ad4ad6",
+      "bytes": 7666,
+      "sha256": "3265a4d1bbd082d01a6bde04a19e4a31da6bc8ad406746691efd7166d00a9db1",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1467,6 +1579,26 @@
       "mimeTypes": [
         "application/json",
         "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/terrain-contract.json",
+      "bytes": 5192,
+      "sha256": "e44ba80b993451713caf6da20524e5b259f03060d4c67b9a0b83d9ab9f4b3f77",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "reference/terrain-contract.md",
+      "bytes": 4897,
+      "sha256": "cab4fa20105c411a4267801958082fe023fcc2da02e35190600ea8993ca6aab5",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
         "application/octet-stream"
       ]
     },
@@ -1594,8 +1726,8 @@
     },
     {
       "path": "server.py",
-      "bytes": 2230,
-      "sha256": "b7abd7c78a60c7f7271cb1eb9bd4f6bd9e095b50822ef49546d720c85e102272",
+      "bytes": 2258,
+      "sha256": "f5f5cd9748511f15a01eb4fca6191e13e36389e7ab2cd9873457eb188a1aa120",
       "mimeTypes": [
         "text/plain",
         "application/octet-stream"
@@ -1603,8 +1735,8 @@
     },
     {
       "path": "styles.css",
-      "bytes": 27064,
-      "sha256": "a576ae09898683b3ae45e04a36143a61dd51350b0f3145c9f8c155622317605e",
+      "bytes": 28168,
+      "sha256": "18d4e9089e3ac40c41fa7d1c48aa4fc156e0d407efe960ee52025d555bff1981",
       "mimeTypes": [
         "text/css"
       ]
@@ -2812,8 +2944,8 @@
       ]
     }
   ],
-  "manifestScope": "All explicit nonhidden previously published files plus approved revision1.4 additions except this self manifest. Local browser screenshots remain outside the repository. Revision1.4 is not yet published.",
-  "releaseReadiness": "pending_root_staged_review",
+  "manifestScope": "All explicit previously published files plus approved revision1.5 additions except this self manifest. Screenshots are archived outside repository. Source files reviewed by root; hosting/live attestation is separate.",
+  "releaseReadiness": "root_staged_review_passed_provider_proof_separate",
   "housePointRendering": {
     "mode": "individual_source_points",
     "aggregationEnabled": false,
@@ -2824,30 +2956,47 @@
     "primary": "existing_citychat_google_hybrid_xyz",
     "officialGoogleAPI": false,
     "nativeZoomCap": 19,
-    "displayMaxZoom": 20,
+    "displayMaxZoom": 22,
     "licenseStatus": "not_verified",
     "archiveOption": "explicit_eox_2016_2017"
   },
-  "releaseState": "local_candidate_not_published",
+  "releaseState": "source_release_provider_attestation_separate",
   "originalGISDatasets": 16,
-  "additionalMunicipalSummaryViews": 4,
-  "runtimeDatasetsWhenSummaryReady": 20,
+  "additionalMunicipalSummaryViews": 5,
+  "runtimeDatasetsWhenSummaryReady": 21,
   "additionalSourceReceivedAt": "2026-10-19",
-  "additionalSourceFiles": 11,
+  "additionalSourceFiles": 15,
   "publicSummary": {
     "path": "data/municipal-summary.json",
-    "bytes": 22985,
-    "sha256": "616f6c8bd97379684c91bd8d92e55d78fa694e3fa678f39aed3870b11ba2221d",
+    "bytes": 55549,
+    "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.3",
-  "previousPublishedCommit": "928a42859776730cbd4503975b9aeeb693a98cfe",
+  "previousPublishedRevision": "1.4",
+  "previousPublishedCommit": "444970a59e58764195aed54a931479711ab362f5",
   "originalGisSourceFolders": 14,
-  "additionalMunicipalSourceFolders": 2,
-  "additionalMunicipalFilesInspectedThisUpdate": 11,
+  "additionalMunicipalSourceFolders": 3,
+  "additionalMunicipalFilesInspectedThisUpdate": 6,
   "postReviewCopyCorrection": {
     "date": "2026-10-19",
     "scope": "Parcel catalogue hint now distinguishes newly received tax registers from pending linkage/formal CRS certification. No data/geometry/layout change.",
     "priorRuntimeReview": "qa/revision-1.4-browser-checks.json"
+  },
+  "additionalSourceFilesMeaning": "Functional active municipal source files including prior batch; PDS7/8 reexports counted once.",
+  "totalAdditionalMunicipalFilesInspectedAcrossBatches": 17,
+  "terrain": {
+    "contract": "reference/terrain-contract.json",
+    "sourceMetadata": "data/terrain-source.json",
+    "coverageMetadata": "data/terrain-coverage.geojson",
+    "dataset": "FABDEM V1-2",
+    "version": "z12-20261007",
+    "districtCode": "4001",
+    "maxNativeZoom": 12,
+    "maxDisplayZoom": 22,
+    "heightColourRamp": false,
+    "verticalDatum": null,
+    "commercialPermissionVerified": false,
+    "rawDEMRehosted": false,
+    "runtimeCatalogOverrideOnly": true
   }
 }

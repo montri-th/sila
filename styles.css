@@ -1421,3 +1421,14 @@ select {
   body[data-public-aggregate="true"] .map-stage { height: 30dvh; min-height: 220px; max-height: 270px; }
   body[data-public-aggregate="true"] .map-legend { bottom: 76px; }
 }
+
+/* Source care-group counts: neutral tables, no clinical-severity colour. */
+.aggregate-breakdown h2 { font-family: "Bai Jamjuree", sans-serif; font-size: 18px; line-height: 1.65; margin: 0 0 10px; overflow-wrap: anywhere; }
+.aggregate-breakdown table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.75; }
+.aggregate-breakdown th, .aggregate-breakdown td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: top; overflow-wrap: anywhere; text-align: left; }
+.aggregate-breakdown thead th { color: var(--secondary); font-weight: 400; }
+.aggregate-breakdown tbody th { font-weight: 600; }
+.aggregate-breakdown td { width: 32%; min-width: 90px; }
+.aggregate-breakdown td strong { font-size: 20px; font-family: "Taviraj", serif; font-weight: 600; }
+.aggregate-breakdown small, .aggregate-table-unit { display: block; margin-top: 5px; color: var(--secondary); font-weight: 400; font-size: 13px; line-height: 1.7; }
+@media (max-width: 599px) { .aggregate-breakdown th, .aggregate-breakdown td { padding: 12px 8px; } .aggregate-breakdown td { width: 30%; } }

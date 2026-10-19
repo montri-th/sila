@@ -248,7 +248,7 @@
         }
         this._renderer = 'osm-raster-fallback';
         this._child = root.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          pane:'tilePane', maxZoom:20, maxNativeZoom:19, noWrap:true,
+          pane:'tilePane', maxZoom:this._hostMap?.getMaxZoom() || 20, maxNativeZoom:19, noWrap:true,
           keepBuffer:1, updateWhenIdle:true,
           attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · raster fallback',
         });

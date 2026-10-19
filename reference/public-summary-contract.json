@@ -1,23 +1,125 @@
 {
   "schema": "sila-public-summary-ui-contract/1.0",
   "preparedOn": "2026-10-19",
-  "publicationState": "local_candidate_pending_review",
+  "publicationState": "source_contract_checked_provider_and_live_proof_separate",
   "input": "data/municipal-summary.json",
   "inputSchema": "sila-municipal-public-summary/1.0",
-  "newViewIds": ["tax", "business", "animals", "healthservices"],
+  "newViewIds": [
+    "tax",
+    "business",
+    "animals",
+    "healthservices",
+    "caregroups"
+  ],
   "baseDatasetCountUnchanged": 16,
-  "runtimeDatasetCountWhenSummaryReady": 20,
+  "runtimeDatasetCountWhenSummaryReady": 21,
   "defaultDataset": "buildings",
-  "scope": "municipality_only_independent_of_selected_map_context",
+  "scope": "municipality_aggregate_or_explicit_received_service_cohort_independent_of_selected_map_context",
   "recordDetail": false,
   "sourceRowExport": false,
   "rawSourceDownload": false,
   "syntheticAuthentication": false,
-  "preserve": ["all_source_house_points_no_cluster", "selected_scope_and_camera", "single_boundary_dimension", "inverted_municipal_mask", "actual_geometry_picking", "four_existing_health_facility_points", "LDS0.9.7_CityChat0.9.2_exact_assets"],
-  "unknownStates": {"measuredZero": "0", "unknown": "dash_and_note", "withheld": "dash_and_not_published_label"},
-  "privacyExclusions": ["person_names", "title_or_assessment_identifiers", "raw_receipt_or_debtor_rows", "patient_records", "household_or_patient_coordinates", "deterministic_title_case_hashes", "exact_catalogue_row_locators", "restricted_officer_crosswalks"],
+  "preserve": [
+    "all_source_house_points_no_cluster",
+    "selected_scope_and_camera",
+    "single_boundary_dimension",
+    "inverted_municipal_mask",
+    "actual_geometry_picking",
+    "four_existing_health_facility_points",
+    "LDS0.9.7_CityChat0.9.2_exact_assets"
+  ],
+  "unknownStates": {
+    "measuredZero": "0",
+    "unknown": "dash_and_note",
+    "withheld": "dash_and_not_published_label"
+  },
+  "privacyExclusions": [
+    "person_names",
+    "title_or_assessment_identifiers",
+    "raw_receipt_or_debtor_rows",
+    "patient_records",
+    "household_or_patient_coordinates",
+    "deterministic_title_case_hashes",
+    "exact_catalogue_row_locators",
+    "restricted_officer_crosswalks"
+  ],
   "financialRule": "Source receipt cash across tax years and unsplit charges is not annual assessment, overdue balance, collection rate or project uplift.",
-  "components": ["public-aggregate.js", "app.js", "styles.css", "index.html"],
+  "components": [
+    "public-aggregate.js",
+    "app.js",
+    "styles.css",
+    "index.html"
+  ],
   "publicPayloadApproval": "Required separately from runtime rendering checks; UI hiding cannot secure a shipped static file.",
-  "deploymentGate": "Root review of final sanitized payload and local QA before any publication."
+  "deploymentGate": "Root review of final sanitized payload and local QA before any publication.",
+  "revision": "1.5",
+  "requiredViewIds": [
+    "tax",
+    "business",
+    "animals",
+    "healthservices"
+  ],
+  "optionalViewIds": [
+    "caregroups"
+  ],
+  "caregroups": {
+    "coverage": "supplied_service_cohort_only",
+    "countGrain": "distinct stored source keys, not verified people or all current city patients",
+    "publicGroupCodes": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "groupDefinitionStatus": "awaiting confirmation; printed group3/4 descriptions are identical",
+    "publicConditionKeywords": [
+      "HT",
+      "DM",
+      "STROKE",
+      "DLP",
+      "CKD",
+      "CVA"
+    ],
+    "conditionKeywordMeaning": "literal overlapping source terms, not confirmed diagnoses or prevalence",
+    "minimumPublishedKeywordCount": 10,
+    "providerVillageCrossTabs": false,
+    "smallKeywordNamesOrResidualTotals": false,
+    "careTaxJoin": false
+  },
+  "optionalBreakdowns": {
+    "shape": "[{id,label:{th,en},note:{th,en},rows:[{id,label,value,unit,note,state?,sourceIds}]}]",
+    "values": "finite number or null; escaped text; exact source units",
+    "aggregation": "explicit source grains; no automatic sum across rows or tables"
+  },
+  "taxForms": {
+    "functionalActiveSourceFiles": 10,
+    "receivedFolderFilesThisBatch": 6,
+    "newFormTypes": 4,
+    "reexportFormTypes": [
+      "7",
+      "8"
+    ],
+    "reexportRule": "PDS7/8 equal across 1,419,353 source cells by value and type; binary hashes differ, no duplicate source-file count",
+    "forms": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "7",
+      "8"
+    ],
+    "crossFormCandidateLink": "corroborating keys; ambiguous rows held; not effective assessment or individual tax gap"
+  },
+  "legacyPayloadCompatibility": "The four required views remain valid without optional caregroups; no unknown dataset IDs accepted.",
+  "terrainRuntimeOverride": {
+    "catalogFile": "data/catalog.json",
+    "catalogPreserved": true,
+    "historicCatalogStatus": "pending_other_team",
+    "consumerOverride": "app.js overrides only the in-memory terrain entry to ready_external_dem when both approved external metadata files load",
+    "metadata": [
+      "data/terrain-source.json",
+      "data/terrain-coverage.geojson"
+    ],
+    "contract": "reference/terrain-contract.json"
+  }
 }

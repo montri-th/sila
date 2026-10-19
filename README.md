@@ -1,18 +1,20 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "1.4"
+artifact_revision: "1.5"
 updated_on: "2026-10-19"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
 source_received_on: "2026-10-05"
-source_folder_count: 14
-source_component_count: 251
+source_folder_count: 17
+base_gis_source_folder_count: 14
+base_gis_source_component_count: 251
 catalog_dataset_count: 16
-additional_municipal_summary_views: 4
-runtime_dataset_count: 20
+additional_municipal_summary_views: 5
+runtime_dataset_count: 21
 additional_source_received_on: "2026-10-19"
 release_state: local_review_pending
-published_revision_before_update: "1.3"
+published_revision_before_update: "1.4"
+published_commit_before_update: "444970a59e58764195aed54a931479711ab362f5"
 additional_view: area_overview
 release_mode: owner_authorized_static_prototype
 publish_repository: montri-th/sila
@@ -27,13 +29,21 @@ municipal_writes: false
 # ศิลา · CityChat CityMETER สำหรับเจ้าหน้าที่
 
 
-## เตรียมปรับข้อมูลรอบ 19 ตุลาคม 2569 · ยังไม่เผยแพร่
+## Revision1.5 · กลุ่มดูแล ข้อมูลภาษี และภูมิประเทศ
 
-เพิ่มมุมมองสรุปภาษีที่ดินและสิ่งปลูกสร้าง กิจการและใบอนุญาต ข้อมูลสัตว์ และความพร้อมข้อมูลดูแลระยะยาว แยกจาก GIS เดิม 16 ชุด เมื่อไฟล์สรุปที่ตรวจแล้วพร้อม เมนูรวมเป็น 20 ชุดพร้อมภาพรวม โดยเริ่มต้นที่รูปอาคารและคงจุดสถานพยาบาลเดิม 4 จุดไว้
+GISเดิม16ชุด + summary5มุมมอง =21ชุดและภาพรวม คง default รูปอาคาร จุดบ้านทั้งหมดแบบไม่ cluster และจุดสถานพยาบาลเดิม4จุด แหล่งที่ตรวจครอบคลุม17โฟลเดอร์ ไม่นับแบบ7/8ที่ส่งออกซ้ำเป็นไฟล์ใหม่
 
-มุมมองใหม่เป็นยอดระดับเทศบาล ไม่เปลี่ยนตามหมู่บ้าน/เขตเลือกตั้งที่เลือกบนแผนที่ และไม่มีรายชื่อ เลขสิทธิ เลขประเมิน รายการลูกหนี้ ผู้ป่วย พิกัดรายบุคคล หรือการดาวน์โหลด raw source ค่าที่ยังไม่ยืนยันแยกจากศูนย์ที่วัดได้ ยอดรับในไฟล์อาจรวมภาษีหลายปีและส่วนเพิ่ม จึงไม่เรียกว่าเงินเก็บเพิ่มจากโครงการหรืออัตราจัดเก็บ
+เพิ่ม “กลุ่มเปราะบางและผู้รับการดูแล” ตามกลุ่ม1–4และคำที่บันทึกในบัญชี เป็นกลุ่มในข้อมูลที่ได้รับ ไม่ใช่ผู้ป่วยทั้งหมดในเมือง จำนวน194คือรหัสต้นทางไม่ซ้ำ ยังไม่ยืนยันเป็น194คนที่ตรวจตัวตนครบ คำที่บันทึกซ้อนกันได้ ไม่ใช่วินิจฉัยหรือ prevalence ส่วนความพร้อมข้อมูล LTC ยังแยกเป็น inventory
 
-ดู [สัญญาข้อมูลสรุป](reference/public-summary-contract.md) และ [machine contract](reference/public-summary-contract.json) การเผยแพร่รอบใหม่ยังรอ root ตรวจ sanitized payload และ QA; revision 1.3 ด้านล่างเป็นประวัติรุ่นเผยแพร่เดิม ไม่ใช่ผลตรวจ build รอบนี้
+ภาษีแสดงแบบ1/2/3/4/7/8และ candidate linkage จากคีย์ประกอบ แถวกำกวมเก็บรอทวน ไม่อ้างผลต่างเนื้อที่เป็นภาษีผิดหรือเงินเพิ่ม ไฟล์ภาษีใช้งาน10ไฟล์ โดย7/8ส่งออกซ้ำมีค่าพร้อมชนิดข้อมูลตรงของเดิมทุกช่อง จึงนับครั้งเดียว ยอดรับ23,074,139.17บาทตามช่วงในไฟล์ยังรวมหลายปีภาษี/ส่วนเพิ่ม ไม่ใช่เงินที่โครงการทำให้เก็บเพิ่ม
+
+ภูมิประเทศเดิมเชื่อมเงา FABDEM V1-2 บนแผนที่เดิม เฉพาะอำเภอเมืองขอนแก่น source tile `z12-20261007` ไม่คัดลอก DEM ไป host เว็บ Native zoom12 / display zoom22 ขยายข้อมูลประมาณ30ม.โดยไม่เพิ่มรายละเอียด เงาขาวดำช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม ฐานอ้างอิงแนวดิ่ง/ความแม่นยำยังไม่ประกาศ มี loading/ready/partial/error/no-dataโปร่งใส แยกศูนย์จริง เปิด [3D route อำเภอ4001](https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain) เป็นอีกแท็บ; เลือก FABDEM ในต้นทางหาก source อื่น active
+
+Public เป็น aggregate-only ไม่มีชื่อ เลขสิทธิ เลขประเมิน รายการลูกหนี้ ผู้ป่วย พิกัดรายบุคคลหรือ raw download ยอดไม่เปลี่ยนตามหมู่บ้าน/เขตเลือกตั้งที่เลือกบนแผนที่ งานรายบุคคลต้องผ่านระบบเจ้าหน้าที่ที่ยืนยันสิทธิจริง เว็บ static นี้ยังไม่มี authentication หรือเขียนข้อมูลเทศบาล
+
+ดู [summary contract](reference/public-summary-contract.md), [machine contract](reference/public-summary-contract.json), [terrain contract](reference/terrain-contract.md) และ [บันทึกข้อมูล](docs/data-update-20261019.md) Revision1.5ผ่านการตรวจข้อมูลและหน้าจอในเครื่องแล้ว การเผยแพร่จริงให้ตรวจ commit/build ของ GitHub Pages และ live-byte receipt ที่ส่งคู่ชุดรายงาน; commit444970aคือรุ่น1.4ก่อนรอบนี้ สถานะ terrain pending ใน catalog เดิมเป็นประวัติที่รักษา byteไว้ Consumer override เฉพาะหน่วยความจำเมื่อ metadata ภายนอกพร้อม ข้อความ revision1.3และเก่าด้านล่างเป็นประวัติ ไม่ใช่ผลรับรอง buildปัจจุบัน
+
+## พื้นฐานและประวัติการพัฒนา
 
 เว็บต้นแบบนี้นำข้อมูลจริงจากทุกโฟลเดอร์ที่ได้รับมาแยกเป็น 16 dataset และภาพรวม ให้เลือกขอบเขตเทศบาล หมู่บ้าน หรือเขตเลือกตั้ง แล้วดูรายการในพื้นที่ตามแนวทาง drilldown ของ Yolk ผู้ใช้อนุญาตให้เผยแพร่ต้นแบบที่ [montri-th/sila](https://github.com/montri-th/sila) แล้ว สถานะการเผยแพร่และ hash ของ build ให้ยึด release receipt ที่จัดทำพร้อมการส่งมอบ
 
@@ -41,7 +51,7 @@ Revision 1.3 ปรับ shell ให้ใกล้หน้า Officer ใน
 
 ใช้ LDS 0.9.7 คู่กับ CityChat Add-on 0.9.2 จริง: exact font และ logo animated เดิม เพิ่ม ConversationMotif ต้นฉบับที่อนุมัติบนคำแนะนำเริ่มใช้งาน พร้อม Material Symbols Rounded subset ที่รับไว้เฉพาะต้นแบบนี้ มี source commit/license/hash แยกจาก registry กลาง การมี asset หรือผลตรวจสีแบบ static ไม่ใช่ใบรับรอง conformance ทั้ง UI
 
-ธีมสว่างคงสี categorical ของข้อมูล แต่เพิ่มขอบกลางของรูปอาคาร จุด และเส้นประกอบ หมุดบ้านแสดงเป็นจุดต้นทางทุกจุดในขอบเขตที่เลือกโดยไม่รวมกลุ่ม ปรับขนาดจุดตามซูม คงพิกัดเดิมและสีข้อมูล พร้อมขอบกลางเพื่อให้อ่านบนพื้นหลังต่าง ๆ ได้ง่ายขึ้น จุดที่อยู่ใกล้กันหรือซ้อนกันเปิดตัวเลือกจาก geometry จริงได้ ภาพดาวเทียมหลักใช้ Google Hybrid tile URL เดียวกับ `CmScreen.tsx` ใน CityChat ตามคำสั่งเจ้าของงาน เรียกจาก Google โดยตรง ไม่คัดลอก API key หรือเก็บ raw tile Google เป็นชุดข้อมูลใน repo ไม่ยืนยันปีถ่าย ความละเอียด หรือสิทธิ์จากการเปิด URL ได้ ระดับ 20 ขยายภาพระดับ 19; ช่องทางนี้ต่างจาก Google Map Tiles API ทางการที่ใช้ key และ session token มีตัวเลือก “ภาพเก่า 2016/2017 · EOX” แยกไว้ ใช้ Sentinel-2 cloudless CC BY 4.0 เก็บเฉพาะพื้นที่ศิลา ความละเอียดประมาณ 10 ม. ขยายภาพระดับ 14 ได้ถึง 20 โดยไม่เพิ่มรายละเอียด ดู [สัญญาพื้นหลังดาวเทียม](reference/satellite-basemap-contract.md)
+ธีมสว่างคงสี categorical ของข้อมูล แต่เพิ่มขอบกลางของรูปอาคาร จุด และเส้นประกอบ หมุดบ้านแสดงเป็นจุดต้นทางทุกจุดในขอบเขตที่เลือกโดยไม่รวมกลุ่ม ปรับขนาดจุดตามซูม คงพิกัดเดิมและสีข้อมูล พร้อมขอบกลางเพื่อให้อ่านบนพื้นหลังต่าง ๆ ได้ง่ายขึ้น จุดที่อยู่ใกล้กันหรือซ้อนกันเปิดตัวเลือกจาก geometry จริงได้ ภาพดาวเทียมหลักใช้ Google Hybrid tile URL เดียวกับ `CmScreen.tsx` ใน CityChat ตามคำสั่งเจ้าของงาน เรียกจาก Google โดยตรง ไม่คัดลอก API key หรือเก็บ raw tile Google เป็นชุดข้อมูลใน repo ไม่ยืนยันปีถ่าย ความละเอียด หรือสิทธิ์จากการเปิด URL ได้ ระดับ 20–22 ขยายภาพระดับ 19; ช่องทางนี้ต่างจาก Google Map Tiles API ทางการที่ใช้ key และ session token มีตัวเลือก “ภาพเก่า 2016/2017 · EOX” แยกไว้ ใช้ Sentinel-2 cloudless CC BY 4.0 เก็บเฉพาะพื้นที่ศิลา ความละเอียดประมาณ 10 ม. ขยายภาพระดับ 14 ได้ถึง 22 โดยไม่เพิ่มรายละเอียด ดู [สัญญาพื้นหลังดาวเทียม](reference/satellite-basemap-contract.md)
 
 ให้น้องเริ่มต่อจาก [คู่มือย้ายเข้าระบบ CityChat](reference/platform-layout-handoff.md) และ machine contract คู่กันใน JSON: ใช้ CmMapLayout, breadcrumb, dataset dropdown, guard และ entitlement เดิม ข้อมูล/พฤติกรรมของต้นแบบนี้เป็นสิ่งส่งต่อ ไม่ต้องเปลี่ยน stack ของ platform ไปเป็น Leaflet
 
