@@ -110,7 +110,7 @@
   "per-parcel payment status for debtor-linked titles",
   "tax-map parcel codes"
  ],
- "houseNumberNotesRemoved": "house-number values with no digit (surveyor notes, including a name and visit outcomes) are dropped; bracketed notes about the household or the visit are removed; a point without a number shows its survey point number",
+ "houseNumberNotesRemoved": "house-number fields keep house numbers only: other text typed by surveyors is removed, and a point without a number shows its survey point number",
  "withheldPerPoint": [
   "some household-survey status values and some use values are published blank (null) per point, mixed with points that are blank in the source, so a blank does not reveal which value was withheld"
  ],
