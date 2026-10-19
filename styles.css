@@ -1397,3 +1397,27 @@ select {
     padding: 0 16px;
   }
 }
+
+/* Public municipal summaries: readable source meaning, no person-level controls. */
+.aggregate-view { min-width: 0; }
+.aggregate-facts .facts-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.aggregate-fact { min-width: 0; }
+.aggregate-fact h2 { font-size: 14px; line-height: 1.65; margin: 0; color: var(--secondary); font-family: "Bai Jamjuree", sans-serif; font-weight: 600; }
+.aggregate-fact strong { font-size: 23px; line-height: 1.5; overflow-wrap: anywhere; }
+.aggregate-fact strong .aggregate-unit { font-family: "Bai Jamjuree", sans-serif; font-size: 13px; font-weight: 400; display: inline; color: var(--secondary); white-space: normal; }
+.aggregate-fact p { margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: var(--secondary); overflow-wrap: anywhere; }
+.aggregate-fact .aggregate-state { color: var(--primary); font-weight: 600; }
+.aggregate-scope p { font-size: 13px; line-height: 1.7; }
+.aggregate-next li { margin: 0 0 12px; padding-left: 4px; line-height: 1.75; }
+.aggregate-next ol { padding-left: 24px; }
+.aggregate-packages .section-title { flex-wrap: wrap; }
+.aggregate-packages .document-card h3 { font-size: 15px; line-height: 1.6; }
+.aggregate-packages .document-card p, .aggregate-packages .document-meta { font-size: 13px; line-height: 1.7; }
+.aggregate-privacy { font-size: 13px; line-height: 1.75; }
+.aggregate-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.aggregate-links button { white-space: normal; min-height: 44px; text-align: left; }
+
+@media (max-width: 899px) {
+  body[data-public-aggregate="true"] .map-stage { height: 30dvh; min-height: 220px; max-height: 270px; }
+  body[data-public-aggregate="true"] .map-legend { bottom: 76px; }
+}

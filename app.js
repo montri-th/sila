@@ -1,6 +1,7 @@
-/* Sila internal Officer prototype. Actual source geometries; no production writes. */
+/* Sila public preview. Source GIS and approved municipal aggregates; no production writes. */
 (() => {
   "use strict";
+  const PublicAggregates = window.SilaPublicAggregates || {ids:[],icons:{},valid:()=>false,get:()=>null,entries:()=>[],render:()=>"",localized:v=>String(v ?? "")};
   const $ = (id) => document.getElementById(id);
   const esc = (s) =>
     String(s ?? "").replace(
@@ -34,6 +35,8 @@
     metadata: null,
     docs: null,
     tokens: null,
+    publicSummary: null,
+    publicSummaryStatus: "pending",
     cache: new Map(),
     inflight: new Map(),
     map: null,
@@ -130,6 +133,10 @@
     parcels: "yellow",
     flood: "teal",
     terrain: "slate",
+    tax: "slate",
+    business: "blue",
+    animals: "slate",
+    healthservices: "coral",
   };
   const groupLabels = {
     Land: ["ที่ดินและอาคาร", "Land & buildings"],
@@ -181,7 +188,14 @@
       "Display boundaries derived from source lines",
     ],
   };
+  Object.assign(hints, {
+    tax: ["สรุปทั้งเทศบาล · รอกระทบยอดประเมินกับใบเสร็จ", "Citywide summary · assessment and receipt reconciliation pending"],
+    business: ["ข้อมูลกิจการที่ได้รับ · ไม่ยืนยันใบอนุญาตปัจจุบัน", "Received business records · current permit status is unverified"],
+    animals: ["สรุปตามไฟล์สัตว์ · ไม่เผยเจ้าของหรือตำแหน่งบ้าน", "Animal-source summary · no owners or home locations"],
+    healthservices: ["ความพร้อมข้อมูลดูแลระยะยาว · ไม่มีรายการผู้ป่วย", "Long-term care data readiness · no patient records"],
+  });
   const statusLabels = {
+    municipal_public_summary: ["สรุประดับเทศบาล", "Municipality-wide summary"],
     ready_with_caveats: ["ข้อมูลต้นทาง", "Source data"],
     needs_reconciliation: ["รอสอบทาน", "To reconcile"],
     derived_display: ["ขอบเขตทดลอง", "Derived display"],
@@ -206,8 +220,11 @@
           sourceUrl: S.metadata?.sourceFolder,
         }
       : S.catalog.datasets.find((d) => d.id === id);
+  const publicAggregate = (id = S.dataset) => PublicAggregates.get(S.publicSummary, id);
+  const publicAggregateView = (tab) => PublicAggregates.render(S.publicSummary, S.dataset, { language: S.lang, tab, scopeLabel: scopeLabel() });
+  const datasetIcon = (id, size) => window.SilaIcons.dataset(PublicAggregates.icons[id] || id, { size });
   const label = (id) =>
-    labels[id] ? text(...labels[id]) : dataset(id)?.label || id;
+    labels[id] ? text(...labels[id]) : publicAggregate(id) ? PublicAggregates.localized(publicAggregate(id).label, S.lang) : dataset(id)?.label || id;
   const categoryColor = (id) =>
     S.tokens?.categoricalSeries.values.find((v) => v.name === colors[id])?.[
       S.theme
@@ -447,7 +464,7 @@
     });
     const controls = {"layers-open":"layers", back:"back", fit:"fit", theme:S.theme === "dark" ? "light" : "dark"};
     for (const [id,role] of Object.entries(controls)) { const el=$(id); el.innerHTML=icon(role,{size:20})+`<span>${el.textContent}</span>`; }
-    $("dataset-icon").innerHTML = window.SilaIcons.dataset(S.dataset,{size:28});
+    $("dataset-icon").innerHTML = datasetIcon(S.dataset,28);
   }
   function renderCatalog() {
     const q = $("dataset-search").value.trim().toLowerCase();
@@ -471,13 +488,17 @@
       if (!list.length) continue;
       html += `<h3 class="dataset-group-title">${esc(text(...(groupLabels[g] || [g, g])))}</h3>`;
       for (const d of list)
-        html += `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === S.dataset}"><span class="dataset-type-icon">${window.SilaIcons.dataset(d.id,{size:28})}</span><span><strong>${esc(label(d.id))}</strong><small>${esc(text(...(hints[d.id] || statusLabels[d.status] || ["ข้อมูลจากเทศบาล", "Municipal source data"])))}</small></span><span class="number">${num(d.count)}<small>${d.id === "overview" ? text("หมู่บ้าน", "villages") : d.id === "flood" ? text("จุดในเอกสาร", "document sites") : d.count == null ? text("รอข้อมูล", "pending") : text("รายการต้นทาง", "source rows")}</small></span></button>`;
+        html += `<button class="dataset-row" data-dataset="${esc(d.id)}" aria-current="${d.id === S.dataset}"><span class="dataset-type-icon">${datasetIcon(d.id,28)}</span><span><strong>${esc(label(d.id))}</strong><small>${esc(text(...(hints[d.id] || statusLabels[d.status] || ["ข้อมูลจากเทศบาล", "Municipal source data"])))}</small></span><span class="number">${num(d.count)}<small>${d.id === "overview" ? text("หมู่บ้าน", "villages") : d.id === "flood" ? text("จุดในเอกสาร", "document sites") : d.publicAggregate ? text("ไฟล์รอบใหม่", d.count === 1 ? "new source file" : "new source files") : d.count == null ? text("รอข้อมูล", "pending") : text("รายการต้นทาง", "source rows")}</small></span></button>`;
     }
     $("dataset-catalog").innerHTML =
       html ||
       `<p>${text("ไม่พบชุดข้อมูลที่ค้นหา", "No matching datasets")}</p>`;
   }
   function renderHeader() {
+    const aggregateMode = String(Boolean(publicAggregate()));
+    const aggregateModeChanged = document.body.dataset.publicAggregate !== aggregateMode;
+    document.body.dataset.publicAggregate = aggregateMode;
+    if (aggregateModeChanged && S.map) requestAnimationFrame(() => S.map.invalidateSize({pan:false}));
     applyLocale();
     $("dataset-title").textContent = label(S.dataset);
     window.SilaContextActions.render({
@@ -488,9 +509,10 @@
       scopeId: S.scope.id,
       scopeLabel: scopeLabel(),
       municipality: text("เทศบาลเมืองศิลา", "Sila Municipality"),
-      sourceDate: "2026-10-05",
+      sourceDate: publicAggregate() ? S.publicSummary.sourceReceivedAt : "2026-10-05",
     });
 
+    $("tab-list").textContent = publicAggregate() ? text("ความพร้อม", "Readiness") : text(...I18N.list);
     $("boundary-mode").value = S.boundary;
     $("place-eyebrow").textContent =
       S.scope.type === "municipality"
@@ -510,6 +532,11 @@
             "ตัวเลขและรายการด้านล่างใช้ขอบเขตนี้ ไม่เปลี่ยนตามการเลื่อนแผนที่",
             "Figures and records use this boundary, not the current map viewport",
           );
+    if (publicAggregate()) {
+      $("place-description").textContent = text("ดูยอดสรุปทั้งเทศบาล ขอบเขตแผนที่ที่เลือกเป็นเพียงบริบทและไม่เปลี่ยนยอด", "Inspect municipality-wide summaries. The selected map area is context and does not change these totals.");
+      const received = new Date(S.publicSummary.sourceReceivedAt + "T00:00:00Z");
+      if (Number.isFinite(received.getTime())) document.querySelector(".snapshot-label").textContent = received.toLocaleDateString(S.lang === "en" ? "en-GB" : "th-TH", {day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+    }
     const sep = `<span class="breadcrumb-separator" aria-hidden="true">${window.SilaIcons.icon("next",{size:16})}</span>`;
     const municipality = text("เทศบาลเมืองศิลา", "Sila Municipality");
     $("breadcrumbs").innerHTML = `${window.SilaIcons.icon("municipality",{size:20})}<span>${text("ประเทศไทย", "Thailand")}</span>${sep}<span>${text("ขอนแก่น", "Khon Kaen")}</span>${sep}${S.scope.type === "municipality" && !S.record ? `<strong aria-current="location">${esc(municipality)}</strong>` : `<button data-scope="sila">${esc(municipality)}</button>`}${S.scope.type !== "municipality" ? `${sep}${S.record ? `<button data-close-record>${esc(scopeLabel())}</button>` : `<strong aria-current="location">${esc(scopeLabel())}</strong>`}` : ""}${S.record ? `${sep}<strong aria-current="location">${esc(S.record.properties.label || S.record.properties.id)}</strong>` : ""}`;
@@ -529,7 +556,7 @@
           String(
             b.dataset.purpose === "flood"
               ? ["flood", "waterways"].includes(S.dataset)
-              : ["parcels", "buildings", "houses"].includes(S.dataset),
+              : ["tax", "parcels", "buildings", "houses"].includes(S.dataset),
           ),
         ),
       );
@@ -537,7 +564,9 @@
   function renderSummary() {
     const c = countFor(S.dataset);
     let items;
-    if (S.dataset === "overview")
+    if (publicAggregate())
+      items = [[dataset().count, text("ไฟล์ข้อมูลรอบใหม่", "New source files")], [null, text("ยอดย่อยตามขอบเขตแผนที่", "Allocation to map area")], [null, text("ข้อมูลรายบุคคลบนเว็บ", "Individual data on this site")]];
+    else if (S.dataset === "overview")
       items = [
         [
           S.scope.type === "municipality" ? boundaries().length : 1,
@@ -613,7 +642,7 @@
         ],
       ];
     $("summary-title").textContent = label(S.dataset);
-    $("summary-eyebrow").textContent = scopeLabel();
+    $("summary-eyebrow").textContent = publicAggregate() ? text("ข้อมูลสรุปทั้งเทศบาลเมืองศิลา", "Sila municipality-wide summary") : scopeLabel();
     $("summary-metrics").innerHTML = items
       .map(
         ([v, k]) =>
@@ -621,7 +650,7 @@
       )
       .join("");
     $("summary-note").textContent =
-      S.dataset === "overview"
+      publicAggregate() ? PublicAggregates.localized(publicAggregate().limitations, S.lang) : S.dataset === "overview"
         ? text(
             "นับรายการที่ตัดกับขอบเขตจากไฟล์ ไม่ใช่จำนวนครัวเรือนที่ยืนยันแล้ว",
             "Records intersecting the supplied boundary; not verified unique households",
@@ -651,11 +680,17 @@
       )
       .join("");
   }
+  function publicUpdateLinks(ids = PublicAggregates.ids) {
+    const available = ids.filter(id => publicAggregate(id));
+    if (!available.length) return S.publicSummaryStatus === "unavailable" ? notice(text("ข้อมูลสรุปรอบใหม่ยังเปิดไม่สำเร็จ", "New public summaries could not be loaded"), text("ชั้นแผนที่เดิมยังใช้ได้ ลองโหลดหน้าใหม่เพื่อเปิดข้อมูลสรุป โดยสถานะนี้ไม่ได้หมายความว่าไม่มีข้อมูลเทศบาล", "Existing map layers remain usable. Reload to retry the summaries; this state does not mean municipal data is absent.")) : "";
+    return `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลเพิ่มสำหรับงานเทศบาล", "New evidence for municipal work")}</h2><span>${text("สรุปทั้งเทศบาล", "Citywide summaries")}</span></div><div class="aggregate-links">${available.map(id => `<button class="mini-action" data-dataset="${esc(id)}">${datasetIcon(id,20)}<span>${esc(label(id))}</span></button>`).join("")}</div><p class="inline-note">${text("เริ่มจากยอดสรุปและความพร้อมต้นทาง ข้อมูลรายบุคคลใช้ผ่านช่องทางเจ้าหน้าที่ที่ได้รับสิทธิ", "Start with summary evidence and source readiness. Individual data belongs in the authorized Officer workflow.")}</p></section>`;
+  }
   function overviewContent() {
+    if (publicAggregate()) return publicAggregateView("overview");
     if (S.dataset === "flood") return floodContent();
-    if (S.dataset === "parcels") return parcelContent();
+    if (S.dataset === "parcels") return publicUpdateLinks(["tax"]) + parcelContent();
     if (S.dataset === "terrain") return terrainContent();
-    let html = "";
+    let html = ["overview", "buildings"].includes(S.dataset) ? publicUpdateLinks() : S.dataset === "health" ? publicUpdateLinks(["healthservices", "business", "animals"]) : "";
     if (S.boundary === "election")
       html += notice(
         text("ขอบเขตสำหรับแสดงผล", "Derived display boundary"),
@@ -787,6 +822,7 @@
     );
   }
   function recordsContent() {
+    if (publicAggregate()) return publicAggregateView("list");
     if (["flood", "terrain"].includes(S.dataset)) return overviewContent();
     if (
       [
@@ -842,6 +878,7 @@
     return `<label class="search-field list-search"><span class="sr-only">${text("ค้นหารายการ", "Search records")}</span><input type="search" id="record-search" placeholder="${text("ค้นหาชื่อ บ้านเลขที่ หรือหมู่บ้าน", "Search a name, house number or village")}" value="${esc(S.search)}"></label>`;
   }
   function sourcesContent() {
+    if (publicAggregate()) return publicAggregateView("source");
     const d = dataset();
     const sourceFolders =
       S.dataset === "overview"
@@ -1388,6 +1425,11 @@
     drawLegend();
   }
   function drawLegend() {
+    if (publicAggregate()) {
+      $("map-legend").innerHTML = `<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div><div class="legend-description">${text("แผนที่เป็นบริบท · ไม่ได้แจกแจงยอดสรุปตามพื้นที่", "Map context only · summary values are not spatially allocated")}</div>`;
+      $("map-context-text").textContent = scopeLabel() + " · " + text("ยอดสรุปใช้ทั้งเทศบาล", "summary covers the whole municipality");
+      return;
+    }
     if (
       S.dataset === "population" &&
       S.boundary === "village" &&
@@ -1524,6 +1566,7 @@
     if (push) syncURL();
   }
   function exportCSV() {
+    if (publicAggregate()) { toast(text("หน้านี้เผยเฉพาะข้อมูลสรุป ไม่มีรายการรายบุคคลให้ดาวน์โหลด", "This view contains public summaries only; no individual rows are downloadable.")); return; }
     const rows = currentFeatures().filter((f) =>
       JSON.stringify(f.properties)
         .toLowerCase()
@@ -1665,7 +1708,7 @@
       if (e.target.closest("[data-export]")) exportCSV();
       const purpose = e.target.closest("[data-purpose]");
       if (purpose)
-        setDataset(purpose.dataset.purpose === "flood" ? "flood" : "parcels");
+        setDataset(purpose.dataset.purpose === "flood" ? "flood" : publicAggregate("tax") ? "tax" : "parcels");
     });
     document.addEventListener("input", (e) => {
       if (e.target.id === "record-search") {
@@ -1776,12 +1819,20 @@
   }
   async function start() {
     try {
-      [S.catalog, S.metadata, S.docs, S.tokens] = await Promise.all([
+      [S.catalog, S.metadata, S.docs, S.tokens, S.publicSummary] = await Promise.all([
         fetchJSON("data/catalog.json"),
         fetchJSON("data/metadata.json"),
         fetchJSON("reference/document-catalog.json"),
         fetchJSON("reference/design-tokens.json"),
+        fetchJSON("data/municipal-summary.json").catch(() => null),
       ]);
+      if (PublicAggregates.valid(S.publicSummary)) {
+        S.catalog.datasets.push(...PublicAggregates.entries(S.publicSummary));
+        S.publicSummaryStatus = "ready";
+      } else {
+        S.publicSummary = null;
+        S.publicSummaryStatus = "unavailable";
+      }
       await Promise.all(
         [
           "data/municipality.geojson",
@@ -1811,6 +1862,9 @@
   window.SilaExplorer = {
     getState: () => ({
       dataset: S.dataset,
+      publicSummaryStatus: S.publicSummaryStatus,
+      publicAggregateScope: publicAggregate() ? "municipality" : null,
+      datasetCount: S.catalog?.datasets.length ?? 0,
       boundary: S.boundary,
       scope: { ...S.scope },
       record: S.record?.properties.id || null,

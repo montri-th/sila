@@ -1,0 +1,557 @@
+{
+  "schema": "sila-municipal-public-summary/1.0",
+  "asOf": "2026-10-19",
+  "sourceReceivedAt": "2026-10-19",
+  "exposure": "municipality_aggregate_only",
+  "recordDetailsAvailable": false,
+  "sourceRowExportAvailable": false,
+  "datasets": [
+    {
+      "id": "tax",
+      "label": {
+        "th": "ภาษีที่ดินและสิ่งปลูกสร้าง",
+        "en": "Land and building tax"
+      },
+      "scope": "municipality",
+      "metrics": [
+        {
+          "id": "source_files",
+          "value": 6,
+          "label": {
+            "th": "ไฟล์ภาษีที่ได้รับรอบใหม่",
+            "en": "New tax source files"
+          },
+          "unit": {
+            "th": "ไฟล์",
+            "en": "files"
+          },
+          "note": {
+            "th": "มีบัญชีประเมิน รับชำระ ลูกหนี้ ภ.ด.ส.7/8 และประกาศ",
+            "en": "Assessment, payment, debtor, PDS7/8 and notice sources received."
+          },
+          "sourceIds": [
+            "TAX-ASSESS-69",
+            "TAX-PAYMENT-69",
+            "TAX-DEBT-69",
+            "TAX-PDS7-69",
+            "TAX-PDS8-69",
+            "TAX-NOTICE-69"
+          ]
+        },
+        {
+          "id": "receipt_rows",
+          "value": 7741,
+          "label": {
+            "th": "รายการรับชำระในไฟล์",
+            "en": "Receipt rows in source"
+          },
+          "unit": {
+            "th": "รายการ",
+            "en": "rows"
+          },
+          "note": {
+            "th": "ไม่ซ้ำเลขใบเสร็จในไฟล์นี้ ยังต้องเชื่อมเลขประเมิน",
+            "en": "Receipt numbers are unique in this file; assessment allocation remains unverified."
+          },
+          "sourceIds": [
+            "TAX-PAYMENT-69"
+          ]
+        },
+        {
+          "id": "source_received_amount_thb",
+          "value": 23074139.17,
+          "label": {
+            "th": "ยอดรับตามไฟล์",
+            "en": "Amount recorded in payment file"
+          },
+          "unit": {
+            "th": "บาท",
+            "en": "THB"
+          },
+          "note": {
+            "th": "รับ 1 เม.ย.–30 ก.ย.2569 รวมภาษีหลายปีและส่วนเพิ่มที่ยังไม่แยก ไม่ใช่เงินเพิ่มจากโครงการ",
+            "en": "Receipts from 1 Apr–30 Sep 2026 include several tax years and unsplit charges. This is not project uplift."
+          },
+          "sourceIds": [
+            "TAX-PAYMENT-69"
+          ]
+        },
+        {
+          "id": "actual_uplift_thb",
+          "value": null,
+          "label": {
+            "th": "ภาษีเพิ่มที่ยืนยันแล้ว",
+            "en": "Verified additional tax"
+          },
+          "unit": {
+            "th": "บาท",
+            "en": "THB"
+          },
+          "note": {
+            "th": "ยังไม่มีผลแก้ประเมินที่รับรองและเชื่อมใบเดิม จึงยังคำนวณไม่ได้",
+            "en": "No approved corrected assessment linked to its effective baseline; not yet calculable."
+          },
+          "sourceIds": [
+            "TAX-ASSESS-69"
+          ]
+        },
+        {
+          "id": "pds7_land_starts",
+          "value": 39361,
+          "label": {
+            "th": "แถวเริ่มรายการที่ดินใน ภ.ด.ส.7",
+            "en": "Land record starts in PDS7"
+          },
+          "unit": {
+            "th": "แถว",
+            "en": "rows"
+          },
+          "note": {
+            "th": "เป็นหน่วยต้นทาง ยังไม่ใช่รายการสิทธิหรือบัญชีภาษีไม่ซ้ำ",
+            "en": "Source row grain; not deduplicated titles or effective bills."
+          },
+          "sourceIds": [
+            "TAX-PDS7-69"
+          ]
+        },
+        {
+          "id": "pds8_unit_groups",
+          "value": 3317,
+          "label": {
+            "th": "กลุ่มห้องชุดใน ภ.ด.ส.8",
+            "en": "Condominium unit groups in PDS8"
+          },
+          "unit": {
+            "th": "กลุ่ม",
+            "en": "groups"
+          },
+          "note": {
+            "th": "แยกองค์ประกอบ รวม และแถวภาษีแล้ว ไม่บวกห้าแถวซ้ำเป็นห้าห้อง",
+            "en": "Component, total and tax rows are separated; five rows do not count as five units."
+          },
+          "sourceIds": [
+            "TAX-PDS8-69"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "TAX-ASSESS-69",
+          "label": {
+            "th": "บัญชีเลขประเมิน",
+            "en": "Assessment register"
+          },
+          "periodLabel": {
+            "th": "ปีภาษี 2569",
+            "en": "Tax year BE2569"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PAYMENT-69",
+          "label": {
+            "th": "บัญชีรับชำระ",
+            "en": "Payment register"
+          },
+          "periodLabel": {
+            "th": "1 เม.ย.–30 ก.ย.2569; ปีภาษีหลายปี",
+            "en": "1 Apr–30 Sep 2026; receipts labelled tax years BE2566–2569"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-DEBT-69",
+          "label": {
+            "th": "บัญชีลูกหนี้",
+            "en": "Debtor register"
+          },
+          "periodLabel": {
+            "th": "ปี 2569; วันตัดยอดยังต้องรับรอง",
+            "en": "File labelled BE2569; accounting cutoff requires confirmation"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS7-69",
+          "label": {
+            "th": "ภ.ด.ส.7 ที่ดินและอาคาร",
+            "en": "Land and building assessment form"
+          },
+          "periodLabel": {
+            "th": "ไฟล์รับ 19 ต.ค.2569",
+            "en": "Received 19 Oct 2026; table tax year not printed"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-PDS8-69",
+          "label": {
+            "th": "ภ.ด.ส.8 ห้องชุด",
+            "en": "Condominium assessment form"
+          },
+          "periodLabel": {
+            "th": "ไฟล์รับ 19 ต.ค.2569",
+            "en": "Received 19 Oct 2026; table tax year not printed"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        },
+        {
+          "id": "TAX-NOTICE-69",
+          "label": {
+            "th": "ประกาศเทศบาล",
+            "en": "Municipal notice"
+          },
+          "periodLabel": {
+            "th": "ปี 2569",
+            "en": "File labelled BE2569"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        }
+      ],
+      "limitations": {
+        "th": "ข้อมูลสรุปทั้งเทศบาล ไม่ได้แจกแจงตามพื้นที่ที่เลือกบนแผนที่ และไม่ใช่อัตราจัดเก็บภาษี",
+        "en": "Municipality-wide summary; not allocated to the selected map area and not a collection rate."
+      },
+      "nextSteps": [
+        {
+          "th": "ตรวจใบที่ยกเลิก เลขประเมินซ้ำ และกระทบยอดใบเสร็จก่อนคำนวณยอดค้าง",
+          "en": "Review canceled and duplicated assessments, then reconcile receipt allocations."
+        },
+        {
+          "th": "เจ้าหน้าที่ใช้ชุดจำกัดสิทธิเชื่อมทรัพย์กับใบประเมิน",
+          "en": "Use the restricted Officer package to link assets to assessments."
+        }
+      ],
+      "privacy": {
+        "th": "ไม่เผยรายชื่อ เลขสิทธิ เลขใบประเมิน หรือยอดภาษีรายบุคคล",
+        "en": "No names, title numbers, assessment IDs or individual tax amounts exposed."
+      }
+    },
+    {
+      "id": "business",
+      "label": {
+        "th": "กิจการและใบอนุญาต",
+        "en": "Businesses and permits"
+      },
+      "scope": "municipality",
+      "metrics": [
+        {
+          "id": "source_files",
+          "value": 1,
+          "label": {
+            "th": "ไฟล์ต้นทางรอบใหม่",
+            "en": "New source files"
+          },
+          "unit": {
+            "th": "ไฟล์",
+            "en": "files"
+          },
+          "note": {
+            "th": "ใช้เฉพาะตารางกิจการที่ได้รับ",
+            "en": "Uses the received business table only."
+          },
+          "sourceIds": [
+            "HEALTH-BUSINESS"
+          ]
+        },
+        {
+          "id": "source_business_rows",
+          "value": 962,
+          "label": {
+            "th": "รายการกิจการในตาราง",
+            "en": "Source business rows"
+          },
+          "unit": {
+            "th": "แถว",
+            "en": "rows"
+          },
+          "note": {
+            "th": "ไม่ใช่จำนวนกิจการไม่ซ้ำหรือใบอนุญาตที่ยังมีผล",
+            "en": "Not a deduplicated establishment count or active permit count."
+          },
+          "sourceIds": [
+            "HEALTH-BUSINESS"
+          ]
+        },
+        {
+          "id": "category_groups",
+          "value": 13,
+          "label": {
+            "th": "กลุ่มกิจการตามรหัสต้นทาง",
+            "en": "Source business groups"
+          },
+          "unit": {
+            "th": "กลุ่ม",
+            "en": "groups"
+          },
+          "note": {
+            "th": "ปรับคำเรียกต่างกันด้วยรหัสกลุ่มเดิม ไม่อนุมานประเภทภาษี",
+            "en": "Normalizes label variants by source group code; no tax-use inference."
+          },
+          "sourceIds": [
+            "HEALTH-BUSINESS"
+          ]
+        },
+        {
+          "id": "repeated_business_address_keys",
+          "value": 13,
+          "label": {
+            "th": "แถวซ้ำคีย์ชื่อกิจการและที่อยู่",
+            "en": "Repeated name-address keys"
+          },
+          "unit": {
+            "th": "แถว",
+            "en": "rows"
+          },
+          "note": {
+            "th": "เป็นคิวทวน ไม่ลบรายการอัตโนมัติ",
+            "en": "Review candidates; no automatic record deletion."
+          },
+          "sourceIds": [
+            "HEALTH-BUSINESS"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "HEALTH-BUSINESS",
+          "label": {
+            "th": "ทะเบียนกิจการสาธารณสุข",
+            "en": "Public-health business register"
+          },
+          "periodLabel": {
+            "th": "ชื่อไฟล์ระบุ 2570; ปีและสถานะใบอนุญาตยังไม่รับรอง",
+            "en": "Filename indicates BE2570; permit period and validity not certified"
+          },
+          "status": "validated-aggregate",
+          "publicDownload": false
+        }
+      ],
+      "limitations": {
+        "th": "สรุปทั้งเทศบาลตามตารางที่ได้รับ ยังไม่รับรองความครบของกิจการหรือใบอนุญาตปัจจุบัน",
+        "en": "Municipality-wide received-source summary; completeness and active permit status are not certified."
+      },
+      "nextSteps": [
+        {
+          "th": "ตรวจคีย์กิจการและสถานะใบอนุญาตกับทะเบียนงานจริงก่อนแจ้งเตือน",
+          "en": "Resolve establishment identities and permit status with the operational register before reminders."
+        },
+        {
+          "th": "ใช้กิจการเป็นหลักฐานประกอบคิวสำรวจ โดยตรวจการใช้พื้นที่จริงอีกครั้ง",
+          "en": "Use business evidence to support inspection planning, then verify actual property use."
+        }
+      ],
+      "privacy": {
+        "th": "เผยเฉพาะยอดสรุป ไม่เผยชื่อกิจการ เจ้าของ ที่อยู่ โทรศัพท์ หรือพิกัด",
+        "en": "Only aggregate counts; no establishment names, owners, addresses, phones or coordinates."
+      }
+    },
+    {
+      "id": "animals",
+      "label": {
+        "th": "ข้อมูลสัตว์และการให้บริการ",
+        "en": "Animals and municipal services"
+      },
+      "scope": "municipality",
+      "metrics": [
+        {
+          "id": "source_files",
+          "value": 1,
+          "label": {
+            "th": "ไฟล์ต้นทางรอบใหม่",
+            "en": "New source files"
+          },
+          "unit": {
+            "th": "ไฟล์",
+            "en": "files"
+          },
+          "note": {
+            "th": "มี 33 แผ่นงาน รวมรายละเอียด 28 หมู่บ้านและสรุปต่างรอบ",
+            "en": "Contains 33 sheets: 28 village detail sheets and summaries from different rounds."
+          },
+          "sourceIds": [
+            "HEALTH-ANIMALS"
+          ]
+        },
+        {
+          "id": "detail_dogs",
+          "value": 3501,
+          "label": {
+            "th": "สุนัขตามแผ่นรายละเอียด",
+            "en": "Dogs in detail sheets"
+          },
+          "unit": {
+            "th": "ตัว",
+            "en": "animals"
+          },
+          "note": {
+            "th": "เป็นผลรวมช่องตัวเลขในรายละเอียด ยังไม่เลือกเป็นยอดปัจจุบันที่รับรอง",
+            "en": "Sum of numeric detail cells; not yet a certified current total."
+          },
+          "sourceIds": [
+            "HEALTH-ANIMALS"
+          ]
+        },
+        {
+          "id": "detail_cats",
+          "value": 1872,
+          "label": {
+            "th": "แมวตามแผ่นรายละเอียด",
+            "en": "Cats in detail sheets"
+          },
+          "unit": {
+            "th": "ตัว",
+            "en": "animals"
+          },
+          "note": {
+            "th": "รายละเอียด 1,872 ต่างจากสรุปรอบ 2 ที่ 1,869 อยู่ 3 ตัว ต้องทวน",
+            "en": "Detail total 1,872 differs from round-2 summary 1,869 by three; reconciliation remains."
+          },
+          "sourceIds": [
+            "HEALTH-ANIMALS"
+          ]
+        },
+        {
+          "id": "vaccination_coverage",
+          "value": null,
+          "label": {
+            "th": "ความครอบคลุมวัคซีนที่ยืนยันแล้ว",
+            "en": "Verified vaccination coverage"
+          },
+          "unit": {
+            "th": "%",
+            "en": "%"
+          },
+          "note": {
+            "th": "ยังต้องรับรองรอบสำรวจ ตัวหาร และรายการซ้ำก่อนคำนวณ",
+            "en": "Survey round, denominator and duplicates require reconciliation before calculation."
+          },
+          "sourceIds": [
+            "HEALTH-ANIMALS"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "HEALTH-ANIMALS",
+          "label": {
+            "th": "ข้อมูลสัตว์และวัคซีน 2569",
+            "en": "Animal and vaccination workbook"
+          },
+          "periodLabel": {
+            "th": "ปี 2569; มีรายละเอียดและสรุปรอบ 1/2 ห้ามรวมข้ามรอบ",
+            "en": "BE2569; detail and round1/2 summaries must not be added"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        }
+      ],
+      "limitations": {
+        "th": "ข้อมูลทั้งเทศบาลจากหลายแผ่นงานและหลายรอบ ยังไม่แยกยอดตามขอบเขตที่เลือก และไม่ใช้แทนความเสี่ยงโรค",
+        "en": "Municipality-wide data from several sheets and rounds; not allocated to selected map areas and not a disease-risk estimate."
+      },
+      "nextSteps": [
+        {
+          "th": "ให้เจ้าของข้อมูลเลือก snapshot หลักและทวนยอดสัตว์ก่อนจัดรอบบริการ",
+          "en": "Have the data owner select the authoritative snapshot and reconcile counts before service planning."
+        },
+        {
+          "th": "แยกสัตว์มีเจ้าของ พื้นที่สาธารณะ และรอบสำรวจ ไม่บวกยอดซ้ำ",
+          "en": "Keep owned animals, public-area animals and survey rounds separate."
+        }
+      ],
+      "privacy": {
+        "th": "ไม่เผยข้อมูลเจ้าของสัตว์ บ้านเลขที่ เลขบุคคล หรือพิกัดบ้าน",
+        "en": "No animal-owner details, house numbers, personal IDs or household coordinates."
+      }
+    },
+    {
+      "id": "healthservices",
+      "label": {
+        "th": "ความพร้อมข้อมูลดูแลระยะยาว",
+        "en": "Long-term care data readiness"
+      },
+      "scope": "municipality",
+      "metrics": [
+        {
+          "id": "source_files",
+          "value": 3,
+          "label": {
+            "th": "ไฟล์ข้อมูลดูแลระยะยาวที่ได้รับ",
+            "en": "Received long-term care files"
+          },
+          "unit": {
+            "th": "ไฟล์",
+            "en": "files"
+          },
+          "note": {
+            "th": "รวม 7 แผ่นงาน ไม่แสดงจำนวนหรือภาวะสุขภาพรายบุคคล",
+            "en": "Seven sheets in total; no individual counts or health conditions disclosed."
+          },
+          "sourceIds": [
+            "HEALTH-LTC"
+          ]
+        },
+        {
+          "id": "individual_care_records",
+          "value": null,
+          "label": {
+            "th": "ข้อมูลผู้รับการดูแลรายบุคคล",
+            "en": "Individual care records"
+          },
+          "unit": {
+            "th": "รายการ",
+            "en": "records"
+          },
+          "note": {
+            "th": "แสดงเฉพาะความพร้อมของชุดข้อมูล งานรายบุคคลต้องใช้สิทธิด้านสุขภาพ",
+            "en": "Only dataset readiness is shown. Individual workflows require health-role authorization."
+          },
+          "sourceIds": [
+            "HEALTH-LTC"
+          ],
+          "state": "restricted"
+        }
+      ],
+      "sources": [
+        {
+          "id": "HEALTH-LTC",
+          "label": {
+            "th": "ชุดข้อมูลดูแลระยะยาวจากหน่วยบริการ 3 แห่ง",
+            "en": "Long-term care files from three service units"
+          },
+          "periodLabel": {
+            "th": "ชื่อไฟล์ปี 2570 รอบ 1; บางหัวตารางมีทั้ง 2569 และ 2570 รอรับรอง cohort",
+            "en": "Filenames indicate BE2570 round1; some title zones include BE2569 and2570; cohort confirmation pending"
+          },
+          "status": "content-inspected",
+          "publicDownload": false
+        }
+      ],
+      "limitations": {
+        "th": "มุมมองนี้เป็นบัญชีความพร้อมของข้อมูล ไม่แสดงผู้รับบริการหรือภาระงานสุขภาพรายพื้นที่",
+        "en": "Dataset inventory only; no service-recipient records or geographic health caseload."
+      },
+      "nextSteps": [
+        {
+          "th": "รับรองรอบข้อมูลและกำหนดสิทธิผู้ดูแลก่อนเชื่อมระบบงาน",
+          "en": "Confirm cohort periods and health-role permissions before operational integration."
+        },
+        {
+          "th": "จัดระบบติดตามการเยี่ยมและนัดหมายในช่องทางเจ้าหน้าที่ที่ได้รับสิทธิ",
+          "en": "Plan visit and appointment tracking within the authorized Officer workflow."
+        }
+      ],
+      "privacy": {
+        "th": "ไม่เชื่อมข้อมูลสุขภาพรายบุคคลเข้าคิวภาษีหรือเผยเป็นหมุดบนเว็บ",
+        "en": "Individual health records are not linked to tax queues or published as map points."
+      }
+    }
+  ]
+}

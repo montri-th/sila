@@ -1,0 +1,556 @@
+{
+  "schemaVersion": "sila-browser-review-1.4",
+  "revision": "1.4",
+  "reviewedAtUtc": "2026-10-19T08:18:48.681187+00:00",
+  "status": "passed_with_bounded_coverage",
+  "releaseState": "local_candidate_not_published",
+  "scope": "Actual local Chrome rendering and interactions; not full accessibility, satellite licensing, native mobile performance or CityChat platform integration certification.",
+  "sourcePins": {
+    "lds": "v0.9.7-owner.1 / color-srgb-10",
+    "citychatAddon": "0.9.2"
+  },
+  "approvedPublicSummary": {
+    "path": "data/municipal-summary.json",
+    "bytes": 22985,
+    "sha256": "616f6c8bd97379684c91bd8d92e55d78fa694e3fa678f39aed3870b11ba2221d"
+  },
+  "reviewedStates": [
+    {
+      "dataset": "tax",
+      "locale": "th",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "tax-th-dark-narrow-01.jpg",
+          "sha256": "b89b7012ce2e32bfb934ee4efca7e0ccd6e4b51e295bbb1274e00368bf2c12b6"
+        },
+        {
+          "file": "tax-th-dark-narrow-02.jpg",
+          "sha256": "3bf06806a5043fbaf03e90f50e053158393e7f1b7e8f75318a8a95bf261f5980"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "tax",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "tax-en-light-narrow.jpg",
+          "sha256": "6a33eec3aaf7ed2acdba4500cc3470ca99b0516931a3499774d78e51db3ebd83"
+        },
+        {
+          "file": "tax-en-light-sources-narrow-final.jpg",
+          "sha256": "a05acf23247a908b7a037e54809ac1a3cc635e0b6cec4401957848d5987247c3"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "business",
+      "locale": "th",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "business-th-dark-narrow-final.jpg",
+          "sha256": "f0e1c033b3f73d2b9243be7d2178bdc9ff4460ff1fbbfeff3f5fcacc7296da43"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "animals",
+      "locale": "th",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "animals-th-dark-narrow-final.jpg",
+          "sha256": "3a73cac66d45c9a9913b27d03d61629e2e8916ac4be99a4a109deed51f4743a3"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "healthservices",
+      "locale": "th",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "healthservices-th-dark-narrow-final.jpg",
+          "sha256": "7eb24a48b816549228c8227c48242a3bb0bc7c0ad260eb86505814ad6ef7ecff"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "business",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "business-en-light-narrow-final.jpg",
+          "sha256": "4720c894940e0189aa9796324717643ed0b10ad0f7810052c191e43443f327c4"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "animals",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "animals-en-light-narrow-final.jpg",
+          "sha256": "1398015884d14de7daed47e248797d71e60923f8c00171b0f48293e1652dd135"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "healthservices",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "healthservices-en-light-narrow-final.jpg",
+          "sha256": "7a5f91c7edfdedaed3752ef1ae9d810ec8af9f8cff2ba068cc1949a5c2ba21c6"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "tax",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        1440,
+        900
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "tax-en-dark-desktop-final.jpg",
+          "sha256": "20dcd1f93c0e21702e171e3eaf16ee8691d2e69a520eeb98bf34d29636b1b8e2"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "business",
+      "locale": "th",
+      "theme": "light",
+      "viewport": [
+        1440,
+        900
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "business-th-light-desktop-final.jpg",
+          "sha256": "2ab1bf18d2df9e8f204efe938d7e8034452f9e1002abe729285027844a3a1894"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "animals",
+      "locale": "th",
+      "theme": "light",
+      "viewport": [
+        1440,
+        900
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "animals-th-light-desktop-final.jpg",
+          "sha256": "02f9e080d2d5d4a4dd074d106126fb6713845d0b8da28f93694596af6a4e47f0"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    },
+    {
+      "dataset": "healthservices",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        1440,
+        900
+      ],
+      "basemap": "none",
+      "evidence": [
+        {
+          "file": "healthservices-en-dark-desktop-final.jpg",
+          "sha256": "970a293a5a9433230ae6a6a9aff22e0ef13a6ae87e746f1ac9daba303e08e543"
+        }
+      ],
+      "checks": [
+        "actual Thai/English text visually reviewed",
+        "no squeezed or overlapping headings or metric text",
+        "document width contained in viewport",
+        "municipality-wide meaning visible",
+        "unknown/withheld not presented as zero",
+        "no individual row or raw source download"
+      ]
+    }
+  ],
+  "browserInteractions": [
+    {
+      "check": "new catalog count",
+      "observed": "20 datasets plus overview; new badges count source files, not individual records"
+    },
+    {
+      "check": "village scope persistence",
+      "observed": "Changing healthservices to tax retained v26 and the observed Leaflet pane transform"
+    },
+    {
+      "check": "municipal aggregate scope invariance",
+      "observed": "Tax metric strings remained identical when selected map scope changed from village26 to municipality"
+    },
+    {
+      "check": "original house rendering",
+      "observed": "v26 retained 2240 in-scope source points; original full source count28783 and no cluster badges"
+    },
+    {
+      "check": "original default buildings",
+      "observed": "URL without dataset selected buildings; source38849, mapped38847, municipal38794.",
+      "insideMunicipalCount": 38794
+    },
+    {
+      "check": "existing health facilities",
+      "observed": "4 existing point features retained; new healthservices view separate"
+    },
+    {
+      "check": "tax source tab",
+      "observed": "All6 bilingual source periods rendered; no raw source or per-row links"
+    },
+    {
+      "check": "console",
+      "observed": "No warning/error messages returned for final QA tab"
+    }
+  ],
+  "automatedChecks": {
+    "javascriptSyntax": [
+      "app.js",
+      "public-aggregate.js",
+      "context-actions.js"
+    ],
+    "publicAggregate": {
+      "status": "passed",
+      "viewLanguageTabCombinations": 24,
+      "originalGISDatasets": 16,
+      "additionalMunicipalViews": 4,
+      "unknownGainIsNull": true,
+      "zeroUnknownWithheldDistinct": true,
+      "individualSourceExport": false,
+      "rawLinkageKeysExcluded": true
+    },
+    "housePointSourceFixtures": {
+      "checks": 31,
+      "status": "passed",
+      "sourceRecords": 28783,
+      "aggregationEnabled": false,
+      "scope": "source coordinate/count preservation and Canvas integration test doubles"
+    },
+    "mapPickFixtures": {
+      "checks": 24,
+      "status": "passed",
+      "scope": "source geometry hole/edge/overlap and pixel-distance fixtures"
+    },
+    "originalTrackedDataByteParity": {
+      "count": 19,
+      "status": "passed",
+      "referenceCommit": "928a42859776730cbd4503975b9aeeb693a98cfe",
+      "files": [
+        {
+          "path": "data/buildings.geojson",
+          "bytes": 27674202,
+          "sha256": "a20aa69a9b433c33778a3ffc72ae553ccdc9f5539fbba4e78ffb63189796ed6c",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/catalog.json",
+          "bytes": 69061,
+          "sha256": "56776a0644bd41369860e7ac01a0c2dfd1ac64609b16cd948084c0c03d0f302f",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/cctv.geojson",
+          "bytes": 21188,
+          "sha256": "a16d185a82c7ef9b0d1def0252ff2413181393c2e5c017493216aedf3ca0ccb6",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/data-validation.json",
+          "bytes": 2401,
+          "sha256": "dabdce71e87bdb5f326890182a5b37ecffd99331e2543a21609841412a694147",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/education.geojson",
+          "bytes": 10198,
+          "sha256": "b55320a3c5be68b2e3f9aafef4e84f600bff1067d6d123515ae61c9e3651c29d",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/election-source-lines.geojson",
+          "bytes": 46540,
+          "sha256": "34bf6e67002936bb3df89eeedb696d2b12280660d58cd4be7e1232e2c7c84d6d",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/election.geojson",
+          "bytes": 46671,
+          "sha256": "0385da460254317568748347c3d7a20931a1bc21262245085ec82ffd76a583d2",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/flood-evidence.json",
+          "bytes": 23147,
+          "sha256": "96472738d7f28937f74bc4f688d98ede518402f523757cff51964d08a9120913",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/health.geojson",
+          "bytes": 2133,
+          "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/houses.geojson",
+          "bytes": 13323656,
+          "sha256": "cb51d5fbadfe517ce122d966addf94be1fa42f7043e118f0a07ea82ce9b43d49",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/metadata.json",
+          "bytes": 34190,
+          "sha256": "6471c79437c8f1557cf225a77de9384a62f8c109e8dbb5745335682fa56393d9",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/municipality.geojson",
+          "bytes": 36585,
+          "sha256": "87cb4aef0cb14a38bec7d7a380adaadffb4b50c2f179bd3100590f492507f88a",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/parcels.geojson",
+          "bytes": 30883759,
+          "sha256": "5befe44c02c6ba8a2b70ad05e9a2886ff8b7380a62151eeea1b2632ff230508c",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/publicfacilities.geojson",
+          "bytes": 88645,
+          "sha256": "d9d05ca1d0ee3716d6bb6e8b36cc50e363046b9c3a73f5bf4aa9aa5c6b761602",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/religion.geojson",
+          "bytes": 11526,
+          "sha256": "f5926d21e349161960abbe46a7fda0469ec46f4ae6b69f5758874b3d586e0eed",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/roads.geojson",
+          "bytes": 608961,
+          "sha256": "764c9486f8dbbefea56a505be37112c8f7abd301ae604d9d72062716f08b87d8",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/source-manifest.json",
+          "bytes": 48576,
+          "sha256": "de9a61a41bae0d76e61cf18edd442102d1f98b0acf5f99117659b35a16fb6e78",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/villages.geojson",
+          "bytes": 164944,
+          "sha256": "1097e6a528b3063c42c3f0c30e5c83a89b040652ea9a1dda6f44fe7ccf2ffbfe",
+          "unchangedFromHead": true
+        },
+        {
+          "path": "data/waterways.geojson",
+          "bytes": 416511,
+          "sha256": "9948c44d74b63935d4519f3ea51a337773160af1270d73c5902d166c44195e18",
+          "unchangedFromHead": true
+        }
+      ]
+    },
+    "ldsStatic": {
+      "status": "PASS",
+      "files": [
+        "app.js",
+        "public-aggregate.js",
+        "styles.css"
+      ],
+      "coverage": "registered literal-colors, prohibited-alias and governed numeric-state checks only",
+      "fullConformance": false,
+      "problems": []
+    }
+  },
+  "frozenRuntime": [
+    {
+      "path": "app.js",
+      "bytes": 99148,
+      "sha256": "4cace8652fba286e5b60ead0fc7479dd41e4e3ffe13acfa3229c260878532b7b"
+    },
+    {
+      "path": "public-aggregate.js",
+      "bytes": 8650,
+      "sha256": "7ec6248e75b632f8b42d59e2804cc27fe4913f6c700babb1467d7ceee1deb761"
+    },
+    {
+      "path": "context-actions.js",
+      "bytes": 22959,
+      "sha256": "4dba28a2fb1615fa7f71a06e95e9209ac42ca03cf4affb1728a5fc5370e37609"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 27064,
+      "sha256": "a576ae09898683b3ae45e04a36143a61dd51350b0f3145c9f8c155622317605e"
+    },
+    {
+      "path": "index.html",
+      "bytes": 16219,
+      "sha256": "761e1bd595000eb4563354cfd4bec256e01b037353d052c5ffb70c730e059d69"
+    },
+    {
+      "path": "server.py",
+      "bytes": 2230,
+      "sha256": "b7abd7c78a60c7f7271cb1eb9bd4f6bd9e095b50822ef49546d720c85e102272"
+    },
+    {
+      "path": "data/municipal-summary.json",
+      "bytes": 22985,
+      "sha256": "616f6c8bd97379684c91bd8d92e55d78fa694e3fa678f39aed3870b11ba2221d"
+    }
+  ],
+  "evidenceArchive": "Local project review archive; screenshots are not added to the public website.",
+  "knownLimits": [
+    "Map basemap was none for this aggregate update; provider/tile zoom behavior was not newly certified.",
+    "Narrow English business/animal screenshots precede a singular noun-only copy correction; numbers and layout geometry are unchanged.",
+    "Keyboard, native touch, exhaustive contrast ratios, all device sizes and optional-file network failure recovery were not exhaustively browser tested.",
+    "No production authentication or municipal write workflow is connected.",
+    "No public deployment has been performed for revision1.4."
+  ]
+}

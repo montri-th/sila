@@ -1,13 +1,18 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "1.3"
-updated_on: "2026-10-06"
+artifact_revision: "1.4"
+updated_on: "2026-10-19"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
 source_received_on: "2026-10-05"
 source_folder_count: 14
 source_component_count: 251
 catalog_dataset_count: 16
+additional_municipal_summary_views: 4
+runtime_dataset_count: 20
+additional_source_received_on: "2026-10-19"
+release_state: local_review_pending
+published_revision_before_update: "1.3"
 additional_view: area_overview
 release_mode: owner_authorized_static_prototype
 publish_repository: montri-th/sila
@@ -20,6 +25,15 @@ municipal_writes: false
 ---
 
 # ศิลา · CityChat CityMETER สำหรับเจ้าหน้าที่
+
+
+## เตรียมปรับข้อมูลรอบ 19 ตุลาคม 2569 · ยังไม่เผยแพร่
+
+เพิ่มมุมมองสรุปภาษีที่ดินและสิ่งปลูกสร้าง กิจการและใบอนุญาต ข้อมูลสัตว์ และความพร้อมข้อมูลดูแลระยะยาว แยกจาก GIS เดิม 16 ชุด เมื่อไฟล์สรุปที่ตรวจแล้วพร้อม เมนูรวมเป็น 20 ชุดพร้อมภาพรวม โดยเริ่มต้นที่รูปอาคารและคงจุดสถานพยาบาลเดิม 4 จุดไว้
+
+มุมมองใหม่เป็นยอดระดับเทศบาล ไม่เปลี่ยนตามหมู่บ้าน/เขตเลือกตั้งที่เลือกบนแผนที่ และไม่มีรายชื่อ เลขสิทธิ เลขประเมิน รายการลูกหนี้ ผู้ป่วย พิกัดรายบุคคล หรือการดาวน์โหลด raw source ค่าที่ยังไม่ยืนยันแยกจากศูนย์ที่วัดได้ ยอดรับในไฟล์อาจรวมภาษีหลายปีและส่วนเพิ่ม จึงไม่เรียกว่าเงินเก็บเพิ่มจากโครงการหรืออัตราจัดเก็บ
+
+ดู [สัญญาข้อมูลสรุป](reference/public-summary-contract.md) และ [machine contract](reference/public-summary-contract.json) การเผยแพร่รอบใหม่ยังรอ root ตรวจ sanitized payload และ QA; revision 1.3 ด้านล่างเป็นประวัติรุ่นเผยแพร่เดิม ไม่ใช่ผลตรวจ build รอบนี้
 
 เว็บต้นแบบนี้นำข้อมูลจริงจากทุกโฟลเดอร์ที่ได้รับมาแยกเป็น 16 dataset และภาพรวม ให้เลือกขอบเขตเทศบาล หมู่บ้าน หรือเขตเลือกตั้ง แล้วดูรายการในพื้นที่ตามแนวทาง drilldown ของ Yolk ผู้ใช้อนุญาตให้เผยแพร่ต้นแบบที่ [montri-th/sila](https://github.com/montri-th/sila) แล้ว สถานะการเผยแพร่และ hash ของ build ให้ยึด release receipt ที่จัดทำพร้อมการส่งมอบ
 
