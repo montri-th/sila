@@ -703,7 +703,9 @@
             : (countFor(metric, { type: S.boundary, id: b.id }) ?? -1) -
               (countFor(metric, { type: S.boundary, id: a.id }) ?? -1),
         );
-      html += `<section class="panel-section"><div class="section-title"><h2>${text("ดูทีละพื้นที่", "Look at one area")}</h2><span>${text("กดชื่อเพื่อซูมเข้า", "select a name to zoom in")}</span></div><div class="area-list">${areaRows(sort, metric)}</div></section>`;
+      html += S.boundary === "municipality"
+        ? `<section class="panel-section"><div class="section-title"><h2>${text("ดูทีละหมู่บ้าน", "Look village by village")}</h2></div><p>${text("แบ่งแผนที่และตัวเลขเป็น 28 หมู่บ้าน แล้วกดหมู่บ้านที่ต้องการ", "Split the map and figures into 28 villages, then choose one")}</p><button type="button" class="more-button" data-boundary-switch="village">${text("แบ่งดูทีละหมู่บ้าน", "Show by village")}</button></section>`
+        : `<section class="panel-section"><div class="section-title"><h2>${text("ดูทีละพื้นที่", "Look at one area")}</h2><span>${text("กดชื่อเพื่อซูมเข้า", "select a name to zoom in")}</span></div><div class="area-list">${areaRows(sort, metric)}</div></section>`;
     } else {
       const place = scopeData();
       html += `<section class="panel-section"><div class="section-title"><h2>${text("ข้อมูลพื้นที่นี้", "About this area")}</h2></div><div class="facts-grid">${fact(populationFor(), text("ประชากร", "Population"), text("ตัวเลขปี 2569", "2026 figure"))}${fact(place.areaKm2, text("ขนาดพื้นที่โดยประมาณ", "Approximate size"), text("ตารางกิโลเมตร วัดจากแผนที่", "km², measured from the map"), 2)}</div><p class="inline-note">${text("เปลี่ยนงานหรือชุดข้อมูลได้ โดยยังอยู่ในพื้นที่นี้", "You can switch work or data and stay in this area")}</p></section>`;
@@ -1806,6 +1808,12 @@
       const tool = e.target.closest("[data-tool]");
       if (tool) {
         openTool(tool.dataset.tool, tool);
+        return;
+      }
+      const boundarySwitch = e.target.closest("[data-boundary-switch]");
+      if (boundarySwitch) {
+        $("boundary-mode").value = boundarySwitch.dataset.boundarySwitch;
+        $("boundary-mode").dispatchEvent(new Event("change"));
         return;
       }
       const openTab = e.target.closest("[data-open-tab]");
