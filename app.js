@@ -2059,6 +2059,7 @@
       zoomAnimation: false,
     });
     L.control.zoom({ position: "topright" }).addTo(S.map);
+    localizeZoom();
     S.map.createPane("terrain");
     S.map.getPane("terrain").style.zIndex = 330;
     S.map.getPane("terrain").style.pointerEvents = "none";
@@ -2311,7 +2312,7 @@
           node.setAttribute("role", "button");
           node.setAttribute(
             "aria-label",
-            text("เลือก ", "Select ") + f.properties.label,
+            text("เลือก ", "Select ") + areaLabel(f.properties),
           );
           node.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -2589,6 +2590,12 @@
     if (!el || !el.innerHTML.trim()) return;
     el.dataset.collapsed = S.legendCollapsed ? "true" : "false";
     el.insertAdjacentHTML("afterbegin", `<button type="button" class="legend-toggle" aria-expanded="${S.legendCollapsed ? "false" : "true"}">${S.legendCollapsed ? text("แสดงคำอธิบายสี", "Show legend") : text("ซ่อนคำอธิบายสี", "Hide legend")}</button>`);
+  }
+  /* Leaflet's zoom buttons carry English titles; follow the page language. */
+  function localizeZoom() {
+    const set = (sel, th, en) => { const el = document.querySelector(sel); if (el) { el.title = text(th, en); el.setAttribute("aria-label", text(th, en)); } };
+    set(".leaflet-control-zoom-in", "ซูมเข้า", "Zoom in");
+    set(".leaflet-control-zoom-out", "ซูมออก", "Zoom out");
   }
   const TOUCH = () => typeof window !== "undefined" && !!window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
   function drawLegendBody() {
@@ -3084,6 +3091,7 @@
     $("language").addEventListener("click", () => {
       S.lang = S.lang === "th" ? "en" : "th";
       renderPanel();
+      localizeZoom();
       S.tile?.setLanguage?.(S.lang);
       refreshMap();
       syncURL();
