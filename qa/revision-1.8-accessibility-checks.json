@@ -1,0 +1,144 @@
+{
+ "schema": "sila-accessibility-checks/1.8",
+ "checkedAtUtc": "2026-10-20T00:34:05.155296+00:00",
+ "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
+ "tool": "axe-core 4.10.2",
+ "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
+ "views": [
+  {
+   "view": "taxmap-dark-th",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "taxmap-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "taxmap-record",
+   "viewport": "1440x900",
+   "rulesPassed": 51,
+   "violations": []
+  },
+  {
+   "view": "taxmap-calculator-open",
+   "viewport": "1440x900",
+   "rulesPassed": 31,
+   "violations": []
+  },
+  {
+   "view": "taxmap-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-delta-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "appraisal-light-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "buildings-use-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-registry-en",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-straddle-light",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "houses-list-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "houses-sources-en",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "popgrid-light",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "terrain-2d-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "roads",
+   "viewport": "1440x900",
+   "rulesPassed": 44,
+   "violations": []
+  },
+  {
+   "view": "overview-en",
+   "viewport": "1440x900",
+   "rulesPassed": 44,
+   "violations": []
+  },
+  {
+   "view": "villages-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-taxmap",
+   "viewport": "390x844",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-house-card",
+   "viewport": "390x844",
+   "rulesPassed": 45,
+   "violations": []
+  }
+ ],
+ "manualChecks": {
+  "contrast": "text that axe could not resolve (toolbar over the map) measured from computed styles: lowest 5.4:1 (light theme basemap label), all others above 10:1 in dark theme and 15:1 in light theme",
+  "keyboard": "tab order: skip link, home, options, boundary, layers, basemap, map, area buttons, zoom, fit, panel splitter, missions; focus outline 2px solid",
+  "language": "html lang follows the page language; map zoom and area buttons are labelled in the page language"
+ },
+ "notCovered": [
+  "screen readers on real devices",
+  "real phones",
+  "zoom to 200% on desktop browsers"
+ ],
+ "browser": "Chromium 141.0.7390.37",
+ "summary": {
+  "views": 20,
+  "violations": 0
+ }
+}
