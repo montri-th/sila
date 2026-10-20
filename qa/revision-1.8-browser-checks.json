@@ -1,6 +1,6 @@
 {
  "schema": "sila-browser-checks/1.8",
- "checkedAtUtc": "2026-10-20T02:13:42.693350+00:00",
+ "checkedAtUtc": "2026-10-20T04:09:01.611533+00:00",
  "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
  "browser": "Chromium 141.0.7390.37",
  "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
@@ -203,6 +203,42 @@
    "legendShown": true,
    "ready": true,
    "webglCanvas": null
+  },
+  {
+   "case": "buildings-tax-v02",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "appraisal-adj20-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "phone-buildings-tax-en",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
+  },
+  {
+   "case": "taxmap-new70-land10-bld10",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflow": false,
+   "legendShown": true,
+   "ready": true,
+   "webglCanvas": null
   }
  ],
  "flows": {
@@ -221,7 +257,7 @@
    "pageErrors": []
   },
   "phoneLegendToggle": {
-   "collapsedHeight": 73,
+   "collapsedHeight": 74,
    "openHeight": 250,
    "opens": true,
    "pageErrors": []
@@ -242,10 +278,30 @@
    "phonePinchZooms": true,
    "terrain2DSingleCanvas": true,
    "terrain2DReadyAfterZoom": true
+  },
+  "assumptionSliders": {
+   "switchesTo2570WithFixes": true,
+   "focusStaysOnSlider": true,
+   "urlKeepsLand10": true,
+   "urlKeepsBuildings10": true,
+   "summaryShows2570Land10": true,
+   "buildingSliderChangesTotal": true,
+   "legendSwatches": 41,
+   "legendSwatchesInLdsPriceLut": true,
+   "pageErrors": []
+  },
+  "titleSets": {
+   "cardListsTitlesUnderBuilding": true,
+   "cardShowsSetLikelyTaxedTogether": true,
+   "cardShowsCombinedBase2570": true,
+   "setListOffered": true,
+   "figuresInJetBrainsMono": true,
+   "summaryFigureOnOneLine": true,
+   "pageErrors": []
   }
  },
  "summary": {
-  "cases": 22,
+  "cases": 26,
   "pageErrors": 0,
   "horizontalOverflow": 0,
   "flowsPassed": true

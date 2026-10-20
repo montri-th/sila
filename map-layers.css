@@ -18,7 +18,7 @@
 .control-field select:focus-visible,.control-field input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .control-range{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
 .control-range input{width:100%;min-height:44px;accent-color:var(--accent)}
-.control-range output{font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:600;color:var(--primary);min-width:64px;text-align:right}
+.control-range output{font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;font-size:14px;color:var(--primary);min-width:64px;text-align:right}
 .segmented{display:flex;flex-wrap:wrap;gap:6px}
 .segmented button{min-height:40px;padding:6px 12px;border:1px solid var(--border);border-radius:999px;background:var(--alt);color:var(--primary);font-size:13px}
 .segmented button[aria-pressed="true"]{background:var(--raised);border-color:var(--primary);font-weight:600}
@@ -33,7 +33,7 @@
 .totals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
 .total-box{padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--alt);display:grid;gap:2px}
 .total-box small{font-size:12px;color:var(--secondary)}
-.total-box strong{font-family:"JetBrains Mono",monospace;font-size:18px;line-height:1.4;overflow-wrap:anywhere}
+.total-box strong{font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;font-size:18px;line-height:1.4;overflow-wrap:anywhere}
 .total-box span{font-size:12px;color:var(--muted)}
 .total-box[data-emphasis="true"]{border-color:var(--border);background:var(--raised)}
 .small-note{margin:0;font-size:12px;line-height:1.7;color:var(--muted)}
@@ -47,7 +47,7 @@
 .data-table{width:100%;border-collapse:collapse;font-size:13px}
 .data-table th,.data-table td{padding:8px 6px;border-bottom:1px solid var(--hairline);text-align:left;vertical-align:top}
 .data-table th{color:var(--secondary);font-weight:400}
-.data-table td.num,.data-table th.num{text-align:right;font-family:"JetBrains Mono",monospace;white-space:nowrap}
+.data-table td.num,.data-table th.num{text-align:right;font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;white-space:nowrap}
 .data-table button{min-height:32px;padding:2px 6px;border:0;background:transparent;color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:13px}
 /* Analytical legend: swatches plus printed thresholds and units */
 .legend-title{font-weight:600;font-size:12px;margin-bottom:4px}
@@ -74,7 +74,7 @@
 /* Hover and click information on the map */
 .leaflet-tooltip.sila-hover{padding:8px 10px;width:max-content;max-width:280px;white-space:normal;font-size:12px;line-height:1.55;border-radius:10px}
 .sila-hover strong{display:block;font-size:13px}
-.sila-hover .hover-value{font-family:"JetBrains Mono",monospace;font-weight:600}
+.sila-hover .hover-value{font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;}
 .leaflet-popup-content-wrapper{background:var(--card);color:var(--primary);border:1px solid var(--border);border-radius:12px;box-shadow:none}
 .leaflet-popup-tip{background:var(--card);border:1px solid var(--border);box-shadow:none}
 .leaflet-popup-content{margin:12px 14px;font-family:"Bai Jamjuree",sans-serif;font-size:13px;line-height:1.6;min-width:240px;max-width:320px}
@@ -99,7 +99,7 @@
 .portfolio-list li[aria-current="true"]{background:var(--raised);font-weight:600}
 .terrain-exaggeration{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--secondary)}
 .terrain-exaggeration input{width:120px;min-height:36px;accent-color:var(--accent)}
-.terrain-exaggeration output{font-family:"JetBrains Mono",monospace;color:var(--primary);min-width:34px}
+.terrain-exaggeration output{font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;color:var(--primary);min-width:34px}
 @media(max-width:599px){.layer-picker,.layer-controls{padding:0 16px}.selector-row{grid-template-columns:1fr}.totals-grid{grid-template-columns:1fr 1fr}.record-card .record-dl{grid-template-columns:100px 1fr}.terrain-exaggeration input{width:96px}}
 .portfolio-link{min-height:28px;padding:0;border:0;background:transparent;color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-align:left;font:inherit;font-size:12px;cursor:pointer}
 .portfolio-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
@@ -111,7 +111,7 @@
 @media(max-width:599px){.terrain-exaggeration{flex-wrap:wrap}.terrain-exaggeration input{width:110px}}
 /* Terrain height colour bar and contour sample (palette HEX applied inline from the OH3 exception) */
 .terrain-bar{height:12px;border-radius:3px;border:1px solid rgba(127,127,127,.45);margin:4px 0 2px}
-.terrain-bar-labels{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--secondary)}
+.terrain-bar-labels{display:flex;justify-content:space-between;font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;font-size:11px;color:var(--secondary)}
 .legend-line.terrain-contour-sample{border-top:1.5px solid var(--primary);opacity:.8}
 /* Over height colours the contour ink is the same dark line in both themes; the sample sits on a neutral chip so it shows on dark panels too. */
 .legend-line.terrain-contour-sample.on-colour{width:28px;height:12px;border-top:0;border-radius:3px;opacity:1;background:linear-gradient(to bottom,transparent 5px,#182327 5px,#182327 7px,transparent 7px),#DDE2DE;box-shadow:inset 0 0 0 1px rgba(127,127,127,.45)}
@@ -123,3 +123,26 @@
 
 /* A record opened from the map or a link keeps its title clear of the sticky breadcrumb bar. */
 #record-detail,.record-card,#parcel-buildings{scroll-margin-top:72px}
+/* Revision 1.8.1: 41-sample LDS legend (one flat swatch per bin, no gradient), assumption sliders and fixes list */
+.lut-bar{display:flex;height:14px;margin:6px 0 4px;border-radius:3px;overflow:hidden;outline:1px solid var(--hairline)}
+.lut-bar span{flex:1 1 0;min-width:0}
+.lut-ends{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.5;color:var(--secondary);margin-bottom:6px}
+.lut-ends span:nth-child(2){text-align:center}
+.lut-ends span:last-child{text-align:right}
+.lut-table{margin-top:6px;font-size:12px}
+.lut-table summary{cursor:pointer;display:list-item;padding:6px 0;line-height:1.5;color:var(--primary)}
+.lut-table .lut-scroll{margin-top:4px;max-height:220px;overflow:auto;border-radius:4px}
+.lut-table .lut-scroll:focus-visible{outline-offset:-2px}
+.lut-table ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.lut-table li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px;align-items:center;line-height:1.5}
+.lut-table .legend-chip{width:16px;height:12px}
+fieldset.assumptions{margin:10px 0 0;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;display:grid;gap:8px}
+fieldset.assumptions legend{padding:0 4px;font-size:13px;font-weight:600;color:var(--primary)}
+.fix-details{margin-top:10px}
+.fix-details>summary{cursor:pointer;display:list-item;padding:11px 0;line-height:1.5;font-size:13px;font-weight:600;color:var(--primary)}
+.fix-details .check-list{margin-top:4px}
+.title-set{margin:8px 0 0;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--alt)}
+.title-set h4{margin:0 0 6px;font-size:13px;font-weight:600}
+.title-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.title-list li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:baseline;font-size:13px;line-height:1.55}
+.title-list .portfolio-link{min-height:32px}

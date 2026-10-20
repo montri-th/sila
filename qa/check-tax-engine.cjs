@@ -104,3 +104,24 @@ console.log(JSON.stringify({status: 'passed', checks, scope: 'Synthetic portfoli
   eq(r16.byParcel.get('d1').collected69, 0, 'full debt means nothing collected'); eq(r16.byParcel.get('d2').collected69, 2000, 'debt 1,000 of 3,000 means 2,000 collected');
   console.log(JSON.stringify({status: 'passed', debtorStatusChecks: 4}));
 }
+// 17 Revision 1.8.1: building price change and titles joined by one building (s.42 para 2 proxy).
+{
+  const bfields = [...fields, 'bgrp'];
+  const bmodel = (parcels, groups) => E.prepare({schema: 'sila-parcel-tax-1', asOf: '2026-10-19', taxYear: 2569, fields: bfields,
+    parcels: parcels.map((p) => [...row(p), p.bgrp ?? null]), taxpayers: {}, buildingGroups: groups});
+  // Two commercial titles under one building, 30M + 30M land and 6M + 4M buildings: separately 0.3% each; combined, 70M crosses the 50M tier.
+  const m17 = bmodel([{id: 'j1', landValue: 30e6, bldValue: 6e6, use: 'other', tax69: 108000, bgrp: 1}, {id: 'j2', landValue: 30e6, bldValue: 4e6, use: 'other', tax69: 102000, bgrp: 1}], [['j1', 'j2', 'offroll']]);
+  assert.equal(m17.availability.combineBuilding, true); assert.deepEqual(m17.buildingGroups.get(1), ['j1', 'j2', 'offroll']); checks += 2;
+  const off = E.run(m17, {strategies: new Set(), appraisalAdjPct: 0}), on = E.run(m17, {strategies: new Set(['combineBuilding']), appraisalAdjPct: 0});
+  eq(off.totals.new70, 210000, 'fix off: each title keeps its own tax');
+  // Combined base 70M: 50M at 0.3% + 20M at 0.4% = 230,000 law-based, vs 210,000 separately.
+  eq(on.totals.new70 - off.totals.new70, 20000, 'combined 70M adds the 0.4% tier on 20M');
+  eq(off.byParcel.get('j1').combineEffect + off.byParcel.get('j2').combineEffect, 20000, 'potential effect reported even when the fix is off');
+  eq(off.byGroup.get(1).combined70, 230000, 'group total if combined'); eq(off.byGroup.get(1).assessed69, 210000, 'group 2569 total');
+  assert.equal(off.byGroup.get(1).onRoll, 2); checks++;
+  // Building prices +10% (land unchanged): j1 law tax 36M -> 36.6M at 0.3%, so 2570 current method scales 108,000 by 36.6/36.
+  const b10 = E.run(m17, {strategies: new Set(), appraisalAdjPct: 0, buildingAdjPct: 10});
+  eq(b10.byParcel.get('j1').old70, 108000 * 36.6 / 36, 'building price change scales the title by its own law change');
+  eq(b10.buildingFactor, 1.1, 'factor reported');
+  console.log(JSON.stringify({status: 'passed', buildingGroupChecks: 9}));
+}

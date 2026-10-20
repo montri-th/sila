@@ -87,8 +87,10 @@
     interactionRevision: 0,
     /* Revision 1.8 layer state */
     taxScenario: "assessed69",
-    taxStrategies: new Set(["combine", "agriShare", "mixedUse", "rented", "newBuildings"]),
+    taxStrategies: new Set(["combine", "combineBuilding", "agriShare", "mixedUse", "rented", "newBuildings"]),
     appraisalAdj: 0,
+    bldAdj: 0,
+    lutRefs: {},
     popMetric: "t",
     buildingView: "type",
     terrainExaggeration: 20,
@@ -415,7 +417,7 @@
       basemap: S.basemap,
       mode: S.dataset === "terrain" ? S.mode : "2d",
     };
-    if (S.dataset === "taxmap") { params.scenario = S.taxScenario; params.adj = String(S.appraisalAdj); params.fix = [...S.taxStrategies].sort().join("."); }
+    if (S.dataset === "taxmap" || (S.dataset === "buildings" && S.buildingView === "tax")) { params.scenario = S.taxScenario; params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); }
     if (S.dataset === "appraisal" && S.appraisalAdj) params.adj = String(S.appraisalAdj);
     if (S.dataset === "popgrid") params.metric = S.popMetric;
     if (S.dataset === "buildings" && S.buildingView !== "type") params.view = S.buildingView;
@@ -449,9 +451,11 @@
     S.taxScenario = ["assessed69", "old70", "new70", "delta"].includes(q.get("scenario")) ? q.get("scenario") : "assessed69";
     const adj = Number(q.get("adj"));
     S.appraisalAdj = Number.isFinite(adj) ? Math.max(-30, Math.min(100, Math.round(adj))) : 0;
+    const badj = Number(q.get("badj"));
+    S.bldAdj = Number.isFinite(badj) ? Math.max(-30, Math.min(100, Math.round(badj))) : 0;
     if (q.has("fix")) S.taxStrategies = new Set(String(q.get("fix")).split(".").filter(k => TAX_STRATEGIES.some(s => s.id === k)));
     S.popMetric = ["t", "c", "a", "o", "m", "f"].includes(q.get("metric")) ? q.get("metric") : "t";
-    S.buildingView = ["type", "registry", "roll", "straddle", "use"].includes(q.get("view")) ? q.get("view") : "type";
+    S.buildingView = ["type", "tax", "registry", "roll", "straddle", "use"].includes(q.get("view")) ? q.get("view") : "type";
     S.listFilter = null;
     const ex = Number(q.get("ex")), ext = Number(q.get("ext"));
     S.terrainAuto = !(q.has("ex") && Number.isFinite(ex) && ex > 0);
@@ -1225,7 +1229,7 @@
         .slice(0, S.page)
         .map(
           (f) =>
-            `<button class="area-row" data-record="${esc(f.properties.id)}"><span class="area-name">${esc(featureTitle(f))}<span class="area-meta">${lf === LIST_FILTERS.fixes ? (() => { const r = taxRow(f.properties.id); return esc(text(`ตามข้อเสนอ +${fixed(r.new70 - r.old70, 2)} บาท (จาก ${fixed(r.old70, 2)})`, `with fixes +${fixed(r.new70 - r.old70, 2)} THB (from ${fixed(r.old70, 2)})`)) + " · "; })() : featureLines(f)[0] ? featureLines(f)[0] + " · " : ""}${esc(villageNamesOf(f).join(" · ") || text("ยังไม่ระบุหมู่บ้าน", "village not assigned"))}${f.properties.villageIds?.length > 1 ? " · " + text("อยู่บนเส้นแบ่งหลายหมู่บ้าน", "on a village dividing line") : ""}</span></span><span aria-hidden="true">›</span></button>`,
+            `<button class="area-row" data-record="${esc(f.properties.id)}"><span class="area-name">${esc(featureTitle(f))}<span class="area-meta">${lf === LIST_FILTERS.fixes ? (() => { const r = taxRow(f.properties.id); return esc(text(`ตามข้อเสนอ +${fixed(r.new70 - r.old70, 2)} บาท (จาก ${fixed(r.old70, 2)})`, `with fixes +${fixed(r.new70 - r.old70, 2)} THB (from ${fixed(r.old70, 2)})`)) + " · "; })() : lf === LIST_FILTERS.titlesets || lf === LIST_FILTERS.titleoffroll ? (() => { const u = buildingUnit(f.properties), ids = S.parcelTax.buildingGroups.get(u.id) || [], g = setOf(f.properties), off = setOffRoll(f.properties); return esc(text(`ชุด ${ids.length} โฉนด ${ids.map(codeOf).join(", ")}${g ? ` · ปี 2569 ${fixed(g.assessed69, 2)} · ปี 2570 ${fixed(g.new70, 2)} บาท` : ""}${off ? ` · ยังจับคู่กับบัญชีไม่ได้ ${off} โฉนด` : ""}`, `${ids.length} titles ${ids.map(codeOf).join(", ")}${g ? ` · 2569 ${fixed(g.assessed69, 2)} · 2570 ${fixed(g.new70, 2)} THB` : ""}${off ? ` · ${off} not matched to the roll` : ""}`)) + " · "; })() : featureLines(f)[0] ? featureLines(f)[0] + " · " : ""}${esc(villageNamesOf(f).join(" · ") || text("ยังไม่ระบุหมู่บ้าน", "village not assigned"))}${f.properties.villageIds?.length > 1 ? " · " + text("อยู่บนเส้นแบ่งหลายหมู่บ้าน", "on a village dividing line") : ""}</span></span><span aria-hidden="true">›</span></button>`,
         )
         .join(
           "",
@@ -1402,12 +1406,56 @@
     }
     const f = S.record;
     const rows = recordRows(f);
-    const portfolio = ["taxmap", "appraisal"].includes(S.dataset) ? portfolioHTML(f.properties.id) + parcelBuildingsHTML(f.properties.id)
+    const portfolio = S.dataset === "buildings" ? buildingTitlesHTML(f) : S.dataset === "houses" ? titleSetHTML(parcelAttr(f.properties.parcelId)?.bgrp, f.properties.parcelId) : ["taxmap", "appraisal"].includes(S.dataset) ? portfolioHTML(f.properties.id) + titleSetHTML(parcelAttr(f.properties.id)?.bgrp, f.properties.id) + parcelBuildingsHTML(f.properties.id)
       + (parcelAttr(f.properties.id) ? `<div class="record-actions"><button type="button" class="mini-action" data-tool="tax-calculator" data-parcel="${esc(f.properties.id)}">${text("เปิดแปลงนี้ในเครื่องคิดภาษี", "Open this parcel in the tax calculator")}</button></div><p class="small-note">${esc(calculatorNote(f.properties.id))}</p>` : "") : "";
     el.hidden = false;
     el.innerHTML = `<article class="record-card" tabindex="-1"><div class="record-title"><div><small>${esc(label(S.dataset))}</small><h2>${esc(featureTitle(f))}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><dl class="record-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>${recordFlags(f)}${portfolio}<div class="record-actions"><button class="mini-action" data-focus-record>${text("ซูมไปที่รายการนี้", "Zoom to this record")}</button>${recordLinks(f)}</div></article>`;
   }
 
+  /* Building -> titles under its roof -> tax 2569 and 2570, and the set of titles likely taxed together (joined by one building:
+     s.42 para 2 proxy; one owner and one use are assumed, not known, because the PDS files carry no owner per title). */
+  const codeOf = (id) => S.parcelTax?.codes?.get(id) || `#${Number(String(id).slice(8))}`;
+  function titleLine(id, share, current) {
+    const r = taxRow(id), a = parcelAttr(id);
+    const name = esc(text(`แปลง ${codeOf(id)}`, `Parcel ${codeOf(id)}`));
+    const link = id === current ? `<strong>${name}</strong>` : `<button type="button" class="portfolio-link" data-goto="taxmap|${esc(id)}">${name}</button>`;
+    const share_ = share != null ? esc(text(` · หลังคา ${Math.round(share * 100)}%`, ` · ${Math.round(share * 100)}% of the roof`)) : "";
+    const val = !a ? text("ยังจับคู่กับบัญชีภาษีไม่ได้", "Not matched to the tax roll") : r?.assessed69 == null ? text("ยังไม่มีตัวเลขภาษี", "No tax figure")
+      : text(`ปี 2569 ${money(r.assessed69, 2)} · ปี 2570 ${money(r.new70, 2)}`, `2569 ${money(r.assessed69, 2)} · 2570 ${money(r.new70, 2)}`);
+    return `<li><span>${link}${share_}</span><span>${esc(val)}</span></li>`;
+  }
+  function titleSetHTML(gid, current, listed = []) {
+    if (gid == null || !S.taxResult || !S.parcelTax?.buildingGroups) return "";
+    const members = S.parcelTax.buildingGroups.get(gid) || [], g = S.taxResult.byGroup?.get(gid);
+    if (members.length < 2) return "";
+    const off = members.filter((id) => !parcelAttr(id)).length, gap = g ? g.combined70 - g.old70 : 0;
+    const notes = [];
+    if (g) notes.push(Math.abs(gap) < 1
+      ? text("รวมหรือแยกโฉนดได้ภาษีเท่ากัน เพราะมูลค่ารวมของแต่ละประเภทการใช้ยังไม่ถึงขั้นถัดไปของอัตรา หรือยังอยู่ในเกณฑ์ยกเว้นบ้านหลังหลัก", "Combined or title by title, the tax is the same: the value per use type does not reach the next rate step, or stays within the main-home exemption")
+      : text(`ถ้ารวมเป็นฐานเดียว ภาษีต่างจากคิดแยกโฉนด ${gap > 0 ? "+" : ""}${money(gap, 2)}`, `Combined into one base, the tax differs from title by title by ${gap > 0 ? "+" : ""}${money(gap, 2)}`));
+    if (g && g.taxed < g.onRoll) notes.push(text(`${num(g.onRoll - g.taxed)} โฉนดในบัญชียังไม่มีตัวเลขภาษี จึงไม่อยู่ในยอดรวม`, `${num(g.onRoll - g.taxed)} title(s) on the roll have no tax figure and are not in the totals`));
+    if (off) notes.push(text(`${num(off)} โฉนดในชุดนี้ยังจับคู่กับบัญชีภาษีไม่ได้ อาจไม่อยู่ในบัญชี หรือจับคู่ไม่ได้เพราะแผนที่แปลงไม่มีเลขโฉนดหรือมีโฉนดที่เป็นไปได้หลายใบ ควรตรวจว่าตกสำรวจหรือไม่`, `${num(off)} title(s) in this set are not matched to the tax roll: either not on it, or not matchable because the parcel map has no deed number or several candidate deeds; check whether they were missed`));
+    notes.push(text("รวมฐานได้เมื่อเป็นเจ้าของเดียวกันและใช้ประโยชน์ประเภทเดียวกัน (ม.42 วรรคสอง) ไฟล์ ภ.ด.ส. ที่ได้รับไม่มีชื่อเจ้าของ ต้องตรวจโฉนดก่อนใช้", "Bases combine only for one owner and one use type (s.42 para 2); the PDS files carry no owner, so check the titles before use"));
+    const dl = g ? `<dl class="record-dl"><dt>${text("ปี 2569 ที่ประเมิน (บัญชีคิดแยกโฉนด)", "2569 assessed (the roll taxes each title)")}</dt><dd>${esc(money(g.assessed69, 2))}</dd>`
+      + `<dt>${text("ปี 2570 วิธีเดิม แยกโฉนด", "2570 current method, title by title")}</dt><dd>${esc(money(g.old70, 2))}</dd>`
+      + `<dt>${text("ปี 2570 ถ้ารวมเป็นฐานเดียว", "2570 combined into one base")}</dt><dd>${esc(money(g.combined70, 2))}</dd>`
+      + `<dt>${text("ปี 2570 ตามข้อเสนอที่เลือก", "2570 with the selected fixes")}</dt><dd>${esc(money(g.new70, 2))}</dd></dl>` : "";
+    // The member list is left out when it would only repeat the titles already listed under the building.
+    const same = listed.length && members.every((id) => listed.includes(id));
+    return `<div class="title-set"><h4>${esc(text(`ชุดโฉนดที่น่าจะคิดภาษีรวมกัน · ${members.length} โฉนด (อาคารหลังเดียวกันคร่อม)`, `Titles likely taxed together · ${members.length} (joined by one building)`))}</h4>${same ? `<p class="small-note">${text("ชุดนี้คือโฉนดใต้อาคารด้านบน", "This set is the titles listed above")}</p>` : `<ul class="title-list">${members.map((id) => titleLine(id, null, current)).join("")}</ul>`}${dl}${notes.map((x) => `<p class="small-note">${esc(x)}</p>`).join("")}</div>`;
+  }
+  function buildingTitlesHTML(f) {
+    const p = f.properties, ids = p.parcelIds || [];
+    const head = `<div class="record-section"><h3>${text("โฉนดใต้อาคารและภาษี", "Titles under the building and their tax")}</h3>`;
+    if (!S.taxResult) return head + `<p class="small-note">${text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet")}</p></div>`;
+    if (!ids.length) return head + `<p class="small-note">${text("อาคารนี้ไม่ตรงแปลงใดในแผนที่แปลง", "No parcel on the parcel map lies under this building")}</p></div>`;
+    const u = buildingUnit(p);
+    const lead = !u ? text("ยังจับคู่โฉนดใต้อาคารนี้กับบัญชีภาษีไม่ได้", "None of the titles under this building is matched to the tax roll")
+      : u.kind === "group" ? text("อาคารนี้น่าจะคิดภาษีกับชุดโฉนดด้านล่าง", "This building is likely taxed with the set of titles below")
+      : text(`อาคารนี้คิดภาษีกับแปลง ${codeOf(u.id)} ไม่พบโฉนดอื่นที่อาคารหลังเดียวกันคร่อมตามเกณฑ์`, `This building is taxed with parcel ${codeOf(u.id)}; no other title is joined to it by one building under the rule`);
+    return head + `<ul class="title-list">${ids.map((id, i) => titleLine(id, p.parcelShares?.[i])).join("")}</ul><p class="small-note">${esc(lead)}</p>${u?.kind === "group" ? titleSetHTML(u.id, null, ids) : ""}`
+      + `<p class="small-note">${text("ปี 2570 ใช้ค่าที่ตั้งไว้ในแถบสมมติและข้อเสนอที่เลือก", "2570 uses the slider assumptions and the selected fixes")}</p></div>`;
+  }
   /* Parcel -> buildings on it (deed x footprint x house number). The footprint file is large, so it opens on request. */
   const BUILDINGS_PATH = () => dataset("buildings")?.geojson || "data/buildings.geojson";
   function parcelBuildingsHTML(parcelId) {
@@ -1436,8 +1484,7 @@
     const p = f.properties, out = [];
     if (S.dataset === "houses" && p.buildingId && dataset("buildings")) out.push(`<button class="mini-action" data-goto="buildings|${esc(p.buildingId)}">${text("ดูรูปอาคารหลังนี้", "Open this footprint")}</button>`);
     if (S.dataset === "buildings" && p.parcelIds?.length) {
-      const parcels = S.cache.get("data/parcels.geojson")?.features;
-      const code = (id) => parcels?.find((x) => x.properties.id === id)?.properties.code || `#${Number(id.slice(8))}`;
+      const code = codeOf;
       if (dataset("taxmap") && S.parcelTax) for (const id of p.parcelIds.slice(0, 3)) out.push(`<button class="mini-action" data-goto="taxmap|${esc(id)}">${esc(text(`ภาษีแปลง ${code(id)}`, `Tax of parcel ${code(id)}`))}</button>`);
     }
     return out.join("");
@@ -1466,7 +1513,7 @@
   /* Value per feature for the active analytical layer; null means no data (never zero). */
   function layerValue(f) {
     const p = f.properties;
-    if (S.dataset === "appraisal") return parcelAttr(p.id)?.price ?? null;
+    if (S.dataset === "appraisal") { const price = parcelAttr(p.id)?.price; return price == null ? null : price * (1 + S.appraisalAdj / 100); }
     if (S.dataset === "taxmap") {
       const r = taxRow(p.id);
       if (!r) return null;
@@ -1475,31 +1522,117 @@
     if (S.dataset === "popgrid") return p.suppressed ? null : p.hidden?.includes(S.popMetric) ? "<5" : p[S.popMetric];
     return null;
   }
+  /* LDS 0.9.7: tax and appraisal use the approved 41-sample LUT (as in CityMETER), one exact sample per bin, no interpolation.
+     Thresholds are equal-count cut points of a FIXED reference for the whole municipality (2569 roll tax, the current
+     appraisal, or the change at the default settings), rounded to three significant figures. A given amount therefore keeps
+     its colour when the year, scope or sliders change, so the map colours move with the sliders. Bins are [lower, upper);
+     amounts beyond the last cut take the last colour and the legend says "X and above" (a declared end bin). */
+  const LUT_STEPS = 41;
+  const nice3 = (v) => { if (!Number.isFinite(v) || v === 0) return v; const p = Math.pow(10, Math.floor(Math.log10(Math.abs(v))) - 2); return Math.round(Math.round(v / p) * p * 1e6) / 1e6; };
+  function lutCutsOf(values, bins) {
+    const v = values.filter((x) => Number.isFinite(x) && x > 0).sort((a, b) => a - b);
+    if (!v.length) return [];
+    const cuts = [];
+    for (let i = 1; i < bins; i++) cuts.push(nice3(v[Math.min(v.length - 1, Math.floor(i * v.length / bins))]));
+    return [...new Set(cuts)].filter((x) => x > 0);
+  }
+  function defaultTaxRun() {
+    if (!S.defaultTaxRun && S.parcelTax && window.SilaTaxEngine) S.defaultTaxRun = window.SilaTaxEngine.run(S.parcelTax, { strategies: new Set(TAX_STRATEGIES.map((x) => x.id)), appraisalAdjPct: 0, buildingAdjPct: 0 });
+    return S.defaultTaxRun;
+  }
+  /* A building is taxed with the titles under it: the first title under the roof that is on the roll, together with every title
+     joined to it by one building (bgrp, s.42 para 2 proxy). */
+  function buildingUnit(p) {
+    for (const id of p.parcelIds || []) {
+      const a = parcelAttr(id);
+      if (a) return a.bgrp != null ? { kind: "group", id: a.bgrp, main: id } : { kind: "parcel", id, main: id };
+    }
+    return null;
+  }
+  function unitValue(u, scen, result = S.taxResult) {
+    if (!u || !result) return null;
+    if (u.kind === "group") {
+      const g = result.byGroup?.get(u.id);
+      if (!g || !g.taxed) return null;
+      return scen === "assessed69" ? g.assessed69 : scen === "old70" ? g.old70 : scen === "new70" ? g.new70 : g.new70 - g.assessed69;
+    }
+    const r = result.byParcel.get(u.id);
+    if (!r) return null;
+    return scen === "assessed69" ? r.assessed69 : scen === "old70" ? r.old70 : scen === "new70" ? r.new70 : r.delta;
+  }
+  function unitValues(result, scen) {
+    if (!result || !S.parcelTax) return [];
+    const out = [];
+    for (const p of S.parcelTax.parcels) if (p.bgrp == null) out.push(unitValue({ kind: "parcel", id: p.id }, scen, result));
+    for (const id of result.byGroup?.keys() || []) out.push(unitValue({ kind: "group", id }, scen, result));
+    return out.filter((v) => v != null);
+  }
+  function lutRef(kind) {
+    if (S.lutRefs[kind]) return S.lutRefs[kind];
+    const parcels = S.parcelTax?.parcels || [];
+    let cuts = [];
+    if (kind === "price") cuts = lutCutsOf(parcels.map((p) => p.price), LUT_STEPS);
+    else if (kind === "tax") cuts = lutCutsOf(parcels.map((p) => p.tax69), LUT_STEPS);
+    else if (kind === "unitTax") cuts = lutCutsOf(unitValues(S.taxResult, "assessed69"), LUT_STEPS);
+    else if (kind === "delta" || kind === "unitDelta") {
+      const base = defaultTaxRun();
+      const vals = kind === "delta" ? [...(base?.byParcel.values() || [])].map((r) => r.delta) : unitValues(base, "delta");
+      cuts = lutCutsOf(vals.filter((x) => x != null && Math.abs(x) >= 1).map(Math.abs), 20);
+    }
+    if (cuts.length) S.lutRefs[kind] = cuts;
+    return cuts;
+  }
+  function lutIndex(c, v) {
+    let j = 0;
+    if (c.kind === "lutdiv") {
+      if (Math.abs(v) < c.neutral) return 20;
+      while (j < c.cuts.length && Math.abs(v) >= c.cuts[j]) j++;
+      const k = c.cuts.length ? Math.round(j * 19 / c.cuts.length) : 0;
+      return v < 0 ? 19 - k : 21 + k;
+    }
+    while (j < c.cuts.length && v >= c.cuts[j]) j++;
+    return c.cuts.length ? Math.round(j * 40 / c.cuts.length) : 0;
+  }
+  const lutHex = (c, v) => c.lut[lutIndex(c, v)];
+  function appraisalTitle() {
+    return S.appraisalAdj ? text(`ราคาประเมินที่ดิน สมมติรอบ 2570–2573 ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}%`, `Land appraisal, assumed 2570–2573 round ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}%`)
+      : text("ราคาประเมินที่ดิน", "Land appraisal");
+  }
   function computeClassing() {
     S.classing = null;
-    if (!CHORO_LAYERS.has(S.dataset) || !window.SilaScales) return;
-    const feats = currentFeatures();
-    const vals = feats.map(layerValue).filter((v) => typeof v === "number");
-    if (S.dataset === "taxmap" && S.taxScenario === "delta") {
-      const neutral = 1;
-      const cuts = SilaScales.divergingBreaks(vals, 3, neutral);
-      S.classing = { kind: "diverging", scaleId: "delta", colors: SilaScales.classes("delta", 7), cuts, neutral,
-        unit: text("บาทต่อปี · ปี 2570 ตามข้อเสนอ ลบ ปี 2569 ที่ประเมิน", "THB per year · 2570 proposed minus 2569 assessed"),
-        title: text("ภาษีเปลี่ยนจากปี 2569", "Change from 2569 tax") };
+    if (!window.SilaScales) return;
+    const lut = (scaleId) => SilaScales.record(scaleId, "light").lut;
+    const divergent = (cuts, title, unit, refNote) => ({ kind: "lutdiv", scaleId: "delta", lut: lut("delta"), cuts, neutral: 1, title, unit, refNote });
+    const sequential = (cuts, title, unit, refNote) => ({ kind: "lut", scaleId: "price", lut: lut("price"), cuts, title, unit, refNote });
+    const deltaNote = text("ช่วงสีจากขนาดส่วนต่างทั้งเมืองเมื่อใช้ค่าเริ่มต้น (ราคาเท่าเดิม ข้อเสนอที่คิดได้ทุกข้อ) · สองฝั่งใช้ช่วงเดียวกัน", "Ranges from the city-wide size of the change at the default settings (same prices, every fix that can be computed) · both sides share the ranges");
+    if (S.dataset === "buildings") {
+      if (S.buildingView !== "tax" || !S.taxResult) return;
+      S.classing = S.taxScenario === "delta"
+        ? divergent(lutRef("unitDelta"), text("ภาษีของชุดโฉนดเปลี่ยนจากปี 2569", "Change in the title set's tax from 2569"), text("บาทต่อปี · ปี 2570 ตามข้อเสนอ ลบ ปี 2569 · โฉนดที่อาคารหลังเดียวกันคร่อมนับเป็นชุดเดียว", "THB per year · 2570 with fixes minus 2569 · titles joined by one building count as one set"), deltaNote)
+        : sequential(lutRef("unitTax"), `${taxScenarioLabel(S.taxScenario)}${text(" ของโฉนดใต้อาคาร", " of the titles under the building")}`, text("บาทต่อปี ต่อชุดโฉนด · โฉนดที่อาคารหลังเดียวกันคร่อมนับเป็นชุดเดียว", "THB per year per title set · titles joined by one building count as one set"), text("ช่วงสีจากภาษีปี 2569 ของทุกชุดโฉนดในเมือง แต่ละช่วงมีจำนวนชุดเท่า ๆ กัน", "Ranges from the 2569 tax of every title set in the city, an equal number of sets in each"));
       return;
     }
-    const scaleId = S.dataset === "popgrid" ? "count" : "price";
-    const colors = SilaScales.classes(scaleId, 7);
+    if (!CHORO_LAYERS.has(S.dataset)) return;
+    if (S.dataset === "taxmap") {
+      S.classing = S.taxScenario === "delta"
+        ? divergent(lutRef("delta"), text("ภาษีเปลี่ยนจากปี 2569", "Change from 2569 tax"), text("บาทต่อปี · ปี 2570 ตามข้อเสนอ ลบ ปี 2569 ที่ประเมิน", "THB per year · 2570 proposed minus 2569 assessed"), deltaNote)
+        : sequential(lutRef("tax"), taxScenarioLabel(S.taxScenario), text("บาทต่อปี ต่อแปลง", "THB per year per parcel"), text("ช่วงสีจากภาษีปี 2569 ทั้งเมือง แต่ละช่วงมีจำนวนแปลงเท่า ๆ กัน", "Ranges from the city-wide 2569 tax, an equal number of parcels in each"));
+      return;
+    }
+    if (S.dataset === "appraisal") {
+      S.classing = sequential(lutRef("price"), appraisalTitle(), text("บาทต่อตารางวา", "THB per square wah"), text("ช่วงสีจากราคาประเมินรอบปัจจุบันทั้งเมือง แต่ละช่วงมีจำนวนแปลงเท่า ๆ กัน", "Ranges from the current city-wide appraisal, an equal number of parcels in each"));
+      return;
+    }
+    /* Population cells keep seven LDS classes with their hidden and <5 states. */
+    const feats = currentFeatures();
+    const vals = feats.map(layerValue).filter((v) => typeof v === "number");
+    const colors = SilaScales.classes("count", 7);
     const breaks = SilaScales.quantileBreaks(vals, colors.length);
-    const units = {
-      appraisal: [text("ราคาประเมินที่ดิน", "Land appraisal"), text("บาทต่อตารางวา · รอบบัญชีที่เทศบาลใช้ปี 2569", "THB per square wah · round used for 2569")],
-      taxmap: [taxScenarioLabel(S.taxScenario), text("บาทต่อปี ต่อแปลง", "THB per year per parcel")],
-      popgrid: [popMetricLabel(S.popMetric), text("คนในช่อง 250 × 250 ม. · เฉพาะบ้านที่มีรายชื่อในแบบสำรวจ", "people per 250 × 250 m cell · surveyed households with member lists only")],
-    }[S.dataset];
-    S.classing = { kind: "sequential", scaleId, colors: colors.slice(0, breaks.length + 1), breaks, title: units[0], unit: units[1] };
+    S.classing = { kind: "sequential", scaleId: "count", colors: colors.slice(0, breaks.length + 1), breaks, title: popMetricLabel(S.popMetric), unit: text("คนในช่อง 250 × 250 ม. · เฉพาะบ้านที่มีรายชื่อในแบบสำรวจ", "people per 250 × 250 m cell · surveyed households with member lists only") };
   }
   function classColor(v) {
     const c = S.classing;
+    if (c.kind === "lut" || c.kind === "lutdiv") return lutHex(c, v);
     if (c.kind === "diverging") return c.colors[SilaScales.divergingIndex(v, c.cuts, c.neutral, 3)];
     return c.colors[Math.min(c.colors.length - 1, SilaScales.classIndex(v, c.breaks))];
   }
@@ -1513,7 +1646,7 @@
     if (S.dataset === "popgrid" && f.properties.suppressed) return { ...base, fillColor: S.theme === "light" ? "#DDE2DE" : "#26302F", dashArray: "3 3", color: S.theme === "light" ? "#5F6B66" : "#8C968F", weight: 1 };
     if (v === "<5") return { ...base, fillColor: S.theme === "light" ? "#DDE2DE" : "#26302F", dashArray: "5 2", color: S.theme === "light" ? "#3D4744" : "#C4CECA", weight: 1.2 };
     if (v == null) return { ...base, fillColor: SilaScales.hatch(S.theme) || SilaScales.noData("price", S.theme) };
-    if (v === 0 && c.kind === "sequential") return { ...base, fillColor: c.colors[0], color: SilaScales.zeroOutline(c.scaleId, S.theme), weight: 1.4 };
+    if (v === 0 && (c.kind === "sequential" || c.kind === "lut")) return { ...base, fillColor: (c.lut || c.colors)[0], color: SilaScales.zeroOutline(c.scaleId, S.theme), weight: 1.4 };
     return { ...base, fillColor: classColor(v) };
   }
   /* Published use is grouped so empty homes cannot be singled out: owner-occupied, other, vacant and blank are one group. */
@@ -1533,6 +1666,13 @@
   const catHex = (name) => S.tokens?.categoricalSeries.values.find((v) => v.name === name)?.[S.theme]?.fill || "#BFD4E7";
   function buildingStyle(f) {
     const p = f.properties, stroke = S.theme === "light" || S.basemap.startsWith("satellite") ? "#182327" : categoryColor("buildings");
+    if (S.buildingView === "tax") {
+      /* Colour = the tax of the titles under the building (41-sample LUT, fixed reference). No figure = no-data hatch, never zero. */
+      const c = S.classing, v = c ? unitValue(buildingUnit(p), S.taxScenario) : null, outline = S.theme === "light" ? "#8C968F" : "#46524F";
+      if (v == null) return { color: outline, weight: 0.6, fill: true, fillColor: SilaScales.hatch(S.theme) || SilaScales.noData("price", S.theme), fillOpacity: 1, opacity: 1 };
+      if (v === 0 && c.kind === "lut") return { color: SilaScales.zeroOutline("price", S.theme), weight: 1.4, fill: true, fillColor: c.lut[0], fillOpacity: 1, opacity: 1 };
+      return { color: S.theme === "light" ? "#FFFFFF" : "#11191D", weight: 0.4, fill: true, fillColor: lutHex(c, v), fillOpacity: 1, opacity: 0.9 };
+    }
     if (S.buildingView === "straddle") {
       return p.straddle
         ? { color: S.theme === "light" ? "#182327" : "#F1F4EF", weight: 1.4, fill: true, fillColor: catHex("coral"), fillOpacity: 1, opacity: 1 }
@@ -1638,9 +1778,16 @@
       out.push(`${p.floors ? `${floorsText(p.floors)} · ` : ""}${text("หลังคา", "roof")} ${num(p.areaM2)} ${text("ตร.ม.", "m²")}`);
       if (p.use) out.push(esc(`${text("การใช้", "Use")}: ${sv(p.use)}`));
       if (p.straddle) out.push(text(`ตั้งอยู่บน ${p.parcelCount} แปลง`, `Spans ${p.parcelCount} parcels`));
+      if (S.buildingView === "tax") {
+        const u = buildingUnit(p), v = unitValue(u, S.taxScenario);
+        out.push(`${esc(taxScenarioLabel(S.taxScenario))}: <span class="hover-value">${v == null ? "—" : (S.taxScenario === "delta" && v > 0 ? "+" : "") + fixed(v, 2)}</span> ${text("บาท", "THB")}`);
+        if (u?.kind === "group") out.push(esc(text(`ชุดโฉนด ${num(S.parcelTax.buildingGroups.get(u.id)?.length || 0)} โฉนดที่น่าจะคิดรวมกัน`, `Set of ${num(S.parcelTax.buildingGroups.get(u.id)?.length || 0)} titles likely taxed together`)));
+        else if (!u) out.push(text("โฉนดใต้อาคารยังจับคู่กับบัญชีภาษีไม่ได้", "Titles under it are not matched to the tax roll"));
+      }
     } else if (S.dataset === "appraisal") {
       const a = parcelAttr(p.id);
       out.push(a?.price != null ? `<span class="hover-value">${num(a.price)}</span> ${text("บาท/ตร.ว.", "THB/sq wah")}` : text("ยังไม่มีราคาประเมินของแปลงนี้", "No appraisal for this parcel yet"));
+      if (a?.price != null && S.appraisalAdj) out.push(`${text("สมมติรอบใหม่", "Assumed new round")} ${pctText(S.appraisalAdj)}: <span class="hover-value">${num(Math.round(a.price * (1 + S.appraisalAdj / 100)))}</span> ${text("บาท/ตร.ว.", "THB/sq wah")}`);
     } else if (S.dataset === "taxmap") {
       const r = taxRow(p.id);
       if (!r) out.push(text("ยังไม่พบแปลงนี้ในบัญชีภาษี", "Not found on the tax roll"));
@@ -1710,6 +1857,15 @@
   /* The popup leads with what the layer is about: on the tax map, the tax figures come first. */
   function popupRows(f) {
     const rows = recordRows(f);
+    if (S.dataset === "buildings" && S.buildingView === "tax") {
+      /* In the tax view the popup leads with the tax of the titles under the building. */
+      const u = buildingUnit(f.properties), ids = u?.kind === "group" ? S.parcelTax.buildingGroups.get(u.id) || [] : u ? [u.id] : [];
+      const lead = [[text("คิดภาษีกับ", "Taxed with"), ids.length ? esc(ids.map((id) => text(`แปลง ${codeOf(id)}`, `parcel ${codeOf(id)}`)).join(", ")) + (ids.length > 1 ? esc(text(" (ชุดที่น่าจะคิดรวมกัน)", " (likely taxed together)")) : "") : text("โฉนดใต้อาคารยังจับคู่กับบัญชีภาษีไม่ได้", "Titles under it are not matched to the tax roll")]];
+      for (const [k, scen] of [[text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed"), "assessed69"], [text("ปี 2570 วิธีเดิม", "2570 current method"), "old70"], [text("ปี 2570 ตามข้อเสนอ", "2570 with fixes"), "new70"]]) {
+        const v = unitValue(u, scen); if (u) lead.push([k, v == null ? text("ยังไม่มีตัวเลข", "No figure") : money(v, 2)]);
+      }
+      return lead.concat(rows.slice(0, 2)).slice(0, 7);
+    }
     if (S.dataset !== "taxmap") return rows.slice(0, 6);
     const r = taxRow(f.properties.id), find = (k) => rows.find((x) => x[0] === k);
     const out = [];
@@ -1739,6 +1895,11 @@
       add(text("การใช้ตามสำรวจ", "Surveyed use"), esc(sv(p.use) || text(...USE_OTHER_LABEL)));
       add(text("ชั้นที่ใช้ค้าขาย", "Commercial floor"), p.commercial ? text("มี", "Yes") : text("ไม่พบ", "None found"));
       add(text("ตำแหน่งใหม่จากการสำรวจ", "New position from the survey"), p.newPoint ? text("ใช่ · อาจยังไม่อยู่ในบัญชี", "Yes · may be missing from the roll") : text("ไม่ใช่", "No"));
+      if (p.parcelId) {
+        const a = parcelAttr(p.parcelId), r = taxRow(p.parcelId);
+        add(text("โฉนด", "Title"), `<button type="button" class="portfolio-link" data-goto="taxmap|${esc(p.parcelId)}">${esc(text(`แปลง ${codeOf(p.parcelId)}`, `Parcel ${codeOf(p.parcelId)}`))}</button>${esc(p.parcelFrom === "p" ? text(" · แปลงที่หมุดตั้งอยู่", " · parcel the point stands in") : text(" · โฉนดหลักของอาคาร", " · main title of the building"))}`);
+        add(text("ภาษีของโฉนด", "Tax of the title"), esc(!a ? text("ยังจับคู่กับบัญชีภาษีไม่ได้", "Not matched to the tax roll") : r?.assessed69 == null ? text("ยังไม่มีตัวเลขภาษี", "No tax figure") : text(`ปี 2569 ${money(r.assessed69, 2)} · ปี 2570 ${money(r.new70, 2)}`, `2569 ${money(r.assessed69, 2)} · 2570 ${money(r.new70, 2)}`)));
+      }
     } else if (S.dataset === "buildings") {
       if (p.houseNumbers?.length || p.surveyPoints) add(text("บ้านเลขที่ในอาคาร", "House numbers"), esc(houseNumbersText(p.houseNumbers, 12) || text("ไม่มีในแบบสำรวจ", "None in the survey")));
       if (p.roll) add(text("บัญชีสิ่งปลูกสร้าง", "Building roll"), esc(text(...(rollGroup(p)?.label || ["อาคารไม่ตรงแปลงใด", "No parcel under the building"]))) + (p.rollValue != null
@@ -1762,6 +1923,7 @@
       if (a?.sqwa != null) add(text("เนื้อที่ตามบัญชี", "Area on the roll"), esc(sqwaText(a.sqwa)));
       else add(text("เนื้อที่ (วัดจากแผนที่)", "Area (map measure)"), `${num(p.areaM2)} ${text("ตร.ม.", "m²")}`);
       add(text("ราคาประเมิน", "Appraisal"), a?.price != null ? `${num(a.price)} ${text("บาท/ตร.ว.", "THB/sq wah")}` : text("ยังไม่มีข้อมูลส่วนนี้", "Not available"));
+      if (a?.price != null && S.appraisalAdj) add(text("ราคาสมมติรอบ 2570–2573", "Assumed 2570–2573 price"), `${num(Math.round(a.price * (1 + S.appraisalAdj / 100)))} ${text("บาท/ตร.ว.", "THB/sq wah")} (${pctText(S.appraisalAdj)})`);
       add(text("มูลค่าที่ดิน", "Land value"), a?.landValue != null ? money(a.landValue) : null);
       add(text("การใช้ประโยชน์ปี 2569", "Use in 2569"), a?.useLabel ? esc(text(...a.useLabel)) + (a.mainHome ? text(" · บ้านหลังหลัก", " · main home") : "") : null);
       if (r) {
@@ -1812,9 +1974,42 @@
   }
 
   /* ---------- legends ---------- */
+  /* 41-sample legend: one flat swatch per bin in the order drawn (no gradient), end labels, and the full range table. */
+  const lutNum = (v) => (Math.abs(v) >= 100 ? num(Math.round(v)) : num(v, Math.abs(v) >= 10 ? 1 : 2));
+  function lutLegendHTML(c, noDataLabel, zeroLabel) {
+    const m = c.cuts.length;
+    if (!m) return `<div class="legend-title">${esc(c.title)}</div><p class="small-note">${text("ยังคำนวณช่วงสีไม่ได้", "Colour ranges are not available yet")}</p>`;
+    let swatches = [], ends = [], rows = [];
+    if (c.kind === "lut") {
+      for (let j = 0; j <= m; j++) {
+        const col = c.lut[m ? Math.round(j * 40 / m) : 0];
+        swatches.push(col);
+        rows.push([col, j === 0 ? text(`ต่ำกว่า ${lutNum(c.cuts[0])}`, `Under ${lutNum(c.cuts[0])}`) : j === m ? text(`${lutNum(c.cuts[m - 1])} ขึ้นไป`, `${lutNum(c.cuts[m - 1])} and above`) : `${lutNum(c.cuts[j - 1])}–${lutNum(c.cuts[j])}`]);
+      }
+      ends = [text(`ต่ำกว่า ${lutNum(c.cuts[0])}`, `Under ${lutNum(c.cuts[0])}`), lutNum(c.cuts[Math.floor(m / 2)]), text(`${lutNum(c.cuts[m - 1])} ขึ้นไป`, `${lutNum(c.cuts[m - 1])} and up`)];
+    } else {
+      const arm = (j) => (m ? Math.round(j * 19 / m) : 0);
+      const range = (j) => (j === m ? text(`${lutNum(c.cuts[m - 1])} ขึ้นไป`, `${lutNum(c.cuts[m - 1])} and over`) : `${lutNum(j === 0 ? c.neutral : c.cuts[j - 1])}–${lutNum(c.cuts[j])}`);
+      for (let j = m; j >= 0; j--) { swatches.push(c.lut[19 - arm(j)]); rows.push([c.lut[19 - arm(j)], text(`ลดลง ${range(j)}`, `Down ${range(j)}`)]); }
+      swatches.push(c.lut[20]); rows.push([c.lut[20], text(`ไม่เปลี่ยน (ต่างไม่ถึง ${c.neutral} บาท)`, `No change (under ${c.neutral} THB)`)]);
+      for (let j = 0; j <= m; j++) { swatches.push(c.lut[21 + arm(j)]); rows.push([c.lut[21 + arm(j)], text(`เพิ่มขึ้น ${range(j)}`, `Up ${range(j)}`)]); }
+      ends = [text(`ลดลง ${lutNum(c.cuts[m - 1])}+`, `Down ${lutNum(c.cuts[m - 1])}+`), text("ไม่เปลี่ยน", "No change"), text(`เพิ่ม ${lutNum(c.cuts[m - 1])}+`, `Up ${lutNum(c.cuts[m - 1])}+`)];
+    }
+    const bar = `<div class="lut-bar" aria-hidden="true">${swatches.map((col) => `<span style="background:${col}"></span>`).join("")}</div>`;
+    const endRow = `<div class="lut-ends"><span>${esc(ends[0])}</span><span>${esc(ends[1])}</span><span>${esc(ends[2])}</span></div>`;
+    const extra = (zeroLabel ? `<div class="legend-class"><span class="legend-chip" data-state="zero" style="background:${c.lut[0]};--zero-outline:${SilaScales.zeroOutline(c.scaleId, S.theme)}"></span><span>${esc(zeroLabel)}</span></div>` : "")
+      + `<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${esc(noDataLabel)}</span></div>`;
+    // The range list scrolls inside the legend, so the scroll box takes keyboard focus (axe scrollable-region-focusable).
+    const table = `<details class="lut-table"><summary>${text(`ช่วงสีทั้งหมด ${rows.length} ช่วง`, `All ${rows.length} colour ranges`)}</summary><div class="lut-scroll" role="region" tabindex="0" aria-label="${esc(text(`ช่วงสี ${rows.length} ช่วงของ${c.title}`, `${rows.length} colour ranges of ${c.title}`))}"><ul>${rows.map(([col, label]) => `<li><span class="legend-chip" style="background:${col}"></span><span>${esc(label)}</span></li>`).join("")}</ul></div></details>`;
+    return `<div class="legend-title">${esc(c.title)}</div>${bar}${endRow}<div class="legend-classes">${extra}</div><div class="legend-unit">${esc(c.unit)}</div><div class="legend-unit">${esc(text(`41 สีตาม LDS · ${c.refNote} · ช่วงคงที่ เปลี่ยนปีหรือเลื่อนแถบแล้วสีเปลี่ยนตามจำนวนเงิน`, `41 LDS colours · ${c.refNote} · fixed ranges, so colours follow the amount when the year or sliders change`))}</div>${table}`;
+  }
   function analyticalLegend() {
     const c = S.classing;
     if (!c) return "";
+    if (c.kind === "lut" || c.kind === "lutdiv") {
+      const noData = S.dataset === "appraisal" ? text("ยังไม่มีราคาประเมิน", "No appraisal yet") : text("ไม่มีตัวเลขภาษีของแปลงนี้ (ไม่ใช่ศูนย์)", "No tax figure for this parcel (not zero)");
+      return lutLegendHTML(c, noData, S.dataset === "taxmap" && c.kind === "lut" ? text("0 บาท (บัญชีระบุว่ายกเว้นทั้งหมด)", "0 THB (the roll shows it fully exempt)") : null);
+    }
     let rows = "";
     if (c.kind === "diverging") {
       const cuts = c.cuts, n = cuts.length;
@@ -1838,6 +2033,8 @@
     return `<div class="legend-title">${esc(c.title)}</div><div class="legend-classes">${rows}</div><div class="legend-unit">${esc(c.unit)}</div>`;
   }
   function buildingLegend() {
+    if (S.buildingView === "tax") return S.classing ? lutLegendHTML(S.classing, text("ยังไม่มีตัวเลขภาษีของโฉนดใต้อาคาร (ไม่ใช่ศูนย์)", "No tax figure for the titles under it (not zero)"), S.classing.kind === "lut" ? text("0 บาท (บัญชีระบุว่ายกเว้นทั้งหมด)", "0 THB (the roll shows it fully exempt)") : null)
+      : `<p class="small-note">${text("กำลังเปิดข้อมูลภาษี…", "Opening tax data…")}</p>`;
     if (S.buildingView === "straddle") return `<div class="legend-title">${text("อาคารที่อยู่บนหลายแปลง", "Buildings spanning parcels")}</div><div class="legend-classes"><div class="legend-class"><span class="legend-chip" style="background:${catHex("coral")}"></span><span>${text("แปลงที่สองมีหลังคาตั้งแต่ 25% และ 20 ตร.ม.", "Second parcel holds ≥25% and 20 m² of the roof")}</span></div><div class="legend-class"><span class="legend-chip" style="background:${S.theme === "light" ? "#DCE1DD" : "#33403D"}"></span><span>${text("อาคารอื่น", "Other buildings")}</span></div></div>`;
     if (S.buildingView === "roll") return `<div class="legend-title">${text("อาคารกับบัญชีสิ่งปลูกสร้างปี 2569", "Buildings and the 2569 building roll")}</div><div class="legend-classes one-col">${ROLL_GROUPS.map((g) => `<div class="legend-class"><span class="legend-chip" style="background:${catHex(g.color)}"></span><span>${esc(text(...g.label))}</span></div>`).join("")}<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${text("ไม่ตรงแปลงใด", "No parcel under it")}</span></div></div><div class="legend-unit">${text("ผูกเมื่อบ้านเลขที่ในอาคารและโฉนดใต้อาคารตรงกับรายการในบัญชี · สีแยกประเภท ไม่ใช่ระดับความเสี่ยง", "Linked when the building’s house number and the title under it both match a roll entry · colours separate categories, not risk")}</div>`;
     if (S.buildingView === "registry") {
@@ -1866,28 +2063,42 @@
     if (!mount) return;
     let html = "";
     if (S.dataset === "taxmap") {
-      const scen = ["assessed69", "old70", "new70", "delta"].map((id) => `<option value="${id}"${id === S.taxScenario ? " selected" : ""}>${esc(taxScenarioLabel(id))}</option>`).join("");
-      const future = ["old70", "new70", "delta"].includes(S.taxScenario);
-      html = `<div class="control-card"><label class="control-field"><span>${text("สีบนแผนที่แสดง", "Map colours show")}</span><select id="tax-scenario">${scen}</select></label>`
-        + (future ? `<div class="control-field"><span id="adj-label">${text("ราคาประเมินรอบใหม่ 2570–2573 เทียบรอบปัจจุบัน", "New 2570–2573 appraisal vs current")}</span><div class="control-range"><input id="appraisal-adj" type="range" min="-30" max="100" step="5" value="${S.appraisalAdj}" aria-labelledby="adj-label" aria-describedby="adj-note"><output id="appraisal-adj-value" for="appraisal-adj">${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}%</output></div><p id="adj-note" class="small-note">${text("กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569 ระหว่างนี้ใช้แถบนี้สมมติว่าราคาที่ดินเปลี่ยนเท่าไร ราคาอาคารคงเดิม", "The Treasury is due to publish new prices on 1 Dec 2569; until then use this to assume a land price change. Building prices stay the same.")}</p></div>` : "")
-        + (S.taxScenario === "new70" || S.taxScenario === "delta" ? `<fieldset class="check-list"><legend>${text("ข้อเสนอที่คิดรวม", "Fixes included")}</legend>${TAX_STRATEGIES.map((s) => { const off = S.parcelTax?.availability?.[s.id] === false; return `<label class="check-item"><input type="checkbox" data-strategy="${s.id}"${S.taxStrategies.has(s.id) && !off ? " checked" : ""}${off ? " disabled" : ""}><span>${esc(text(...s.label))}<small>${esc(text(...(off ? window.SilaTaxEngine.OWNER_REASON : s.basis)))}</small></span></label>`; }).join("")}</fieldset>` : "")
-        + `</div>`;
+      html = `<div class="control-card">${taxAssumptionsHTML()}</div>`;
+    } else if (S.dataset === "appraisal") {
+      html = `<div class="control-card"><fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>${adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)}<p id="adj-note" class="small-note">${text("ที่ 0% แผนที่แสดงราคารอบปัจจุบัน เมื่อเลื่อนแถบ แผนที่และตัวเลขแสดงราคาที่สมมติ ช่วงสีคงเดิม สีจึงเปลี่ยนตามราคา · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569", "At 0% the map shows the current round; moving the slider shows assumed prices on the same colour ranges, so colours follow the price · the Treasury is due to publish new prices on 1 Dec 2569")}</p></fieldset></div>`;
     } else if (S.dataset === "popgrid") {
       html = `<div class="control-card"><span class="control-field">${text("สีบนแผนที่แสดง", "Map colours show")}</span><div class="segmented" role="group" aria-label="${text("เลือกกลุ่มคน", "Choose a group")}">${["t", "c", "a", "o", "m", "f"].map((id) => `<button type="button" data-pop-metric="${id}" aria-pressed="${id === S.popMetric}">${esc(popMetricLabel(id))}</button>`).join("")}</div><p class="small-note">${text("นับจากรายชื่อในแบบสำรวจอาคาร 19 ต.ค. 2569 ซึ่งมีรายชื่อเพียงบางหลัง อายุ 15–42 และ 42 ปีขึ้นไปประมาณจากประเภทเลขบัตรประชาชน", "Counted from member lists in the 19 Oct 2026 building survey, which only some houses have. The 15–42 and 42+ bands are estimated from the national ID type.")}</p></div>`;
     } else if (S.dataset === "terrain") {
       html = terrainSurfaceControlsHTML() + terrainControlsHTML();
     } else if (S.dataset === "buildings") {
-      html = `<div class="control-card"><span class="control-field">${text("ระบายสีตาม", "Colour by")}</span><div class="segmented" role="group" aria-label="${text("ระบายสีอาคารตาม", "Colour buildings by")}">${[["type", ["อาคารทั้งหมด", "All buildings"]], ["registry", ["ทะเบียนบ้านต่ออาคาร", "House registrations"]], ["roll", ["อยู่ในบัญชีภาษีหรือยัง", "On the tax roll?"]], ["straddle", ["อยู่บนหลายแปลง", "Spans parcels"]], ["use", ["การใช้ตามสำรวจ", "Surveyed use"]]].map(([id, lab]) => `<button type="button" data-building-view="${id}" aria-pressed="${id === S.buildingView}">${esc(text(...lab))}</button>`).join("")}</div></div>`;
+      html = `<div class="control-card"><span class="control-field">${text("ระบายสีตาม", "Colour by")}</span><div class="segmented" role="group" aria-label="${text("ระบายสีอาคารตาม", "Colour buildings by")}">${[["type", ["อาคารทั้งหมด", "All buildings"]], ["tax", ["ภาษีของโฉนดใต้อาคาร", "Tax of the titles under it"]], ["roll", ["อยู่ในบัญชีภาษีหรือยัง", "On the tax roll?"]], ["registry", ["ทะเบียนบ้านต่ออาคาร", "House registrations"]], ["straddle", ["อยู่บนหลายแปลง", "Spans parcels"]], ["use", ["การใช้ตามสำรวจ", "Surveyed use"]]].map(([id, lab]) => `<button type="button" data-building-view="${id}" aria-pressed="${id === S.buildingView}">${esc(text(...lab))}</button>`).join("")}</div>${S.buildingView === "tax" ? `<p class="small-note">${text("อาคารคิดภาษีกับโฉนดใต้หลังคา โฉนดที่อาคารหลังเดียวกันคร่อม (หลังคาบนโฉนดที่สองอย่างน้อย 25% และ 20 ตร.ม. มีบ้านเลขที่ไม่เกินหนึ่งเลข และโฉนดที่สองไม่มีอาคารอื่น) นับเป็นชุดเดียวที่น่าจะคิดภาษีรวมกัน ต้องตรวจชื่อในโฉนดก่อนใช้", "A building is taxed with the titles under its roof. Titles joined by one building (at least 25% and 20 m² of the roof on the second title, one house number at most, no other building on the second title) count as one set that is likely taxed together; check the owner on the titles before use.")}</p>${taxAssumptionsHTML()}` : ""}</div>`;
     }
     mount.innerHTML = html;
   }
 
+  const pctText = (v) => `${v > 0 ? "+" : ""}${v}%`;
+  function adjSliderHTML(id, label, value) {
+    return `<div class="control-field"><span id="${id}-label">${label}</span><div class="control-range"><input id="${id}" type="range" min="-30" max="100" step="5" value="${value}" aria-labelledby="${id}-label" aria-describedby="adj-note"><output id="${id}-value" for="${id}">${pctText(value)}</output></div></div>`;
+  }
+  /* Shared assumptions for the tax map and the buildings tax view: year shown, new appraisal round (land and buildings), fixes. */
+  function taxAssumptionsHTML() {
+    const scen = ["assessed69", "old70", "new70", "delta"].map((id) => `<option value="${id}"${id === S.taxScenario ? " selected" : ""}>${esc(taxScenarioLabel(id))}</option>`).join("");
+    const avail = (s) => S.parcelTax?.availability?.[s.id] !== false;
+    const fixes = TAX_STRATEGIES.map((s) => `<label class="check-item"><input type="checkbox" data-strategy="${s.id}"${S.taxStrategies.has(s.id) && avail(s) ? " checked" : ""}${avail(s) ? "" : " disabled"}><span>${esc(text(...s.label))}<small>${esc(text(...(avail(s) ? s.basis : window.SilaTaxEngine.OWNER_REASON)))}</small></span></label>`).join("");
+    const on = TAX_STRATEGIES.filter((s) => S.taxStrategies.has(s.id) && avail(s)).length;
+    return `<label class="control-field"><span>${text("สีบนแผนที่แสดง", "Map colours show")}</span><select id="tax-scenario">${scen}</select></label>`
+      + `<fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>`
+      + adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)
+      + adjSliderHTML("building-adj", text("ราคาสิ่งปลูกสร้าง เทียบรอบปัจจุบัน", "Building prices vs the current round"), S.bldAdj)
+      + `<p id="adj-note" class="small-note">${text("มีผลกับภาษีปี 2570 · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569 ระหว่างนี้ใช้แถบนี้สมมติ · ถ้าแผนที่แสดงปี 2569 อยู่ เลื่อนแถบแล้วจะเปลี่ยนไปแสดงปี 2570 ตามข้อเสนอ · ยังไม่ได้คิดค่าเสื่อมอาคารที่เพิ่มขึ้นหนึ่งปี", "Applies to the 2570 tax · the Treasury is due to publish new prices on 1 Dec 2569; until then use these to assume · if the map shows 2569, moving a slider switches it to 2570 with fixes · one more year of building depreciation is not included")}</p></fieldset>`
+      + `<details class="fix-details"${S.taxScenario === "new70" || S.taxScenario === "delta" ? " open" : ""}><summary>${text(`ข้อเสนอที่คิดรวมในปี 2570 ตามข้อเสนอ (เลือก ${on} ข้อ)`, `Fixes in 2570 with fixes (${on} selected)`)}</summary><fieldset class="check-list"><legend class="sr-only">${text("ข้อเสนอที่คิดรวม", "Fixes included")}</legend>${fixes}</fieldset></details>`;
+  }
   /* ---------- tax engine glue ---------- */
   function runTax() {
     S.taxResult = null;
     if (!S.parcelTax || !window.SilaTaxEngine) return;
     try {
-      S.taxResult = window.SilaTaxEngine.run(S.parcelTax, { strategies: S.taxStrategies, appraisalAdjPct: S.appraisalAdj });
+      S.taxResult = window.SilaTaxEngine.run(S.parcelTax, { strategies: S.taxStrategies, appraisalAdjPct: S.appraisalAdj, buildingAdjPct: S.bldAdj });
     } catch (e) { console.error(e); S.taxResult = null; }
   }
   /* Parcels matched to the municipal roll whose outline lies outside the boundary line: in city totals, not in the municipality list. */
@@ -1970,6 +2181,8 @@
     const onRoll = fs.filter((f) => f.properties.roll === "on_roll").length, missing = fs.filter((f) => f.properties.roll === "missing_house_no").length, unmatched = fs.filter((f) => f.properties.roll === "house_no_unmatched").length, elsewhere = fs.filter((f) => f.properties.roll === "house_no_elsewhere").length;
     return `<section class="panel-section"><div class="facts-grid">${fact(fs.length, text("อาคารในพื้นที่นี้", "Buildings in this area"))}${fact(withReg, text("อาคารที่ผูกกับทะเบียนบ้านได้", "Buildings joined to the house register"))}${fact(multi, text("อาคารที่มี 2 ทะเบียนบ้านขึ้นไป", "Buildings with 2+ house registrations"))}${fact(onRoll, text("อาคารที่ผูกกับบัญชีสิ่งปลูกสร้างได้", "Buildings linked to the building roll"))}${fact(missing, text("บ้านเลขที่ไม่อยู่ในบัญชีสิ่งปลูกสร้าง", "House number absent from the roll"))}${fact(straddle, text("อาคารที่อยู่บนหลายแปลง", "Buildings spanning parcels"))}${fact(valued, text("อาคารที่ประมาณมูลค่าได้", "Buildings with an estimated value"))}</div>`
       + `<button class="more-button" data-show-list="missing">${text("ดูอาคารที่บ้านเลขที่ไม่อยู่ในบัญชี", "List buildings missing from the roll")} (${num(missing)})</button>${unmatched ? `<button class="more-button" data-show-list="unmatched">${text("ดูอาคารที่ต้องเทียบกับรายการไม่มีบ้านเลขที่", "List buildings to compare with roll entries lacking a number")} (${num(unmatched)})</button>` : ""}${elsewhere ? `<button class="more-button" data-show-list="elsewhere">${text("ดูบ้านเลขที่ที่ผูกกับโฉนดอื่น", "List house numbers under another title")} (${num(elsewhere)})</button>` : ""}<button class="more-button" data-show-list="multi">${text("ดูอาคารที่มีหลายทะเบียนบ้าน", "List buildings with several registrations")}</button><button class="more-button" data-show-list="straddle">${text("ดูอาคารที่อยู่บนหลายแปลง", "List buildings spanning parcels")}</button>`
+      + (() => { if (!S.taxResult) return ""; const sets = fs.filter((f) => setLead(f.properties) != null), off = sets.filter((f) => setOffRoll(f.properties) > 0).length;
+          return sets.length ? `<button class="more-button" data-show-list="titlesets">${text("ดูชุดโฉนดที่น่าจะคิดภาษีรวมกัน (อาคารหลังเดียวกันคร่อม)", "List title sets likely taxed together")} (${num(sets.length)})</button>${off ? `<button class="more-button" data-show-list="titleoffroll">${text("ดูชุดโฉนดที่มีโฉนดยังจับคู่กับบัญชีภาษีไม่ได้", "List title sets with a title not matched to the roll")} (${num(off)})</button>` : ""}` : ""; })()
       + `<p class="small-note">${text("ผูกหมุดทะเบียนบ้านกับรูปอาคารด้วยตำแหน่ง: หมุดอยู่ในรูปอาคาร หรืออยู่ติดอาคารไม่เกิน 5 ม. และอยู่ในแปลงเดียวกัน ไม่ใช้ชื่อหรือเลขที่คล้ายกันเดา อาคารหลายทะเบียนบ้านเป็นสัญญาณให้ตรวจการให้เช่าหรือสิทธิบ้านหลังหลัก ไม่ใช่ข้อพิสูจน์", "House-register points are joined to footprints by position: inside the outline, or within 5 m on the same parcel. No guessing from names or similar numbers. Several registrations in one building signal a check on renting or main-home relief, not proof.")}</p>`
       + `<p class="small-note">${text("อาคารที่อยู่บนหลายแปลงเป็นสัญญาณให้ตรวจว่าแปลงเหล่านั้นควรรวมเป็นฐานภาษีเดียวกันหรือไม่ (ม.42 วรรคสอง ถ้าเป็นเจ้าของเดียวกันและที่ดินติดกัน) แผนที่สองชุดอาจเหลื่อมกันเล็กน้อย จึงต้องตรวจที่ดินจริงก่อน", "A building spanning parcels is a signal to check whether those parcels form one tax base (s.42 para 2, same owner and adjoining). The two maps can be slightly offset, so check on site first.")}</p></section>` + supplementsHTML() + notesLink();
   }
@@ -1986,10 +2199,30 @@
     elsewhere: { layer: "buildings", test: (p) => p.roll === "house_no_elsewhere", label: ["บ้านเลขที่อยู่ในบัญชีแต่ผูกกับโฉนดอื่น", "House number on the roll under another title"] },
     fixes: { layer: "taxmap", test: (p) => { const r = taxRow(p.id); return r?.new70 != null && r?.old70 != null && r.new70 - r.old70 >= 1; }, sort: (a, b) => { const d = (f) => { const r = taxRow(f.properties.id); return (r?.new70 ?? 0) - (r?.old70 ?? 0); }; return d(b) - d(a); }, label: ["แปลงที่ข้อเสนอทำให้ภาษีปี 2570 เปลี่ยน เรียงจากมากไปน้อย (ควรตรวจก่อน)", "Parcels whose 2570 tax changes with the fixes, largest first (check first)"] },
     debtors: { layer: "taxmap", test: (p) => ["unpaid", "partial"].includes(taxRow(p.id)?.status69), sort: (a, b) => (taxRow(b.properties.id)?.assessed69 || 0) - (taxRow(a.properties.id)?.assessed69 || 0), label: ["แปลงที่อยู่ในบัญชีลูกหนี้ปี 2569", "Parcels on the 2569 debtor list"] },
+    titlesets: { layer: "buildings", test: (p) => setLead(p) != null, sort: (a, b) => (setOf(b.properties)?.new70 ?? -1) - (setOf(a.properties)?.new70 ?? -1), label: ["ชุดโฉนดที่น่าจะคิดภาษีรวมกัน (อาคารหลังเดียวกันคร่อม) เรียงตามภาษีปี 2570 ตามข้อเสนอ", "Title sets likely taxed together (joined by one building), by 2570 tax with fixes"] },
+    titleoffroll: { layer: "buildings", test: (p) => setLead(p) != null && setOffRoll(p) > 0, sort: (a, b) => setOffRoll(b.properties) - setOffRoll(a.properties), label: ["ชุดโฉนดที่มีโฉนดยังจับคู่กับบัญชีภาษีไม่ได้ (ควรตรวจว่าตกสำรวจหรือไม่)", "Title sets with a title not matched to the tax roll (check whether it was missed)"] },
     newpoints: { layer: "houses", test: (p) => p.newPoint === true, label: ["หมุดตำแหน่งใหม่จากการสำรวจ", "Positions added by the survey"] },
     nofootprint: { layer: "houses", test: (p) => !p.buildingId, sort: (a, b) => (b.properties.buildingDistM ?? 0) - (a.properties.buildingDistM ?? 0), label: ["หมุดที่ยังไม่มีรูปอาคาร", "Points without a footprint"] },
   };
   const activeListFilter = () => (S.listFilter && LIST_FILTERS[S.listFilter]?.layer === S.dataset ? LIST_FILTERS[S.listFilter] : null);
+  /* One list row per title set: the largest building whose titles belong to the set leads it. */
+  function setLeads() {
+    const fc = S.cache.get(BUILDINGS_PATH());
+    if (!fc || !S.parcelTax) return null;
+    if (S.setLeads?.fc === fc) return S.setLeads.map;
+    const map = new Map();
+    for (const f of fc.features) {
+      const u = buildingUnit(f.properties);
+      if (u?.kind !== "group") continue;
+      const cur = map.get(u.id);
+      if (!cur || (f.properties.areaM2 || 0) > cur.area) map.set(u.id, { id: f.properties.id, area: f.properties.areaM2 || 0 });
+    }
+    S.setLeads = { fc, map };
+    return map;
+  }
+  function setLead(p) { const u = buildingUnit(p); return u?.kind === "group" && setLeads()?.get(u.id)?.id === p.id ? u.id : null; }
+  const setOf = (p) => { const u = buildingUnit(p); return u?.kind === "group" ? S.taxResult?.byGroup?.get(u.id) || null : null; };
+  const setOffRoll = (p) => { const u = buildingUnit(p); return u?.kind === "group" ? (S.parcelTax.buildingGroups.get(u.id) || []).filter((id) => !parcelAttr(id)).length : 0; };
   async function gotoFeature(layer, id) {
     if (!dataset(layer)) return;
     if (S.dataset !== layer) await setDataset(layer);
@@ -2446,6 +2679,7 @@
       computeClassing();
       S.featureLayer = L.geoJSON({ ...fc, features: scoped }, { pane: "features", interactive: false, style: choroplethStyle }).addTo(S.map);
     } else if (S.dataset === "buildings") {
+      computeClassing();
       S.featureLayer = L.geoJSON({ ...fc, features: scoped }, { pane: "features", interactive: false, style: buildingStyle }).addTo(S.map);
     } else S.featureLayer =
       S.dataset === "houses"
@@ -2837,12 +3071,22 @@
       const t = (r) => taxRow(r.properties.id) || {};
       cols.push(["taxMapCode", prop("code")], ["titleMatchedBy", (r) => a(r).link], ["appraisalTHBPerSqWah", (r) => a(r).price], ["areaSqWah", (r) => round2(a(r).sqwa)],
         ["tax2569AssessedTHB", (r) => round2(t(r).assessed69)], ["payment2569", (r) => (t(r).status69 ? statusText(t(r).status69) : null)], ["taxpayerCode", (r) => a(r).tp],
-        [`tax2570CurrentMethodTHB_appraisal${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct`, (r) => round2(t(r).old70)],
-        [`tax2570WithFixesTHB_appraisal${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct`, (r) => round2(t(r).new70)], ["fixesApplied", (r) => (t(r).reasons || []).map((x) => (Array.isArray(x) ? text(...x) : x)).join("|")]);
+        [`tax2570CurrentMethodTHB_land${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct_buildings${S.bldAdj >= 0 ? "+" : ""}${S.bldAdj}pct`, (r) => round2(t(r).old70)],
+        [`tax2570WithFixesTHB_land${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct_buildings${S.bldAdj >= 0 ? "+" : ""}${S.bldAdj}pct`, (r) => round2(t(r).new70)], ["fixesApplied", (r) => (t(r).reasons || []).map((x) => (Array.isArray(x) ? text(...x) : x)).join("|")],
+        ["titleSetId", (r) => a(r).bgrp], ["titleSetSize", (r) => (a(r).bgrp != null ? S.parcelTax.buildingGroups.get(a(r).bgrp)?.length : null)]);
+      if (S.dataset === "appraisal" && S.appraisalAdj) cols.push([`appraisalAssumedTHBPerSqWah_${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct`, (r) => (a(r).price == null ? null : Math.round(a(r).price * (1 + S.appraisalAdj / 100)))]);
+      /* Same thresholds and colours as the map and legend (LDS 41-sample LUT). */
+      if (S.classing?.lut) cols.push(["mapColorStep41", (r) => { const v = layerValue(r); return typeof v === "number" ? lutIndex(S.classing, v) : null; }], ["mapColorHex", (r) => { const v = layerValue(r); return typeof v === "number" ? lutHex(S.classing, v) : null; }]);
     } else if (S.dataset === "buildings") {
-      cols.push(["type", prop("type")], ["floors", prop("floors")], ["areaM2", prop("areaM2")], ["houseNumbers", prop("houseNumbers")], ["parcelIds", prop("parcelIds")], ["rollStatus", prop("roll")], ["spansParcels", prop("straddle")]);
+      cols.push(["type", prop("type")], ["floors", prop("floors")], ["areaM2", prop("areaM2")], ["houseNumbers", prop("houseNumbers")], ["parcelIds", prop("parcelIds")], ["parcelCodes", (r) => (r.properties.parcelIds || []).map(codeOf)], ["rollStatus", prop("roll")], ["spansParcels", prop("straddle")]);
+      if (S.taxResult) {
+        const unit = (r) => buildingUnit(r.properties);
+        cols.push(["taxedWithTitleSet", (r) => { const u = unit(r); return u?.kind === "group" ? (S.parcelTax.buildingGroups.get(u.id) || []).map(codeOf) : u ? [codeOf(u.id)] : null; }],
+          ["titleSetTax2569THB", (r) => round2(unitValue(unit(r), "assessed69"))], [`titleSetTax2570WithFixesTHB_land${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct_buildings${S.bldAdj >= 0 ? "+" : ""}${S.bldAdj}pct`, (r) => round2(unitValue(unit(r), "new70"))]);
+        if (S.buildingView === "tax" && S.classing?.lut) cols.push(["mapColorStep41", (r) => { const v = unitValue(unit(r), S.taxScenario); return v == null ? null : lutIndex(S.classing, v); }], ["mapColorHex", (r) => { const v = unitValue(unit(r), S.taxScenario); return v == null ? null : lutHex(S.classing, v); }]);
+      }
     } else if (S.dataset === "houses") {
-      cols.push(["houseNumber", prop("houseNumber")], ["type", prop("type")], ["use", prop("use")], ["buildingId", prop("buildingId")]);
+      cols.push(["houseNumber", prop("houseNumber")], ["type", prop("type")], ["use", prop("use")], ["buildingId", prop("buildingId")], ["parcelId", prop("parcelId")], ["parcelCode", (r) => (r.properties.parcelId ? codeOf(r.properties.parcelId) : null)], ["parcelFrom", (r) => ({ b: "building main title", p: "point in parcel" }[r.properties.parcelFrom] || null)]);
     } else if (S.dataset === "roads") {
       cols.push(["roadName", prop("roadName")], ["surface", prop("surface")]);
     }
@@ -2882,19 +3126,42 @@
   function restyleLayer() {
     if (S.featureLayer) {
       if (CHORO_LAYERS.has(S.dataset)) { computeClassing(); S.featureLayer.setStyle(choroplethStyle); }
-      else if (S.dataset === "buildings") S.featureLayer.setStyle(buildingStyle);
+      else if (S.dataset === "buildings") { computeClassing(); S.featureLayer.setStyle(buildingStyle); }
     }
     drawLegend();
     if (S.record) { renderRecord(); if (S.popup) openPopupFor(S.record, S.popup.getLatLng()); }
+  }
+  /* Slider assumptions: the value shows while dragging; the map and totals follow after a short pause and on release.
+     Controls are not re-rendered meanwhile, so the slider keeps focus and the drag. */
+  function readAdj(t) {
+    const v = Math.max(-30, Math.min(100, Math.round(Number(t.value) || 0)));
+    if (t.id === "building-adj") S.bldAdj = v; else S.appraisalAdj = v;
+    const out = $(`${t.id}-value`); if (out) out.textContent = pctText(v);
+  }
+  function applyAssumptions() {
+    clearTimeout(applyAssumptions.timer); applyAssumptions.timer = 0;
+    const taxView = S.dataset === "taxmap" || (S.dataset === "buildings" && S.buildingView === "tax");
+    if (taxView && S.taxScenario === "assessed69" && (S.appraisalAdj || S.bldAdj)) {
+      S.taxScenario = "new70";
+      const sel = $("tax-scenario"); if (sel) sel.value = "new70";
+      const det = document.querySelector(".fix-details"); if (det) det.open = true;
+      toast(text("แผนที่เปลี่ยนไปแสดงภาษีปี 2570 ตามข้อเสนอ เพราะราคาใหม่มีผลกับปี 2570", "The map now shows the 2570 tax with fixes, since new prices apply to 2570"));
+    }
+    if (S.dataset !== "appraisal") runTax();
+    restyleLayer();
+    if (S.tab === "overview") $("tab-content").innerHTML = overviewContent();
+    renderSummary(); syncURL(true);
   }
   function bindEvents() {
     document.addEventListener("change", (e) => {
       const t = e.target;
       if (t.id === "mission-select") { setMission(t.value); return; }
       if (t.id === "layer-select") { setDataset(t.value); return; }
-      if (t.id === "tax-scenario") { S.taxScenario = t.value; renderLayerControls(); restyleLayer(); syncURL(true); return; }
+      if (t.id === "tax-scenario") { S.taxScenario = t.value; renderLayerControls(); restyleLayer(); syncURL(true); $("tax-scenario")?.focus(); return; }
       if (t.matches?.("[data-strategy]")) {
         t.checked ? S.taxStrategies.add(t.dataset.strategy) : S.taxStrategies.delete(t.dataset.strategy);
+        const sum = document.querySelector(".fix-details > summary"), on = TAX_STRATEGIES.filter((x) => S.taxStrategies.has(x.id) && S.parcelTax?.availability?.[x.id] !== false).length;
+        if (sum) sum.textContent = text(`ข้อเสนอที่คิดรวมในปี 2570 ตามข้อเสนอ (เลือก ${on} ข้อ)`, `Fixes in 2570 with fixes (${on} selected)`);
         runTax(); restyleLayer(); $("tab-content").innerHTML = S.tab === "overview" ? overviewContent() : $("tab-content").innerHTML; renderSummary(); syncURL(true); return;
       }
       if (t.id === "terrain-exaggeration-input") { renderLayerControls(); syncURL(true); return; }
@@ -2906,13 +3173,13 @@
       if (t.id === "terrain-lock") { S.terrainRangeLock = t.checked; if (!t.checked) updateTerrainSurface(true); renderLayerControls(); drawLegend(); syncURL(true); $("terrain-lock")?.focus(); return; }
       if (t.id === "terrain-contours") { S.terrainContours = t.checked; updateTerrainSurface(true); renderLayerControls(); syncURL(true); $("terrain-contours")?.focus(); return; }
       if (t.id === "terrain-step") { S.terrainStepChoice = t.value === "auto" ? "auto" : Number(t.value); updateTerrainSurface(true); renderLayerControls(); syncURL(true); $("terrain-step")?.focus(); return; }
-      if (t.id === "appraisal-adj") {
-        S.appraisalAdj = Number(t.value) || 0;
-        runTax(); restyleLayer(); if (S.tab === "overview") $("tab-content").innerHTML = overviewContent(); renderSummary(); syncURL(true); return;
-      }
+      if (t.id === "appraisal-adj" || t.id === "building-adj") { readAdj(t); applyAssumptions(); return; }
     });
     document.addEventListener("input", (e) => {
-      if (e.target.id === "appraisal-adj") { const v = Number(e.target.value) || 0; $("appraisal-adj-value").textContent = `${v > 0 ? "+" : ""}${v}%`; }
+      if (e.target.id === "appraisal-adj" || e.target.id === "building-adj") {
+        readAdj(e.target);
+        clearTimeout(applyAssumptions.timer); applyAssumptions.timer = setTimeout(applyAssumptions, 260);
+      }
       if (e.target.id === "terrain-exaggeration-input" && TEX) {
         S.terrainAuto = false;
         S.terrainSliderPos = Number(e.target.value);
@@ -3164,7 +3431,53 @@
       refreshMap({ fit: previousScope !== S.scope.id });
     });
   }
+  /* LDS 0.9.7 technical/data role: figures and codes in UI text are set in JetBrains Mono (Thai keeps its own face).
+     Text added anywhere in the page is scanned once and each figure is wrapped in <lds-num> (an inline element that no
+     existing span rule matches); form controls, options and cells already set in the data face are left alone. */
+  const NUM_TOKEN = /(?:[+\u2212](?=\d))?[A-Za-z0-9]+(?:[.,/:\-][A-Za-z0-9]+)*%?/g;
+  const NUM_SKIP = new Set(["SCRIPT", "STYLE", "TEXTAREA", "OPTION", "OPTGROUP", "SELECT", "INPUT", "TITLE", "NOSCRIPT", "CODE", "PRE", "svg", "LDS-NUM"]);
+  const numSkipEl = (e) => NUM_SKIP.has(e.nodeName) || e.classList?.contains("num") || e.classList?.contains("no-num") || e.isContentEditable;
+  function numInsideSkip(n) {
+    for (let e = n.nodeType === 1 ? n : n.parentNode; e && e !== document.body; e = e.parentNode) if (e.nodeType === 1 && numSkipEl(e)) return true;
+    return false;
+  }
+  /* The pieces stay inside one inline <lds-run>, so a flex or grid parent still sees one item and keeps its spaces. */
+  function numWrapText(n) {
+    const text = n.data; let last = 0, run = null;
+    for (const m of text.matchAll(NUM_TOKEN)) {
+      if (!/\d/.test(m[0])) continue;
+      run = run || document.createElement("lds-run");
+      if (m.index > last) run.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const span = document.createElement("lds-num"); span.textContent = m[0]; run.appendChild(span);
+      last = m.index + m[0].length;
+    }
+    if (!run || !n.parentNode) return;
+    if (last < text.length) run.appendChild(document.createTextNode(text.slice(last)));
+    n.parentNode.replaceChild(run, n);
+  }
+  function numWrap(root) {
+    if (!root || !root.isConnected || numInsideSkip(root)) return;
+    if (root.nodeType === 3) { if (/\d/.test(root.data)) numWrapText(root); return; }
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: (n) =>
+      n.nodeType === 1 ? (numSkipEl(n) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_SKIP) : (/\d/.test(n.data) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP) });
+    const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(numWrapText);
+  }
+  function installNumerals() {
+    if (!window.MutationObserver || !document.body) return;
+    const pending = new Set(); let queued = false;
+    const flush = () => { queued = false; const list = [...pending]; pending.clear(); list.forEach(numWrap); };
+    new MutationObserver((records) => {
+      for (const r of records) {
+        if (r.type === "characterData") pending.add(r.target);
+        else for (const n of r.addedNodes) if (n.nodeType === 1 || n.nodeType === 3) pending.add(n);
+      }
+      if (pending.size && !queued) { queued = true; queueMicrotask(flush); }
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    numWrap(document.body);
+  }
   async function start() {
+    installNumerals();
     try {
       let scales, parcelTax;
       [S.catalog, S.metadata, S.docs, S.tokens, S.publicSummary, S.terrainSource, S.terrainCoverage, scales, parcelTax, S.popStructure] = await Promise.all([

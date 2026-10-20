@@ -1,6 +1,6 @@
 {
  "schema": "sila-accessibility-checks/1.8",
- "checkedAtUtc": "2026-10-20T02:25:15.519929+00:00",
+ "checkedAtUtc": "2026-10-20T04:20:48.937739+00:00",
  "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
  "tool": "axe-core 4.10.2",
  "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
@@ -8,19 +8,19 @@
   {
    "view": "taxmap-dark-th",
    "viewport": "1440x900",
-   "rulesPassed": 49,
+   "rulesPassed": 50,
    "violations": []
   },
   {
    "view": "taxmap-light-en",
    "viewport": "1440x900",
-   "rulesPassed": 49,
+   "rulesPassed": 50,
    "violations": []
   },
   {
    "view": "taxmap-record",
    "viewport": "1440x900",
-   "rulesPassed": 51,
+   "rulesPassed": 52,
    "violations": []
   },
   {
@@ -44,7 +44,7 @@
   {
    "view": "appraisal-light-v12",
    "viewport": "1440x900",
-   "rulesPassed": 49,
+   "rulesPassed": 50,
    "violations": []
   },
   {
@@ -86,7 +86,7 @@
   {
    "view": "terrain-2d-light-en",
    "viewport": "1440x900",
-   "rulesPassed": 48,
+   "rulesPassed": 47,
    "violations": []
   },
   {
@@ -116,13 +116,31 @@
   {
    "view": "phone-taxmap",
    "viewport": "390x844",
-   "rulesPassed": 48,
+   "rulesPassed": 49,
    "violations": []
   },
   {
    "view": "phone-house-card",
    "viewport": "390x844",
    "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-tax-card",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "appraisal-adj20-en",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "taxmap-colour-table-open",
+   "viewport": "1440x900",
+   "rulesPassed": 52,
    "violations": []
   }
  ],
@@ -138,7 +156,7 @@
  ],
  "browser": "Chromium 141.0.7390.37",
  "summary": {
-  "views": 20,
+  "views": 23,
   "violations": 0
  }
 }

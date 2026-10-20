@@ -37,6 +37,8 @@
   "reference/terrain-contract.md",
   "reference/terrain-palettes.json",
   "server.py",
+  "styles.css",
+  "tax-calculator.css",
   "tax-calculator.js",
   "tax-engine.js",
   "terrain-3d.js"
@@ -77,6 +79,8 @@
   "reference/terrain-contract.md",
   "reference/terrain-palettes.json",
   "server.py",
+  "styles.css",
+  "tax-calculator.css",
   "tax-calculator.js",
   "tax-engine.js",
   "terrain-3d.js"
@@ -112,6 +116,7 @@
  "personalDataPatternHits": {},
  "reviewedFalsePositives": {
   "build-manifest.json": [
+   "thirteen_digit_number inside a SHA-256 hex string",
    "thirteen_digit_number inside a SHA-256 hex string",
    "thirteen_digit_number inside a SHA-256 hex string",
    "thirteen_digit_number inside a SHA-256 hex string",

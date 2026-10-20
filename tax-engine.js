@@ -5,6 +5,8 @@
  * difference the selected fixes make to the law-based tax of each taxpayer's whole portfolio, so the
  * gap between the two 2570 figures is exactly the effect of the fixes and is never counted twice.
  * Law: Land and Building Tax Act 2562 s.35, 37, 38, 40, 41, 42 para 2; rates: Royal Decree 2564.
+ * Revision 1.8.1: a building price change for the new appraisal round (buildingAdjPct, like appraisalAdjPct for land), and
+ * titles joined by one building (bgrp) as a s.42 para 2 proxy: its effect is reported per title even when the fix is off.
  */
 (function (root) {
   'use strict';
@@ -13,6 +15,8 @@
   const STRATEGIES = Object.freeze([
     {id: 'combine', needsOwner: true, label: ['รวมแปลงที่ติดกันของเจ้าของเดียวกันเป็นฐานเดียว', 'Combine adjoining parcels of one owner'],
       basis: ['ม.42 วรรคสอง · แปลงที่มีอาณาเขตติดต่อกันและเป็นของเจ้าของเดียวกัน รวมมูลค่าเป็นฐานเดียว (เครื่องนี้รวมภายในประเภทการใช้เดียวกัน เพราะอัตราแยกตามประเภท)', 's.42 para 2 · adjoining parcels of the same owner form one base (combined here within each use type, since rates differ by use)']},
+    {id: 'combineBuilding', label: ['รวมโฉนดที่อาคารหลังเดียวกันคร่อมเป็นฐานเดียว', 'Combine titles joined by one building'],
+      basis: ['ม.42 วรรคสอง · โฉนดที่อาคารหลังเดียวกันคร่อม (หลังคาบนโฉนดที่สองอย่างน้อย 25% และ 20 ตร.ม. อาคารมีบ้านเลขที่ไม่เกินหนึ่งเลข และโฉนดที่สองไม่มีอาคารหลังอื่นตั้งอยู่) น่าจะเป็นที่ดินผืนเดียวกันที่ใช้ร่วมกัน เครื่องนี้สมมติว่าเป็นเจ้าของเดียวกันและรวมภายในประเภทการใช้เดียวกัน ต้องตรวจชื่อในโฉนดก่อนใช้', 's.42 para 2 · titles joined by one building (at least 25% and 20 m² of the roof on the second title, one house number at most, and no other building on the second title) are likely one plot used together; this assumes one owner and combines within each use type. Check the owner on the titles before use']},
     {id: 'agriShare', needsOwner: true, label: ['ยกเว้นเกษตร 50 ล้านบาทครั้งเดียวต่อคน', 'One 50 million farm allowance per person'],
       basis: ['ม.40 · ยกเว้นรวมไม่เกิน 50 ล้านบาทต่อบุคคลใน อปท. เดียว ลำดับการหักระหว่างแปลงยังไม่มีเกณฑ์ เครื่องนี้หักแปลงมูลค่าสูงก่อนเป็นสมมติฐาน', 's.40 · at most 50 million per individual in one local authority; no rule yet on the order between parcels, so highest value first is assumed']},
     {id: 'mixedUse', label: ['แยกชั้นที่ค้าขายออกจากที่อยู่อาศัย', 'Split commercial floors from homes'],
@@ -37,7 +41,7 @@
 
   /* Expand a row into category parts {cat, value} where cat ∈ agri|main|resOther|other|vacant. */
   function parts(p, opts) {
-    const value = (p.landValue == null ? 0 : p.landValue * opts.landFactor) + (opts.building ? (opts.building(p) || 0) : (p.bldValue || 0));
+    const value = (p.landValue == null ? 0 : p.landValue * opts.landFactor) + (opts.building ? (opts.building(p) || 0) : (p.bldValue || 0)) * (opts.bldFactor || 1);
     if (!(value > 0)) return [];
     let shares = p.shares ? {...p.shares} : {[p.use || 'other']: 1};
     // Only titles the roll records as residential with no 'other' part: an existing 'other' share already covers trade.
@@ -65,7 +69,7 @@
     for (const p of rows) out.set(p.id, 0);
     // Groups: with "combine", adjoining same-owner parcels form one base per category; otherwise each parcel stands alone.
     const groupOf = new Map();
-    for (const p of rows) groupOf.set(p.id, opts.combine && p.grp != null ? 'g' + p.grp : 'p' + p.id);
+    for (const p of rows) groupOf.set(p.id, opts.combine && p.grp != null ? 'g' + p.grp : opts.combineBuilding && p.bgrp != null ? 'b' + p.bgrp : 'p' + p.id);
     const buckets = new Map();
     for (const part of allParts) {
       const key = groupOf.get(part.parcel) + '|' + part.cat;
@@ -102,7 +106,12 @@
       tp: r[idx.tp] ?? null, tax69: r[idx.tax69] ?? null, grp: r[idx.grp] ?? null,
       rented: !!r[idx.rented], comShare: r[idx.comShare] ?? 0, surveyBld: r[idx.surveyBld] ?? null,
       link: idx.link != null ? r[idx.link] ?? null : null, rollBld: idx.rollBld != null ? r[idx.rollBld] ?? null : null, missBld: idx.missBld != null ? r[idx.missBld] ?? 0 : 0,
+      bgrp: idx.bgrp != null ? r[idx.bgrp] ?? null : null, code: idx.code != null ? r[idx.code] ?? null : null,
     }));
+    // Titles joined by one building (index + 1 = bgrp); lists also titles that are not on the roll, with their map codes.
+    const buildingGroups = new Map((json.buildingGroups || []).map((ids, i) => [i + 1, ids]));
+    const codes = new Map(parcels.filter(p => p.code).map(p => [p.id, p.code]));
+    (json.buildingGroupCodes || []).forEach((list, i) => (json.buildingGroups?.[i] || []).forEach((id, k) => { if (list?.[k] && !codes.has(id)) codes.set(id, list[k]); }));
     for (const p of parcels) p.useLabel = p.use ? USE_LABEL[p.use] : null;
     const byId = new Map(parcels.map(p => [p.id, p]));
     const taxpayers = new Map();
@@ -120,38 +129,45 @@
     const summary = {...(json.summary || {}), pricedParcels: priced.length, medianPrice: priced.length ? priced[Math.floor(priced.length / 2)] : null};
     const keyedShare = parcels.length ? parcels.filter(p => p.tp && taxpayers.has(p.tp)).length / parcels.length : 0;
     const availability = Object.fromEntries(STRATEGIES.map(st => [st.id, !st.needsOwner || keyedShare >= 0.5]));
-    return {parcels, byId, taxpayers, summary, keyedShare, availability, meta: {asOf: json.asOf, taxYear: json.taxYear}};
+    if (!buildingGroups.size) availability.combineBuilding = false;
+    return {parcels, byId, taxpayers, summary, keyedShare, availability, buildingGroups, codes, meta: {asOf: json.asOf, taxYear: json.taxYear}};
   }
 
   function run(model, options = {}) {
     if (!RULES()) throw new Error('Load tax-calculator.js before tax-engine.js');
     const asked = options.strategies instanceof Set ? options.strategies : new Set(options.strategies || []);
     const strategies = new Set([...asked].filter(id => model.availability ? model.availability[id] !== false : true));
-    const f = 1 + (Number(options.appraisalAdjPct) || 0) / 100;
-    const baseOpts = (factor, set) => ({
-      landFactor: factor,
+    const f = 1 + (Number(options.appraisalAdjPct) || 0) / 100, bf = 1 + (Number(options.buildingAdjPct) || 0) / 100;
+    const baseOpts = (factor, set, bfactor = 1) => ({
+      landFactor: factor, bldFactor: bfactor,
+      combineBuilding: set.has('combineBuilding'),
       combine: set.has('combine'),
       agriShare: set.has('agriShare'),
       mainHome: p => !(set.has('rented') && p.rented),
       commercialShare: set.has('mixedUse') ? (p => p.comShare || 0) : null,
       building: set.has('newBuildings') ? (p => (p.bldValue || 0) + (p.surveyBld > 0 ? p.surveyBld : 0)) : null,
     });
-    const byParcel = new Map(), byTaxpayer = new Map(), byVillage = new Map();
+    const byParcel = new Map(), byTaxpayer = new Map(), byVillage = new Map(), byGroup = new Map();
     const totals = {assessed69: 0, collected69: 0, old70: 0, new70: 0, parcels69: 0};
     const stratDelta = new Map(STRATEGIES.map(s => [s.id, {delta: 0, parcels: 0}]));
     // Parcels without a taxpayer stand alone (their own one-title portfolio, type unknown -> treated as individual).
     const groups = new Map(), solo = {type: null, assessed69: null, paid69: null, debt69: null, status69: 'unknown'};
+    // Titles joined by one building share a portfolio (it only matters when that fix is on; each title still stands alone otherwise).
     for (const p of model.parcels) {
-      const key = p.tp && model.taxpayers.has(p.tp) ? p.tp : 'parcel:' + p.id;
+      const key = p.tp && model.taxpayers.has(p.tp) ? p.tp : p.bgrp != null ? 'bgrp:' + p.bgrp : 'parcel:' + p.id;
       if (!groups.has(key)) groups.set(key, []); groups.get(key).push(p);
     }
+    const potentialCombine = model.availability?.combineBuilding !== false;
     for (const [key, rows] of groups) {
       const tp = model.taxpayers.get(key) || solo;
       const law69 = portfolioTax(rows, tp, baseOpts(1, new Set()));
-      const law70 = portfolioTax(rows, tp, baseOpts(f, new Set()));
-      const fixed70 = portfolioTax(rows, tp, baseOpts(f, strategies));
+      const law70 = portfolioTax(rows, tp, baseOpts(f, new Set(), bf));
+      const fixed70 = portfolioTax(rows, tp, baseOpts(f, strategies, bf));
       const single = new Map();
-      for (const s of STRATEGIES) if (strategies.has(s.id)) single.set(s.id, portfolioTax(rows, tp, baseOpts(f, new Set([s.id]))));
+      for (const s of STRATEGIES) if (strategies.has(s.id)) single.set(s.id, portfolioTax(rows, tp, baseOpts(f, new Set([s.id]), bf)));
+      // What combining titles joined by one building would change, shown on building and parcel cards even when the fix is off.
+      const joined = potentialCombine && rows.length > 1 && rows.some(p => p.bgrp != null);
+      const combine = joined ? (single.get('combineBuilding') || portfolioTax(rows, tp, baseOpts(f, new Set(['combineBuilding']), bf))) : null;
       const ratioPaid = !(tp.assessed69 > 0) ? null : tp.paid69 != null ? Math.min(1, tp.paid69 / tp.assessed69)
         : tp.debt69 != null && tp.debt69 > 0 ? Math.max(0, Math.min(1, (tp.assessed69 - tp.debt69) / tp.assessed69)) : null;
       const agg = {assessed69: 0, collected69: 0, old70: 0, new70: 0};
@@ -172,8 +188,16 @@
         }
         // A title with no 2569 tax has nothing due of its own, even when its owner is on the debtor list for other items.
         const status69 = assessed === 0 && (tp.status69 === 'unpaid' || tp.status69 === 'partial') ? 'none' : tp.status69;
-        const row = {assessed69: assessed, collected69: collected, status69, old70, new70, delta: new70 == null || assessed == null ? null : new70 - assessed, reasons};
+        const combineEffect = combine ? (combine.get(p.id) || 0) - base70 : 0;
+        const row = {assessed69: assessed, collected69: collected, status69, old70, new70, delta: new70 == null || assessed == null ? null : new70 - assessed, reasons, combineEffect};
         byParcel.set(p.id, row);
+        if (p.bgrp != null) {
+          if (!byGroup.has(p.bgrp)) byGroup.set(p.bgrp, {assessed69: 0, old70: 0, new70: 0, combined70: 0, onRoll: 0, taxed: 0});
+          const g = byGroup.get(p.bgrp); g.onRoll++;
+          if (assessed != null) { g.taxed++; g.assessed69 += assessed; }
+          if (old70 != null) { g.old70 += old70; g.combined70 += Math.max(0, old70 + combineEffect); }
+          if (new70 != null) g.new70 += new70;
+        }
         if (assessed != null) { agg.assessed69 += assessed; totals.assessed69 += assessed; totals.parcels69++; }
         if (collected != null) { agg.collected69 += collected; totals.collected69 += collected; }
         if (old70 != null) { agg.old70 += old70; totals.old70 += old70; }
@@ -187,10 +211,10 @@
       if (model.taxpayers.has(key)) byTaxpayer.set(key, agg);
     }
     const byStrategy = STRATEGIES.filter(s => strategies.has(s.id)).map(s => ({id: s.id, label: s.label, ...stratDelta.get(s.id)}));
-    return {byParcel, byTaxpayer, byVillage, byStrategy, totals, factor: f};
+    return {byParcel, byTaxpayer, byVillage, byGroup, byStrategy, totals, factor: f, buildingFactor: bf};
   }
 
-  const api = Object.freeze({STRATEGIES, OWNER_REASON, USE_LABEL, prepare, run, _test: {tiered, portfolioTax, parts}, version: '1.1.2'});
+  const api = Object.freeze({STRATEGIES, OWNER_REASON, USE_LABEL, prepare, run, _test: {tiered, portfolioTax, parts}, version: '1.2.0'});
   root.SilaTaxEngine = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);
