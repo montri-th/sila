@@ -1,390 +1,395 @@
 {
-  "schema": "sila-browser-checks/1.9",
-  "checkedAtUtc": "2026-10-20T10:00:01.762371+00:00",
-  "base": "local preview of the revision-1.9 tree (python http.server, loopback)",
-  "browser": "Chromium 141.0.7390.37",
-  "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
-  "basemap": "none (data only; external street tiles are not reachable from the test machine)",
-  "matrix": [
-    {
-      "case": "landing-dark-th",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "taxmap-light-en",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "taxmap-new70-adj10",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "taxmap-delta-v12",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "appraisal-light",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "properties-gain",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "properties-pct-light-en",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "businesses",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "businesses-en-light",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "buildings-roll-v12",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "buildings-tax-card",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": false,
-      "ready": true,
-      "popup": {
-        "w": 279,
-        "h": 257,
-        "mapShare": 0.17
-      },
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "houses-en",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "popgrid",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "caregroups",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "terrain-2d-light",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 3,
-      "terrain3D": null
-    },
-    {
-      "case": "terrain-3d-dark",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 4,
-      "terrain3D": {
-        "state": "ready",
-        "webglCanvas": true,
-        "exaggeration": "2",
-        "bearing": "0"
-      }
-    },
-    {
-      "case": "terrain-3d-auto-light-en",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 4,
-      "terrain3D": {
-        "state": "ready",
-        "webglCanvas": true,
-        "exaggeration": "38",
-        "bearing": "0"
-      }
-    },
-    {
-      "case": "roads",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "overview",
-      "viewport": "1440x900",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "tablet-properties",
-      "viewport": "1024x768",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "phone-properties",
-      "viewport": "390x844",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "phone-taxmap-record",
-      "viewport": "390x844",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": false,
-      "ready": true,
-      "popup": {
-        "w": 269,
-        "h": 181,
-        "mapShare": 0.27
-      },
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "phone-businesses",
-      "viewport": "390x844",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    },
-    {
-      "case": "phone-terrain-3d",
-      "viewport": "390x844",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 4,
-      "terrain3D": {
-        "state": "ready",
-        "webglCanvas": true,
-        "exaggeration": "2",
-        "bearing": "0"
-      }
-    },
-    {
-      "case": "small-phone-taxmap-light",
-      "viewport": "320x640",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 8,
-      "terrain3D": null
-    },
-    {
-      "case": "small-phone-caregroups-en",
-      "viewport": "320x640",
-      "pageErrors": [],
-      "horizontalOverflowPx": 0,
-      "legendShown": true,
-      "ready": true,
-      "popup": null,
-      "smallTargets": 0,
-      "terrain3D": null
-    }
-  ],
-  "flows": {
-    "compactPopupAndParcelBuildings": {
-      "popupRowsAtMost3": true,
-      "popupLeadsWithTax": true,
-      "popupHeightPx": 221,
-      "popupTwoActions": true,
-      "summaryShows2570WithFixes": true,
-      "buildingsListed": 4,
-      "gotoBuilding": true,
-      "buildingCardHasRoll": true,
-      "pageErrors": []
-    },
-    "propertiesRankingCardLinks": {
-      "rows": 60,
-      "firstRow": "1\n ทรัพย์สิน P0385\n+331,180 บาทต่อปี (+25%) · 6 แปลง · รวมแปลงที่ติดกันของเจ้าของเดียวกันเป็นฐานเดียว · เพิ่มอาคารที่สำรวจพบแต่ยังไม่อยู่ในบัญชี · นิติบุคคลไม่ไ",
-      "cardHasParcels": true,
-      "streetViewLinks": 1,
-      "streetViewHeading": true,
-      "aiLinksWithoutCoordinates": true,
-      "newTabLinksWithCue": true,
-      "csvDownload": true,
-      "pageErrors": []
-    },
-    "businessWebsite": {
-      "listRows": 60,
-      "websiteShown": true,
-      "websiteHttps": true,
-      "cue": true,
-      "pageErrors": []
-    },
-    "terrain3DNorthUp": {
-      "defaultExaggeration2": true,
-      "bearingStays0": true,
-      "tiltChanged": true,
-      "noCompass": true,
-      "automaticRaisesHeight": true,
-      "pageErrors": []
-    },
-    "phoneLegendToggle": {
-      "collapsedHeight": 74,
-      "openHeight": 250,
-      "opens": true,
-      "pageErrors": []
-    },
-    "keyboardBuildingView": {
-      "focusKept": true,
-      "focusOutline": "solid 2px",
-      "pageErrors": []
-    }
+ "schema": "sila-browser-checks/1.9",
+ "checkedAtUtc": "2026-10-20T10:53:10.946335+00:00",
+ "base": "local preview of the revision-1.9 tree (python http.server, loopback)",
+ "browser": "Chromium 141.0.7390.37",
+ "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
+ "basemap": "none (data only; external street tiles are not reachable from the test machine)",
+ "matrix": [
+  {
+   "case": "landing-dark-th",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
   },
-  "summary": {
-    "cases": 26,
-    "pageErrors": 0,
-    "horizontalOverflowCases": 0,
-    "flowsPassed": {
-      "compactPopupAndParcelBuildings": true,
-      "propertiesRankingCardLinks": true,
-      "businessWebsite": true,
-      "terrain3DNorthUp": true,
-      "phoneLegendToggle": true,
-      "keyboardBuildingView": true
-    }
+  {
+   "case": "taxmap-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
   },
-  "notCovered": [
-    "real GPU rendering (checked on the live site separately)",
-    "screen readers",
-    "real phones",
-    "street basemap tiles",
-    "AWS or other third-party DEM (not used)"
-  ],
-  "smallTargetsNote": "Every control counted in smallTargets is an 18 px checkbox inside its own label; the label (at least 57 px tall, full panel width) is the click and tap target, so no actionable target is smaller than 24 x 24 CSS px. Checked on 20 Oct 2026 in the tax, 2D and 3D terrain views at 1440 and 390 px."
+  {
+   "case": "taxmap-new70-adj10",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "taxmap-delta-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "appraisal-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "properties-gain",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "properties-pct-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "businesses",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "businesses-en-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "buildings-roll-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "buildings-tax-card",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": false,
+   "ready": true,
+   "popup": {
+    "w": 279,
+    "h": 257,
+    "mapShare": 0.17
+   },
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "houses-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "popgrid",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "caregroups",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "terrain-2d-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 3,
+   "terrain3D": null
+  },
+  {
+   "case": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 4,
+   "terrain3D": {
+    "state": "ready",
+    "webglCanvas": true,
+    "exaggeration": "2",
+    "bearing": "0"
+   }
+  },
+  {
+   "case": "terrain-3d-auto-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 4,
+   "terrain3D": {
+    "state": "ready",
+    "webglCanvas": true,
+    "exaggeration": "40",
+    "bearing": "0"
+   }
+  },
+  {
+   "case": "roads",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "overview",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "tablet-properties",
+   "viewport": "1024x768",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-properties",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-taxmap-record",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": false,
+   "ready": true,
+   "popup": {
+    "w": 269,
+    "h": 181,
+    "mapShare": 0.27
+   },
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-businesses",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-terrain-3d",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 4,
+   "terrain3D": {
+    "state": "ready",
+    "webglCanvas": true,
+    "exaggeration": "2",
+    "bearing": "0"
+   }
+  },
+  {
+   "case": "small-phone-taxmap-light",
+   "viewport": "320x640",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "small-phone-caregroups-en",
+   "viewport": "320x640",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "ready": true,
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  }
+ ],
+ "flows": {
+  "compactPopupAndParcelBuildings": {
+   "popupRowsAtMost3": true,
+   "popupLeadsWithTax": true,
+   "popupHeightPx": 221,
+   "popupTwoActions": true,
+   "summaryShows2570WithFixes": true,
+   "buildingsListed": 4,
+   "gotoBuilding": true,
+   "buildingCardHasRoll": true,
+   "pageErrors": []
+  },
+  "propertiesRankingCardLinks": {
+   "rows": 60,
+   "firstRow": "1\n ทรัพย์สิน P0385\n+331,180 บาทต่อปี (+25%) · 6 แปลง · รวมแปลงที่ติดกันของเจ้าของเดียวกันเป็นฐานเดียว · เพิ่มอาคารที่สำรวจพบแต่ยังไม่อยู่ในบัญชี · นิติบุคคลไม่ไ",
+   "cardHasParcels": true,
+   "streetViewLinks": 1,
+   "streetViewHeading": true,
+   "aiLinksWithoutCoordinates": true,
+   "newTabLinksWithCue": true,
+   "csvDownload": true,
+   "pageErrors": []
+  },
+  "businessWebsite": {
+   "summaryFigures": [
+    "654",
+    "37"
+   ],
+   "summaryHasCounts": true,
+   "listRows": 60,
+   "websiteShown": true,
+   "websiteHttps": true,
+   "cue": true,
+   "pageErrors": []
+  },
+  "terrain3DNorthUp": {
+   "defaultExaggeration2": true,
+   "bearingStays0": true,
+   "tiltChanged": true,
+   "noCompass": true,
+   "automaticRaisesHeight": true,
+   "pageErrors": []
+  },
+  "phoneLegendToggle": {
+   "collapsedHeight": 74,
+   "openHeight": 250,
+   "opens": true,
+   "pageErrors": []
+  },
+  "keyboardBuildingView": {
+   "focusKept": true,
+   "focusOutline": "solid 2px",
+   "pageErrors": []
+  }
+ },
+ "summary": {
+  "cases": 26,
+  "pageErrors": 0,
+  "horizontalOverflowCases": 0,
+  "flowsPassed": {
+   "compactPopupAndParcelBuildings": true,
+   "propertiesRankingCardLinks": true,
+   "businessWebsite": true,
+   "terrain3DNorthUp": true,
+   "phoneLegendToggle": true,
+   "keyboardBuildingView": true
+  }
+ },
+ "notCovered": [
+  "real GPU rendering (checked on the live site separately)",
+  "screen readers",
+  "real phones",
+  "street basemap tiles",
+  "AWS or other third-party DEM (not used)"
+ ],
+ "smallTargetsNote": "Every control counted in smallTargets is an 18 px checkbox inside its own label; the label (at least 57 px tall, full panel width) is the click and tap target, so no actionable target is smaller than 24 x 24 CSS px. Checked on 20 Oct 2026 in the tax, 2D and 3D terrain views at 1440 and 390 px."
 }

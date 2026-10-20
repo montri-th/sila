@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.9",
-  "builtAtUtc": "2026-10-20T10:26:37.232702+00:00",
+  "builtAtUtc": "2026-10-20T11:07:00.383021+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 81114,
-      "sha256": "f44c81e9940d46b33f5830dac7e4b84225a6227156c301280b5efd03581f91f2",
+      "bytes": 81984,
+      "sha256": "d228f4be1ce3de52c6cd330c9df4e9a5010f208c381152afb7836f4860a644ae",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 394415,
-      "sha256": "b7d2c8c953a2e5cea4dd592a6b91a8de2e955b97b5330af0ffc5c9916f512707",
+      "bytes": 395438,
+      "sha256": "17f8ed33f1fd8227d09345c7870780d387662d877b300bcbb418faa95da44d05",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1128,7 +1128,7 @@
     {
       "path": "index.html",
       "bytes": 15289,
-      "sha256": "ae3e937281512b0138fcef589c1850542ba02f0c97bdb8e171aab5594b1d0d18",
+      "sha256": "1fedb3c6dbaa2d352648367d056d3d2ff8fefa657342ea35af48b785246bd750",
       "mimeTypes": [
         "text/html"
       ]
@@ -1692,7 +1692,7 @@
     {
       "path": "qa/revision-1.9-accessibility-checks.json",
       "bytes": 5423,
-      "sha256": "ab7be58a3be44aea0e2d327e2565e493bed4f39c4054df8abe918b78f5acf978",
+      "sha256": "10e6d8102b2c0f88046f5489927fa95c9fe835b0ad93eb1c6275d3cf79fd1935",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1701,8 +1701,8 @@
     },
     {
       "path": "qa/revision-1.9-browser-checks.json",
-      "bytes": 9975,
-      "sha256": "143bdb856c9c4c3da4261f87f7846f0ce0fd943cc262440e2c5ab3abb713ebb9",
+      "bytes": 8975,
+      "sha256": "553d3b60b417f08b125adfb2f6703a5f12737f4029edf0bd01ff4e5126f03533",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1711,8 +1711,8 @@
     },
     {
       "path": "qa/revision-1.9-publication-audit.json",
-      "bytes": 6917,
-      "sha256": "5f6fbe1f0c2ab83916a56f4ffaf9a4fc30350cf82e2332aeb470ab9c99ba6fd1",
+      "bytes": 8186,
+      "sha256": "d162b063a2140b0a5dfe79c09f2948a2b099259be8d5de570f6a8baa3ec6e8b4",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1951,8 +1951,8 @@
     },
     {
       "path": "reference/tax-map-method.md",
-      "bytes": 32544,
-      "sha256": "bd64c6317b476e9a16e81abff1849db463be622f1ae174ea0acfccfb0d439ccd",
+      "bytes": 33271,
+      "sha256": "e49e50c74c1a6ee8ba3f7ef6b0c04fb773a2bedd682441eb38d492e606c216da",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -3560,7 +3560,20 @@
     "terrainPalettes": "OH3 palettes as an owner-approved exception for ground height only; see reference/terrain-palettes.json",
     "publicSafety": "House-number fields keep numbers only (surveyor notes removed); survey status per point is not published (only whether a point is a new survey position); building use is published only in groups (rented or used by others, parking or storage, farming or livestock, and one group for everything else including owner-occupied, vacant and not stated); the population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
   },
-  "patches": [],
+  "patches": [
+    {
+      "id": "1.9.1",
+      "dateBangkok": "2026-10-20",
+      "afterCommit": "bd5b77d5bf3f987d7f73e38e8f67f0b231382277",
+      "changes": [
+        "businesses: the summary card under the map shows pinned businesses and confirmed websites in the selected area instead of a dash",
+        "record cards: Street View note says some Sila roads have no Google imagery and how to find the nearest covered road",
+        "docs: Street View coverage sample in README and reference/tax-map-method.md (6 of 8 links opened imagery in Chrome on 20 Oct 2026)",
+        "app.js cache key 1.9.1; browser and accessibility receipts re-run on the patched code"
+      ],
+      "foundBy": "opening the live 1.9 site in Chrome on a Mac (Apple M5)"
+    }
+  ],
   "accessibilityReceipt": "qa/revision-1.9-accessibility-checks.json",
   "terrain3dBenchmark": "qa/revision-1.9-terrain3d-benchmark.json",
   "revision19": {

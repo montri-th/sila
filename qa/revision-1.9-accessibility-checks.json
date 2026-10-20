@@ -1,6 +1,6 @@
 {
  "schema": "sila-accessibility-checks/1.9",
- "checkedAtUtc": "2026-10-20T10:08:02.930588+00:00",
+ "checkedAtUtc": "2026-10-20T10:59:11.462584+00:00",
  "base": "local preview of the revision-1.9 tree (python http.server, loopback)",
  "tool": "axe-core 4.10.2",
  "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",

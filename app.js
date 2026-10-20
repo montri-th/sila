@@ -735,6 +735,10 @@
     } else if (S.dataset === "properties") {
       const t = propScopeTotals();
       items = [[moneyShort(t.gain), text("ภาษีปี 2570 ที่เพิ่มได้ต่อปี", "2570 tax that can be added a year")], [t.nGain, text("ทรัพย์สินที่ควรตรวจ", "properties to check")], [moneyShort(t.new70), text("ปี 2570 ตามข้อเสนอ ของแปลงที่มีเจ้าของ", "2570 with fixes, owned parcels")]];
+    } else if (S.dataset === "businesses") {
+      /* Pinned businesses in the selected area, the same count as the panel (no per-area table in metadata). */
+      const fs = S.cache.get(dataset()?.geojson) ? currentFeatures() : null;
+      items = [[fs ? fs.length : null, text("ธุรกิจที่ปักหมุดในพื้นที่นี้", "businesses pinned in this area")], [fs ? fs.filter((f) => f.properties.website).length : null, text("มีเว็บไซต์ทางการที่ยืนยันได้", "with a confirmed official website")]];
     } else if (S.dataset === "appraisal") {
       const st = appraisalStats();
       items = [[st.n, text("แปลงที่มีราคาประเมิน", "parcels with an appraisal")], [st.med, text("ราคากลาง บาท/ตร.ว.", "median THB per sq wah")]];
@@ -2550,7 +2554,7 @@
     return `<div class="record-section external-actions"><h3>${text("ตรวจจากหน้าจอก่อนลงพื้นที่", "Check from the screen before a site visit")}</h3><div class="record-actions">`
       + `<a class="mini-action ext-link" data-sv-link href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("streetview", { size: 18 }) || ""}<span data-sv-label>${sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place")}</span>${extMark()}</a>`
       + aiQuestions(f).map(([label, q]) => `<a class="mini-action ext-link" href="${esc(aiModeURL(q))}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("travel_explore", { size: 18 }) || ""}<span>${esc(label)}</span>${extMark()}</a>`).join("")
-      + `</div><p class="small-note">${text("เปิดบริการของ Google ในแท็บใหม่ · Street View ใช้ตำแหน่งบนถนน ส่วนคำถามถึง Google AI ใช้ชื่อถนน หมู่บ้าน ชื่อธุรกิจที่จดทะเบียน หรือคำถามกฎหมายทั่วไปเท่านั้น ไม่ส่งพิกัด รหัสเจ้าของ ตัวเลขภาษี หรือบ้านเลขที่ · ภาพ Street View อาจเก่า ดูวันที่ในภาพ · คำตอบของ AI เป็นข้อมูลประกอบ ต้องตรวจกับเอกสารก่อนใช้", "Opens Google in a new tab · Street View uses a road position; questions to Google AI use only road and village names, registered business names or general legal questions, never coordinates, owner codes, tax figures or house numbers · Street View imagery can be old; check its date · AI answers are leads to verify against documents before use")}</p></div>`;
+      + `</div><p class="small-note">${text("เปิดบริการของ Google ในแท็บใหม่ · Street View ใช้ตำแหน่งบนถนน ส่วนคำถามถึง Google AI ใช้ชื่อถนน หมู่บ้าน ชื่อธุรกิจที่จดทะเบียน หรือคำถามกฎหมายทั่วไปเท่านั้น ไม่ส่งพิกัด รหัสเจ้าของ ตัวเลขภาษี หรือบ้านเลขที่ · ภาพ Street View อาจเก่า ดูวันที่ในภาพ ถนนบางเส้นยังไม่มีภาพของ Google ถ้าขึ้นว่าไม่มีภาพ ให้ลากหมุดรูปคนสีเหลืองใน Google Maps ไปวางบนเส้นสีฟ้าที่ใกล้ที่สุด · คำตอบของ AI เป็นข้อมูลประกอบ ต้องตรวจกับเอกสารก่อนใช้", "Opens Google in a new tab · Street View uses a road position; questions to Google AI use only road and village names, registered business names or general legal questions, never coordinates, owner codes, tax figures or house numbers · Street View imagery can be old; check its date. Some roads have no Google imagery; if none shows, drag the yellow figure in Google Maps onto the nearest blue line · AI answers are leads to verify against documents before use")}</p></div>`;
   }
   /* Roads open on request; when they arrive, turn the Street View link toward the place. */
   function refreshStreetView(f) {
