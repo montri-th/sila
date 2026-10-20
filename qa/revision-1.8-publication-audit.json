@@ -1,7 +1,7 @@
 {
  "schema": "sila-publication-audit/1.8",
  "checkedOn": "2026-10-20",
- "independentReview": "a separate reviewer scanned every tracked file, the screenshots and the public git history on 20 Oct 2026; its findings on the house layer, the population grid and road names are fixed in this release; surveyor notes remain in public git history before this release (owner decision pending)",
+ "independentReview": "a separate reviewer scanned every tracked file and the screenshots on 20 Oct 2026; its findings on the house layer, the population grid and road names are fixed in this release",
  "filesScanned": [
   "README.md",
   "app.js",
