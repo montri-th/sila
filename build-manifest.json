@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.8",
-  "builtAtUtc": "2026-10-20T00:52:36.538692+00:00",
+  "builtAtUtc": "2026-10-20T02:29:43.228852+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 278163,
-      "sha256": "d9a10e3ea77df823953ee898fd57d29e961ef59190138e46a7877a3e51c6c487",
+      "bytes": 279386,
+      "sha256": "0bdfed134858cbf376b3a473b3ddfafe472c67a42f4b740c4328a9f3235aa4ee",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -707,8 +707,8 @@
     },
     {
       "path": "basemap.css",
-      "bytes": 531,
-      "sha256": "86a4786d559c6400be986d9fb560095922d2a1eaa7ca1773deaa64ca62f916ea",
+      "bytes": 787,
+      "sha256": "f02b861edbba339160328589570943ff93a5a7225e8babebeecd2fcc695767df",
       "mimeTypes": [
         "text/css"
       ]
@@ -1010,8 +1010,8 @@
     },
     {
       "path": "fabdem-layer.js",
-      "bytes": 20277,
-      "sha256": "981591af8054ee2d7fb0e2a7d6f2c6635d36034490e1a2a22a423917c9c69754",
+      "bytes": 24785,
+      "sha256": "7fd6814e15ed50c4fa9d2d6a9314c5967a62a16b7b07575a2fcbc97d1a4f6798",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1045,8 +1045,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 15257,
-      "sha256": "b5f7f7f4560a3d744ccbcee11bb1089d1d07147985bcc496c44fb9b2c88cb3f3",
+      "bytes": 15265,
+      "sha256": "86391278c5eea0addfe6b0270e2a32078320c00ba6603d29fced68a3fb2ff5c5",
       "mimeTypes": [
         "text/html"
       ]
@@ -1560,7 +1560,7 @@
     {
       "path": "qa/revision-1.8-accessibility-checks.json",
       "bytes": 3176,
-      "sha256": "1cec83a6220c401a9bb7156e3d16a833adbf980746cdd151881a0c0a4d5a151b",
+      "sha256": "981f89ec116b9281b3537653816058d9baeb3758e8c5d1c42c7672e914533e4d",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1569,8 +1569,8 @@
     },
     {
       "path": "qa/revision-1.8-browser-checks.json",
-      "bytes": 5337,
-      "sha256": "c4e38418400c896482d88a9d0159c085dc6f95dbce53d3ab2a1a0eda1e8f227d",
+      "bytes": 5611,
+      "sha256": "f862934ef6833fe9f58508823dae91d5369dd6730328a53a6cc0fa5b9b852be0",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1579,8 +1579,8 @@
     },
     {
       "path": "qa/revision-1.8-publication-audit.json",
-      "bytes": 5882,
-      "sha256": "8e12464a05d02a782d7547eaec24825fa006a6f3eb5edf8ff3fd9bfdfaa64810",
+      "bytes": 5952,
+      "sha256": "387865e90d3d3f8f5a5a2431c51e1721c6f2d1c0ed89fb8f79bb0dfd3d58ac7a",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1590,7 +1590,7 @@
     {
       "path": "qa/revision-1.8-terrain-fixtures.json",
       "bytes": 614,
-      "sha256": "ecc80c68455086f5fab38b26dbf146071814c8b8d8a2068aa3bca997baa7448e",
+      "sha256": "eb28d179cccfa2eb4850c80bbc1cc152f30c9c98d642b2bf47433ba2b6d7bbac",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1600,7 +1600,7 @@
     {
       "path": "qa/revision-1.8-terrain3d-fixtures.json",
       "bytes": 925,
-      "sha256": "ae3deca90cf6c2b583554094f4dc385b8561e894636342d07db0e956a738df23",
+      "sha256": "5262f4d62772438b25edd336e6eec6cf174275934010fcfe278bf0f73577fa8d",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -2024,8 +2024,8 @@
     },
     {
       "path": "terrain-3d.js",
-      "bytes": 42223,
-      "sha256": "354394e6248c72d642968aec83c5e84a4c679b19236675f3ece8e3a2146ffd49",
+      "bytes": 43149,
+      "sha256": "02eba6586bcd3f9f7e323e550253812324d00c8d9df365566f967626209df552",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -3369,6 +3369,13 @@
     },
     "ownerPortfolios": "not computable: PDS exports carry no taxpayer code per title; only 38 debtor-linked taxpayers (random public codes) on 53 parcels",
     "terrainPalettes": "OH3 palettes as an owner-approved exception for ground height only; see reference/terrain-palettes.json",
-    "publicSafety": "House-number fields keep numbers only (surveyor notes removed); some survey status, use and building type values are published blank per point, mixed with values blank in the source; population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
-  }
+    "publicSafety": "House-number fields keep numbers only (surveyor notes removed); survey status per point is not published (only whether a point is a new survey position); building use is published only in groups (rented or used by others, parking or storage, farming or livestock, and one group for everything else including owner-occupied, vacant and not stated); the population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
+  },
+  "patches": [
+    {
+      "date": "2026-10-20",
+      "change": "2D terrain drawn as one canvas for the whole view (no per-tile canvases); 3D terrain receives mouse, trackpad and touch gestures again (a basemap style had switched off pointer events on every MapLibre canvas).",
+      "browserReceiptFlow": "terrainGestures"
+    }
+  ]
 }
