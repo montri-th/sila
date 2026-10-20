@@ -4,6 +4,9 @@
   const PublicAggregates = window.SilaPublicAggregates || {ids:[],icons:{},valid:()=>false,get:()=>null,entries:()=>[],render:()=>"",localized:v=>String(v ?? ""),valueLabel:m=>({number:m?.value ?? "—",state:""})};
   const Missions = window.SilaMissions;
   const TAX_STRATEGIES = window.SilaTaxEngine?.STRATEGIES || [];
+  const DEFAULT_STRATEGIES = ["combine", "combineBuilding", "agriShare", "mainHomeOnce", "juristic", "mixedUse", "rented", "newBuildings"];
+  // Links saved before revision 1.9 carry the old default set; they open with the new default instead.
+  const OLD_DEFAULT_FIX = "agriShare.combine.combineBuilding.mixedUse.newBuildings.rented";
   const TEX = window.SilaTerrain3D?.exaggeration || null;
   /* Height colours for the terrain layer only. LDS 0.9.7 has no land-elevation scale, so these OH3 Dynamic Elevation
      Map palettes (as used in the CityMETER terrain viewer) are used at the owner’s request as an exception for ground height only, same HEX on both themes.
@@ -17,6 +20,7 @@
     "oh3-gray": { label: ["ขาวดำ (OH3 gray)", "Greyscale (OH3 gray)"], note: ["เข้มที่ต่ำ สว่างที่สูง พิมพ์ขาวดำได้", "Dark low, light high; prints in black and white"], colors: ["#202020", "#F4F4F4"] },
   });
   const TERRAIN_DEFAULT_PALETTE = "oh3-relief-lowland";
+  const TERRAIN_DEFAULT_EX = 2;
   const CONTOUR_STEPS = Object.freeze([0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10]);
   const CONTOUR_SOFT = 100, CONTOUR_HARD = 200;
   const $ = (id) => document.getElementById(id);
@@ -87,14 +91,16 @@
     interactionRevision: 0,
     /* Revision 1.8 layer state */
     taxScenario: "assessed69",
-    taxStrategies: new Set(["combine", "combineBuilding", "agriShare", "mixedUse", "rented", "newBuildings"]),
+    taxStrategies: new Set(DEFAULT_STRATEGIES),
     appraisalAdj: 0,
     bldAdj: 0,
+    propMetric: "thb",
+    propSort: "thb",
     lutRefs: {},
     popMetric: "t",
     buildingView: "type",
-    terrainExaggeration: 20,
-    terrainAuto: true,
+    terrainExaggeration: 2,     // owner decision 20 Oct 2026: default 2 times, manual; automatic stays available
+    terrainAuto: false,
     terrainAutoTarget: 0.15,
     terrainRelief: null,
     terrainPalette: "oh3-relief-lowland",
@@ -157,6 +163,8 @@
   const labels = {
     overview: ["ขอบเขตและภาพรวมพื้นที่", "Boundaries and area overview"],
     taxmap: ["ภาษีที่ดินรายแปลง", "Land tax by parcel"],
+    properties: ["ทรัพย์สินรายเจ้าของ: ภาษีที่เพิ่มได้", "Properties by owner: tax that can be added"],
+    businesses: ["ธุรกิจนิติบุคคลที่จดทะเบียน VAT", "VAT-registered companies"],
     appraisal: ["ราคาประเมินที่ดินรายแปลง", "Land appraisal by parcel"],
     popgrid: ["คนในพื้นที่ แยกเพศและอายุ", "People by sex and age"],
     houses: ["หมุดบ้านที่สำรวจ", "Surveyed house points"],
@@ -178,6 +186,8 @@
   };
   const colors = {
     taxmap: "slate",
+    properties: "slate",
+    businesses: "coral",
     appraisal: "slate",
     popgrid: "slate",
     overview: "slate",
@@ -215,6 +225,14 @@
     taxmap: [
       "แปลงที่ดินจากแผนที่แปลง กับภาษีต่อโฉนดจาก ภ.ด.ส.7 ปี 2569 ที่จับคู่ได้ ไม่ใช่จำนวนผู้เสียภาษี",
       "Parcels from the parcel map with 2569 tax per title from PDS 7 where matched; not a count of taxpayers",
+    ],
+    properties: [
+      "ทรัพย์สิน 1 รายการ = แปลงที่ติดกันของเจ้าของเดียวกันในบัญชี ภ.ด.ส.3 ปี 2563 หรือแปลงเดียวที่มีเจ้าของ ไม่ใช่จำนวนเจ้าของ",
+      "One property = the adjoining parcels of one owner in the 2563 PDS 3 list, or a single owned parcel; not a count of owners",
+    ],
+    businesses: [
+      "นิติบุคคลที่จดทะเบียนภาษีมูลค่าเพิ่ม 1 จุดต่อสถานประกอบการ (สำนักงานใหญ่หรือสาขา) ที่หาตำแหน่งได้ ไม่ใช่ธุรกิจทั้งหมดในพื้นที่",
+      "VAT-registered juristic persons, one point per establishment (head office or branch) that could be placed; not every business in the area",
     ],
     appraisal: [
       "แปลงที่ดินที่จับคู่กับบัญชีปี 2569 ได้ พร้อมราคาประเมินบาทต่อตารางวา",
@@ -360,10 +378,12 @@
       null
     );
   }
+  /* Data files carry the release version so a new app never reads the previous release's data from a cache. */
+  const DATA_VERSION = "1.9.0";
   function fetchJSON(path) {
     if (S.cache.has(path)) return Promise.resolve(S.cache.get(path));
     if (S.inflight.has(path)) return S.inflight.get(path);
-    const p = fetch(path)
+    const p = fetch(/^data\//.test(path) ? `${path}?v=${DATA_VERSION}` : path)
       .then((r) => {
         if (!r.ok) throw new Error(`Cannot load ${path}`);
         return r.json();
@@ -418,6 +438,7 @@
       mode: S.dataset === "terrain" ? S.mode : "2d",
     };
     if (S.dataset === "taxmap" || (S.dataset === "buildings" && S.buildingView === "tax")) { params.scenario = S.taxScenario; params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); }
+    if (S.dataset === "properties") { params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); if (S.propMetric === "pct") params.pm = "pct"; }
     if (S.dataset === "appraisal" && S.appraisalAdj) params.adj = String(S.appraisalAdj);
     if (S.dataset === "popgrid") params.metric = S.popMetric;
     if (S.dataset === "buildings" && S.buildingView !== "type") params.view = S.buildingView;
@@ -430,8 +451,8 @@
       if (S.terrainStepChoice !== "auto") params.step = String(S.terrainStepChoice);
     }
     if (S.dataset === "terrain" && S.mode === "3d") {
-      if (!S.terrainAuto) params.ex = String(S.terrainExaggeration);
-      else if (Math.round(S.terrainAutoTarget * 100) !== 15) params.ext = String(Math.round(S.terrainAutoTarget * 100));
+      if (S.terrainAuto) { params.ex = "auto"; if (Math.round(S.terrainAutoTarget * 100) !== 15) params.ext = String(Math.round(S.terrainAutoTarget * 100)); }
+      else if (S.terrainExaggeration !== TERRAIN_DEFAULT_EX) params.ex = String(S.terrainExaggeration);
     }
     u.search = new URLSearchParams(params);
     if (S.record)
@@ -453,13 +474,15 @@
     S.appraisalAdj = Number.isFinite(adj) ? Math.max(-30, Math.min(100, Math.round(adj))) : 0;
     const badj = Number(q.get("badj"));
     S.bldAdj = Number.isFinite(badj) ? Math.max(-30, Math.min(100, Math.round(badj))) : 0;
-    if (q.has("fix")) S.taxStrategies = new Set(String(q.get("fix")).split(".").filter(k => TAX_STRATEGIES.some(s => s.id === k)));
+    if (q.has("fix")) S.taxStrategies = q.get("fix") === OLD_DEFAULT_FIX ? new Set(DEFAULT_STRATEGIES) : new Set(String(q.get("fix")).split(".").filter(k => TAX_STRATEGIES.some(s => s.id === k)));
+    S.propMetric = q.get("pm") === "pct" ? "pct" : "thb";
     S.popMetric = ["t", "c", "a", "o", "m", "f"].includes(q.get("metric")) ? q.get("metric") : "t";
     S.buildingView = ["type", "tax", "registry", "roll", "straddle", "use"].includes(q.get("view")) ? q.get("view") : "type";
     S.listFilter = null;
+    // Height: default 2 times (manual). ex=auto (or an old link with ext=) selects automatic; ex=<number> a fixed value.
     const ex = Number(q.get("ex")), ext = Number(q.get("ext"));
-    S.terrainAuto = !(q.has("ex") && Number.isFinite(ex) && ex > 0);
-    if (!S.terrainAuto) S.terrainExaggeration = TEX ? TEX.roundEx(Math.max(TEX.min, Math.min(TEX.max, ex))) : ex;
+    S.terrainAuto = q.get("ex") === "auto" || (!q.has("ex") && q.has("ext"));
+    S.terrainExaggeration = !S.terrainAuto && q.has("ex") && Number.isFinite(ex) && ex > 0 ? (TEX ? TEX.roundEx(Math.max(TEX.min, Math.min(TEX.max, ex))) : ex) : TERRAIN_DEFAULT_EX;
     S.terrainAutoTarget = q.has("ext") && Number.isFinite(ext) && ext >= 5 && ext <= 30 ? ext / 100 : 0.15;
     S.terrainPalette = TERRAIN_PALETTES[q.get("pal")] || q.get("pal") === "off" ? q.get("pal") : TERRAIN_DEFAULT_PALETTE;
     S.terrainBands = q.get("bands") !== "0";
@@ -709,6 +732,9 @@
         [moneyShort(t?.new70), text("ปี 2570 ตามข้อเสนอ", "2570 with fixes")],
       ];
       if (!village) items.splice(1, 0, [moneyShort(receipts), text("รับชำระปีภาษี 2569 ทั้งเมือง", "2569 receipts, whole city")]);
+    } else if (S.dataset === "properties") {
+      const t = propScopeTotals();
+      items = [[moneyShort(t.gain), text("ภาษีปี 2570 ที่เพิ่มได้ต่อปี", "2570 tax that can be added a year")], [t.nGain, text("ทรัพย์สินที่ควรตรวจ", "properties to check")], [moneyShort(t.new70), text("ปี 2570 ตามข้อเสนอ ของแปลงที่มีเจ้าของ", "2570 with fixes, owned parcels")]];
     } else if (S.dataset === "appraisal") {
       const st = appraisalStats();
       items = [[st.n, text("แปลงที่มีราคาประเมิน", "parcels with an appraisal")], [st.med, text("ราคากลาง บาท/ตร.ว.", "median THB per sq wah")]];
@@ -739,6 +765,8 @@
         ? text("ใช้ดูรูปทรงที่สูงที่ต่ำประกอบการวางแผน ไม่ใช่ระดับน้ำท่วม", "Shows the shape of high and low ground for planning; not flood depth")
         : S.dataset === "flood"
           ? text("แผนเดิม พ.ศ. 2564–2567 ไม่ใช่สถานการณ์น้ำท่วมตอนนี้", "Past 2021–2024 plan, not current flooding")
+          : S.dataset === "properties"
+            ? text("ทรัพย์สิน = แปลงที่ติดกันของเจ้าของเดียวกันพร้อมอาคาร · เจ้าของตามบัญชี ภ.ด.ส.3 ปี 2563 สมมติว่ายังไม่เปลี่ยน · ตรวจโฉนดและการใช้จริงก่อนแจ้งประเมิน", "Property = adjoining parcels of one owner with their buildings · owners from the 2563 PDS 3 list, assumed unchanged · check deeds and actual use before any assessment")
           : S.dataset === "taxmap"
             ? (S.scope.type === "village"
               ? text("รวมเฉพาะแปลงในหมู่บ้านนี้ จากบัญชีภาษีปี 2569 และการคาดการณ์ปี 2570 · ยอดรับชำระมีเฉพาะทั้งเมือง", "Parcels in this village only, from the 2569 roll and 2570 estimates · receipts exist only city-wide")
@@ -775,6 +803,8 @@
     if (S.dataset === "parcels") return parcelContent();
     if (S.dataset === "terrain") return terrainContent() + supplementsHTML();
     if (S.dataset === "taxmap") return taxmapContent();
+    if (S.dataset === "properties") return propertiesContent();
+    if (S.dataset === "businesses") return businessesContent();
     if (S.dataset === "appraisal") return appraisalContent();
     if (S.dataset === "popgrid") return popgridContent();
     if (S.dataset === "buildings") return buildingsContent();
@@ -852,7 +882,7 @@
     ["ไม่มีชื่อเจ้าของหรือเลขผู้เสียภาษีบนเว็บ และยังไม่ได้จับคู่แปลงกับอาคารเป็นรายการเดียวกัน", "No owner names or taxpayer numbers on this site; parcels and buildings are not yet matched one-to-one."],
   ];
   function parcelContent() {
-    return `<section class="panel-section"><p>${esc(purposeOf("parcels"))}</p><div class="facts-grid">${fact(countFor("parcels"), text("แปลงในพื้นที่นี้", "Parcels in this area"))}${fact(null, text("แปลงที่อยู่ในบัญชีภาษีแล้ว", "Parcels on the tax roll"), text("ยังไม่มีข้อมูลส่วนนี้", "Not available yet"))}</div><button data-show-list class="more-button">${text("ดูรายการแปลงในพื้นที่นี้", "List parcels in this area")}</button><button type="button" class="more-button" data-tool="tax-calculator">${text("คิดภาษีที่ควรเก็บของหนึ่งแปลง", "Work out the tax due for one parcel")}</button>${notesLink()}</section>`;
+    return `<section class="panel-section"><p>${esc(purposeOf("parcels"))}</p><div class="facts-grid">${fact(countFor("parcels"), text("แปลงในพื้นที่นี้", "Parcels in this area"))}${fact(null, text("แปลงที่อยู่ในบัญชีภาษีแล้ว", "Parcels on the tax roll"), text("ยังไม่มีข้อมูลส่วนนี้", "Not available yet"))}</div><button data-show-list class="more-button">${text("ดูรายการแปลงในพื้นที่นี้", "List parcels in this area")}</button><button type="button" class="more-button" data-tool="tax-calculator">${ui("calculator", 18)}${text("คิดภาษีที่ควรเก็บของหนึ่งแปลง", "Work out the tax due for one parcel")}</button>${notesLink()}</section>`;
   }
   function terrainStateLabel() {
     if (S.mode === "3d") {
@@ -881,7 +911,7 @@
   }
   function terrainSources() {
     const s = S.terrainSource;
-    return `<p class="inline-note">${text("เงาภูมิประเทศ FABDEM ครอบคลุมอำเภอเมืองขอนแก่น แสงช่วยเห็นรูปทรง ไม่ใช่สีระดับความสูงหรือความเสี่ยงน้ำท่วม · 3D ไม่สร้างความสูงอาคารหรือระดับน้ำ", "FABDEM hillshade for Mueang Khon Kaen district. Shading shows form, not elevation colours or flood risk · 3D does not infer building heights or water levels.")}</p>` +
+    return `<p class="inline-note">${text("เงาภูมิประเทศ FABDEM ครอบคลุมอำเภอเมืองขอนแก่น แสงช่วยเห็นรูปทรง ไม่ใช่ความเสี่ยงน้ำท่วม · ใน 3D รูปทรงพื้นผิวต่อด้วย FABDEM นอกอำเภอเพื่อไม่ให้เกิดหน้าผาปลอมที่ขอบอำเภอ ส่วนสีความสูง เส้นชั้นความสูง และการวัดความต่างระดับใช้เฉพาะในอำเภอ · 3D ไม่สร้างความสูงอาคารหรือระดับน้ำ", "FABDEM hillshade for Mueang Khon Kaen district. Shading shows form, not flood risk · In 3D the surface shape continues with FABDEM beyond the district so no false cliff appears at its edge; height colours, contours and relief measurements stay inside the district · 3D does not infer building heights or water levels.")}</p>` +
       `<dl class="source-dl"><dt>${text("ชุดข้อมูล", "Dataset")}</dt><dd>${esc(s?.dataset || "FABDEM")}</dd><dt>${text("รายละเอียดต้นทาง", "Source detail")}</dt><dd>${esc(s?.resolution || text("กำลังเปิดคำอธิบายต้นทาง", "Source description is loading"))}</dd><dt>${text("รุ่นไฟล์แสดงผล", "Tile build version")}</dt><dd>${esc(s?.version || "—")} · ${text("วันสร้าง tile ไม่ใช่วันสำรวจภูมิประเทศ", "Tile build date is not terrain survey date")}</dd><dt>${text("ระดับซูม", "Zoom")}</dt><dd>${text("ข้อมูลต้นทางถึงซูม", "Native source through zoom")} ${num(s?.maxNativeZoom)} · ${text("ขยายแสดงผลถึง 22 โดยไม่เพิ่มรายละเอียด", "Display overzoom through 22 adds no detail")}</dd><dt>${text("ฐานอ้างอิงแนวดิ่ง", "Vertical datum")}</dt><dd>${esc(s?.verticalDatum || text("ยังไม่ประกาศในคำอธิบายที่ได้รับ", "Not declared in the supplied source description"))}</dd><dt>${text("สิทธิ์และที่มา", "Rights and source")}</dt><dd>${esc(s?.attribution || "—")}${s?.sourceUrl ? ` · <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener">${text("ต้นทาง", "Source")}</a>` : ""}${s?.licenseUrl ? ` · <a href="${esc(s.licenseUrl)}" target="_blank" rel="noopener">${text("อ่านเงื่อนไข", "Read terms")}</a>` : ""}</dd></dl>`;
   }
   function renderTerrainControls() {
@@ -897,8 +927,8 @@
     });
     $("terrain-view-help").textContent = S.mode === "3d"
       ? (TOUCH()
-        ? text("ลากนิ้วเดียวเพื่อเลื่อน · จีบหรือถ่างสองนิ้วเพื่อซูม · บิดสองนิ้วเพื่อหมุน ลากสองนิ้วขึ้นลงเพื่อเอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag one finger to pan · pinch to zoom · twist two fingers to rotate, slide them up or down to tilt · height is exaggerated to show form")
-        : text("ลากเพื่อเลื่อน · หมุนล้อ จีบทัชแพด หรือปัดสองนิ้วขึ้นลงเพื่อซูม · ปัดสองนิ้วซ้ายขวาเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · wheel, pinch or two-finger swipe up/down to zoom · two-finger swipe sideways to pan · right-drag to rotate/tilt · height is exaggerated to show form"))
+        ? text("ลากนิ้วเดียวเพื่อเลื่อน · จีบหรือถ่างสองนิ้วเพื่อซูม · ลากสองนิ้วขึ้นลงเพื่อเอียง · ทิศเหนืออยู่ด้านบนเสมอ · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag one finger to pan · pinch to zoom · slide two fingers up or down to tilt · north stays up · height is exaggerated to show form")
+        : text("ลากเพื่อเลื่อน · หมุนล้อ จีบทัชแพด หรือปัดสองนิ้วขึ้นลงเพื่อซูม · ปัดสองนิ้วซ้ายขวาเพื่อเลื่อน · คลิกขวาลากขึ้นลงเพื่อเอียง · ทิศเหนืออยู่ด้านบนเสมอ · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · wheel, pinch or two-finger swipe up/down to zoom · two-finger swipe sideways to pan · right-drag up or down to tilt · north stays up · height is exaggerated to show form"))
       : text("อ่านตำแหน่งใน 2D · เปลี่ยนเป็น 3D เพื่อดูรูปทรงพื้นที่", "Inspect locations in 2D · switch to 3D to explore terrain form");
     const status = active ? terrainStateLabel() : "";
     if ($("terrain-view-status").textContent !== status) $("terrain-view-status").textContent = status;
@@ -961,8 +991,8 @@
       + `<label class="check-item"><input type="checkbox" id="terrain-auto-check"${S.terrainAuto ? " checked" : ""}><span>${text("ขยายความสูงอัตโนมัติ", "Automatic height")}<small>${text(`ความต่างระดับสูงเป็น ${pct}% ของความกว้างมุมมอง · สูตรเดียวกับ CityMETER · เลื่อนแถบความสูงเมื่อไรจะเปลี่ยนเป็นกำหนดเอง`, `Relief shown as ${pct}% of the view width · same rule as CityMETER · moving the height slider switches to manual`)}</small></span></label>`
       + (S.terrainAuto ? `<div class="control-field"><span id="terrain-target-label">${text("สัดส่วนความต่างระดับต่อความกว้างมุมมอง", "Relief as a share of view width")}</span><div class="control-range"><input id="terrain-target" type="range" min="5" max="30" step="1" value="${pct}" aria-labelledby="terrain-target-label"><output id="terrain-target-value" for="terrain-target">${pct}%</output></div></div>` : "")
       + `<p id="terrain-relief-note" class="small-note">${esc(reliefText())}</p>`
-      + `<p class="small-note">${text("ค่าเริ่มต้นแนะนำ: อัตโนมัติ 15% แบบ CityMETER เพราะศิลาค่อนข้างราบ ทั้งเขตเทศบาลสูงต่างกันราว 60 ม. ในความกว้าง 13 กม. ภาพทั้งเทศบาลจึงขยายราว 34 เท่า ถ้าใช้ 1.5 เท่าแบบค่าตั้งต้นของ CityMETER ภาพจะเกือบแบน ความสูงที่ขยายใช้ดูรูปทรงเท่านั้น ไม่ใช่ความสูงจริงหรือระดับน้ำ", "Recommended start: automatic 15%, as in CityMETER. Sila is fairly flat, with about 60 m of relief across 13 km, so the whole-city view is exaggerated about 34 times. CityMETER’s fixed default of 1.5 times would look almost flat. Exaggeration shows form only, not true height or water level.")}</p>`
-      + (S.terrainAuto && pct === 15 ? "" : `<button type="button" class="more-button" data-terrain-reset>${text("กลับไปใช้ค่าแนะนำ (อัตโนมัติ 15%)", "Back to the recommended setting (automatic 15%)")}</button>`) + `</div>`;
+      + `<p class="small-note">${text("ค่าเริ่มต้น 2 เท่า ตามที่เจ้าของงานกำหนด ศิลาค่อนข้างราบ ทั้งเขตเทศบาลสูงต่างกันราว 60 ม. ในความกว้าง 13 กม. ภาพที่ 2 เท่าจึงค่อนข้างแบน ถ้าอยากเห็นรูปทรงชัดขึ้น เลือก “ขยายความสูงอัตโนมัติ” (สูตร CityMETER ความต่างระดับเป็น 15% ของความกว้างภาพ ทั้งเทศบาลจะขยายราว 34 เท่า) ความสูงที่ขยายใช้ดูรูปทรงเท่านั้น ไม่ใช่ความสูงจริงหรือระดับน้ำ", "Default 2 times, as set by the owner. Sila is fairly flat, with about 60 m of relief across 13 km, so 2 times looks rather flat. For a clearer shape choose “Automatic height” (the CityMETER rule: relief shown as 15% of the view width, about 34 times for the whole city). Exaggeration shows form only, not true height or water level.")}</p>`
+      + (!S.terrainAuto && S.terrainExaggeration === TERRAIN_DEFAULT_EX ? "" : `<button type="button" class="more-button" data-terrain-reset>${text("กลับไปค่าเริ่มต้น (2 เท่า)", "Back to the default (2 times)")}</button>`) + `</div>`;
   }
   /* Height colour (OH3 explore: stretched to the view's 0.5–99.5% heights, re-stretched after each move unless locked)
      and contour lines (finest step with at most 100 lines in view by default; a manual step above 200 lines is coarsened). */
@@ -1146,6 +1176,8 @@
         S.terrain3DCamera=c; scheduleAutoExaggeration(); scheduleTerrainSurface();
         Object.assign($("terrain-3d").dataset,{longitude:String(c.center[0]),latitude:String(c.center[1]),zoom:String(c.zoom),pitch:String(c.pitch),bearing:String(c.bearing)});
       },
+      // Relief is measured in the terrain worker after each move and as tiles arrive; re-fit height and colours then.
+      onRelief:()=>{ if(generation!==S.terrain3DGeneration)return; scheduleAutoExaggeration(); scheduleTerrainSurface(); },
       onStatus:status=>{
         if(generation!==S.terrain3DGeneration)return;
         S.terrain3DStatus=status; $("map").dataset.terrain3dState=status.state;
@@ -1153,7 +1185,7 @@
         if(status.basemapState)$("terrain-3d").dataset.basemapState=status.basemapState;
         if(S.dataset!=="terrain"||S.mode!=="3d")return;
         if(status.state==="error"&&status.fatal){terrain3DFailed();return;}
-        if(status.state==="ready"||status.state==="partial"&&status.triangles>0){showTerrain3D();scheduleAutoExaggeration();scheduleTerrainSurface();}
+        if(status.state==="ready"||status.state==="partial"&&status.rendered>0){showTerrain3D();scheduleAutoExaggeration();scheduleTerrainSurface();}
         renderTerrainControls(); const node=$("terrain-state");if(node)node.textContent=terrainStateLabel();drawLegend();
       }
     }).then(controller=>{
@@ -1206,6 +1238,7 @@
         )}</div>`
       );
     }
+    if (S.dataset === "properties" && S.cache.has(dataset().geojson)) return propertyListHTML();
     if (dataset().geojson && !S.cache.has(dataset().geojson))
       return notice(
         text("กำลังเปิดรายการ", "Loading records"),
@@ -1233,7 +1266,7 @@
         )
         .join(
           "",
-        )}</div>${!list.length ? `<div class="empty-state"><h3>${text(S.search ? "ไม่พบรายการที่ค้นหา" : "ไม่พบรายการจากชั้นนี้ในขอบเขต", S.search ? "No matching records" : "No mapped records in this boundary")}</h3><p>${text("ไม่พบในข้อมูลที่ได้รับ ไม่ได้แปลว่าในพื้นที่จริงไม่มี", "Not found in the supplied data; this does not mean none exist on the ground.")}</p></div>` : ""}${list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : ""}<p class="inline-note">${text("รายการที่อยู่บนเส้นแบ่งจะเห็นได้ในหลายหมู่บ้าน ไม่ใช่รายการซ้ำที่ต้องลบ", "Items on a dividing line appear in several villages; they are not duplicates to delete.")}</p><button class="more-button" data-export>${text("ดาวน์โหลดรายการที่ค้นหา · CSV", "Download matching records · CSV")}</button>`
+        )}</div>${!list.length ? `<div class="empty-state"><h3>${text(S.search ? "ไม่พบรายการที่ค้นหา" : "ไม่พบรายการจากชั้นนี้ในขอบเขต", S.search ? "No matching records" : "No mapped records in this boundary")}</h3><p>${text("ไม่พบในข้อมูลที่ได้รับ ไม่ได้แปลว่าในพื้นที่จริงไม่มี", "Not found in the supplied data; this does not mean none exist on the ground.")}</p></div>` : ""}${list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : ""}<p class="inline-note">${text("รายการที่อยู่บนเส้นแบ่งจะเห็นได้ในหลายหมู่บ้าน ไม่ใช่รายการซ้ำที่ต้องลบ", "Items on a dividing line appear in several villages; they are not duplicates to delete.")}</p><button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดรายการที่ค้นหา · CSV", "Download matching records · CSV")}</button>`
     );
   }
   function popVillageTableHTML() {
@@ -1267,6 +1300,8 @@
       ? ["ค้นหาชื่อหรือเลขหมู่บ้าน", "Search a village name or number"]
       : ({
           taxmap: ["ค้นหารหัสแปลง หรือชื่อหมู่บ้าน", "Search a parcel code or village"],
+          properties: ["ค้นหารหัสทรัพย์สิน รหัสแปลง หรือรหัสเจ้าของ", "Search a property, parcel or owner code"],
+          businesses: ["ค้นหาชื่อธุรกิจ หรือชื่อหมู่บ้าน", "Search a business name or village"],
           appraisal: ["ค้นหารหัสแปลง หรือชื่อหมู่บ้าน", "Search a parcel code or village"],
           parcels: ["ค้นหารหัสแปลง หรือชื่อหมู่บ้าน", "Search a parcel code or village"],
           buildings: ["ค้นหาบ้านเลขที่ ประเภทอาคาร หรือชื่อหมู่บ้าน", "Search a house number, building type or village"],
@@ -1274,7 +1309,7 @@
           popgrid: ["ค้นหาชื่อหมู่บ้าน", "Search a village"],
           roads: ["ค้นหาชื่อถนน หรือชื่อหมู่บ้าน", "Search a road name or village"],
         }[S.dataset] || ["ค้นหาชื่อสถานที่ หรือชื่อหมู่บ้าน", "Search a place name or village"]);
-    return `<label class="search-field list-search"><span class="sr-only">${text("ค้นหารายการ", "Search records")}</span><input type="search" id="record-search" placeholder="${esc(text(...ph))}" value="${esc(S.search)}"></label>`;
+    return `<label class="search-field list-search"><span class="sr-only">${text("ค้นหารายการ", "Search records")}</span>${ui("search", 20)}<input type="search" id="record-search" placeholder="${esc(text(...ph))}" value="${esc(S.search)}"></label>`;
   }
   function sourcesContent() {
     if (publicAggregate()) return publicAggregateView("source");
@@ -1290,12 +1325,14 @@
     const notes = plainCaveatList(d);
     return `<section class="panel-section"><div class="section-title"><h2>${text("ข้อควรรู้ก่อนใช้", "Know before you use it")}</h2>${Missions?.status[d.status] ? `<span class="status-label">${esc(text(...Missions.status[d.status]))}</span>` : ""}</div><ul class="notes-list">${notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>${["taxmap", "appraisal", "buildings"].includes(S.dataset) ? `<p class="small-note"><a href="https://github.com/montri-th/sila/blob/main/reference/tax-map-method.md" target="_blank" rel="noopener">${text("อ่านวิธีจับคู่และวิธีคิดภาษีฉบับเต็ม", "Read the full matching and tax method")}</a></p>` : ""}</section><div class="section-title"><h2>${text("ข้อมูลนี้มาจากไหน", "Where this data comes from")}</h2></div><dl class="source-dl"><dt>${text("ตัวเลขนับอะไร", "What is counted")}</dt><dd>${esc(text(...(hints[S.dataset] || ["จำนวนรายการจากไฟล์ ไม่ใช่จำนวนคนหรือครัวเรือนที่ยืนยันแล้ว", "Rows from the files, not verified people or households"])))}</dd><dt>${text("นับในพื้นที่ไหน", "Which area is counted")}</dt><dd>${esc(scopeLabel())} · ${["flood", "terrain"].includes(S.dataset) ? text("ชุดนี้ยังไม่ได้ผูกกับพื้นที่บนแผนที่", "This dataset is not tied to map areas yet") : text("นับสิ่งที่อยู่ในเส้นขอบเขต ไม่ขึ้นกับการเลื่อนแผนที่", "Counts what lies inside the boundary, regardless of map panning")}</dd><dt>${text("เทศบาลส่งข้อมูลเมื่อ", "Received from the municipality")}</dt><dd>${NEW_LAYERS_19OCT.has(S.dataset) ? text("19 ตุลาคม 2569", "19 October 2026") : text("5 ตุลาคม 2569", "5 October 2026")} · ${text("ไม่ใช่วันที่สำรวจ", "not the survey date")}</dd><dt>${text("ตำแหน่งบนแผนที่", "Map positions")}</dt><dd>${["flood", "terrain"].includes(S.dataset) ? text("ยังไม่มีตำแหน่งที่ตรวจแล้ว", "No checked positions yet") : (["parcels", "taxmap", "appraisal", "houses", "popgrid"].includes(S.dataset) ? text("อ่านเป็น Indian 1975 UTM 48N (EPSG:24048) แล้วแปลงเป็น WGS84 · รอเทศบาลรับรอง", "Read as Indian 1975 UTM 48N (EPSG:24048), shown in WGS84 · awaiting municipal confirmation") : S.dataset === "buildings" ? text("รูปอาคารส่งมาเป็น WGS84", "Footprints supplied in WGS84") : d.sourceCRS?.join(", ")) || text("ตามไฟล์ขอบเขตที่ได้รับ", "Supplied boundary files")} · ${text("ยังไม่ได้ตรวจความแม่นยำในพื้นที่จริง", "field accuracy not yet checked")}</dd></dl>${!sourceFolders.length && SOURCE_FILES_19OCT[S.dataset] ? `<section class="panel-section" style="margin-top:24px"><div class="section-title"><h2>${text("ไฟล์ต้นทาง", "Source files")}</h2></div><ul class="notes-list">${SOURCE_FILES_19OCT[S.dataset].map((x) => `<li>${esc(text(...x))}</li>`).join("")}</ul><p class="small-note">${text("ไฟล์ต้นฉบับมีข้อมูลส่วนบุคคล จึงไม่เปิดให้ดาวน์โหลดจากหน้านี้", "The original files hold personal data, so they are not downloadable here.")}</p></section>` : ""}<section class="panel-section" style="margin-top:24px"${!sourceFolders.length && !d.sourceUrl ? " hidden" : ""}><div class="section-title"><h2>${text("โฟลเดอร์ต้นทาง", "Source folders")}</h2><span>${num(sourceFolders.length)}</span></div>${sourceFolders.map((f) => `<a class="source-folder" target="_blank" rel="noopener" href="${esc(f.url || f.sourceUrl || "https://drive.google.com/drive/folders/" + f.id)}">${esc(f.folder || f.title || f.name)}<span>${num(f.fileCount ?? f.componentCount ?? f.inventoryComponents ?? f.files?.length)} ${text("ไฟล์ประกอบ", "file components")} · ${text("เปิดใน Google Drive", "open in Google Drive")}</span></a>`).join("")}${!sourceFolders.length && d.sourceUrl ? `<a class="mini-action" href="${esc(d.sourceUrl)}" target="_blank" rel="noopener">${text("เปิดต้นทาง", "Open source")}</a>` : ""}</section>${S.dataset === "flood" ? S.docs.documents.map((x) => `<article class="document-card"><h3>${esc(x.title)}</h3><p>${text("เอกสารประกอบการวางแผน ไม่ใช่สถานการณ์ปัจจุบัน", "Planning document, not current conditions")}</p><a href="${esc(x.url)}" target="_blank" rel="noopener">${text("อ่านเอกสารต้นฉบับ", "Read original document")}</a></article>`).join("") : ""}<div id="context-actions"></div>`;
   }
-  const NEW_LAYERS_19OCT = new Set(["parcels", "taxmap", "appraisal", "buildings", "houses", "popgrid"]);
+  const NEW_LAYERS_19OCT = new Set(["parcels", "taxmap", "properties", "appraisal", "buildings", "houses", "popgrid"]);
   const PARCEL_FILE = ["ชั้นแปลงที่ดิน parcel (Shapefile) ที่เทศบาลส่ง 19 ต.ค. 2569", "Parcel layer (Shapefile) received 19 Oct 2026"];
   const LTAX_FILE = ["ไฟล์ส่งออกจาก LTAX ปีภาษี 2569: ภ.ด.ส.1, 3, 7 บัญชีเลขประเมิน บัญชีชำระ และบัญชีลูกหนี้", "LTAX exports for tax year 2569: PDS 1, 3 and 7, the assessment, payment and debtor registers"];
+  const PDS63_FILE = ["บัญชีรายการที่ดินและสิ่งปลูกสร้าง ภ.ด.ส.3 ปี 2563 (Excel) ที่เจ้าของงานส่งมา 20 ต.ค. 2569", "2563 land and building inventory list, PDS 3 (Excel), supplied by the project owner on 20 Oct 2026"];
   const SURVEY_FILE = ["หมุดแบบสำรวจอาคาร Building_point (Shapefile) ที่เทศบาลส่ง 19 ต.ค. 2569", "Building survey points Building_point (Shapefile) received 19 Oct 2026"];
   const SOURCE_FILES_19OCT = {
-    parcels: [PARCEL_FILE], taxmap: [PARCEL_FILE, LTAX_FILE], appraisal: [PARCEL_FILE, LTAX_FILE],
+    parcels: [PARCEL_FILE], taxmap: [PARCEL_FILE, LTAX_FILE, PDS63_FILE], properties: [PARCEL_FILE, LTAX_FILE, PDS63_FILE], appraisal: [PARCEL_FILE, LTAX_FILE],
+    businesses: [["ทะเบียนผู้ประกอบการจดทะเบียนภาษีมูลค่าเพิ่ม กรมสรรพากร (data.go.th) ดาวน์โหลด 17 ต.ค. 2569", "VAT registrant list, Revenue Department (data.go.th), downloaded 17 Oct 2026"], SURVEY_FILE],
     buildings: [["รูปอาคาร Building (Shapefile) ที่เทศบาลส่ง 19 ต.ค. 2569", "Building footprints (Shapefile) received 19 Oct 2026"], SURVEY_FILE, LTAX_FILE],
     houses: [SURVEY_FILE], popgrid: [SURVEY_FILE],
   };
@@ -1304,8 +1341,19 @@
       ["ภาษีปี 2569 มาจาก ภ.ด.ส.7 บัญชีเลขประเมิน บัญชีชำระ และลูกหนี้ ที่เทศบาลส่งเมื่อ 19 ต.ค. 2569 ไม่แสดงชื่อ เลขบัตร หรือเลขผู้เสียภาษีของเทศบาล ใช้รหัสแทน", "2569 tax comes from PDS 7, the assessment, payment and debtor registers received 19 Oct 2026. Names, ID numbers and municipal taxpayer numbers are not shown; a code is used instead."],
       ["ภาษีปี 2570 เป็นค่าคาดการณ์จากกฎหมายและข้อมูลที่มี ไม่ใช่ใบแจ้งประเมิน ก่อนใช้กับผู้เสียภาษีต้องตรวจเอกสารสิทธิ การใช้ประโยชน์จริง และสิทธิยกเว้นทีละราย", "2570 figures are estimates from the law and the data on hand, not assessments. Check title, actual use and exemptions case by case before acting."],
       ["ปี 2570 วิธีเดิม คือภาษีปี 2569 ของแปลง ปรับตามสัดส่วนที่ภาษีตามกฎหมายเปลี่ยนเมื่อราคาที่ดินเปลี่ยน ส่วนปี 2570 ตามข้อเสนอ คือวิธีเดิมบวกผลต่างจากข้อเสนอที่เลือก ส่วนต่างระหว่างสองค่าจึงเป็นผลของข้อเสนอล้วน ๆ", "2570 current method = the parcel’s 2569 tax scaled by how the legal tax changes with land prices; 2570 with fixes = current method plus the difference the selected fixes make, so the gap is purely the effect of the fixes."],
-      ["สถานะการชำระรายแปลงแสดงได้เฉพาะโฉนดที่อยู่ในบัญชีลูกหนี้ ไฟล์ ภ.ด.ส. ไม่มีรหัสผู้เสียภาษีต่อโฉนด จึงแบ่งยอดชำระลงแปลงไม่ได้ และยังรวมแปลงของเจ้าของคนเดียว (ม.40 ม.42 วรรคสอง) ไม่ได้", "Payment status per parcel exists only for titles on the debtor list. The PDS files carry no taxpayer code per title, so payments cannot be allocated to parcels and one owner’s parcels cannot be combined (s.40, s.42 para 2)."],
+      ["เจ้าของมาจากบัญชี ภ.ด.ส.3 ปี 2563 สมมติว่ายังไม่เปลี่ยน จึงคิดรวมแปลงของเจ้าของเดียวกัน (ม.40 ม.41 ม.42 วรรคสอง) ได้ ชื่อเจ้าของไม่แสดง ใช้รหัสสุ่ม · สถานะการชำระรายแปลงยังแสดงเฉพาะโฉนดในบัญชีลูกหนี้ปี 2569", "Owners come from the 2563 PDS 3 list, assumed unchanged, so one owner’s parcels can be combined (s.40, s.41, s.42 para 2). Owner names are not shown; random codes are used. Payment status per parcel still exists only for titles on the 2569 debtor list."],
+      ["แปลงที่แผนที่ไม่มีเลขโฉนด จับคู่กับบัญชีปี 2569 ผ่านบัญชีปี 2563 ได้อีก 8,240 แปลง (รหัสแปลงและเนื้อที่ตรงกับปี 2563 แล้วใช้เลขโฉนดของปี 2563) ถ้าบ้านเลขที่บนแปลงขัดกับบัญชีจะไม่จับคู่", "8,240 more parcels without a deed number on the map are matched to the 2569 roll through the 2563 list (map code and area match 2563, then its deed number); a parcel whose house numbers contradict the roll is not matched."],
       ["ภาษี 0 บาทแสดงเฉพาะโฉนดที่บัญชีพิสูจน์ว่ายกเว้นทั้งหมด แปลงที่ไม่พบในบัญชีแสดงเป็นลายเส้นเทา ไม่ใช่ศูนย์", "A 0 THB tax appears only where the roll proves the title fully exempt; parcels not on the roll show grey hatching, not zero."],
+    ],
+    properties: [
+      ["ทรัพย์สิน = แปลงที่มีเขตติดกันอย่างน้อย 1 เมตรของเจ้าของเดียวกันในบัญชี ภ.ด.ส.3 ปี 2563 พร้อมอาคารบนแปลงเหล่านั้น แปลงเดียวที่มีเจ้าของนับเป็นทรัพย์สินของตัวเอง", "Property = parcels of one owner in the 2563 PDS 3 list sharing at least 1 m of boundary, with the buildings on them; a single owned parcel is its own property."],
+      ["เจ้าของสมมติว่ายังไม่เปลี่ยนตั้งแต่ปี 2563 โฉนดที่ขาย ตกทอด หรือแบ่งแยกหลังจากนั้นอาจมีเจ้าของผิด ตรวจโฉนดก่อนดำเนินการ", "Owners are assumed unchanged since 2563; titles sold, inherited or subdivided since then can carry the wrong owner. Check the deed before acting."],
+      ["เงินที่เพิ่มได้ = ปี 2570 ตามข้อเสนอที่เลือก ลบ ปี 2570 วิธีเดิม รวมเฉพาะแปลงที่มีภาษีปี 2569 เป็นค่าคาดการณ์ ไม่ใช่ใบแจ้งประเมิน", "Amount added = 2570 with the selected fixes minus the 2570 current method, over the parcels with a 2569 tax; an estimate, not an assessment."],
+    ],
+    businesses: [
+      ["ปักหมุดนิติบุคคลทุกรายที่หาตำแหน่งได้ ตามที่เจ้าของงานตัดสินใจ 20 ต.ค. 2569 ไม่แสดงผู้ประกอบการที่เป็นบุคคลธรรมดา ไม่แสดงเลขผู้เสียภาษีหรือที่อยู่", "Every juristic person that could be placed is pinned (owner decision, 20 Oct 2026). Sole proprietors, tax IDs and addresses are not shown."],
+      ["ตำแหน่งมาจากบ้านเลขที่และหมู่ในทะเบียน VAT ที่ตรงกับหมุดแบบสำรวจ หรือเลขโฉนดในที่อยู่ จุดที่จับคู่ด้วยบ้านเลขที่อย่างเดียวอ่อนกว่า · นิติบุคคลอีกราว 400 รายยังหาตำแหน่งไม่ได้", "Positions come from the VAT house number and moo matched to a survey point, or a deed number in the address; number-only matches are weaker · about 400 more juristic registrants could not be placed yet."],
+      ["ธุรกิจที่ตั้งอยู่บนทรัพย์สินไม่จำเป็นต้องเป็นเจ้าของที่ดิน ทะเบียน VAT ไม่บอกประเภทกิจการ และอาจมีรายที่เลิกกิจการแล้ว", "A business located on a property is not necessarily its owner. The VAT list gives no business type and may include businesses that have closed."],
     ],
     appraisal: [["ราคาประเมินเป็นราคาที่เทศบาลใช้ในบัญชีปี 2569 แปลงที่ยังจับคู่กับบัญชีไม่ได้ไม่แสดงสี และไม่ได้แปลว่าราคาเป็นศูนย์", "Prices are those on the municipality’s 2569 roll. Unmatched parcels have no colour; that does not mean a zero price."]],
     popgrid: [
@@ -1406,10 +1454,12 @@
     }
     const f = S.record;
     const rows = recordRows(f);
-    const portfolio = S.dataset === "buildings" ? buildingTitlesHTML(f) : S.dataset === "houses" ? titleSetHTML(parcelAttr(f.properties.parcelId)?.bgrp, f.properties.parcelId) : ["taxmap", "appraisal"].includes(S.dataset) ? portfolioHTML(f.properties.id) + titleSetHTML(parcelAttr(f.properties.id)?.bgrp, f.properties.id) + parcelBuildingsHTML(f.properties.id)
-      + (parcelAttr(f.properties.id) ? `<div class="record-actions"><button type="button" class="mini-action" data-tool="tax-calculator" data-parcel="${esc(f.properties.id)}">${text("เปิดแปลงนี้ในเครื่องคิดภาษี", "Open this parcel in the tax calculator")}</button></div><p class="small-note">${esc(calculatorNote(f.properties.id))}</p>` : "") : "";
+    const portfolio = S.dataset === "properties" ? propertyCardHTML(f) : S.dataset === "buildings" ? buildingTitlesHTML(f) : S.dataset === "houses" ? titleSetHTML(parcelAttr(f.properties.parcelId)?.bgrp, f.properties.parcelId) : ["taxmap", "appraisal"].includes(S.dataset) ? portfolioHTML(f.properties.id) + titleSetHTML(parcelAttr(f.properties.id)?.bgrp, f.properties.id) + parcelBuildingsHTML(f.properties.id)
+      + (parcelAttr(f.properties.id) ? `<div class="record-actions"><button type="button" class="mini-action" data-tool="tax-calculator" data-parcel="${esc(f.properties.id)}">${ui("calculator", 18)}${text("เปิดแปลงนี้ในเครื่องคิดภาษี", "Open this parcel in the tax calculator")}</button></div><p class="small-note">${esc(calculatorNote(f.properties.id))}</p>` : "") : "";
     el.hidden = false;
-    el.innerHTML = `<article class="record-card" tabindex="-1"><div class="record-title"><div><small>${esc(label(S.dataset))}</small><h2>${esc(featureTitle(f))}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><dl class="record-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>${recordFlags(f)}${portfolio}<div class="record-actions"><button class="mini-action" data-focus-record>${text("ซูมไปที่รายการนี้", "Zoom to this record")}</button>${recordLinks(f)}</div></article>`;
+    const ext = externalActionsHTML(f);
+    refreshStreetView(f);
+    el.innerHTML = `<article class="record-card" tabindex="-1"><div class="record-title"><div><small>${esc(label(S.dataset))}</small><h2>${esc(featureTitle(f))}</h2></div><button class="quiet" data-close-record>${text("ปิด", "Close")}</button></div><dl class="record-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>${recordFlags(f)}${portfolio}${ext}<div class="record-actions"><button class="mini-action" data-focus-record>${text("ซูมไปที่รายการนี้", "Zoom to this record")}</button>${recordLinks(f)}</div></article>`;
   }
 
   /* Building -> titles under its roof -> tax 2569 and 2570, and the set of titles likely taxed together (joined by one building:
@@ -1491,8 +1541,8 @@
   }
 
   /* ---------- Revision 1.8: analytical layers, hover, popups, record cards ---------- */
-  const CHORO_LAYERS = new Set(["taxmap", "appraisal", "popgrid"]);
-  const POINT_LAYERS = new Set(["houses", "cctv", "education", "health", "religion"]);
+  const CHORO_LAYERS = new Set(["taxmap", "properties", "appraisal", "popgrid"]);
+  const POINT_LAYERS = new Set(["houses", "businesses", "cctv", "education", "health", "religion"]);
   const fixed = (v, digits) => Number(v).toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
   const money = (v, digits = 0) => v == null || !Number.isFinite(Number(v)) ? text("ยังไม่มีข้อมูลส่วนนี้", "Not available") : `${fixed(v, digits)} ${text("บาท", "THB")}`;
   const moneyShort = (v) => {
@@ -1520,6 +1570,7 @@
       return S.taxScenario === "assessed69" ? r.assessed69 : S.taxScenario === "old70" ? r.old70 : S.taxScenario === "new70" ? r.new70 : r.delta;
     }
     if (S.dataset === "popgrid") return p.suppressed ? null : p.hidden?.includes(S.popMetric) ? "<5" : p[S.popMetric];
+    if (S.dataset === "properties") { const k = propKeyOf(p.id); if (!k) return null; const v = propValue(k); return v === Infinity ? 1e6 : v; }
     return null;
   }
   /* LDS 0.9.7: tax and appraisal use the approved 41-sample LUT (as in CityMETER), one exact sample per bin, no interpolation.
@@ -1578,6 +1629,11 @@
       const base = defaultTaxRun();
       const vals = kind === "delta" ? [...(base?.byParcel.values() || [])].map((r) => r.delta) : unitValues(base, "delta");
       cuts = lutCutsOf(vals.filter((x) => x != null && Math.abs(x) >= 1).map(Math.abs), 20);
+    } else if (kind === "propGain" || kind === "propPct") {
+      // Properties gaining at the default settings (same prices, every available fix): equal-count ranges, fixed thereafter.
+      const base = defaultTaxRun(), pct = kind === "propPct";
+      const vals = [...(base?.byProperty?.values() || [])].map((e) => (pct ? propPct(e) : propGain(e))).filter((x) => x != null && Number.isFinite(x) && x >= (pct ? 0.5 : 1));
+      cuts = lutCutsOf(vals, 20);
     }
     if (cuts.length) S.lutRefs[kind] = cuts;
     return cuts;
@@ -1617,6 +1673,14 @@
       S.classing = S.taxScenario === "delta"
         ? divergent(lutRef("delta"), text("ภาษีเปลี่ยนจากปี 2569", "Change from 2569 tax"), text("บาทต่อปี · ปี 2570 ตามข้อเสนอ ลบ ปี 2569 ที่ประเมิน", "THB per year · 2570 proposed minus 2569 assessed"), deltaNote)
         : sequential(lutRef("tax"), taxScenarioLabel(S.taxScenario), text("บาทต่อปี ต่อแปลง", "THB per year per parcel"), text("ช่วงสีจากภาษีปี 2569 ทั้งเมือง แต่ละช่วงมีจำนวนแปลงเท่า ๆ กัน", "Ranges from the city-wide 2569 tax, an equal number of parcels in each"));
+      return;
+    }
+    if (S.dataset === "properties") {
+      const pct = S.propMetric === "pct";
+      S.classing = { kind: "lutdiv", oneSided: true, pct, scaleId: "delta", lut: lut("delta"), cuts: lutRef(pct ? "propPct" : "propGain"), neutral: pct ? 0.5 : 1,
+        title: pct ? text("ภาษีปี 2570 ที่เพิ่มได้ เทียบกับวิธีเดิม", "2570 tax that can be added, vs the current method") : text("ภาษีปี 2570 ที่เพิ่มได้ต่อทรัพย์สิน", "2570 tax that can be added per property"),
+        unit: pct ? text("ร้อยละของภาษีปี 2570 วิธีเดิม · ทรัพย์สินที่วิธีเดิมเป็น 0 บาทอยู่ช่วงบนสุด", "% of the 2570 current-method tax · properties at 0 THB today sit in the top range") : text("บาทต่อปี · ปี 2570 ตามข้อเสนอ ลบ ปี 2570 วิธีเดิม", "THB a year · 2570 with fixes minus 2570 current method"),
+        refNote: text("ช่วงสีจากทรัพย์สินที่ภาษีเพิ่มเมื่อใช้ค่าเริ่มต้น แต่ละช่วงมีจำนวนเท่า ๆ กัน", "Ranges from properties that gain at the default settings, equal counts per range") };
       return;
     }
     if (S.dataset === "appraisal") {
@@ -1756,10 +1820,17 @@
   function popMetricLabel(id) {
     return text(...({ t: ["คนทั้งหมด", "All people"], c: ["เด็กต่ำกว่า 15 ปี", "Children under 15"], a: ["อายุประมาณ 15–42 ปี", "About 15–42 years"], o: ["อายุประมาณ 42 ปีขึ้นไป", "About 42 and over"], m: ["ชาย", "Male"], f: ["หญิง", "Female"] }[id] || ["คน", "People"]));
   }
+  /* Approved interface icons (owner, 20 Oct 2026): warning = needs check, check_circle = passed, schedule = awaiting data.
+     Icons never replace the words; the chip colour uses the LDS semantic state tokens. */
+  const ui = (role, size = 16) => window.SilaIcons?.icon(role, { size }) || "";
+  const stateChip = (state, label) => `<span class="state-chip" data-state="${state}">${ui({ check: "needscheck", passed: "passed", awaiting: "awaiting" }[state] || "info")}<span>${esc(label)}</span></span>`;
+  const statusHTML = (s) => s === "paid" ? stateChip("passed", statusText(s)) : s === "unpaid" || s === "partial" ? stateChip("check", statusText(s)) : s === "none" ? esc(statusText(s)) : stateChip("awaiting", statusText(s));
   const statusText = (s) => text(...({ paid: ["ชำระครบแล้ว", "Paid in full"], partial: ["ชำระบางส่วน (บัญชีลูกหนี้ 30 ก.ย. 2569)", "Partly paid (debtor list, 30 Sep 2569)"], unpaid: ["ค้างชำระ (บัญชีลูกหนี้ 30 ก.ย. 2569)", "Unpaid (debtor list, 30 Sep 2569)"], none: ["ไม่มียอดต้องชำระของโฉนดนี้", "Nothing due on this title"] }[s] || ["ยังผูกการชำระรายแปลงไม่ได้", "Payment not linked to parcels yet"]));
   function featureTitle(f) {
     const p = f.properties;
     if (S.dataset === "houses") return p.houseNumber ? text(`บ้านเลขที่ ${p.houseNumber}`, `House ${p.houseNumber}`) : text(`จุดสำรวจ #${p.sourceRecord}`, `Survey point #${p.sourceRecord}`);
+    if (S.dataset === "properties") { const k = propKeyOf(p.id); return k ? propName(k) : p.code ? text(`แปลง ${p.code}`, `Parcel ${p.code}`) : p.label; }
+    if (S.dataset === "businesses") return p.label + (p.branch && p.branch !== "head" ? text(` (สาขา ${p.branch})`, ` (branch ${p.branch})`) : "");
     if (["taxmap", "appraisal", "parcels"].includes(S.dataset)) return p.code ? text(`แปลง ${p.code}`, `Parcel ${p.code}`) : p.label;
     if (S.dataset === "buildings") return (sv(p.type) || text("อาคาร", "Building")) + ` #${p.sourceRecord}`;
     if (S.dataset === "popgrid") return text("ช่อง 250 ม.", "250 m cell");
@@ -1795,6 +1866,19 @@
         const v = layerValue(f);
         out.push(`${esc(taxScenarioLabel(S.taxScenario))}: <span class="hover-value">${v == null ? "—" : (S.taxScenario === "delta" && v > 0 ? "+" : "") + fixed(v, 2)}</span> ${text("บาท", "THB")}`);
         if (S.taxScenario === "assessed69" && r.status69 !== "unknown") out.push(statusText(r.status69));
+      }
+    } else if (S.dataset === "businesses") {
+      out.push(esc(businessKindText(p)));
+      if (p.site) out.push(esc(p.site));
+      if (p.placedBy === "house_no_only") out.push(text("ตำแหน่งจากบ้านเลขที่อย่างเดียว · ควรตรวจ", "Placed by house number only · check"));
+    } else if (S.dataset === "properties") {
+      const k = propKeyOf(p.id), e = propRow(k);
+      if (!k) out.push(text("ยังไม่พบเจ้าของในบัญชีปี 2563", "No owner in the 2563 list"));
+      else if (!e?.taxed) out.push(text("ยังไม่มีตัวเลขภาษี", "No tax figure yet"));
+      else {
+        const g = propGain(e);
+        out.push(`${text("เพิ่มได้ต่อปี", "Can be added a year")}: <span class="hover-value">${g >= 0.5 ? "+" : ""}${fixed(g, 0)}</span> ${text("บาท", "THB")} (${esc(pctLabel(propPct(e)))})`);
+        out.push(esc(text(`${num(propParcels(k).length)} แปลง · ปี 2570 ตามข้อเสนอ ${fixed(e.new70, 0)} บาท`, `${num(propParcels(k).length)} parcel(s) · 2570 with fixes ${fixed(e.new70, 0)} THB`)));
       }
     } else if (S.dataset === "popgrid") {
       if (p.suppressed) out.push(text("คนในรายชื่อน้อยกว่า 10 คนหรือบ้านน้อยกว่า 3 หลัง จึงปิดตัวเลขไว้", "Fewer than 10 listed people or 3 households; figures hidden"));
@@ -1851,8 +1935,23 @@
     if (!S.map) return;
     closePopup();
     const rows = popupRows(f);
-    const html = `<p class="popup-title">${esc(featureTitle(f))}</p><dl class="popup-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>${recordFlags(f)}<button type="button" class="popup-more" data-record-focus>${text("ดูรายละเอียดทั้งหมด", "See all details")}</button>`;
-    S.popup = L.popup({ maxWidth: 340, autoPanPaddingTopLeft: [24, 72], autoPanPaddingBottomRight: [24, 24], closeButton: true }).setLatLng(latlng || featureCenter(f)).setContent(html).openOn(S.map);
+    const sv = f.geometry && S.dataset !== "popgrid" ? streetView(f) : null;
+    /* Revision 1.9: a compact peek, not a second record card. Title, the two or three figures that matter for this
+       layer, a one-line notice when there is something to check, and two actions; everything else is in the panel. */
+    const narrow = (S.map.getContainer().clientWidth || 999) < 520;
+    const peek = rows.slice(0, narrow ? 1 : 3), nFlags = recordFlagList(f).length;
+    const svTitle = sv?.facing ? text("เปิด Street View หันมาทางนี้", "Open Street View facing this place") : text("เปิด Street View ใกล้ตำแหน่งนี้", "Open Street View near this place");
+    const svLink = sv ? `<a class="popup-link ext-link" data-popup-sv href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer" title="${esc(svTitle)}">${window.SilaIcons?.icon("streetview", { size: 16 }) || ""}<span>Street View</span>${extMark()}</a>` : "";
+    const flagLine = nFlags ? `<p class="popup-flag">${ui("needscheck")}<span>${text(`มีข้อควรตรวจ ${num(nFlags)} ข้อ`, `${num(nFlags)} thing${nFlags > 1 ? "s" : ""} to check`)}</span></p>` : "";
+    const html = `<div class="popup-peek"><p class="popup-title">${esc(featureTitle(f))}</p>${peek.length ? `<dl class="popup-dl">${peek.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>` : ""}${flagLine}<div class="popup-actions"><button type="button" class="popup-more" data-record-focus>${window.SilaIcons?.icon("info", { size: 16 }) || ""}<span>${text("รายละเอียด", "Details")}</span></button>${svLink}</div></div>`;
+    if (sv && !S.cache.has(ROADS_PATH())) fetchJSON(ROADS_PATH()).then(() => {
+      const a = document.querySelector("[data-popup-sv]"), nsv = streetView(f);
+      if (a && S.popup?.isOpen?.()) { a.href = nsv.href; if (nsv.facing) a.title = text("เปิด Street View หันมาทางนี้", "Open Street View facing this place"); }
+    }).catch(() => {});
+    S.popup = L.popup({ maxWidth: narrow ? 248 : 276, minWidth: narrow ? 240 : 250, className: "sila-popup", autoPanPaddingTopLeft: [12, 60], autoPanPaddingBottomRight: [12, 12], closeButton: true }).setLatLng(latlng || featureCenter(f)).setContent(html).openOn(S.map);
+    // Numerals and link cues are added just after insertion; re-measure so the peek is panned fully into view.
+    const opened = S.popup;
+    requestAnimationFrame(() => requestAnimationFrame(() => { if (S.popup === opened && opened.isOpen()) opened.update(); }));
   }
   /* The popup leads with what the layer is about: on the tax map, the tax figures come first. */
   function popupRows(f) {
@@ -1865,6 +1964,11 @@
         const v = unitValue(u, scen); if (u) lead.push([k, v == null ? text("ยังไม่มีตัวเลข", "No figure") : money(v, 2)]);
       }
       return lead.concat(rows.slice(0, 2)).slice(0, 7);
+    }
+    if (S.dataset === "properties") {   // the peek leads with the gain and the priority, then the size
+      const pick = [text("เพิ่มได้ต่อปี", "Can be added a year"), text("ลำดับที่ควรจัดการ", "Priority rank"), text("แปลงในทรัพย์สิน", "Parcels in the property")];
+      const lead = pick.map((k) => rows.find((x) => x[0] === k)).filter(Boolean);
+      return lead.concat(rows.filter((x) => !lead.includes(x))).slice(0, 8);
     }
     if (S.dataset !== "taxmap") return rows.slice(0, 6);
     const r = taxRow(f.properties.id), find = (k) => rows.find((x) => x[0] === k);
@@ -1928,9 +2032,38 @@
       add(text("การใช้ประโยชน์ปี 2569", "Use in 2569"), a?.useLabel ? esc(text(...a.useLabel)) + (a.mainHome ? text(" · บ้านหลังหลัก", " · main home") : "") : null);
       if (r) {
         add(text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed"), money(r.assessed69, 2));
-        add(text("การชำระปี 2569", "2569 payment"), esc(statusText(r.status69)));
+        add(text("การชำระปี 2569", "2569 payment"), statusHTML(r.status69));
         add(text("ปี 2570 วิธีเดิม", "2570 current method"), money(r.old70, 2));
         add(text("ปี 2570 ตามข้อเสนอ", "2570 with fixes"), money(r.new70, 2));
+      }
+    } else if (S.dataset === "businesses") {
+      add(text("ชื่อจดทะเบียน", "Registered name"), esc(p.label));
+      if (p.site) add(text("ชื่อสถานประกอบการ", "Trading name"), esc(p.site));
+      add(text("ประเภท", "Type"), esc(businessKindText(p)));
+      if (p.vatSince) add(text("จดทะเบียน VAT ตั้งแต่", "VAT registered since"), esc(text(`ปี ${p.vatSince}`, `${p.vatSince - 543}`)));
+      add(text("หมู่บ้าน", "Village"), esc(villageNames));
+      add(text("ตำแหน่ง", "Position"), esc(p.placedBy === "deed" ? text("แปลงที่มีเลขโฉนดตามที่อยู่", "the parcel with the deed number in the address") : p.placedBy === "house_no_only" ? text("บ้านเลขที่ตรงกับหมุดสำรวจ (ไม่มีหมู่) · อ่อนกว่า ควรตรวจ", "house number matches a survey point (no moo) · weaker, check") : p.placedBy === "house_no_moo_commercial" ? text("บ้านเลขที่และหมู่ตรงกับหมุดสำรวจที่ใช้ค้าขาย", "house number and moo match a commercial survey point") : text("บ้านเลขที่และหมู่ตรงกับหมุดสำรวจ", "house number and moo match a survey point")));
+      if (p.commercialObserved != null) add(text("แบบสำรวจพบการค้าขาย", "Survey saw commercial use"), p.commercialObserved ? text("พบ", "Yes") : text("ไม่พบ", "Not seen"));
+      if (p.website) add(text("เว็บไซต์ทางการ", "Official website"), `<a class="ext-link" href="${esc(p.website)}" target="_blank" rel="noopener noreferrer">${esc(p.website.replace(/^https:\/\//, "").replace(/\/$/, ""))}${extMark()}</a>`);
+      if (p.parcelId) { const k = propKeyOf(p.parcelId); add(text("ตั้งอยู่บน", "Located on"), `<button type="button" class="portfolio-link" data-goto="${k ? "properties" : "taxmap"}|${esc(p.parcelId)}">${esc(k ? propName(k) : text(`แปลง ${codeOf(p.parcelId)}`, `Parcel ${codeOf(p.parcelId)}`))}</button>`); }
+    } else if (S.dataset === "properties") {
+      const key = propKeyOf(p.id), e = propRow(key), rk = propRanking();
+      if (!key) {
+        add(text("รหัสแปลง", "Parcel code"), esc(p.code || "—"));
+        add(text("เจ้าของ", "Owner"), text("ยังไม่พบเจ้าของแปลงนี้ในบัญชี ภ.ด.ส.3 ปี 2563", "No owner for this parcel in the 2563 PDS 3 list"));
+      } else {
+        const ids = propParcels(key), code = propOwnerCode(key);
+        add(text("แปลงในทรัพย์สิน", "Parcels in the property"), esc(text(`${num(ids.length)} แปลง`, `${num(ids.length)}`)));
+        if (code) add(text("เจ้าของ (บัญชีปี 2563)", "Owner (2563 list)"), esc(ownerText(code)));
+        if (e?.taxed) {
+          const g = propGain(e);
+          add(text("เพิ่มได้ต่อปี", "Can be added a year"), `<strong>${esc((g >= 0.5 ? "+" : "") + money(g, 2))}</strong> (${esc(pctLabel(propPct(e)))})`);
+          if (rk?.rank.has(key)) add(text("ลำดับที่ควรจัดการ", "Priority rank"), esc(text(`${num(rk.rank.get(key))} จาก ${num(rk.list.length)} ทรัพย์สิน`, `${num(rk.rank.get(key))} of ${num(rk.list.length)} properties`)));
+          add(text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed"), money(e.assessed69, 2));
+          add(text("ปี 2570 วิธีเดิม", "2570 current method"), money(e.old70, 2));
+          add(text("ปี 2570 ตามข้อเสนอ", "2570 with fixes"), money(e.new70, 2));
+          if (e.taxed < ids.length) add(text("แปลงที่ยังไม่มีตัวเลขภาษี", "Parcels without a tax figure"), esc(text(`${num(ids.length - e.taxed)} แปลง ไม่อยู่ในยอดนี้`, `${num(ids.length - e.taxed)}, not in these totals`)));
+        } else add(text("ภาษี", "Tax"), text("ยังไม่มีตัวเลขภาษีของแปลงในทรัพย์สินนี้", "No tax figure for the parcels of this property"));
       }
     } else if (S.dataset === "popgrid") {
       if (p.suppressed) add(text("ตัวเลข", "Figures"), text("ปิดไว้ เพราะคนในรายชื่อน้อยกว่า 10 คนหรือบ้านน้อยกว่า 3 หลัง", "Hidden: fewer than 10 listed people or 3 households"));
@@ -1953,6 +2086,10 @@
     return rows;
   }
   function recordFlags(f) {
+    const flags = recordFlagList(f);
+    return flags.length ? `<div>${flags.map((x) => `<span class="flag-chip">${ui("needscheck")}<span>${esc(x)}</span></span>`).join("")}</div>` : "";
+  }
+  function recordFlagList(f) {
     const p = f.properties, flags = [];
     if (S.dataset === "buildings" && p.straddle) flags.push(text("อาคารอยู่บนหลายแปลง · ตรวจว่ารวมฐานภาษีได้หรือไม่", "Spans parcels · check whether the tax base should be combined"));
     if (S.dataset === "buildings" && (p.surveyPoints || 0) >= 2) flags.push(text(`มี ${num(p.surveyPoints)} ทะเบียนบ้านในอาคารเดียว · ตรวจการให้เช่าหรือหลายครัวเรือน`, `${num(p.surveyPoints)} house registrations in one building · check renting or several households`));
@@ -1970,7 +2107,7 @@
       const reasons = S.dataset === "taxmap" ? (taxRow(p.id)?.reasons || []).map((r) => r[S.lang === "en" ? 1 : 0]) : [];
       if (reasons.length) flags.push(text(`ปี 2570 ตามข้อเสนอ ต่างจากวิธีเดิมเพราะ: ${reasons.join(" · ")} (สมมติจากแบบสำรวจ ต้องตรวจก่อน)`, `2570 with fixes differs because of: ${reasons.join(" · ")} (assumed from the survey; check first)`));
     }
-    return flags.length ? `<div>${flags.map((x) => `<span class="flag-chip">${esc(x)}</span>`).join("")}</div>` : "";
+    return flags;
   }
 
   /* ---------- legends ---------- */
@@ -1990,10 +2127,12 @@
     } else {
       const arm = (j) => (m ? Math.round(j * 19 / m) : 0);
       const range = (j) => (j === m ? text(`${lutNum(c.cuts[m - 1])} ขึ้นไป`, `${lutNum(c.cuts[m - 1])} and over`) : `${lutNum(j === 0 ? c.neutral : c.cuts[j - 1])}–${lutNum(c.cuts[j])}`);
-      for (let j = m; j >= 0; j--) { swatches.push(c.lut[19 - arm(j)]); rows.push([c.lut[19 - arm(j)], text(`ลดลง ${range(j)}`, `Down ${range(j)}`)]); }
-      swatches.push(c.lut[20]); rows.push([c.lut[20], text(`ไม่เปลี่ยน (ต่างไม่ถึง ${c.neutral} บาท)`, `No change (under ${c.neutral} THB)`)]);
+      if (!c.oneSided) for (let j = m; j >= 0; j--) { swatches.push(c.lut[19 - arm(j)]); rows.push([c.lut[19 - arm(j)], text(`ลดลง ${range(j)}`, `Down ${range(j)}`)]); }
+      swatches.push(c.lut[20]); rows.push([c.lut[20], c.pct ? text(`ไม่เพิ่ม (ไม่ถึง ${c.neutral}%)`, `No gain (under ${c.neutral}%)`) : text(`ไม่เปลี่ยน (ต่างไม่ถึง ${c.neutral} บาท)`, `No change (under ${c.neutral} THB)`)]);
       for (let j = 0; j <= m; j++) { swatches.push(c.lut[21 + arm(j)]); rows.push([c.lut[21 + arm(j)], text(`เพิ่มขึ้น ${range(j)}`, `Up ${range(j)}`)]); }
-      ends = [text(`ลดลง ${lutNum(c.cuts[m - 1])}+`, `Down ${lutNum(c.cuts[m - 1])}+`), text("ไม่เปลี่ยน", "No change"), text(`เพิ่ม ${lutNum(c.cuts[m - 1])}+`, `Up ${lutNum(c.cuts[m - 1])}+`)];
+      const u = c.pct ? "%" : "";
+      ends = c.oneSided ? [text("ไม่เพิ่ม", "No gain"), `+${lutNum(c.cuts[Math.floor(m / 2)])}${u}`, text(`+${lutNum(c.cuts[m - 1])}${u} ขึ้นไป`, `+${lutNum(c.cuts[m - 1])}${u} and up`)]
+        : [text(`ลดลง ${lutNum(c.cuts[m - 1])}+`, `Down ${lutNum(c.cuts[m - 1])}+`), text("ไม่เปลี่ยน", "No change"), text(`เพิ่ม ${lutNum(c.cuts[m - 1])}+`, `Up ${lutNum(c.cuts[m - 1])}+`)];
     }
     const bar = `<div class="lut-bar" aria-hidden="true">${swatches.map((col) => `<span style="background:${col}"></span>`).join("")}</div>`;
     const endRow = `<div class="lut-ends"><span>${esc(ends[0])}</span><span>${esc(ends[1])}</span><span>${esc(ends[2])}</span></div>`;
@@ -2007,7 +2146,7 @@
     const c = S.classing;
     if (!c) return "";
     if (c.kind === "lut" || c.kind === "lutdiv") {
-      const noData = S.dataset === "appraisal" ? text("ยังไม่มีราคาประเมิน", "No appraisal yet") : text("ไม่มีตัวเลขภาษีของแปลงนี้ (ไม่ใช่ศูนย์)", "No tax figure for this parcel (not zero)");
+      const noData = S.dataset === "appraisal" ? text("ยังไม่มีราคาประเมิน", "No appraisal yet") : S.dataset === "properties" ? text("ไม่พบเจ้าของในบัญชีปี 2563 หรือไม่มีตัวเลขภาษี (ไม่ใช่ศูนย์)", "No owner in the 2563 list or no tax figure (not zero)") : text("ไม่มีตัวเลขภาษีของแปลงนี้ (ไม่ใช่ศูนย์)", "No tax figure for this parcel (not zero)");
       return lutLegendHTML(c, noData, S.dataset === "taxmap" && c.kind === "lut" ? text("0 บาท (บัญชีระบุว่ายกเว้นทั้งหมด)", "0 THB (the roll shows it fully exempt)") : null);
     }
     let rows = "";
@@ -2064,6 +2203,8 @@
     let html = "";
     if (S.dataset === "taxmap") {
       html = `<div class="control-card">${taxAssumptionsHTML()}</div>`;
+    } else if (S.dataset === "properties") {
+      html = `<div class="control-card"><span class="control-field">${text("สีบนแผนที่แสดง", "Map colours show")}</span><div class="segmented" role="group" aria-label="${text("เลือกตัวเลขที่ใช้ระบายสี", "Choose the figure for the colours")}">${[["thb", ["เพิ่มกี่บาท", "THB added"]], ["pct", ["เพิ่มกี่เปอร์เซ็นต์", "Percent added"]]].map(([id, l]) => `<button type="button" data-prop-metric="${id}" aria-pressed="${id === S.propMetric}">${esc(text(...l))}</button>`).join("")}</div>${taxAssumptionsHTML(false)}</div>`;
     } else if (S.dataset === "appraisal") {
       html = `<div class="control-card"><fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>${adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)}<p id="adj-note" class="small-note">${text("ที่ 0% แผนที่แสดงราคารอบปัจจุบัน เมื่อเลื่อนแถบ แผนที่และตัวเลขแสดงราคาที่สมมติ ช่วงสีคงเดิม สีจึงเปลี่ยนตามราคา · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569", "At 0% the map shows the current round; moving the slider shows assumed prices on the same colour ranges, so colours follow the price · the Treasury is due to publish new prices on 1 Dec 2569")}</p></fieldset></div>`;
     } else if (S.dataset === "popgrid") {
@@ -2081,17 +2222,347 @@
     return `<div class="control-field"><span id="${id}-label">${label}</span><div class="control-range"><input id="${id}" type="range" min="-30" max="100" step="5" value="${value}" aria-labelledby="${id}-label" aria-describedby="adj-note"><output id="${id}-value" for="${id}">${pctText(value)}</output></div></div>`;
   }
   /* Shared assumptions for the tax map and the buildings tax view: year shown, new appraisal round (land and buildings), fixes. */
-  function taxAssumptionsHTML() {
+  function taxAssumptionsHTML(withScenario = true) {
     const scen = ["assessed69", "old70", "new70", "delta"].map((id) => `<option value="${id}"${id === S.taxScenario ? " selected" : ""}>${esc(taxScenarioLabel(id))}</option>`).join("");
     const avail = (s) => S.parcelTax?.availability?.[s.id] !== false;
     const fixes = TAX_STRATEGIES.map((s) => `<label class="check-item"><input type="checkbox" data-strategy="${s.id}"${S.taxStrategies.has(s.id) && avail(s) ? " checked" : ""}${avail(s) ? "" : " disabled"}><span>${esc(text(...s.label))}<small>${esc(text(...(avail(s) ? s.basis : window.SilaTaxEngine.OWNER_REASON)))}</small></span></label>`).join("");
     const on = TAX_STRATEGIES.filter((s) => S.taxStrategies.has(s.id) && avail(s)).length;
-    return `<label class="control-field"><span>${text("สีบนแผนที่แสดง", "Map colours show")}</span><select id="tax-scenario">${scen}</select></label>`
+    return (withScenario ? `<label class="control-field"><span>${text("สีบนแผนที่แสดง", "Map colours show")}</span><select id="tax-scenario">${scen}</select></label>` : "")
       + `<fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>`
       + adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)
       + adjSliderHTML("building-adj", text("ราคาสิ่งปลูกสร้าง เทียบรอบปัจจุบัน", "Building prices vs the current round"), S.bldAdj)
       + `<p id="adj-note" class="small-note">${text("มีผลกับภาษีปี 2570 · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569 ระหว่างนี้ใช้แถบนี้สมมติ · ถ้าแผนที่แสดงปี 2569 อยู่ เลื่อนแถบแล้วจะเปลี่ยนไปแสดงปี 2570 ตามข้อเสนอ · ยังไม่ได้คิดค่าเสื่อมอาคารที่เพิ่มขึ้นหนึ่งปี", "Applies to the 2570 tax · the Treasury is due to publish new prices on 1 Dec 2569; until then use these to assume · if the map shows 2569, moving a slider switches it to 2570 with fixes · one more year of building depreciation is not included")}</p></fieldset>`
-      + `<details class="fix-details"${S.taxScenario === "new70" || S.taxScenario === "delta" ? " open" : ""}><summary>${text(`ข้อเสนอที่คิดรวมในปี 2570 ตามข้อเสนอ (เลือก ${on} ข้อ)`, `Fixes in 2570 with fixes (${on} selected)`)}</summary><fieldset class="check-list"><legend class="sr-only">${text("ข้อเสนอที่คิดรวม", "Fixes included")}</legend>${fixes}</fieldset></details>`;
+      + `<details class="fix-details"${!withScenario || S.taxScenario === "new70" || S.taxScenario === "delta" ? " open" : ""}><summary>${text(`ข้อเสนอที่คิดรวมในปี 2570 ตามข้อเสนอ (เลือก ${on} ข้อ)`, `Fixes in 2570 with fixes (${on} selected)`)}</summary><fieldset class="check-list"><legend class="sr-only">${text("ข้อเสนอที่คิดรวม", "Fixes included")}</legend>${fixes}</fieldset></details>`;
+  }
+  /* ---------- Revision 1.9: properties = adjoining parcels of one owner with their buildings ----------
+     Owners come from the 2563 PDS 3 list and are assumed unchanged (2569 debtor links take precedence). A property is
+     'g<grp>' for two or more adjoining parcels of one owner, or 'p<parcel id>' for a single owned parcel. */
+  const propertyOf = (id) => S.parcelTax?.propertyOf?.get(id) ?? null;
+  function propKeyOf(id) {
+    const g = propertyOf(id);
+    if (g != null) return "g" + g;
+    return parcelAttr(id)?.tp ? "p" + id : null;
+  }
+  const propParcels = (key) => (!key ? [] : key[0] === "g" ? S.parcelTax?.properties?.get(Number(key.slice(1))) || [] : [key.slice(1)]);
+  const propRow = (key) => (key ? S.taxResult?.byProperty?.get(key) || null : null);
+  const propGain = (e) => (e && e.taxed ? e.new70 - e.old70 : null);
+  const propPct = (e) => { const g = propGain(e); if (g == null) return null; if (e.old70 > 0) return (g / e.old70) * 100; return g >= 0.5 ? Infinity : 0; };
+  const propValue = (key) => { const e = propRow(key); return S.propMetric === "pct" ? propPct(e) : propGain(e); };
+  const propCode = (key) => (key?.[0] === "g" ? `P${key.slice(1).padStart(4, "0")}` : key ? codeOf(key.slice(1)) : "");
+  const propName = (key) => (key?.[0] === "g" ? text(`ทรัพย์สิน ${propCode(key)}`, `Property ${propCode(key)}`) : text(`ทรัพย์สินแปลงเดียว · แปลง ${propCode(key)}`, `Single-parcel property · parcel ${propCode(key)}`));
+  const pctLabel = (p) => (p == null ? "—" : p === Infinity ? text("จาก 0 บาท", "from 0 THB") : `${p >= 0 ? "+" : ""}${fixed(p, Math.abs(p) >= 10 ? 0 : 1)}%`);
+  const propOwnerCode = (key) => { for (const id of propParcels(key)) { const tp = parcelAttr(id)?.tp; if (tp) return tp; } return null; };
+  const STRATEGY_BY_ID = new Map(TAX_STRATEGIES.map((x) => [x.id, x]));
+  /* Ranked work list: properties whose 2570 tax with fixes exceeds the current method, largest gain first (cached per run). */
+  function propRanking() {
+    const res = S.taxResult;
+    if (!res?.byProperty) return null;
+    if (S.propRankCache?.res === res) return S.propRankCache;
+    const list = [...res.byProperty.values()].filter((e) => propGain(e) >= 1).sort((a, b) => propGain(b) - propGain(a) || (a.key < b.key ? -1 : 1));
+    S.propRankCache = { res, list, rank: new Map(list.map((e, i) => [e.key, i + 1])) };
+    return S.propRankCache;
+  }
+  /* Properties in the selected boundary: a property counts where any of its parcels lies in the boundary. */
+  function propsInScope() {
+    const fs = currentFeatures();
+    if (S.propScopeCache?.fs === fs) return S.propScopeCache.keys;
+    const keys = new Set();
+    for (const f of fs) { const k = propKeyOf(f.properties.id); if (k) keys.add(k); }
+    S.propScopeCache = { fs, keys };
+    return keys;
+  }
+  function propScopeTotals() {
+    const keys = propsInScope(), t = { n: 0, nGain: 0, gain: 0, old70: 0, new70: 0, assessed69: 0, byFix: new Map() };
+    for (const k of keys) {
+      const e = propRow(k);
+      if (!e) continue;
+      t.n++;
+      if (!e.taxed) continue;
+      t.assessed69 += e.assessed69; t.old70 += e.old70; t.new70 += e.new70;
+      const g = propGain(e);
+      if (g >= 1) { t.nGain++; t.gain += g; for (const [id, d] of e.reasons) t.byFix.set(id, (t.byFix.get(id) || 0) + d); }
+    }
+    return t;
+  }
+  const OWNER_KIND = { company: ["บริษัท", "company"], partnership: ["ห้างหุ้นส่วน", "partnership"], bank: ["ธนาคาร", "bank"], cooperative: ["สหกรณ์", "cooperative"], foundation: ["มูลนิธิ", "foundation"], association: ["สมาคม", "association"], religious: ["ศาสนสถาน", "religious body"], government: ["ส่วนราชการหรือรัฐวิสาหกิจ", "government body"], other: ["นิติบุคคลอื่น", "other juristic person"] };
+  function ownerText(code) {
+    const t = S.parcelTax?.taxpayers?.get(code);
+    const kind = t?.type === "juristic" ? text(...(OWNER_KIND[t.kind] || ["นิติบุคคล", "juristic person"])) : t?.type === "individual" ? text("บุคคลธรรมดา", "individual") : text("ไม่ทราบประเภท", "type unknown");
+    return text(`รหัส ${code} · ${kind}`, `code ${code} · ${kind}`);
+  }
+  const OWN_EVIDENCE = { ds: ["เลขโฉนดและหน้าสำรวจตรงกับบัญชีปี 2563", "deed and survey numbers match the 2563 list"], dl: ["เลขโฉนดและเลขที่ดินตรงกับบัญชีปี 2563", "deed and land numbers match the 2563 list"], dc: ["เลขโฉนดและรหัสแปลงตรงกับบัญชีปี 2563", "deed number and map code match the 2563 list"], du: ["เลขโฉนดตรงกับโฉนดเดียวในบัญชีปี 2563", "the deed number matches one title in the 2563 list"], ca: ["รหัสแปลงและเนื้อที่ตรงกับบัญชีปี 2563 (แผนที่ไม่มีเลขโฉนด)", "map code and area match the 2563 list (no deed number on the map)"], d69: ["บัญชีลูกหนี้ปี 2569", "the 2569 debtor list"] };
+  function ownEvidenceText(own) {
+    if (!own) return text("ยังไม่พบเจ้าของในบัญชีปี 2563", "No owner found in the 2563 list");
+    const h = own !== "d69" && own.endsWith("h"), k = h ? own.slice(0, -1) : own;
+    return text(...(OWN_EVIDENCE[k] || ["ไม่ทราบวิธีจับคู่", "matching method unknown"])) + (h ? text(" · บ้านเลขที่ในแปลงตรงกับบัญชี", " · house numbers on the parcel agree") : "");
+  }
+  const propertyFeatures = (key) => {
+    const ids = new Set(propParcels(key)), fc = S.cache.get("data/parcels.geojson");
+    return fc && ids.size ? fc.features.filter((x) => ids.has(x.properties.id)) : [];
+  };
+  /* Open a property from the ranked list: select one of its parcels in the boundary and fit the whole property. */
+  function openProperty(key) {
+    const ids = new Set(propParcels(key));
+    const f = currentFeatures().find((x) => ids.has(x.properties.id));
+    if (!f) { toast(text("ทรัพย์สินนี้ไม่อยู่ในขอบเขตที่เลือก", "This property is not in the selected boundary")); return; }
+    selectRecord(f);
+    if (S.selectedLayer && S.map && !S.terrain3DVisible) { S.interactionRevision++; S.map.fitBounds(S.selectedLayer.getBounds(), { padding: [64, 64], maxZoom: 19, animate: false }); openPopupFor(f); }
+  }
+  function propertiesContent() {
+    if (!S.taxResult?.byProperty) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
+    const t = propScopeTotals(), where = S.scope.type === "municipality" ? text("ทั้งเมือง", "whole city") : scopeLabel();
+    const box = (label, value, note, emph) => `<div class="total-box"${emph ? ' data-emphasis="true"' : ""}><small>${esc(label)}</small><strong>${value}</strong>${note ? `<span>${esc(note)}</span>` : ""}</div>`;
+    const fixRows = [...t.byFix.entries()].filter(([, d]) => d >= 0.5).sort((a, b) => b[1] - a[1]);
+    const sm = S.parcelTax?.summary?.ownersFrom2563;
+    return `<section class="panel-section"><h2 class="sr-only">${text("ทรัพย์สินรายเจ้าของ", "Properties by owner")}</h2><div class="totals-grid">`
+      + box(text(`ภาษีปี 2570 ที่เพิ่มได้ต่อปี · ${where}`, `2570 tax that can be added a year · ${where}`), esc(moneyShort(t.gain)), text(`จาก ${num(t.nGain)} ทรัพย์สิน`, `from ${num(t.nGain)} properties`), true)
+      + box(text(`ปี 2570 วิธีเดิม · ${where}`, `2570 current method · ${where}`), esc(moneyShort(t.old70)), text(`ตามข้อเสนอ ${moneyShort(t.new70)}`, `with fixes ${moneyShort(t.new70)}`))
+      + box(text(`ทรัพย์สินที่มีเจ้าของในบัญชีปี 2563 · ${where}`, `Properties with a 2563 owner · ${where}`), esc(num(t.n)), text("รวมทรัพย์สินแปลงเดียว", "including single-parcel ones"))
+      + `</div><button type="button" class="more-button" data-open-tab="list">${text(`ดูรายการที่ควรจัดการก่อน (${num(t.nGain)})`, `See what to handle first (${num(t.nGain)})`)}</button>`
+      + (fixRows.length ? `<details class="supplement" open><summary>${text("ภาษีที่เพิ่มได้ แยกตามข้อเสนอ", "Tax that can be added, by fix")}</summary><div class="supplement-body"><table class="data-table"><thead><tr><th>${text("ข้อเสนอ", "Fix")}</th><th class="num">${text("บาทต่อปี (สมมติ)", "THB a year (scenario)")}</th></tr></thead><tbody>${fixRows.map(([id, d]) => `<tr><td>${esc(text(...(STRATEGY_BY_ID.get(id)?.label || [id, id])))}</td><td class="num">${esc(fixed(d, 0))}</td></tr>`).join("")}</tbody></table><p class="small-note">${text("แต่ละแถวคิดข้อเสนอทีละข้อ ผลรวมจึงต่างจากยอดที่คิดพร้อมกันได้เล็กน้อย", "Each row applies one fix alone, so rows can differ slightly from the combined total")}</p></div></details>` : "")
+      + `<p class="small-note">${text("เรียงลำดับตามเงินที่เพิ่มได้ต่อปี (ปี 2570 ตามข้อเสนอ ลบ วิธีเดิม) จากมากไปน้อย ทรัพย์สินที่ได้ลำดับต้นคุ้มค่าที่จะตรวจก่อน แต่ทุกรายต้องตรวจโฉนด ทะเบียนบ้าน และการใช้จริงก่อนแจ้งประเมิน", "Ranked by the tax that can be added a year (2570 with fixes minus the current method), largest first. Top properties are worth checking first, but every case needs the deed, house registration and actual use checked before any assessment")}</p>`
+      + `<p class="small-note">${text(`เจ้าของมาจากบัญชี ภ.ด.ส.3 ปี 2563 ที่เทศบาลส่งมา สมมติว่ายังไม่เปลี่ยน${sm ? ` · ผูกเจ้าของกับแปลงในบัญชีภาษีได้ ${num(sm.parcelsWithOwner)} แปลง` : ""} · ชื่อเจ้าของไม่แสดงบนเว็บ ใช้รหัสสุ่มแทน`, `Owners come from the 2563 PDS 3 list supplied by the municipality and are assumed unchanged${sm ? ` · ${num(sm.parcelsWithOwner)} parcels on the roll have an owner` : ""} · owner names are not shown; random codes are used`)}</p>`
+      + `</section>` + supplementsHTML() + notesLink();
+  }
+  function businessesContent() {
+    const fs = currentFeatures(), n = (t) => fs.filter((f) => t(f.properties)).length, d = dataset("businesses") || {};
+    const kinds = [["company", "บริษัท", "companies"], ["public", "บริษัทมหาชน", "public companies"], ["partnership", "ห้างหุ้นส่วน", "partnerships"]].map(([k, th, en]) => [n((p) => p.kind === k), text(th, en)]).filter(([c]) => c);
+    const np = d.notPlaced || {};
+    return `<section class="panel-section"><div class="facts-grid">${fact(fs.length, text("ธุรกิจที่ปักหมุดในพื้นที่นี้", "Businesses pinned in this area"))}${fact(n((p) => p.branch && p.branch !== "head"), text("เป็นสาขา", "branches"))}${fact(n((p) => p.commercialObserved), text("แบบสำรวจพบการค้าขายที่จุดเดียวกัน", "with commercial use seen by the survey"))}${fact(n((p) => p.website), text("มีเว็บไซต์ทางการที่ยืนยันได้", "with a confirmed official website"))}</div>`
+      + `<p class="small-note">${esc(kinds.map(([c, l]) => `${l} ${num(c)}`).join(" · "))}</p>`
+      + (np.juristic != null ? `<p class="small-note">${text(`ทั้งตำบล: นิติบุคคลที่ยังหาตำแหน่งไม่ได้ ${num(np.juristic)} ราย และผู้ประกอบการบุคคลธรรมดา ${num(np.individuals)} รายไม่แสดงบนเว็บ`, `Whole tambon: ${num(np.juristic)} juristic registrants could not be placed yet, and ${num(np.individuals)} sole proprietors are not shown`)}</p>` : "")
+      + `<button class="more-button" data-show-list>${text("ดูรายชื่อธุรกิจในพื้นที่นี้", "List businesses in this area")}</button>`
+      + `<p class="small-note">${text("ข้อมูลจากทะเบียนผู้ประกอบการ VAT ของกรมสรรพากร (data.go.th) ไม่บอกประเภทกิจการ ใช้ปุ่ม Google AI Mode ในการ์ดธุรกิจเพื่อค้นข้อมูลเพิ่ม แล้วตรวจกับเอกสารก่อนใช้", "From the Revenue Department VAT registrant list (data.go.th), which has no business type. Use the Google AI Mode button on a business card to look further, and verify before use.")}</p></section>` + notesLink();
+  }
+  function propertyListHTML() {
+    const rk = propRanking();
+    if (!rk) return notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"));
+    const keys = propsInScope(), q = S.search.trim().toLowerCase();
+    let list = rk.list.filter((e) => keys.has(e.key));
+    if (q) list = list.filter((e) => [propCode(e.key), ...propParcels(e.key).map(codeOf), e.tp].join(" ").toLowerCase().includes(q));
+    if (S.propSort === "pct") { const v = (e) => { const p = propPct(e); return p === Infinity ? 1e9 : p ?? -1; }; list = [...list].sort((a, b) => v(b) - v(a)); }
+    const sortBtns = `<div class="segmented" role="group" aria-label="${text("เรียงรายการตาม", "Sort the list by")}">${[["thb", ["เรียงตามบาท", "By THB"]], ["pct", ["เรียงตามเปอร์เซ็นต์", "By percent"]]].map(([id, l]) => `<button type="button" data-prop-sort="${id}" aria-pressed="${id === S.propSort}">${esc(text(...l))}</button>`).join("")}</div>`;
+    const rows = list.slice(0, S.page).map((e) => {
+      const g = propGain(e), n = propParcels(e.key).length;
+      const fixes = [...e.reasons.entries()].filter(([, d]) => d >= 0.5).sort((a, b) => b[1] - a[1]).map(([id]) => text(...(STRATEGY_BY_ID.get(id)?.label || [id, id])));
+      return `<button class="area-row" data-property="${esc(e.key)}"><span class="area-name"><span class="rank-badge" aria-label="${esc(text(`ลำดับ ${rk.rank.get(e.key)}`, `rank ${rk.rank.get(e.key)}`))}">${num(rk.rank.get(e.key))}</span> ${esc(propName(e.key))}<span class="area-meta">${esc(text(`+${fixed(g, 0)} บาทต่อปี (${pctLabel(propPct(e))}) · ${num(n)} แปลง`, `+${fixed(g, 0)} THB a year (${pctLabel(propPct(e))}) · ${num(n)} parcel${n === 1 ? "" : "s"}`))}${fixes.length ? " · " + esc(fixes.join(" · ")) : ""}</span></span><span aria-hidden="true">›</span></button>`;
+    }).join("");
+    return searchInput() + sortBtns
+      + `<div class="section-title"><h2>${text("ทรัพย์สินที่ควรจัดการก่อน", "Properties to handle first")}</h2><span>${num(list.length)} ${text("ราย", list.length === 1 ? "property" : "properties")}</span></div><div class="area-list">${rows}</div>`
+      + (!list.length ? `<div class="empty-state"><h3>${text(q ? "ไม่พบทรัพย์สินที่ค้นหา" : "ไม่พบทรัพย์สินที่ภาษีเพิ่มได้ในขอบเขตนี้", q ? "No matching property" : "No property in this boundary gains tax")}</h3><p>${text("ลองเลือกข้อเสนอเพิ่ม หรือขยายขอบเขตเป็นทั้งเทศบาล", "Try selecting more fixes or the whole municipality")}</p></div>` : "")
+      + (list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : "")
+      + `<p class="inline-note">${text("ค้นได้ด้วยรหัสทรัพย์สิน รหัสแปลง หรือรหัสเจ้าของ", "Search by property code, parcel code or owner code")}</p><button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดรายการทรัพย์สิน · CSV", "Download the property list · CSV")}</button>`;
+  }
+  /* Property card: figures, why the tax changes (with the law), parcels, buildings, businesses, evidence. */
+  function propertyCardHTML(f) {
+    const key = propKeyOf(f.properties.id);
+    if (!key) return `<div class="record-section"><p class="small-note">${text("แปลงนี้ยังไม่พบเจ้าของในบัญชี ภ.ด.ส.3 ปี 2563 จึงยังจัดเป็นทรัพย์สินไม่ได้ ดูภาษีรายแปลงได้ที่แผนที่ภาษีที่ดินรายแปลง", "This parcel has no owner in the 2563 PDS 3 list, so it is not grouped into a property. See its tax on the land tax map")}</p><div class="record-actions"><button type="button" class="mini-action" data-goto="taxmap|${esc(f.properties.id)}">${text("ดูภาษีของแปลงนี้", "See this parcel’s tax")}</button></div></div>`;
+    const e = propRow(key), ids = propParcels(key);
+    const reasons = e ? [...e.reasons.entries()].filter(([, d]) => d >= 0.5).sort((a, b) => b[1] - a[1]) : [];
+    const why = reasons.length ? `<div class="record-section"><h3>${text("ทำไมภาษีเพิ่ม", "Why the tax goes up")}</h3><ul class="reason-list">${reasons.map(([id, d]) => { const st = STRATEGY_BY_ID.get(id); return `<li><strong>${esc(text(...(st?.label || [id, id])))}</strong> <span class="reason-amount">+${esc(fixed(d, 0))} ${text("บาท", "THB")}</span><details><summary>${text("ฐานกฎหมายและข้อสมมติ", "Legal basis and assumptions")}</summary><p class="small-note">${esc(text(...(st?.basis || ["", ""])))}</p></details></li>`; }).join("")}</ul><p class="small-note"><span class="evidence-badge" data-evidence="inference">${text("ข้อสรุป", "Inference")}</span> ${text("คิดจากบัญชีปี 2569 แบบสำรวจอาคาร และเจ้าของปี 2563 ต้องตรวจในพื้นที่ก่อนใช้", "From the 2569 roll, the building survey and 2563 owners; check on site before use")}</p></div>`
+      : `<div class="record-section"><p class="small-note">${text("ข้อเสนอที่เลือกไม่ทำให้ภาษีของทรัพย์สินนี้เปลี่ยน", "The selected fixes do not change this property’s tax")}</p></div>`;
+    const list = ids.slice(0, 15).map((id) => titleLine(id, null, f.properties.id)).join("");
+    const parcels = `<div class="record-section"><h3>${text(`แปลงในทรัพย์สิน (${num(ids.length)})`, `Parcels in the property (${num(ids.length)})`)}</h3><ul class="title-list">${list}</ul>${ids.length > 15 ? `<p class="small-note">${text(`และอีก ${num(ids.length - 15)} แปลง`, `and ${num(ids.length - 15)} more`)}</p>` : ""}<p class="small-note">${esc(ownEvidenceText(parcelAttr(f.properties.id)?.own))}</p></div>`;
+    return why + parcels + propertyBuildingsHTML(key) + propertyBusinessesHTML(key)
+      + `<div class="record-actions"><button type="button" class="mini-action" data-tool="tax-calculator" data-parcel="${esc(f.properties.id)}">${ui("calculator", 18)}${text("เปิดแปลงนี้ในเครื่องคิดภาษี", "Open this parcel in the tax calculator")}</button><button type="button" class="mini-action" data-goto="taxmap|${esc(f.properties.id)}">${text("ดูแปลงนี้บนแผนที่ภาษี", "See this parcel on the tax map")}</button></div>`;
+  }
+  /* Buildings on the property's parcels (main parcel of each footprint); the footprint file opens on request. */
+  function propertyBuildingsHTML(key) {
+    const fc = S.cache.get(BUILDINGS_PATH()), ids = new Set(propParcels(key));
+    const head = `<div class="record-section" id="property-buildings" data-property="${esc(key)}"><h3>${text("อาคารในทรัพย์สิน", "Buildings in the property")}</h3>`;
+    if (!fc) return head + `<div class="record-actions"><button type="button" class="mini-action" data-property-buildings="${esc(key)}">${text("เปิดรายการอาคาร", "Open the buildings")}</button></div></div>`;
+    const list = fc.features.filter((b) => ids.has((b.properties.parcelIds || [])[0]));
+    if (!list.length) return head + `<p class="small-note">${text("ไม่พบรูปอาคารบนแปลงของทรัพย์สินนี้", "No building footprint on this property’s parcels")}</p></div>`;
+    const by = new Map();
+    for (const b of list) { const g = rollGroup(b.properties); const k = g ? text(...g.label) : text("ไม่ตรงแปลงใด", "No parcel match"); by.set(k, (by.get(k) || 0) + 1); }
+    const items = list.slice(0, 12).map((b) => { const p = b.properties; return `<li><button type="button" class="portfolio-link" data-goto="buildings|${esc(p.id)}">${esc(sv(p.type) || text("อาคาร", "Building"))} #${esc(String(p.sourceRecord ?? ""))}${p.houseNumbers?.length ? ` · ${esc(text("บ้านเลขที่ ", "No. ") + houseNumbersText(p.houseNumbers, 3))}` : ""}</button><span>${esc(text(...(rollGroup(p)?.label || ["ไม่ตรงแปลงใด", "No parcel match"])))}</span></li>`; }).join("");
+    return head + `<p class="small-note">${esc([...by.entries()].map(([k, n]) => `${k} ${num(n)}`).join(" · "))}</p><ul class="portfolio-list">${items}</ul>${list.length > 12 ? `<p class="small-note">${text(`และอีก ${num(list.length - 12)} หลัง`, `and ${num(list.length - 12)} more`)}</p>` : ""}</div>`;
+  }
+  const BUSINESSES_PATH = () => dataset("businesses")?.geojson || "data/businesses.geojson";
+  const businessKindText = (p) => [p.kind ? text(...(OWNER_KIND[p.kind] || ["นิติบุคคล", "juristic person"])) : "", p.branch ? text(p.branch === "head" ? "สำนักงานใหญ่" : `สาขา ${p.branch}`, p.branch === "head" ? "head office" : `branch ${p.branch}`) : ""].filter(Boolean).join(" · ");
+  /* Registered businesses located on the property (filled once the businesses layer exists). */
+  function propertyBusinessesHTML(key) {
+    const fc = S.cache.get(BUSINESSES_PATH()), ids = new Set(propParcels(key));
+    if (!dataset("businesses")) return "";
+    const head = `<div class="record-section" id="property-businesses" data-property="${esc(key)}"><h3>${text("ธุรกิจที่ตั้งอยู่ในทรัพย์สิน", "Businesses located in the property")}</h3>`;
+    if (!fc) return head + `<div class="record-actions"><button type="button" class="mini-action" data-property-businesses="${esc(key)}">${text("เปิดรายการธุรกิจ", "Open the businesses")}</button></div></div>`;
+    const list = fc.features.filter((b) => ids.has(b.properties.parcelId));
+    const counted = (S.businessCounts?.get(key) || 0);
+    if (!list.length && !counted) return head + `<p class="small-note">${text("ไม่พบธุรกิจที่จดทะเบียนภาษีมูลค่าเพิ่มในทรัพย์สินนี้ ไม่ได้แปลว่าไม่มีกิจการจริง", "No VAT-registered business found here; that does not mean none operates")}</p></div>`;
+    return head + `<ul class="portfolio-list">${list.slice(0, 12).map((b) => `<li><button type="button" class="portfolio-link" data-goto="businesses|${esc(b.properties.id)}">${esc(b.properties.label)}</button><span>${esc(businessKindText(b.properties))}</span></li>`).join("")}</ul>${counted > list.length ? `<p class="small-note">${text(`มีผู้ประกอบการอีก ${num(counted - list.length)} รายที่ไม่ปักหมุด เพราะที่อยู่อาจเป็นบ้านของบุคคล`, `${num(counted - list.length)} more registrants are counted but not pinned, as the address may be a person’s home`)}</p>` : ""}<p class="small-note">${text("ธุรกิจที่ตั้งอยู่ไม่จำเป็นต้องเป็นเจ้าของที่ดิน", "A business located here is not necessarily the land owner")}</p></div>`;
+  }
+  function exportPropertiesCSV() {
+    const rk = propRanking();
+    if (!rk) return;
+    const keys = propsInScope(), q = S.search.trim().toLowerCase();
+    let list = rk.list.filter((e) => keys.has(e.key));
+    if (q) list = list.filter((e) => [propCode(e.key), ...propParcels(e.key).map(codeOf), e.tp].join(" ").toLowerCase().includes(q));
+    const r2 = (v) => (v == null || !Number.isFinite(Number(v)) ? "" : Math.round(Number(v) * 100) / 100);
+    const tag = `land${S.appraisalAdj >= 0 ? "+" : ""}${S.appraisalAdj}pct_buildings${S.bldAdj >= 0 ? "+" : ""}${S.bldAdj}pct`;
+    const cols = ["rank", "propertyId", "ownerCode", "ownerType", "parcelCodes", "parcels", "parcelsWithTax", "tax2569AssessedTHB", `tax2570CurrentMethodTHB_${tag}`, `tax2570WithFixesTHB_${tag}`, "gainTHB", "gainPct", "fixes", "ownerMatchedBy", "mapColorStep41", "mapColorHex"];
+    const quote = (v) => { let c = String(v ?? ""); if (/^[=+@\-\t\r]/.test(c)) c = "'" + c; return '"' + c.replace(/"/g, '""') + '"'; };
+    const lines = list.map((e) => {
+      const ids = propParcels(e.key), code = propOwnerCode(e.key), t = S.parcelTax.taxpayers.get(code), p = propPct(e), v = propValue(e.key);
+      const step = S.classing && v != null ? lutIndex(S.classing, v === Infinity ? 1e6 : v) : "";
+      return [rk.rank.get(e.key), propCode(e.key), code, t?.type === "juristic" ? `juristic:${t.kind || ""}` : t?.type || "", ids.map(codeOf).join("|"), ids.length, e.taxed, r2(e.assessed69), r2(e.old70), r2(e.new70), r2(propGain(e)), p === Infinity ? "from 0" : r2(p),
+        [...e.reasons.entries()].filter(([, d]) => d >= 0.5).map(([id, d]) => `${id}:${Math.round(d)}`).join("|"), parcelAttr(ids.find((id) => parcelAttr(id)?.own))?.own || "", step, step !== "" ? S.classing.lut[step] : ""].map(quote).join(",");
+    });
+    const csv = "﻿" + cols.join(",") + "\r\n" + lines.join("\r\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = `sila-properties-${S.scope.id}-20261020.csv`; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast(text("ดาวน์โหลดรายการทรัพย์สินในขอบเขตนี้", "Downloaded the property list for this boundary"));
+  }
+
+  /* ---------- Revision 1.9: Street View facing the place, and Google AI Mode questions without personal data ---------- */
+  const ROADS_PATH = () => dataset("roads")?.geojson || "data/roads.geojson";
+  function bearingDeg(a, b) {
+    const r = Math.PI / 180, y = Math.sin((b[0] - a[0]) * r) * Math.cos(b[1] * r);
+    const x = Math.cos(a[1] * r) * Math.sin(b[1] * r) - Math.sin(a[1] * r) * Math.cos(b[1] * r) * Math.cos((b[0] - a[0]) * r);
+    return (Math.atan2(y, x) / r + 360) % 360;
+  }
+  /* Road lines near the place: the registered roads, plus streets drawn by the street basemap (OpenStreetMap via OpenFreeMap)
+     when it is showing. Used only to stand the Street View camera on a road; nothing is drawn from them. */
+  function roadLines() {
+    const out = [], fc = S.cache.get(ROADS_PATH());
+    const push = (g, name) => { if (g?.type === "LineString") out.push({ c: g.coordinates, name }); else if (g?.type === "MultiLineString") for (const c of g.coordinates) out.push({ c, name }); };
+    if (fc) for (const f of fc.features) push(f.geometry, f.properties?.roadName || null);
+    try {
+      const gl = S.basemap === "street" ? S.tile?.getMaplibreMap?.() : null;
+      if (gl) for (const f of gl.querySourceFeatures("openmaptiles", { sourceLayer: "transportation" })) {
+        if (["path", "track", "rail", "transit", "ferry", "aerialway", "bridleway"].includes(f.properties?.class)) continue;
+        push(f.geometry, f.properties?.["name:th"] || f.properties?.name || null);
+      }
+    } catch (_) { /* the basemap may not be ready */ }
+    return out;
+  }
+  /* Nearest point on those road lines (local metric plane); null when no road lies within 120 m. */
+  function roadViewpoint(target, named = false) {
+    const lines = roadLines();
+    if (!lines.length) return null;
+    const kx = Math.cos((target[1] * Math.PI) / 180) * 111320, ky = 110540;
+    let best = null, bd = Infinity, bestName = null;
+    for (const { c: line, name } of lines) {
+      if (named && !name) continue;
+      for (let i = 1; i < line.length; i++) {
+      const ax = (line[i - 1][0] - target[0]) * kx, ay = (line[i - 1][1] - target[1]) * ky, dx = (line[i][0] - line[i - 1][0]) * kx, dy = (line[i][1] - line[i - 1][1]) * ky;
+      const l2 = dx * dx + dy * dy, t = l2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / l2)) : 0;
+      const x = ax + t * dx, y = ay + t * dy, d = x * x + y * y;
+      if (d < bd) { bd = d; best = [target[0] + x / kx, target[1] + y / ky]; bestName = name; }
+      }
+    }
+    return best && Math.sqrt(bd) <= 120 ? { point: best, distM: Math.sqrt(bd), name: bestName } : null;
+  }
+  /* A place described in words (nearest named road within 60 m, village, tambon): AI questions carry no coordinates,
+     house numbers or records, as in the area questions of the context actions. */
+  function placeText(f) {
+    const v = (f.properties.villageIds || (f.properties.villageId ? [f.properties.villageId] : [])).map((id) => S.metadata.villages.find((x) => x.id === id)).filter(Boolean)[0];
+    const road = roadViewpoint(targetPoint(f), true);
+    const roadPart = road && road.distM <= 60 && road.name ? text(`ริม${/^(ถนน|ถ\.|ซอย|ซ\.)/.test(road.name) ? "" : "ถนน"}${road.name} `, `along ${road.name}, `) : "";
+    return roadPart + (v ? text(`${v.label} `, `Village ${v.number} ${v.name}, `) : "") + text("ตำบลศิลา อำเภอเมืองขอนแก่น จังหวัดขอนแก่น", "Sila subdistrict, Mueang Khon Kaen, Khon Kaen");
+  }
+  function targetPoint(f) {
+    const g = f.geometry;
+    if (g?.type === "Point") return g.coordinates;
+    const c = featureCenter(f);
+    return [c.lng, c.lat];
+  }
+  const metresBetween = (a, b) => Math.hypot((b[0] - a[0]) * Math.cos(((a[1] + b[1]) / 2) * Math.PI / 180) * 111320, (b[1] - a[1]) * 110540);
+  const outerRings = (g) => !g ? [] : g.type === "Polygon" ? [g.coordinates[0]] : g.type === "MultiPolygon" ? g.coordinates.map((p) => p[0]) : [];
+  /* Frontage: the road point closest to the place's outline (sampled every ~12 m), within 120 m. Street View stands there. */
+  function frontage(rings) {
+    const lines = roadLines();
+    if (!lines.length || !rings.length) return null;
+    let w = Infinity, so = Infinity, e = -Infinity, n = -Infinity;
+    for (const r of rings) for (const [x, y] of r) { if (x < w) w = x; if (x > e) e = x; if (y < so) so = y; if (y > n) n = y; }
+    const kx = Math.cos(((so + n) / 2) * Math.PI / 180) * 111320, ky = 110540, px = 125 / kx, py = 125 / ky, segs = [];
+    for (const { c } of lines) for (let i = 1; i < c.length; i++) {
+      const a = c[i - 1], b = c[i];
+      if (Math.max(a[0], b[0]) < w - px || Math.min(a[0], b[0]) > e + px || Math.max(a[1], b[1]) < so - py || Math.min(a[1], b[1]) > n + py) continue;
+      segs.push([a, b]);
+    }
+    if (!segs.length) return null;
+    const pts = [];
+    for (const r of rings) for (let i = 1; i < r.length && pts.length < 4000; i++) {
+      const a = r[i - 1], b = r[i], k = Math.max(1, Math.ceil(Math.hypot((b[0] - a[0]) * kx, (b[1] - a[1]) * ky) / 12));
+      for (let j = 0; j < k; j++) pts.push([a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k]);
+    }
+    let best = null, bd = Infinity;
+    for (const p of pts) for (const [a, b] of segs) {
+      const ax = (a[0] - p[0]) * kx, ay = (a[1] - p[1]) * ky, dx = (b[0] - a[0]) * kx, dy = (b[1] - a[1]) * ky, l2 = dx * dx + dy * dy;
+      const t = l2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / l2)) : 0, x = ax + t * dx, y = ay + t * dy, d = x * x + y * y;
+      if (d < bd) { bd = d; best = { road: [p[0] + x / kx, p[1] + y / ky], edge: p }; }
+    }
+    return best && Math.sqrt(bd) <= 120 ? { ...best, distM: Math.sqrt(bd) } : null;
+  }
+  /* Google Maps URL API: open the panorama on the road in front of the place, turned toward it. A point (house, business)
+     uses the nearest road; an outline (parcel, building, whole property) uses its frontage and looks at its middle,
+     or at the frontage itself when the middle is far away (large properties). */
+  function streetView(f) {
+    const rings = S.dataset === "properties"
+      ? (() => { const ids = new Set(propParcels(propKeyOf(f.properties.id))); return currentFeatures().filter((x) => ids.has(x.properties.id)).flatMap((x) => outerRings(x.geometry)); })()
+      : outerRings(f.geometry);
+    let at = null, aim = null;
+    if (rings.length) {
+      const v = frontage(rings);
+      if (v) {
+        let sx = 0, sy = 0, k = 0;
+        for (const r of rings) for (const [x, y] of r) { sx += x; sy += y; k++; }
+        const mid = [sx / k, sy / k], dMid = metresBetween(v.road, mid);
+        at = v.road; aim = dMid > 4 && dMid <= 150 ? mid : metresBetween(v.road, v.edge) > 2 ? v.edge : mid;
+      }
+    }
+    if (!at) { const t = targetPoint(f), v = roadViewpoint(t); if (v && v.distM > 3) { at = v.point; aim = t; } else at = t; }
+    const facing = !!aim && metresBetween(at, aim) > 2;
+    const params = { api: "1", map_action: "pano", viewpoint: `${at[1].toFixed(6)},${at[0].toFixed(6)}` };
+    if (facing) params.heading = String(Math.round(bearingDeg(at, aim)));
+    params.pitch = "0"; params.fov = "80";
+    return { href: "https://www.google.com/maps/@?" + new URLSearchParams(params).toString(), facing };
+  }
+  const aiModeURL = (q) => "https://www.google.com/search?udm=50&q=" + encodeURIComponent(q);
+  /* Questions carry only a place in words, a registered business name or a general legal question: no coordinates, owner code, tax figure, house number or name of a person. */
+  const RULE_QUESTIONS = {
+    mixedUse: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 38 อาคารที่ชั้นล่างค้าขายและชั้นบนอยู่อาศัยคิดภาษีอย่างไร และเจ้าหน้าที่องค์กรปกครองส่วนท้องถิ่นควรตรวจหลักฐานอะไร", "Under Thailand’s Land and Building Tax Act 2019 s.38, how is a building with a shop downstairs and a home upstairs taxed, and what evidence should local officers check?"],
+    rented: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 41 บ้านที่ให้เช่ายังได้รับยกเว้นแบบบ้านหลังหลักหรือไม่ และเจ้าหน้าที่ควรตรวจอะไร", "Under Thailand’s Land and Building Tax Act 2019 s.41, does a rented house keep the main-home exemption, and what should officers check?"],
+    mainHomeOnce: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 41 คนหนึ่งได้รับยกเว้นบ้านหลังหลักได้กี่หลัง และใช้หลักฐานทะเบียนบ้านอย่างไร", "Under Thailand’s Land and Building Tax Act 2019 s.41, how many main homes can one person have exempted, and how is the house registration used?"],
+    juristic: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 40 และ 41 นิติบุคคลได้รับยกเว้นภาษีที่ดินเกษตรหรือบ้านหลังหลักหรือไม่", "Under Thailand’s Land and Building Tax Act 2019 s.40 and s.41, can a company receive the farm or main-home exemption?"],
+    combine: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 42 วรรคสอง ที่ดินหลายแปลงที่ติดกันของเจ้าของเดียวกันต้องรวมมูลค่าเป็นฐานภาษีเดียวอย่างไร", "Under Thailand’s Land and Building Tax Act 2019 s.42 para 2, how are adjoining parcels of one owner combined into one tax base?"],
+    agriShare: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 มาตรา 40 ยกเว้นที่ดินเกษตร 50 ล้านบาทนับต่อคนหรือต่อแปลง", "Under Thailand’s Land and Building Tax Act 2019 s.40, is the 50 million baht farm exemption per person or per parcel?"],
+    newBuildings: ["ตาม พ.ร.บ.ภาษีที่ดินและสิ่งปลูกสร้าง พ.ศ. 2562 อาคารที่สร้างใหม่หรือต่อเติมแต่ยังไม่อยู่ในบัญชีรายการ องค์กรปกครองส่วนท้องถิ่นต้องทำอย่างไร", "Under Thailand’s Land and Building Tax Act 2019, what must a local authority do about new or extended buildings missing from the inventory list?"],
+  };
+  function reasonIdsOf(f) {
+    if (S.dataset === "properties") { const e = propRow(propKeyOf(f.properties.id)); return e ? [...e.reasons.entries()].filter(([, d]) => d >= 0.5).sort((a, b) => b[1] - a[1]).map(([id]) => id) : []; }
+    if (S.dataset === "taxmap") { const r = taxRow(f.properties.id); return (r?.reasons || []).map((lab) => TAX_STRATEGIES.find((x) => x.label === lab)?.id).filter(Boolean); }
+    return [];
+  }
+  function aiQuestions(f) {
+    const at = placeText(f), out = [];
+    if (S.dataset === "businesses" && f.properties.label) out.push([text("ค้นข้อมูลกิจการนี้", "Look up this business"), text(`${f.properties.label} จังหวัดขอนแก่น ประเภทกิจการ เว็บไซต์ทางการ และสาขาในตำบลศิลา`, `${f.properties.label} Khon Kaen: type of business, official website and its Sila branch`)]);
+    out.push([text("ถามว่าบริเวณนี้มีกิจการอะไร", "Ask what operates around here"), text(`บริเวณ${at} มีร้านค้า หอพัก ห้องเช่า หรือกิจการอะไรตั้งอยู่บ้าง ขอแหล่งอ้างอิงและวันที่ของข้อมูล`, `What shops, dormitories, rentals or businesses operate ${at}? Please cite sources and dates.`)]);
+    for (const id of reasonIdsOf(f).slice(0, 2)) if (RULE_QUESTIONS[id]) out.push([text(`ถามข้อกฎหมาย: ${text(...STRATEGY_BY_ID.get(id).label)}`, `Ask the law: ${text(...STRATEGY_BY_ID.get(id).label)}`), text(...RULE_QUESTIONS[id])]);
+    return out;
+  }
+  const extMark = () => `${window.SilaIcons?.icon("external", { size: 16, className: "ext-icon" }) || ""}<span class="sr-only">${text(" (เปิดแท็บใหม่)", " (opens a new tab)")}</span>`;
+  function externalActionsHTML(f) {
+    if (!f?.geometry || S.dataset === "popgrid") return "";
+    const sv = streetView(f);
+    return `<div class="record-section external-actions"><h3>${text("ตรวจจากหน้าจอก่อนลงพื้นที่", "Check from the screen before a site visit")}</h3><div class="record-actions">`
+      + `<a class="mini-action ext-link" data-sv-link href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("streetview", { size: 18 }) || ""}<span data-sv-label>${sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place")}</span>${extMark()}</a>`
+      + aiQuestions(f).map(([label, q]) => `<a class="mini-action ext-link" href="${esc(aiModeURL(q))}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("travel_explore", { size: 18 }) || ""}<span>${esc(label)}</span>${extMark()}</a>`).join("")
+      + `</div><p class="small-note">${text("เปิดบริการของ Google ในแท็บใหม่ · Street View ใช้ตำแหน่งบนถนน ส่วนคำถามถึง Google AI ใช้ชื่อถนน หมู่บ้าน ชื่อธุรกิจที่จดทะเบียน หรือคำถามกฎหมายทั่วไปเท่านั้น ไม่ส่งพิกัด รหัสเจ้าของ ตัวเลขภาษี หรือบ้านเลขที่ · ภาพ Street View อาจเก่า ดูวันที่ในภาพ · คำตอบของ AI เป็นข้อมูลประกอบ ต้องตรวจกับเอกสารก่อนใช้", "Opens Google in a new tab · Street View uses a road position; questions to Google AI use only road and village names, registered business names or general legal questions, never coordinates, owner codes, tax figures or house numbers · Street View imagery can be old; check its date · AI answers are leads to verify against documents before use")}</p></div>`;
+  }
+  /* Roads open on request; when they arrive, turn the Street View link toward the place. */
+  function refreshStreetView(f) {
+    if (S.cache.has(ROADS_PATH())) return;
+    fetchJSON(ROADS_PATH()).then(() => {
+      if (S.record !== f) return;
+      const a = document.querySelector("[data-sv-link]"), sv = streetView(f);
+      if (!a) return;
+      a.href = sv.href;
+      const lab = a.querySelector("[data-sv-label]");
+      if (lab) lab.textContent = sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place");
+    }).catch(() => {});
   }
   /* ---------- tax engine glue ---------- */
   function runTax() {
@@ -2146,7 +2617,7 @@
   function taxmapContent() {
     const debtors = S.taxResult ? currentFeatures().filter((f) => LIST_FILTERS.debtors.test(f.properties)).length : 0;
     const fixes = S.taxResult ? currentFeatures().filter((f) => LIST_FILTERS.fixes.test(f.properties)).length : 0;
-    return `<section class="panel-section"><h2 class="sr-only">${text("ภาษีรายแปลง", "Tax by parcel")}</h2>${taxTotalsHTML()}${fixes ? `<button type="button" class="more-button" data-show-list="fixes">${text("ดูแปลงที่ข้อเสนอทำให้ภาษีเปลี่ยน เรียงจากมากไปน้อย", "List parcels the fixes change most")} (${num(fixes)})</button>` : ""}${debtors ? `<button type="button" class="more-button" data-show-list="debtors">${text("ดูแปลงที่อยู่ในบัญชีลูกหนี้ปี 2569", "List parcels on the 2569 debtor list")} (${num(debtors)})</button><p class="small-note">${esc(text(`ผูกกับโฉนดบนแผนที่ได้ ${num(S.parcelTax?.taxpayers?.size || 0)} จาก ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} รายในบัญชีลูกหนี้ 30 ก.ย. 2569 แสดงเฉพาะแปลงที่โฉนดมีภาษีของตัวเอง`, `${num(S.parcelTax?.taxpayers?.size || 0)} of the ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} debtors on the 30 Sep 2569 list could be linked to mapped titles; only parcels whose title has its own tax are listed`))}</p>` : ""}<button type="button" class="more-button" data-tool="tax-calculator">${text("คิดภาษีแปลงเดียวด้วยมือ", "Work out one parcel by hand")}</button><p class="small-note">${text("คลิกหรือแตะแปลงเพื่อดูภาษี อาคารในบัญชี และอาคารที่สำรวจพบแต่ไม่อยู่ในบัญชี ไฟล์ ภ.ด.ส. ที่ได้รับไม่มีชื่อหรือรหัสผู้เสียภาษีต่อโฉนด จึงยังรวมทุกแปลงของเจ้าของคนเดียว (ม.40 ม.42) และแบ่งการชำระรายแปลงไม่ได้ ยกเว้นโฉนดที่อยู่ในบัญชีลูกหนี้", "Click or tap a parcel for its tax, buildings on the roll and surveyed buildings missing from it. The PDS files carry no owner name or taxpayer code per title, so owner portfolios (s.40, s.42) and per-parcel payments are not available yet, except for titles on the debtor list.")}</p></section>`
+    return `<section class="panel-section"><h2 class="sr-only">${text("ภาษีรายแปลง", "Tax by parcel")}</h2>${taxTotalsHTML()}${fixes ? `<button type="button" class="more-button" data-show-list="fixes">${text("ดูแปลงที่ข้อเสนอทำให้ภาษีเปลี่ยน เรียงจากมากไปน้อย", "List parcels the fixes change most")} (${num(fixes)})</button>` : ""}${debtors ? `<button type="button" class="more-button" data-show-list="debtors">${text("ดูแปลงที่อยู่ในบัญชีลูกหนี้ปี 2569", "List parcels on the 2569 debtor list")} (${num(debtors)})</button><p class="small-note">${esc(text(`ผูกกับโฉนดบนแผนที่ได้ ${num(S.parcelTax?.taxpayers?.size || 0)} จาก ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} รายในบัญชีลูกหนี้ 30 ก.ย. 2569 แสดงเฉพาะแปลงที่โฉนดมีภาษีของตัวเอง`, `${num(S.parcelTax?.taxpayers?.size || 0)} of the ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} debtors on the 30 Sep 2569 list could be linked to mapped titles; only parcels whose title has its own tax are listed`))}</p>` : ""}<button type="button" class="more-button" data-tool="tax-calculator">${ui("calculator", 18)}${text("คิดภาษีแปลงเดียวด้วยมือ", "Work out one parcel by hand")}</button><p class="small-note">${text("คลิกหรือแตะแปลงเพื่อดูภาษี อาคารในบัญชี และอาคารที่สำรวจพบแต่ไม่อยู่ในบัญชี ไฟล์ ภ.ด.ส. ที่ได้รับไม่มีชื่อหรือรหัสผู้เสียภาษีต่อโฉนด จึงยังรวมทุกแปลงของเจ้าของคนเดียว (ม.40 ม.42) และแบ่งการชำระรายแปลงไม่ได้ ยกเว้นโฉนดที่อยู่ในบัญชีลูกหนี้", "Click or tap a parcel for its tax, buildings on the roll and surveyed buildings missing from it. The PDS files carry no owner name or taxpayer code per title, so owner portfolios (s.40, s.42) and per-parcel payments are not available yet, except for titles on the debtor list.")}</p></section>`
       + `<details class="supplement" open><summary>${text("ผลของข้อเสนอแต่ละข้อ (ทั้งเมือง)", "Effect of each fix (whole city)")}</summary><div class="supplement-body">${strategyTableHTML()}</div></details>`
       + `<details class="supplement"><summary>${text("ภาษีรายหมู่บ้าน", "Tax by village")}</summary><div class="supplement-body">${villageTaxTableHTML()}</div></details>`
       + supplementsHTML() + notesLink();
@@ -2252,11 +2723,14 @@
   }
   function titleCardHTML(a) {
     const rows = [];
-    rows.push([text("จับคู่โฉนดด้วย", "Title matched by"), a.link === "house" ? text("บ้านเลขที่ของอาคารในแปลง (แผนที่แปลงไม่มีเลขโฉนด) · อ่อนกว่าเลขโฉนด", "house numbers of buildings on the parcel (no deed number in the map) · weaker than a deed") : text("เลขโฉนด หน้าสำรวจ หรือเลขที่ดิน", "deed, survey or land number")]);
+    rows.push([text("จับคู่โฉนดด้วย", "Title matched by"), a.link === "house" ? text("บ้านเลขที่ของอาคารในแปลง (แผนที่แปลงไม่มีเลขโฉนด) · อ่อนกว่าเลขโฉนด", "house numbers of buildings on the parcel (no deed number in the map) · weaker than a deed")
+      : a.link === "pds63" ? text("เลขโฉนดจากบัญชี ภ.ด.ส.3 ปี 2563 (แผนที่แปลงไม่มีเลขโฉนด จับคู่ด้วยรหัสแปลงและเนื้อที่) · อ่อนกว่าเลขโฉนดบนแผนที่", "deed number from the 2563 PDS 3 list (no deed number in the map; matched by map code and area) · weaker than a deed on the map")
+      : text("เลขโฉนด หน้าสำรวจ หรือเลขที่ดิน", "deed, survey or land number")]);
+    rows.push([text("เจ้าของ", "Owner"), a.tp ? (a.own && a.own !== "d69" && a.own.endsWith("h") ? stateChip("passed", text("ผ่าน · บ้านเลขที่ตรง", "Passed · house numbers agree")) + " " : "") + esc(ownEvidenceText(a.own)) : stateChip("awaiting", text("ยังไม่พบในบัญชีปี 2563", "Not found in the 2563 list"))]);
     rows.push([text("อาคารในบัญชีของโฉนดนี้", "Buildings on this title’s roll"), a.rollBld != null ? text(`${num(a.rollBld)} หลัง${a.bldValue != null ? ` · ${moneyShort(a.bldValue)}` : ""}`, `${num(a.rollBld)}${a.bldValue != null ? ` · ${moneyShort(a.bldValue)}` : ""}`) : text("ยังไม่มีข้อมูลส่วนนี้", "Not available")]);
     if (a.missBld) rows.push([text("อาคารที่สำรวจพบแต่ไม่อยู่ในบัญชี", "Surveyed buildings missing from the roll"), text(`${num(a.missBld)} หลัง${a.surveyBld ? ` · ประมาณ ${moneyShort(a.surveyBld)}` : ""}`, `${num(a.missBld)}${a.surveyBld ? ` · about ${moneyShort(a.surveyBld)}` : ""}`)]);
     return `<div class="record-section"><h3>${text("โฉนดของแปลงนี้ในบัญชีภาษี", "This parcel’s title on the roll")}</h3><dl class="record-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
-      + (a.tp ? "" : `<p class="small-note">${text("ยังไม่รู้ว่าเป็นของผู้เสียภาษีรายใด ไฟล์ ภ.ด.ส. ที่ได้รับไม่มีชื่อหรือรหัสผู้เสียภาษี จึงคิดทีละโฉนด ยังรวมแปลงของเจ้าของคนเดียวไม่ได้", "The owner is not known: the PDS files carry no owner name or taxpayer code, so tax is worked out per title, not per owner.")}</p>`) + `</div>`;
+      + (a.tp ? "" : `<p class="small-note">${text("ยังไม่รู้ว่าเป็นของเจ้าของรายใด บัญชีปี 2569 ไม่มีชื่อเจ้าของ และไม่พบโฉนดนี้ในบัญชี ภ.ด.ส.3 ปี 2563 จึงคิดทีละโฉนด", "The owner is not known: the 2569 roll carries no owner and this title is not in the 2563 PDS 3 list, so tax is worked out for the title alone.")}</p>`) + `</div>`;
   }
   function portfolioHTML(parcelId) {
     const a = parcelAttr(parcelId);
@@ -2274,11 +2748,13 @@
     if (roll.land != null) rollParts.push(text(`ที่ดิน ${num(roll.land)} รายการ`, `${num(roll.land)} land title${roll.land === 1 ? "" : "s"}`));
     if (roll.bld != null) rollParts.push(text(`สิ่งปลูกสร้าง ${num(roll.bld)}`, `${num(roll.bld)} building${roll.bld === 1 ? "" : "s"}`));
     if (roll.condo) rollParts.push(text(`ห้องชุด ${num(roll.condo)} ห้อง`, `${num(roll.condo)} condo units`));
-    return `<div class="record-section"><h3>${esc(tpLabel(a.tp))} · ${esc(tp.type === "juristic" ? text("นิติบุคคล", "juristic person") : tp.type === "individual" ? text("บุคคลธรรมดา", "individual") : text("ไม่ทราบประเภท", "type unknown"))}</h3>`
-      + `<dl class="record-dl">${rollParts.length ? `<dt>${text("ในบัญชีภาษี", "On the tax roll")}</dt><dd>${esc(rollParts.join(" · "))}</dd>` : ""}<dt>${text("บัญชีลูกหนี้ 30 ก.ย. 2569", "Debtor list, 30 Sep 2569")}</dt><dd>${esc(text(`ประเมิน ${money(tp.assessed69, 2)} · ค้าง ${money(tp.debt69, 2)}`, `assessed ${money(tp.assessed69, 2)} · owed ${money(tp.debt69, 2)}`))}</dd><dt>${text("แปลงที่จับคู่ได้บนแผนที่", "Matched parcels on the map")}</dt><dd>${esc(text(`${num(tp.parcels.length)} แปลง · ภาษีปี 2569 รวม ${money(r?.assessed69, 2)}`, `${num(tp.parcels.length)} · 2569 tax ${money(r?.assessed69, 2)}`))}</dd><dt>${text("ปี 2570 ตามข้อเสนอ", "2570 with fixes")}</dt><dd>${esc(money(r?.new70, 2))}</dd></dl>`
+    const from63 = tp.src === "2563";
+    return `<div class="record-section"><h3>${esc(from63 ? text(`เจ้าของ${ownerText(a.tp)}`, `Owner ${ownerText(a.tp)}`) : `${tpLabel(a.tp)} · ${tp.type === "juristic" ? text("นิติบุคคล", "juristic person") : tp.type === "individual" ? text("บุคคลธรรมดา", "individual") : text("ไม่ทราบประเภท", "type unknown")}`)}</h3>`
+      + (from63 ? `<p class="small-note"><span class="evidence-badge" data-evidence="hypothesis">${text("สมมติฐาน", "Hypothesis")}</span> ${text("เจ้าของตามบัญชี ภ.ด.ส.3 ปี 2563 สมมติว่ายังไม่เปลี่ยน · ชื่อไม่แสดงบนเว็บ", "Owner from the 2563 PDS 3 list, assumed unchanged · names are not shown")}</p>` : "")
+      + `<dl class="record-dl">${rollParts.length ? `<dt>${text("ในบัญชีภาษี", "On the tax roll")}</dt><dd>${esc(rollParts.join(" · "))}</dd>` : ""}${from63 ? "" : `<dt>${text("บัญชีลูกหนี้ 30 ก.ย. 2569", "Debtor list, 30 Sep 2569")}</dt><dd>${esc(text(`ประเมิน ${money(tp.assessed69, 2)} · ค้าง ${money(tp.debt69, 2)}`, `assessed ${money(tp.assessed69, 2)} · owed ${money(tp.debt69, 2)}`))}</dd>`}<dt>${text("แปลงที่จับคู่ได้บนแผนที่", "Matched parcels on the map")}</dt><dd>${esc(text(`${num(tp.parcels.length)} แปลง · ภาษีปี 2569 รวม ${money(r?.assessed69, 2)}`, `${num(tp.parcels.length)} · 2569 tax ${money(r?.assessed69, 2)}`))}</dd><dt>${text("ปี 2570 ตามข้อเสนอ", "2570 with fixes")}</dt><dd>${esc(money(r?.new70, 2))}</dd></dl>`
       + (r && tp.assessed69 != null && Math.abs((r.assessed69 || 0) - tp.assessed69) > 1 ? `<p class="small-note">${text("ยอดของแปลงบนแผนที่ไม่เท่ายอดในบัญชีลูกหนี้ อาจมีโฉนดที่ยังจับคู่ไม่ได้ หรือสองบัญชีไม่ตรงกัน ควรตรวจกับกองคลัง", "The matched parcels do not add up to the debtor-list amount: some titles may be unmatched, or the two registers disagree. Check with the finance division.")}</p>` : "")
       + `<ul class="portfolio-list">${list}</ul>${tp.parcels.length > 12 ? `<p class="small-note">${text(`และอีก ${num(tp.parcels.length - 12)} แปลง`, `and ${num(tp.parcels.length - 12)} more`)}</p>` : ""}`
-      + `<div class="record-actions"><button type="button" class="mini-action" data-highlight-taxpayer="${esc(a.tp)}">${text("ไฮไลต์ทุกแปลงของรายนี้บนแผนที่", "Highlight all this taxpayer’s parcels")}</button></div></div>` + titleCardHTML(a);
+      + `<div class="record-actions"><button type="button" class="mini-action" data-highlight-taxpayer="${esc(a.tp)}">${text("ไฮไลต์ทุกแปลงของรายนี้บนแผนที่", "Highlight all this taxpayer’s parcels")}</button>${propKeyOf(parcelId) ? `<button type="button" class="mini-action" data-goto="properties|${esc(parcelId)}">${text("ดูทรัพย์สินที่แปลงนี้อยู่", "See the property this parcel belongs to")}</button>` : ""}</div></div>` + titleCardHTML(a);
   }
   function initMap() {
     S.map = L.map("map", {
@@ -2311,8 +2787,16 @@
     setBasemap();
     S.map.on("dragstart", () => S.interactionRevision++);
     // While a popup is open on phones and tablets, the folded legend steps aside so it cannot cover the popup's buttons.
-    S.map.on("popupopen", () => document.querySelector(".map-stage")?.classList.add("popup-open"));
-    S.map.on("popupclose", () => document.querySelector(".map-stage")?.classList.remove("popup-open"));
+    /* A popup never sits under the legend: when they overlap, the legend steps aside until the popup closes or moves clear. */
+    const legendClash = () => {
+      const st = document.querySelector(".map-stage"), pop = document.querySelector(".leaflet-popup"), lg = $("map-legend");
+      let clash = false;
+      if (st && pop && lg) { lg.style.visibility = ""; const a = pop.getBoundingClientRect(), b = lg.getBoundingClientRect(); clash = b.width > 0 && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top; }
+      st?.classList.toggle("popup-over-legend", clash);
+    };
+    S.map.on("popupopen", () => { document.querySelector(".map-stage")?.classList.add("popup-open"); requestAnimationFrame(() => requestAnimationFrame(legendClash)); });
+    S.map.on("popupclose", () => { const st = document.querySelector(".map-stage"); st?.classList.remove("popup-open"); st?.classList.remove("popup-over-legend"); });
+    S.map.on("moveend", () => { if (S.popup?.isOpen?.()) legendClash(); });
     $("map").addEventListener("wheel", () => S.interactionRevision++, {
       passive: true,
     });
@@ -2791,7 +3275,9 @@
   function drawSelected() {
     if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
     if (!S.record) return;
-    S.selectedLayer = L.geoJSON(S.record, {
+    // On the properties map the whole property (every adjoining parcel of the owner) is outlined.
+    const shown = S.dataset === "properties" ? propertyFeatures(propKeyOf(S.record.properties.id)) : null;
+    S.selectedLayer = L.geoJSON(shown?.length > 1 ? { type: "FeatureCollection", features: shown } : S.record, {
       pane: "selected",
       interactive: false,
       style: {
@@ -3022,7 +3508,7 @@
     await refreshMap({ fit: true });
   }
   function selectRecord(f, push = true, fromMap = false) {
-    const source = { taxmap: "parcels", appraisal: "parcels", popgrid: "population-grid" }[S.dataset] || S.dataset;
+    const source = { taxmap: "parcels", properties: "parcels", appraisal: "parcels", popgrid: "population-grid" }[S.dataset] || S.dataset;
     if (
       (f?.properties?.datasetId !== source && f?.properties?.datasetId !== S.dataset) ||
       !filterFeatures({ features: [f] }).length
@@ -3054,6 +3540,7 @@
     if (push) syncURL();
   }
   function exportCSV() {
+    if (S.dataset === "properties") return exportPropertiesCSV();
     if (publicAggregate()) { toast(text("หน้านี้เผยเฉพาะข้อมูลสรุป ไม่มีรายการรายบุคคลให้ดาวน์โหลด", "This view contains public summaries only; no individual rows are downloadable.")); return; }
     const lf = activeListFilter();
     const q = S.search.trim().toLowerCase();
@@ -3150,6 +3637,7 @@
     if (S.dataset !== "appraisal") runTax();
     restyleLayer();
     if (S.tab === "overview") $("tab-content").innerHTML = overviewContent();
+    else if (S.dataset === "properties" && S.tab === "list") $("tab-content").innerHTML = recordsContent();
     renderSummary(); syncURL(true);
   }
   function bindEvents() {
@@ -3206,9 +3694,13 @@
       if (pb) { showParcelBuildings(pb.dataset.parcelBuildings); return; }
       if (!e.target.closest(".header-settings")) document.querySelector(".header-settings").open=false;
       if (e.target.closest("#terrain-auto")) { setTerrainAuto(!S.terrainAuto); return; }
-      if (e.target.closest("[data-terrain-reset]")) { S.terrainAutoTarget = 0.15; setTerrainAuto(true); return; }
+      if (e.target.closest("[data-terrain-reset]")) { S.terrainAutoTarget = 0.15; S.terrainExaggeration = TERRAIN_DEFAULT_EX; setTerrainAuto(false); S.terrain3D?.setExaggeration(TERRAIN_DEFAULT_EX); syncExaggerationReadout(); return; }
       const terrainMode = e.target.closest("[data-terrain-mode]");
       if (terrainMode) { setTerrainMode(terrainMode.dataset.terrainMode); return; }
+      const pm = e.target.closest("[data-prop-metric]");
+      if (pm) { S.propMetric = pm.dataset.propMetric; renderLayerControls(); restyleLayer(); syncURL(true); $("layer-controls").querySelector(`[data-prop-metric="${S.propMetric}"]`)?.focus(); return; }
+      const psort = e.target.closest("[data-prop-sort]");
+      if (psort) { S.propSort = psort.dataset.propSort; S.page = 60; renderPanel(); document.querySelector(`[data-prop-sort="${S.propSort}"]`)?.focus(); return; }
       const metric = e.target.closest("[data-pop-metric]");
       if (metric) { S.popMetric = metric.dataset.popMetric; renderLayerControls(); restyleLayer(); syncURL(true); $(`layer-controls`).querySelector(`[data-pop-metric="${S.popMetric}"]`)?.focus(); return; }
       const bview = e.target.closest("[data-building-view]");
@@ -3251,6 +3743,8 @@
         selectScope(area.dataset.scope);
         return;
       }
+      const prow = e.target.closest("[data-property]");
+      if (prow) { openProperty(prow.dataset.property); return; }
       const record = e.target.closest("[data-record]");
       if (record) {
         const r = currentFeatures().find(
@@ -3278,6 +3772,16 @@
         return;
       }
       if (e.target.closest("[data-clear-filter]")) { S.listFilter = null; renderPanel(); return; }
+      const pbtn = e.target.closest("[data-property-buildings], [data-property-businesses]");
+      if (pbtn) {
+        const key = pbtn.dataset.propertyBuildings || pbtn.dataset.propertyBusinesses, isB = !!pbtn.dataset.propertyBuildings;
+        pbtn.replaceWith(Object.assign(document.createElement("p"), { className: "small-note", textContent: text("กำลังเปิดรายการ…", "Opening…") }));
+        fetchJSON(isB ? BUILDINGS_PATH() : BUSINESSES_PATH()).catch(() => null).then(() => {
+          const box = document.getElementById(isB ? "property-buildings" : "property-businesses");
+          if (box && box.dataset.property === key) box.outerHTML = isB ? propertyBuildingsHTML(key) : propertyBusinessesHTML(key);
+        });
+        return;
+      }
       const go = e.target.closest("[data-goto]");
       if (go) { const [layer, id] = go.dataset.goto.split("|"); gotoFeature(layer, id); return; }
       if (e.target.closest("[data-more]")) {
@@ -3476,8 +3980,66 @@
     }).observe(document.body, { childList: true, subtree: true, characterData: true });
     numWrap(document.body);
   }
+  /* Phones (revision 1.9): a data table never widens the page. Each table sits in its own scroll region; only a table
+     that really overflows becomes a labelled, keyboard-focusable region (scrollable-region-focusable). */
+  function installTableScroll() {
+    const root = $("inspector");
+    if (!root) return;
+    const mark = () => {
+      for (const w of root.querySelectorAll(".table-scroll")) {
+        const over = w.scrollWidth > w.clientWidth + 1;
+        if (String(over) === w.dataset.scrollable) continue;
+        w.dataset.scrollable = String(over);
+        if (over) {
+          const t = w.querySelector("table"), cap = t?.closest("section, details, article")?.querySelector("h2, h3, summary")?.textContent?.trim();
+          if (!w.hasAttribute("aria-label")) w.setAttribute("aria-label", cap ? text(`ตาราง ${cap} (เลื่อนซ้ายขวาได้)`, `${cap} table (scrolls sideways)`) : text("ตาราง (เลื่อนซ้ายขวาได้)", "Table (scrolls sideways)"));
+          w.setAttribute("role", "region"); w.tabIndex = 0;
+        } else if (!w.dataset.fixedRegion) { w.removeAttribute("role"); w.removeAttribute("tabindex"); w.removeAttribute("aria-label"); }
+      }
+    };
+    let queued = false;
+    const wrap = () => {
+      queued = false;
+      for (const t of root.querySelectorAll("table.data-table")) {
+        if (t.parentElement?.classList.contains("table-scroll")) continue;
+        const w = document.createElement("div");
+        w.className = "table-scroll";
+        t.replaceWith(w); w.appendChild(t);
+      }
+      for (const w of root.querySelectorAll(".table-scroll[role='region'][tabindex='0']:not([data-scrollable])")) w.dataset.fixedRegion = "1";
+      requestAnimationFrame(mark);
+    };
+    new MutationObserver(() => { if (!queued) { queued = true; queueMicrotask(wrap); } }).observe(root, { childList: true, subtree: true });
+    window.addEventListener("resize", () => requestAnimationFrame(mark), { passive: true });
+    wrap();
+  }
+  /* LDS CTA-01: every link that opens a new tab carries the open_in_new cue and says so to screen readers. Links whose
+     own text already says "new tab" keep their wording. Re-applied when locale text replaces a link's content. */
+  function installExternalCues() {
+    const cue = (a) => {
+      if (a.querySelector(".ext-icon") || /แท็บใหม่|new tab/i.test(a.textContent)) return;
+      a.insertAdjacentHTML("beforeend", extMark());
+    };
+    const scan = (node) => {
+      if (node.nodeType !== 1) return;
+      if (node.matches?.('a[target="_blank"]')) cue(node);
+      node.querySelectorAll?.('a[target="_blank"]').forEach(cue);
+    };
+    let queued = false; const pending = new Set();
+    new MutationObserver((records) => {
+      for (const r of records) {
+        const a = r.target.closest?.('a[target="_blank"]') || (r.target.parentElement && r.target.parentElement.closest?.('a[target="_blank"]'));
+        if (a) pending.add(a);
+        for (const n of r.addedNodes) if (n.nodeType === 1) pending.add(n);
+      }
+      if (pending.size && !queued) { queued = true; queueMicrotask(() => { queued = false; const list = [...pending]; pending.clear(); list.forEach(scan); }); }
+    }).observe(document.body, { childList: true, subtree: true });
+    scan(document.body);
+  }
   async function start() {
     installNumerals();
+    installTableScroll();
+    installExternalCues();
     try {
       let scales, parcelTax;
       [S.catalog, S.metadata, S.docs, S.tokens, S.publicSummary, S.terrainSource, S.terrainCoverage, scales, parcelTax, S.popStructure] = await Promise.all([
@@ -3494,10 +4056,10 @@
       ]);
       if (!window.SilaScales?.load(scales)) S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "appraisal", "popgrid"].includes(d.id));
       if (parcelTax && window.SilaTaxEngine) {
-        try { S.parcelTax = window.SilaTaxEngine.prepare(parcelTax); S.parcelTaxStatus = "ready"; runTax(); }
+        try { S.parcelTax = window.SilaTaxEngine.prepare(parcelTax); S.parcelTaxStatus = "ready"; }
         catch (e) { console.error(e); S.parcelTaxStatus = "error"; }
       } else S.parcelTaxStatus = "unavailable";
-      if (S.parcelTaxStatus !== "ready") S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "appraisal"].includes(d.id));
+      if (S.parcelTaxStatus !== "ready") S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "properties", "appraisal"].includes(d.id));
       if (!S.popStructure) S.catalog.datasets = S.catalog.datasets.filter((d) => d.id !== "popgrid");
       if (S.terrainSource && S.terrainCoverage) {
         Object.assign(S.catalog.datasets.find(d => d.id === "terrain"), {status:"ready_external_dem",sourceMetadata:"data/terrain-source.json",coverageMetadata:"data/terrain-coverage.geojson"});

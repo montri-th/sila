@@ -48,6 +48,14 @@
   function breakdowns(dataset, lang) {
     return (dataset.breakdowns || []).map(b => `<section class="panel-section aggregate-breakdown"><h2>${esc(tr(b.label,lang))}</h2><p class="inline-note">${esc(tr(b.note,lang))}</p><table><thead><tr><th scope="col">${esc(word('ประเภทตามต้นทาง','Source category',lang))}</th><th scope="col">${esc(word('จำนวนตามบัญชี','Source count',lang))}</th></tr></thead><tbody>${b.rows.map(m => {const v=valueLabel(m,lang);return `<tr><th scope="row"><span>${esc(tr(m.label,lang))}</span>${m.note ? `<small>${esc(tr(m.note,lang))}</small>` : ''}</th><td><strong>${esc(v.number)}</strong><span class="aggregate-table-unit">${esc(unitLabel(m,lang))}</span>${v.state ? `<small class="aggregate-state">${esc(v.state)}</small>` : ''}</td></tr>`;}).join('')}</tbody></table></section>`).join('');
   }
+  /* Group definitions supplied with the source (e.g. LTC groups 1–4), with their evidence label. */
+  function definitions(dataset, lang) {
+    const d = dataset.definitions;
+    if (!d || !Array.isArray(d.groups) || !d.groups.length) return '';
+    const cols = (d.columns && d.columns[lang]) || d.columns?.th || [];
+    const badge = d.evidence === 'owner_stated' ? word('เจ้าของงานระบุ','Owner-stated',lang) : word('ข้อเท็จจริงจากแหล่งที่ระบุ','Observed fact',lang);
+    return `<section class="panel-section aggregate-breakdown aggregate-definitions"><h2>${esc(tr(d.label,lang))}</h2><p class="inline-note"><span class="evidence-badge" data-evidence="${esc(d.evidence || '')}">${esc(badge)}</span> ${esc(tr(d.note,lang))}</p><div class="table-scroll" role="region" tabindex="0" aria-label="${esc(tr(d.label,lang))}"><table><thead><tr>${cols.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${d.groups.map(r=>`<tr><th scope="row">${esc(word('กลุ่ม ','Group ',lang) + r.group)}</th><td>${esc(tr(r.adl,lang))}</td><td>${esc(tr(r.desc,lang))}</td><td>${esc(r.tai)}</td><td>${esc(tr(r.visits,lang))}</td></tr>`).join('')}</tbody></table></div></section>`;
+  }
   function steps(dataset, lang) {
     return `<section class="panel-section aggregate-next"><div class="section-title"><h2>${esc(word('ทำอะไรต่อได้บ้าง','What to do next',lang))}</h2></div><ol>${dataset.nextSteps.map(v=>`<li>${esc(tr(v,lang))}</li>`).join('')}</ol><p class="inline-note">${esc(word('การตรวจรายบุคคลและการแก้ไขระบบงานต้องใช้ช่องทางเจ้าหน้าที่ที่ได้รับสิทธิ','Individual review and operational changes require the authorized Officer workflow',lang))}</p></section>`;
   }
@@ -61,7 +69,7 @@
     const scope=scopeNote(d,lang,options.scopeLabel);
     if(options.tab==='list')return `<div class="aggregate-view">${scope}${packages(d,lang)}${steps(d,lang)}</div>`;
     if(options.tab==='source')return `<div class="aggregate-view">${scopeDetail(d,lang,options.scopeLabel)}<dl class="source-dl"><dt>${esc(word('ความหมายของมุมมอง','View meaning',lang))}</dt><dd>${esc(d.id === 'caregroups' ? word('สรุปรหัสในบัญชีดูแลที่ได้รับ ไม่ใช่จำนวนผู้ป่วยทั้งหมดหรือข้อมูลรายบุคคล','Source care-cohort key aggregates, not all patients or individual records',lang) : word('ข้อมูลสรุปทั้งเทศบาล ไม่ใช่รายแปลง รายครัวเรือน หรือรายผู้ป่วย','Municipal aggregates, not title, household or patient records',lang))}</dd><dt>${esc(word('วันรับข้อมูล','Sources received',lang))}</dt><dd>${esc(payload.sourceReceivedAt)} · ${esc(word('ไม่ใช่วันสำรวจหรือวันตัดยอดของทุกไฟล์','not every file’s survey or accounting cutoff date',lang))}</dd><dt>${esc(word('การจับคู่พื้นที่','Spatial allocation',lang))}</dt><dd>${esc(word('ยังไม่แจกแจงตามหมู่บ้านหรือเขตเลือกตั้ง การเลือกพื้นที่ไม่เปลี่ยนยอดจากไฟล์','Not allocated to villages or electoral areas; selecting a map area does not change source totals',lang))}</dd></dl>${packages(d,lang)}${privacy(d,lang)}</div>`;
-    return `<div class="aggregate-view">${scope}${metrics(d,lang)}${breakdowns(d,lang)}${steps(d,lang)}</div>`;
+    return `<div class="aggregate-view">${scope}${metrics(d,lang)}${breakdowns(d,lang)}${definitions(d,lang)}${steps(d,lang)}</div>`;
   }
   root.SilaPublicAggregates=Object.freeze({ids:IDS,requiredIds:REQUIRED_IDS,icons:ICONS,valid,get,entries,valueLabel,statusLabel,render,localized:tr});
 })(typeof window==='undefined'?globalThis:window);

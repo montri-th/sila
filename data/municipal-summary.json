@@ -980,8 +980,8 @@
                 "en": "source keys"
               },
               "note": {
-                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
-                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+                "th": "ความหมายตามระบบ LTC ดูตารางถัดไป · ข้อความของกลุ่ม 3 และ 4 ในต้นทางเหมือนกัน ทีมสุขภาพควรยืนยันการแยกกลุ่ม",
+                "en": "LTC meaning in the next table · the source text for groups 3 and 4 is identical; the health team should confirm the split"
               },
               "sourceIds": [
                 "CARE-LTC-1",
@@ -1001,8 +1001,8 @@
                 "en": "source keys"
               },
               "note": {
-                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
-                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+                "th": "ความหมายตามระบบ LTC ดูตารางถัดไป · ข้อความของกลุ่ม 3 และ 4 ในต้นทางเหมือนกัน ทีมสุขภาพควรยืนยันการแยกกลุ่ม",
+                "en": "LTC meaning in the next table · the source text for groups 3 and 4 is identical; the health team should confirm the split"
               },
               "sourceIds": [
                 "CARE-LTC-1",
@@ -1022,8 +1022,8 @@
                 "en": "source keys"
               },
               "note": {
-                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
-                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+                "th": "ความหมายตามระบบ LTC ดูตารางถัดไป · ข้อความของกลุ่ม 3 และ 4 ในต้นทางเหมือนกัน ทีมสุขภาพควรยืนยันการแยกกลุ่ม",
+                "en": "LTC meaning in the next table · the source text for groups 3 and 4 is identical; the health team should confirm the split"
               },
               "sourceIds": [
                 "CARE-LTC-1",
@@ -1043,8 +1043,8 @@
                 "en": "source keys"
               },
               "note": {
-                "th": "นิยามทางการยังรอรับรอง โดยเฉพาะกลุ่ม3/4ที่ข้อความต้นฉบับเหมือนกัน",
-                "en": "Official definitions await confirmation; source descriptions for groups 3/4 are identical."
+                "th": "ความหมายตามระบบ LTC ดูตารางถัดไป · ข้อความของกลุ่ม 3 และ 4 ในต้นทางเหมือนกัน ทีมสุขภาพควรยืนยันการแยกกลุ่ม",
+                "en": "LTC meaning in the next table · the source text for groups 3 and 4 is identical; the health team should confirm the split"
               },
               "sourceIds": [
                 "CARE-LTC-1",
@@ -1241,8 +1241,8 @@
       },
       "nextSteps": [
         {
-          "th": "ให้ทีมสุขภาพรับรองความหมายกลุ่ม1–4และช่วงข้อมูลก่อนจัดบริการ",
-          "en": "Have the health team confirm group 1–4 definitions and cohort periods before service planning."
+          "th": "ให้ทีมสุขภาพยืนยันว่ารหัส 1–4 ในทะเบียนตรงกับนิยาม LTC และช่วงข้อมูล ก่อนจัดบริการ",
+          "en": "Have the health team confirm that register codes 1–4 follow the LTC definitions, and the cohort periods, before service planning."
         },
         {
           "th": "เตรียมกำลังคนและอุปกรณ์ตามกลุ่มที่ยืนยัน แยกแผนความถี่เยี่ยมออกจากผลเยี่ยมที่ทำแล้ว",
@@ -1256,6 +1256,100 @@
       "privacy": {
         "th": "แสดงเฉพาะยอดรวมที่ผ่านการคัดเลือก ไม่มีรายชื่อ รหัสบุคคล หมุดบ้าน หรือการแบ่งกลุ่มโรครายหมู่บ้าน/หน่วยบริการ",
         "en": "Selected broad aggregates only; no names, personal keys, home points or condition-by-village/provider cross-tabs."
+      },
+      "definitions": {
+        "id": "ltc-groups",
+        "label": {
+          "th": "ความหมายของกลุ่ม 1–4 ในระบบดูแลผู้สูงอายุที่มีภาวะพึ่งพิง (LTC)",
+          "en": "What groups 1–4 mean in the long-term care (LTC) system"
+        },
+        "note": {
+          "th": "ผู้มีภาวะพึ่งพิงคือคะแนน ADL ไม่เกิน 11 · ติดบ้าน ADL 5–11 · ติดเตียง ADL 0–4 · กลุ่ม TAI และความถี่ที่ CG ดูแลตามภาพสรุปที่เจ้าของงานส่งมา ซึ่งอ้างคู่มือระบบดูแลผู้สูงอายุที่มีภาวะพึ่งพิงในพื้นที่ (Long Term Care) ในระบบหลักประกันสุขภาพแห่งชาติ · ทีมสุขภาพควรยืนยันว่ารหัสในทะเบียนของศิลาใช้นิยามนี้",
+          "en": "Dependent means an ADL score of 11 or less · housebound ADL 5–11 · bedbound ADL 0–4 · TAI classes and caregiver (CG) visit frequency follow the summary the project owner supplied, which cites the NHSO long-term care manual · the health team should confirm Sila’s register uses these definitions"
+        },
+        "evidence": "owner_stated",
+        "columns": {
+          "th": [
+            "กลุ่ม",
+            "ADL",
+            "ลักษณะ",
+            "TAI",
+            "CG ดูแลอย่างน้อย"
+          ],
+          "en": [
+            "Group",
+            "ADL",
+            "Description",
+            "TAI",
+            "CG care at least"
+          ]
+        },
+        "groups": [
+          {
+            "group": "1",
+            "adl": {
+              "th": "5–11 ติดบ้าน",
+              "en": "5–11 housebound"
+            },
+            "desc": {
+              "th": "เคลื่อนไหวได้บ้าง อาจมีปัญหาการกินหรือขับถ่าย แต่ไม่มีภาวะสับสนทางสมอง",
+              "en": "Some mobility; may have eating or toileting problems; no cognitive impairment"
+            },
+            "tai": "B3",
+            "visits": {
+              "th": "2 ครั้งต่อเดือน",
+              "en": "2 times a month"
+            }
+          },
+          {
+            "group": "2",
+            "adl": {
+              "th": "5–11 ติดบ้าน",
+              "en": "5–11 housebound"
+            },
+            "desc": {
+              "th": "เคลื่อนไหวได้บ้าง แต่มีภาวะสับสนทางสมองหรือความผิดปกติด้านการรับรู้",
+              "en": "Some mobility, with cognitive impairment or a perception disorder"
+            },
+            "tai": "C2, C3, C4",
+            "visits": {
+              "th": "4 ครั้งต่อเดือน",
+              "en": "4 times a month"
+            }
+          },
+          {
+            "group": "3",
+            "adl": {
+              "th": "0–4 ติดเตียง",
+              "en": "0–4 bedbound"
+            },
+            "desc": {
+              "th": "เคลื่อนไหวเองไม่ได้ อาจมีปัญหาการกินหรือขับถ่าย หรือมีอาการเจ็บป่วยรุนแรง",
+              "en": "Cannot move unaided; may have eating or toileting problems or severe illness"
+            },
+            "tai": "I3",
+            "visits": {
+              "th": "4 ครั้งต่อเดือน",
+              "en": "4 times a month"
+            }
+          },
+          {
+            "group": "4",
+            "adl": {
+              "th": "0–4 ติดเตียง",
+              "en": "0–4 bedbound"
+            },
+            "desc": {
+              "th": "เคลื่อนไหวเองไม่ได้ มีอาการเจ็บป่วยรุนแรง หรืออยู่ในระยะท้ายของชีวิต",
+              "en": "Cannot move unaided; severe illness or end of life"
+            },
+            "tai": "I1, I2",
+            "visits": {
+              "th": "2 ครั้งต่อสัปดาห์",
+              "en": "2 times a week"
+            }
+          }
+        ]
       }
     }
   ],

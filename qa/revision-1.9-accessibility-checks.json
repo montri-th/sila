@@ -1,0 +1,217 @@
+{
+ "schema": "sila-accessibility-checks/1.9",
+ "checkedAtUtc": "2026-10-20T10:08:02.930588+00:00",
+ "base": "local preview of the revision-1.9 tree (python http.server, loopback)",
+ "tool": "axe-core 4.10.2",
+ "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
+ "views": [
+  {
+   "view": "taxmap-dark-th",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "taxmap-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "taxmap-record",
+   "viewport": "1440x900",
+   "rulesPassed": 52,
+   "violations": []
+  },
+  {
+   "view": "taxmap-calculator-open",
+   "viewport": "1440x900",
+   "rulesPassed": 31,
+   "violations": []
+  },
+  {
+   "view": "taxmap-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-delta-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "appraisal-light-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "buildings-use-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-registry-en",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-straddle-light",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "houses-list-v12",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "houses-sources-en",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "popgrid-light",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "terrain-2d-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "roads",
+   "viewport": "1440x900",
+   "rulesPassed": 44,
+   "violations": []
+  },
+  {
+   "view": "overview-en",
+   "viewport": "1440x900",
+   "rulesPassed": 44,
+   "violations": []
+  },
+  {
+   "view": "villages-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-taxmap",
+   "viewport": "390x844",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "phone-house-card",
+   "viewport": "390x844",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "buildings-tax-card",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "appraisal-adj20-en",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "taxmap-colour-table-open",
+   "viewport": "1440x900",
+   "rulesPassed": 52,
+   "violations": []
+  },
+  {
+   "view": "properties-dark-th",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "properties-list-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "properties-card",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "businesses-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "businesses-card-en",
+   "viewport": "1440x900",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "caregroups-definitions",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "phone-properties-card",
+   "viewport": "390x844",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-taxmap-popup",
+   "viewport": "390x844",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "terrain-3d-auto-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  }
+ ],
+ "manualChecks": {
+  "contrast": "Measured on 20 Oct 2026 from computed styles with alpha-blended backgrounds (8 states: tax record, property card, business card; dark and light themes; basemap set to none and to streets, whose tiles are unreachable on the test machine; 1440 and 390 px). Lowest text contrast 4.9:1 (light theme pending state chip, 12 px); map popup 5.2:1 (light theme check flag, 11.5 px); map toolbar 5.4:1 (light theme basemap label); dark theme lowest 7.97:1. Interface icons at least 4.9:1 against their background (non-text minimum 3:1). Every measured toolbar, control and popup element sits on its own card background, none directly on map tiles.",
+  "keyboard": "Tab order measured on 20 Oct 2026: skip link, home, language and theme options, boundary, layers, basemap, map, area shape, zoom in, zoom out, map attribution, fit to area, colour table (41 ranges), panel splitter, mission, layer. Every stop shows a 2 px solid focus outline; the colour-table summary used the browser default ring before this revision and now uses the same 2 px outline (map-layers.css).",
+  "language": "html lang follows the page language; map zoom and area buttons are labelled in the page language",
+  "targets": "Checkboxes are 18 px but sit inside full-width labels at least 57 px tall, which are the click and tap targets (see qa/revision-1.9-browser-checks.json smallTargetsNote)."
+ },
+ "notCovered": [
+  "screen readers on real devices",
+  "real phones",
+  "zoom to 200% on desktop browsers"
+ ],
+ "browser": "Chromium 141.0.7390.37",
+ "summary": {
+  "views": 32,
+  "violations": 0
+ }
+}

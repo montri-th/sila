@@ -9,12 +9,13 @@
 .selector-benefit{margin:6px 0 0;font-size:13px;line-height:1.6;color:var(--secondary)}
 .layer-controls{padding:0 24px}
 .layer-controls:empty{display:none}
-.control-card{margin:4px 0 12px;padding:12px 14px;border:1px solid var(--hairline);border-radius:12px;background:var(--card);display:grid;gap:10px}
+.control-card{margin:4px 0 12px;padding:12px 14px;border:1px solid var(--hairline);border-radius:12px;background:var(--card);display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
+.control-card>*{min-width:0}
 .control-card h3,.control-card h2.control-title{margin:0;font-size:14px;font-weight:600;line-height:1.5}
 /* Control titles are h2 for heading order but keep the body face of the former h3. */
 .control-card h2.control-title{font-family:"Bai Jamjuree",sans-serif}
-.control-field{display:grid;gap:4px;font-size:13px;color:var(--secondary)}
-.control-field select{min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--alt);color:var(--primary);font:inherit;font-size:14px}
+.control-field{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;min-width:0;font-size:13px;color:var(--secondary)}
+.control-field select{width:100%;max-width:100%;min-width:0;text-overflow:ellipsis;min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--alt);color:var(--primary);font:inherit;font-size:14px}
 .control-field select:focus-visible,.control-field input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .control-range{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
 .control-range input{width:100%;min-height:44px;accent-color:var(--accent)}
@@ -48,6 +49,9 @@
 .data-table th,.data-table td{padding:8px 6px;border-bottom:1px solid var(--hairline);text-align:left;vertical-align:top}
 .data-table th{color:var(--secondary);font-weight:400}
 .data-table td.num,.data-table th.num{text-align:right;font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;white-space:nowrap}
+/* Headers may wrap; values stay on one line. Phones: tighter cells, and any table still too wide scrolls inside its own region. */
+.data-table th.num{white-space:normal;font-family:inherit}
+@media (max-width:599px){.data-table th,.data-table td{padding:8px 4px}}
 .data-table button{min-height:32px;padding:2px 6px;border:0;background:transparent;color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:13px}
 /* Analytical legend: swatches plus printed thresholds and units */
 .legend-title{font-weight:600;font-size:12px;margin-bottom:4px}
@@ -77,14 +81,17 @@
 .sila-hover .hover-value{font-family:"JetBrains Mono","IBM Plex Sans Thai",monospace;font-weight:400;font-synthesis:none;}
 .leaflet-popup-content-wrapper{background:var(--card);color:var(--primary);border:1px solid var(--border);border-radius:12px;box-shadow:none}
 .leaflet-popup-tip{background:var(--card);border:1px solid var(--border);box-shadow:none}
-.leaflet-popup-content{margin:12px 14px;font-family:"Bai Jamjuree",sans-serif;font-size:13px;line-height:1.6;min-width:240px;max-width:320px}
+.leaflet-popup-content{margin:10px 12px;font-family:"Bai Jamjuree",sans-serif;font-size:13px;line-height:1.5}
 .leaflet-container a.leaflet-popup-close-button{width:32px;height:32px;font-size:20px;line-height:30px;color:var(--secondary)}
-.popup-title{margin:0 24px 6px 0;font-size:15px;font-weight:600;line-height:1.45}
-.popup-dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;margin:0;font-size:12px}
+.popup-title{margin:0 22px 4px 0;font-size:14px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.popup-dl{display:grid;grid-template-columns:minmax(88px,1fr) auto;gap:2px 10px;margin:0;font-size:12px;line-height:1.45}
 .popup-dl dt{color:var(--secondary)}
-.popup-dl dd{margin:0;overflow-wrap:anywhere}
-.popup-more{margin-top:8px;min-height:36px;padding:4px 12px;border:1px solid var(--border);border-radius:999px;background:var(--alt);color:var(--primary);font-size:12px}
-.flag-chip{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border:1px solid var(--border);border-radius:999px;background:var(--soft);font-size:11px;color:var(--primary)}
+.popup-dl dd{margin:0;max-width:150px;text-align:right;color:var(--primary);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.popup-flag{margin:6px 0 0;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;line-height:1.6;background:var(--state-warning-bg,var(--alt));color:var(--state-warning-fg,var(--primary))}
+.sila-popup .leaflet-popup-content-wrapper{border-radius:10px}
+.popup-more{display:inline-flex;align-items:center;gap:4px;margin-top:8px;min-height:32px;padding:2px 10px;border:1px solid var(--border);border-radius:999px;background:var(--alt);color:var(--primary);font-size:12px;cursor:pointer}
+.flag-chip{display:inline-flex;align-items:flex-start;gap:4px;margin:2px 4px 2px 0;padding:2px 8px;border:1px solid var(--border);border-radius:999px;background:var(--soft);font-size:11px;color:var(--primary)}
+.flag-chip .sila-ui-icon{flex:none;margin-top:1px;color:var(--state-warning-fg)}
 .filter-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
 .filter-row .flag-chip{font-size:12px;padding:4px 10px}
 .filter-row button{min-height:36px}
@@ -118,6 +125,7 @@
 .summary-metrics strong .metric-unit{font-size:.55em;font-weight:600;font-family:"Bai Jamjuree",sans-serif;white-space:nowrap}
 @media(max-width:360px){.summary-metrics{gap:8px}.summary-metrics strong{font-size:19px}.summary-metrics>div{padding-right:4px}}
 @media(max-width:1100px){.map-stage.popup-open .map-legend{visibility:hidden}}
+.map-stage.popup-over-legend .map-legend{visibility:hidden}
 /* The last context-layer checkbox keeps the row layout (the older last-child rule was for a select). */
 .layer-options label:last-child:not(:has(select)){display:flex;margin-top:0}
 
@@ -131,6 +139,7 @@
 .lut-ends span:last-child{text-align:right}
 .lut-table{margin-top:6px;font-size:12px}
 .lut-table summary{cursor:pointer;display:list-item;padding:6px 0;line-height:1.5;color:var(--primary)}
+.lut-table summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 .lut-table .lut-scroll{margin-top:4px;max-height:220px;overflow:auto;border-radius:4px}
 .lut-table .lut-scroll:focus-visible{outline-offset:-2px}
 .lut-table ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
@@ -146,3 +155,42 @@ fieldset.assumptions legend{padding:0 4px;font-size:13px;font-weight:600;color:v
 .title-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 .title-list li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:baseline;font-size:13px;line-height:1.55}
 .title-list .portfolio-link{min-height:32px}
+/* Revision 1.9: LDS 0.9.7 semantic state colours (colorRegistry.values.semantic) for evidence and rank labels; text always carries the meaning. */
+:root{--state-success-bg:#17362D;--state-success-fg:#72E8C4;--state-warning-bg:#3B2E16;--state-warning-fg:#F5C15C;--state-danger-bg:#3A1F21;--state-danger-fg:#FF7C72;--state-info-bg:#18333E;--state-info-fg:#68C4E2;--state-neutral-bg:#2B3534;--state-neutral-fg:#C4CECA;--state-pending-bg:#2C2A22;--state-pending-fg:#D8CFB2}
+:root[data-theme="light"]{--state-success-bg:#E2F4E5;--state-success-fg:#126B49;--state-warning-bg:#FFF1D1;--state-warning-fg:#A64A00;--state-danger-bg:#FCE5DF;--state-danger-fg:#B43A3A;--state-info-bg:#E8EEF0;--state-info-fg:#176B82;--state-neutral-bg:#ECE4D2;--state-neutral-fg:#5F635A;--state-pending-bg:#F3EEDB;--state-pending-fg:#5C6A61}
+.evidence-badge{display:inline-block;margin-right:4px;padding:1px 8px;border-radius:999px;font-size:12px;line-height:1.6;white-space:nowrap;background:var(--state-neutral-bg);color:var(--state-neutral-fg)}
+.evidence-badge[data-evidence="observed"]{background:var(--state-info-bg);color:var(--state-info-fg)}
+.evidence-badge[data-evidence="hypothesis"],.evidence-badge[data-evidence="owner_stated"]{background:var(--state-pending-bg);color:var(--state-pending-fg)}
+.rank-badge{display:inline-flex;min-width:28px;height:24px;padding:0 6px;margin-right:4px;align-items:center;justify-content:center;border-radius:999px;background:var(--state-info-bg);color:var(--state-info-fg);font-size:12px;font-weight:600;vertical-align:middle}
+.external-actions .record-actions{flex-wrap:wrap}
+.ext-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.ext-link .sila-ui-icon{flex:none}
+a .ext-icon{flex:none;vertical-align:-0.2em;margin-inline-start:3px}
+.ext-link .ext-icon{margin-inline-start:0}
+.popup-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.popup-actions .popup-more{margin-top:0}
+.popup-link{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:2px 10px;border:1px solid var(--border);border-radius:999px;background:var(--alt);color:var(--primary);font-size:12px;text-decoration:none}
+.popup-more:focus-visible,.popup-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reason-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.reason-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;padding:8px 10px;border:1px solid var(--hairline);border-radius:10px;background:var(--alt)}
+.reason-list li details{grid-column:1/-1}
+.reason-list summary{cursor:pointer;display:list-item;font-size:12px;color:var(--secondary)}
+.reason-amount{font-weight:600;white-space:nowrap}
+.table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.table-scroll[data-scrollable="true"]{border-inline-end:2px solid var(--hairline)}
+/* Safety net on narrow screens: the page itself never scrolls sideways (wide content scrolls in its own region). */
+@media (max-width:899px){html,body{overflow-x:clip}}
+.aggregate-definitions table{min-width:520px}
+
+/* Revision 1.9: owner-approved interface icons. Icons sit beside words, never replace them. */
+.state-chip{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:999px;font-size:12px;line-height:1.6;vertical-align:baseline}
+.state-chip .sila-ui-icon{flex:none}
+.state-chip[data-state="passed"]{background:var(--state-success-bg);color:var(--state-success-fg)}
+.state-chip[data-state="check"]{background:var(--state-warning-bg);color:var(--state-warning-fg)}
+.state-chip[data-state="awaiting"]{background:var(--state-pending-bg);color:var(--state-pending-fg)}
+.more-button .sila-ui-icon,.mini-action .sila-ui-icon{vertical-align:-0.22em;margin-inline-end:6px}
+.ext-link.mini-action .sila-ui-icon{margin-inline-end:0}
+.list-search{position:relative}
+.list-search>.sila-ui-icon{position:absolute;left:12px;top:12px;color:var(--muted);pointer-events:none}
+.list-search input{padding-left:40px}

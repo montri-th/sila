@@ -1,0 +1,128 @@
+{
+  "schema": "sila-terrain3d-benchmark/1.9",
+  "measuredAtUtc": "2026-10-20T10:23:14.933855+00:00",
+  "method": "Headless Chromium with software WebGL (SwiftShader). After the page settles, a scripted 3 s gesture sends synthetic mouse events every 16 ms: 1.5 s left-drag arc (pan) then 1.5 s right-drag (rotate and tilt in revision 1.8; tilt only in 1.9 because the view is locked north up). Frame intervals come from requestAnimationFrame, long tasks from PerformanceObserver, main-thread time from the Chrome DevTools Performance domain.",
+  "scope": "Relative comparison on one test machine only. Not a frame rate for phones or real GPUs, which has not been measured.",
+  "baselineRevision18": {
+    "gestureWindowMs": 267699,
+    "longTasks": 114,
+    "longTaskTotalMs": 262587,
+    "mainThreadScriptMs": 262733,
+    "canvasCssPx": "640x408",
+    "exaggeration": "40 (automatic)",
+    "note": "Same harness and gesture on the revision-1.8 tree (JavaScript mesh renderer), measured on 20 Oct 2026 before the rewrite."
+  },
+  "runs": [
+    {
+      "label": "sila-v19-final-2x",
+      "description": "Revision 1.9 default view, 2 times vertical exaggeration, 1280 x 800 window",
+      "page": "/sila/?dataset=terrain&mission=flood&mode=3d&basemap=none",
+      "canvasCssPx": "640x408",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gestureWindowMs": 4145,
+      "inputEvents": 192,
+      "framesPerSecondInWindow": 3.9,
+      "frameIntervalMedianMs": 16.7,
+      "frameIntervalP95Ms": 700,
+      "frameIntervalMaxMs": 1633.3,
+      "framesOver50ms": 3,
+      "longTasks": 0,
+      "longTaskTotalMs": 0,
+      "longTaskMaxMs": 0,
+      "mainThreadTaskMs": 1346,
+      "mainThreadScriptMs": 201,
+      "heapMB": 39.4,
+      "before": {
+        "state": "ready",
+        "exaggeration": "2",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "after": {
+        "state": "ready",
+        "exaggeration": "2",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "sila-v19-final-auto",
+      "description": "Revision 1.9 automatic exaggeration (ex=auto), 1280 x 800 window",
+      "page": "/sila/?dataset=terrain&mission=flood&mode=3d&basemap=none&ex=auto",
+      "canvasCssPx": "640x408",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gestureWindowMs": 4092,
+      "inputEvents": 192,
+      "framesPerSecondInWindow": 4.2,
+      "frameIntervalMedianMs": 16.7,
+      "frameIntervalP95Ms": 483.3,
+      "frameIntervalMaxMs": 1766.7,
+      "framesOver50ms": 3,
+      "longTasks": 2,
+      "longTaskTotalMs": 237,
+      "longTaskMaxMs": 170,
+      "mainThreadTaskMs": 1299,
+      "mainThreadScriptMs": 491,
+      "heapMB": 39.8,
+      "before": {
+        "state": "ready",
+        "exaggeration": "40",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "after": {
+        "state": "ready",
+        "exaggeration": "50",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "sila-v19-final-2x-1920",
+      "description": "Revision 1.9 default view, 2 times, 1920 x 1080 window",
+      "page": "/sila/?dataset=terrain&mission=flood&mode=3d&basemap=none",
+      "canvasCssPx": "960x728",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gestureWindowMs": 3325,
+      "inputEvents": 192,
+      "framesPerSecondInWindow": 3,
+      "frameIntervalMedianMs": 16.6,
+      "frameIntervalP95Ms": 16.8,
+      "frameIntervalMaxMs": 666.7,
+      "framesOver50ms": 1,
+      "longTasks": 1,
+      "longTaskTotalMs": 66,
+      "longTaskMaxMs": 66,
+      "mainThreadTaskMs": 587,
+      "mainThreadScriptMs": 278,
+      "heapMB": 40.3,
+      "before": {
+        "state": "ready",
+        "exaggeration": "2",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "after": {
+        "state": "ready",
+        "exaggeration": "2",
+        "bearing": "0",
+        "pitch": "55.00000000000001"
+      },
+      "consoleErrors": []
+    }
+  ],
+  "referenceCityMETERLive": {
+    "page": "https://landometer.com/v3/citymeter-3d/KKN/D/4001?d=terrain",
+    "measuredOn": "2026-10-20",
+    "canvasCssPx": "1280x800",
+    "gestureWindowMs": 5983,
+    "longTasks": 9,
+    "longTaskTotalMs": 857,
+    "frameIntervalMedianMs": 549.9,
+    "mainThreadTaskMs": 4345,
+    "mainThreadScriptMs": 655,
+    "note": "Same harness and gesture on the published CityMETER terrain viewer. Its canvas fills the window (1280 x 800), larger than the Sila 3D panel (640 x 408), and the page differs, so this is context only, not a like-for-like comparison."
+  }
+}

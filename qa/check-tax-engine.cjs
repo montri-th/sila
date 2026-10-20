@@ -125,3 +125,44 @@ console.log(JSON.stringify({status: 'passed', checks, scope: 'Synthetic portfoli
   eq(b10.buildingFactor, 1.1, 'factor reported');
   console.log(JSON.stringify({status: 'passed', buildingGroupChecks: 9}));
 }
+// 18 Revision 1.9: owners from the 2563 list - one main home per person (s.41) and no personal reliefs for companies (s.40, s.41).
+{
+  const ofields = [...fields, 'h63', 'ex'];
+  const omodel = (parcels, taxpayers, properties = []) => E.prepare({schema: 'sila-parcel-tax-1', asOf: '2026-10-19', taxYear: 2569, fields: ofields,
+    parcels: parcels.map((p) => [...row(p), p.h63 ?? null, p.ex ?? null]), taxpayers, properties});
+  // Two separate main homes of one individual, 3M and 2M: the roll exempts both; with the fix the 2M home pays 0.02%.
+  const ma = omodel([{id: 'h1', landValue: 1e6, bldValue: 2e6, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, ex: 1},
+                     {id: 'h2', landValue: 1e6, bldValue: 1e6, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, ex: 1}], {});
+  assert.equal(ma.taxpayers.get('O1').type, 'individual'); assert.equal(ma.taxpayers.get('O1').src, '2563'); checks += 2;
+  assert.equal(ma.availability.mainHomeOnce, true); checks++;
+  const r0 = E.run(ma, {strategies: new Set()}), r1 = E.run(ma, {strategies: new Set(['mainHomeOnce'])});
+  eq(r0.totals.new70, 0, 'both homes exempt without the fix');
+  eq(r1.byParcel.get('h2').new70, 2e6 * 0.0002, 'second home (2M, not the most valuable) pays the other-residence rate');
+  eq(r1.byParcel.get('h1').new70, 0, 'the most valuable home keeps the relief');
+  // The 2563 list calls the cheaper one the main house: it keeps the relief, the 3M home pays 600.
+  const mb = omodel([{id: 'h1', landValue: 1e6, bldValue: 2e6, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, ex: 1},
+                     {id: 'h2', landValue: 1e6, bldValue: 1e6, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, ex: 1, h63: 'm'}], {});
+  const rb = E.run(mb, {strategies: new Set(['mainHomeOnce'])});
+  eq(rb.byParcel.get('h1').new70, 3e6 * 0.0002, 'house noted as other in 2563 pays 3M x 0.02%'); eq(rb.byParcel.get('h2').new70, 0, '2563 main house keeps relief');
+  // Adjoining parcels of the same property are one main home: no effect.
+  const mc = omodel([{id: 'h1', landValue: 1e6, bldValue: 2e6, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, grp: 1, ex: 1},
+                     {id: 'h2', landValue: 1e6, bldValue: 0, use: 'res', mainHome: 1, tp: 'O1', tax69: 0, grp: 1, ex: 1}], {}, [['h1', 'h2']]);
+  eq(E.run(mc, {strategies: new Set(['mainHomeOnce'])}).totals.new70, 0, 'one property counts as one main home');
+  assert.deepEqual(mc.properties.get(1), ['h1', 'h2']); checks++;
+  // Company with a printed exemption on a 5M home: the roll gave relief (0); the fix taxes 5M x 0.02% = 1,000.
+  // A company title without a printed exemption is already taxed as a company: no effect. Government land is left alone.
+  const mj = omodel([{id: 'c1', landValue: 2e6, bldValue: 3e6, use: 'res', mainHome: 1, tp: 'J1', tax69: 0, ex: 1},
+                     {id: 'c2', landValue: 5e6, use: 'res', tp: 'J1', tax69: 1000},
+                     {id: 'g1', landValue: 5e6, use: 'res', mainHome: 1, tp: 'G1', tax69: 0, ex: 1}],
+    {J1: {type: 'juristic', kind: 'company', src: '2563'}, G1: {type: 'juristic', kind: 'government', src: '2563'}});
+  const j0 = E.run(mj, {strategies: new Set()}), j1 = E.run(mj, {strategies: new Set(['juristic'])});
+  eq(j0.byParcel.get('c1').new70, 0, 'roll relief kept without the fix');
+  eq(j1.byParcel.get('c1').new70, 1000, 'company home pays 5M x 0.02% with the fix');
+  eq(j1.byParcel.get('c2').new70, 1000, 'title already taxed as a company is unchanged');
+  eq(j1.byParcel.get('g1').new70, 0, 'government land is not touched by the company fix');
+  assert.ok(j1.byParcel.get('c1').reasons.some((x) => x[1] === 'No personal reliefs for companies')); checks++;
+  // Property totals: the company's two titles are two single-parcel properties (no grp).
+  eq(j1.byProperty.get('pc1').new70 - j1.byProperty.get('pc1').old70, 1000, 'property gain equals the fix effect');
+  assert.equal(j1.byProperty.get('pc1').reasons.get('juristic'), 1000); checks++;
+  console.log(JSON.stringify({status: 'passed', ownerChecks: 17}));
+}

@@ -1,0 +1,16 @@
+{
+  "schema": "sila-inline-terrain3d-fixtures/2.0",
+  "revision": "1.9",
+  "checkedOn": "2026-10-20",
+  "checks": 45,
+  "passed": 45,
+  "failed": 0,
+  "scope": "Deterministic terrarium decoding, absent-value policy (sentinel, gap fill, refusal), clamped Catmull-Rom overzoom (constancy, linear exactness, no overshoot, tile continuity, padding), conservative coverage clip with holes, worker relief shading, relief statistics, color-relief expressions, contour/shading tile URLs, camera handoff and exaggeration helpers. Synthetic DEM values only; no browser/framebuffer attestation.",
+  "moduleSHA256": "80fc9fbef423e48fa7d399bc07b223f8ad69dbffd8f13d2aa6339d5bb92c4bdf",
+  "workerSHA256": "35ea7fcbfe35387a18b6b355eba178c8471c5eec33053930ec494165002ba186",
+  "testsSHA256": "5cfa8253002024e5ca148831fde0e3d0ea0431e3f485c523e58742e7b14ea0fa",
+  "coverageSHA256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
+  "separateBrowserReceipt": "revision-1.9-browser-checks.json",
+  "browserAttestation": "This receipt does not attest browser rendering; read the separate browser receipt.",
+  "rawDEMRehosted": false
+}

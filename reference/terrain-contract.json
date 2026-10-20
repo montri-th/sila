@@ -1,13 +1,13 @@
 {
   "schema": "sila-inline-terrain-contract/2.0",
-  "revision": "1.6",
-  "preparedOn": "2026-10-19",
+  "revision": "1.9",
+  "preparedOn": "2026-10-20",
   "publicationState": "source_contract_provider_and_runtime_proof_separate",
   "sourceMetadata": "data/terrain-source.json",
   "coverageMetadata": "data/terrain-coverage.geojson",
   "module": "fabdem-layer.js",
   "factory": "SilaFabdem.createLayer({coverage,source,theme,pane,onStatus})",
-  "productRole": "Inline 2D hillshade and true-elevation 3D mesh for terrain form inspection; not flood depth, risk classification or surveyed design levels.",
+  "productRole": "Inline 2D hillshade and true-elevation 3D terrain (MapLibre native terrain, after the CityMETER viewer) for terrain form inspection; not flood depth, risk classification or survey levels.",
   "source": {
     "schema_version": "1.0",
     "dataset_id": "FABDEM-V1-2",
@@ -73,7 +73,7 @@
       103.02077,
       16.636692
     ],
-    "renderRule": "FABDEM district4001 only. 2D clips raster; 3D omits no-data cells and every native cell touched by the district boundary, leaving a conservative empty edge band. No terrain is generated outside verified coverage.",
+    "renderRule": "Measured layers (2D hillshade, 3D height colour, contours, relief statistics) use FABDEM district 4001 only, omitting every pixel touched by the district boundary. The 3D surface shape and shading continue with FABDEM from the same tile service beyond the district so no false cliff appears at the district edge (the municipality lies about 50 m from it); outside the municipality the 3D view is dimmed.",
     "mapFilterMeaning": "Map scope and village boundaries remain context; no new demographic or flood aggregation."
   },
   "runtimeCatalog": {
@@ -84,14 +84,14 @@
     "rule": "Override only in memory when both approved terrain metadata files load; retain historical catalogue bytes."
   },
   "display": {
-    "mapInstance": "Persistent Leaflet 2D plus inline MapLibre6.12 3D controller, shared geographic camera; no iframe or external3D navigation.",
+    "mapInstance": "Persistent Leaflet 2D plus inline MapLibre 6.12 native terrain 3D controller, shared geographic camera; no iframe or external 3D tab.",
     "nativeZoom": 12,
     "maxDisplayZoom": 22,
     "overzoomAddsDetail": false,
     "legend": "neutral hillshade, no numerical elevation domain",
     "heightColourRamp": false,
-    "missingValue": "alpha0 → geometry absent; never zero or RGB-only native DEM decoding",
-    "outsideCoverage": "No mesh; ordinary basemap remains context only.",
+    "missingValue": "alpha 0 → absent: transparent in 2D; in 3D never coloured, contoured or measured (sentinel -9999 drawn transparent); the 3D surface fills such samples from measured neighbours only to avoid a zero wall.",
+    "outsideCoverage": "3D: surface and shading continue with FABDEM from the same service; beyond the FABDEM service (outside Thailand, near the horizon only) the surface is held at the mean measured height. Never coloured, contoured or measured.",
     "sourceFailure": "Keep 2D usable while3D loads; failed3D restores2D with a retry action.",
     "lightAzimuthDegrees2D": 315,
     "lightAltitudeDegrees2D": 45
@@ -108,10 +108,10 @@
   ],
   "rawDEMRehosted": false,
   "rawDEMDownloadExport": false,
-  "automatedReceipt": "../qa/revision-1.6-terrain3d-fixtures.json",
-  "browserReceipt": "../qa/revision-1.6-browser-checks.json",
+  "automatedReceipt": "../qa/revision-1.9-terrain3d-fixtures.json",
+  "browserReceipt": "../qa/revision-1.9-browser-checks.json",
   "inline3DModule": "terrain-3d.js",
-  "inline3DFactory": "SilaTerrain3D.create({container,source,coverage,camera,theme,basemap,boundary,municipality,onStatus,onCameraChange})",
+  "inline3DFactory": "SilaTerrain3D.create({container,source,coverage,camera,theme,basemap,boundary,municipality,exaggeration,tokens,onStatus,onCameraChange,onRelief}) -> controller {ready,getCamera,setCamera,setTheme,setBasemap,setBoundaries,setExaggeration,measureRelief,setSurface,getState,resize,show,hide,destroy}",
   "modes": {
     "queryParameter": "mode",
     "allowed": [
@@ -132,13 +132,15 @@
       ],
       "centreAndZoomSharedOnSwitch": true,
       "scopeIsNotViewport": true,
-      "sceneNavigationBounds": "District4001 bounding box plus0.15degrees context margin; entering from outside this extent can constrain the3D camera."
+      "sceneNavigationBounds": "District4001 bounding box plus0.15degrees context margin; entering from outside this extent can constrain the3D camera.",
+      "bearingDegrees": 0,
+      "northUp": "Always (owner decision 20 Oct 2026): rotation disabled for mouse, touch and keyboard, no compass; tilt by right-drag, ctrl-drag, two fingers up/down or Shift+Up/Down."
     },
     "contextOverlays": "Available in2D; disabled with explanation in3D. Existing selection retained.",
     "recordPicking3D": false,
     "inventedBuildingHeights": false,
     "status": {
-      "meshState": "not_loaded|loading|ready|partial|error",
+      "meshState": "not_loaded|loading|ready|partial|error (ready = first idle frame with surface tiles served by the worker)",
       "basemapState": "not_requested|loading|ready|partial",
       "basemapReadiness": "MapLibre isStyleLoaded() && areTilesLoaded(), refreshed by idle; mesh readiness does not imply basemap tiles are ready.",
       "fallback": "First valid mesh may appear while basemap is loading; neutral surface is explicit fallback. Fatal3D failure restores2D with retry."
@@ -154,7 +156,7 @@
     "precision": "Tile-local Mercator origin; latitude-specific metre conversion.",
     "basemap": "Current-frame projective reprojection when available; neutral surface for offscreen/failed texture support.",
     "heightColourRamp": false,
-    "defaultVerticalExaggeration": "automatic",
+    "defaultVerticalExaggeration": "1.8: automatic; 1.9: 2 times manual (see renderer3D)",
     "noRegionalAccuracyClaim": true,
     "lighting": "Neutral relief shading: illumination 0.5 + 0.62 * max(0, n . normalize(-0.6, -0.6, 0.55)); does not encode elevation or flood risk.",
     "verticalExaggeration": {
@@ -166,7 +168,7 @@
       ],
       "slider": "log scale 0-1000; ex = round(0.5 * exp(ln(100) * v / 1000)); one decimal under 10, whole numbers from 10",
       "automatic": {
-        "defaultOn": true,
+        "defaultOn": false,
         "targetShareOfViewWidth": 0.15,
         "targetRange": [
           0.05,
@@ -178,8 +180,83 @@
       },
       "manual": "moving the slider switches automatic off; URL parameter ex keeps a manual value, ext keeps a non-default target",
       "reasonForAutomaticDefault": "Sila is fairly flat: about 60 m of relief (1st-99th percentile) across about 13 km, so CityMETER's fixed default of 1.5x looks almost flat; automatic 15% gives about 34x for the whole-city view",
-      "boundaryLine": "drawn 2 m plus 1 m per exaggeration step above the exaggerated surface, sampled every 40 m",
+      "boundaryLine": "1.8: drawn 2 m plus 1 m per exaggeration step above the exaggerated surface; 1.9: draped on the surface by MapLibre",
       "notTrueHeight": true
+    },
+    "supersededIn": "1.9: replaced by renderer3D (MapLibre native terrain); kept as the 1.6-1.8 history"
+  },
+  "renderer3D": {
+    "revision": "1.9",
+    "module": "terrain-3d.js 2.0.0",
+    "worker": "terrain-dem-worker.js",
+    "engine": "MapLibre GL JS 6.12.0 raster-dem terrain (level-of-detail mesh, render-to-texture drape)",
+    "parity": "CityMETER terrain viewer technique (landometer.com/v3/citymeter-3d): native MapLibre terrain, color-relief, custom-protocol DEM with Catmull-Rom overzoom to zoom 14, maplibre-contour contours; here all tile work runs in a dedicated Web Worker.",
+    "protocols": {
+      "siladem://geom/{z}/{x}/{y}": "terrain surface heights (terrarium)",
+      "siladem://strict/{z}/{x}/{y}": "height colour source: FABDEM inside district only, -9999 elsewhere",
+      "siladem://hill/{z}/{x}/{y}?k=&t=": "relief shading image (2D rule, slopes x k, light 315/45)",
+      "silacontour://{z}/{x}/{y}?minor=&ratio=": "contour vector tiles (maplibre-contour 0.1.1, BSD-3)"
+    },
+    "overzoom": "native zoom 12 to 14 by clamped Catmull-Rom (no overshoot beyond the 2x2 neighbourhood); a missing tap falls back to bilinear; a missing corner stays absent in strict products",
+    "gapPolicy": "geom: alpha-0 samples take the mean of measured neighbours ring by ring; a tile without any measured sample is refused unless a measured mean exists (beyond the FABDEM service only). strict: absent.",
+    "edgePolicy": "strict products omit every pixel whose square is touched by the district boundary (scanline fill plus edge walk), holes respected",
+    "shading": "worker image; white where a slope faces the light more than flat ground, black where less, alpha by the difference (max 180 dark, 160 light); slope factor k = power of two nearest the exaggeration, 1..64; neighbours across tile edges when loaded, else edge repeated (view edge only)",
+    "contours": "heights scaled by 1/minor so thresholds are integers; level 1 every ratio-th line exactly; widths by zoom instead of spacing fade",
+    "relief": "24 x 24 screen grid unprojected on the terrain, sampled from cached strict FABDEM tiles in the worker (zoom 12 down to 8), trimmed percentiles; unknown samples skipped",
+    "frameBudget": "pixelRatio capped at 2; MSAA only when devicePixelRatio < 2; no per-frame framebuffer copy; sky and horizon in the canvas colour; fog starts at the horizon only",
+    "measured": {
+      "harness": "Chromium headless, SwiftShader software GPU, same machine; scripted 3 s gesture: 1.5 s left-drag (pan) then 1.5 s right-drag (rotate and tilt in 1.8; tilt only in 1.9, which stays north up)",
+      "revision18": {
+        "canvas": "640x408",
+        "windowMs": 267699,
+        "longTasks": 114,
+        "longTaskTotalMs": 262587,
+        "rafMedianMs": 1883.2
+      },
+      "note": "Relative figures on one test machine; not frame rates on phones or real GPUs, which have not been measured.",
+      "revision19": {
+        "default2x": {
+          "canvas": "640x408",
+          "windowMs": 4145,
+          "longTasks": 0,
+          "longTaskTotalMs": 0,
+          "rafMedianMs": 16.7,
+          "bearingAfter": 0
+        },
+        "automatic": {
+          "canvas": "640x408",
+          "exaggeration": "40 to 50",
+          "windowMs": 4092,
+          "longTasks": 2,
+          "longTaskTotalMs": 237,
+          "rafMedianMs": 16.7,
+          "bearingAfter": 0
+        },
+        "default2xLarge": {
+          "canvas": "960x728",
+          "windowMs": 3325,
+          "longTasks": 1,
+          "longTaskTotalMs": 66,
+          "rafMedianMs": 16.6,
+          "bearingAfter": 0
+        }
+      },
+      "cityMETERLiveReference": {
+        "canvas": "1280x800",
+        "windowMs": 5983,
+        "longTasks": 9,
+        "longTaskTotalMs": 857,
+        "rafMedianMs": 549.9,
+        "note": "different page and canvas size; context only"
+      },
+      "receipt": "qa/revision-1.9-terrain3d-benchmark.json"
+    },
+    "defaultVerticalExaggeration": {
+      "value": 2,
+      "mode": "manual",
+      "decidedBy": "owner, 20 Oct 2026",
+      "automaticAvailable": true,
+      "url": "ex=<value> when not 2; ex=auto for automatic; ext=<5..30> target share; a legacy link with only ext opens automatic"
     }
   }
 }

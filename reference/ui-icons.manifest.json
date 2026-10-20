@@ -20,7 +20,8 @@
     "source": "Current human request to improve Sila dataset/navigation/step icons, relayed by parent agent on 2026-10-06",
     "decision": "artifact_owned_subset_extension_for_requested_interface_roles",
     "canonicalDesignSystemPromotion": false,
-    "fullICON01ConformanceClaim": false
+    "fullICON01ConformanceClaim": false,
+    "ownerApproval20261020": "Owner approved the full set of 12 interface roles on 20 Oct 2026 (16:50): street_view → Street View, travel_explore → Google AI Mode, storefront → businesses, home_work → properties, calculate → tax calculator, download → CSV, search → search, layers → layers, warning → needs check, check_circle → passed, schedule → awaiting data, fit_screen → fit area. Nine glyphs are new; download, search and layers were already in the set."
   },
   "roles": {
     "overview": "dashboard",
@@ -48,7 +49,7 @@
     "search": "search",
     "back": "arrow_back",
     "close": "close",
-    "fit": "zoom_out_map",
+    "fit": "fit_screen",
     "dark": "dark_mode",
     "light": "light_mode",
     "more": "more_vert",
@@ -59,7 +60,16 @@
     "next": "chevron_right",
     "done": "check",
     "info": "info",
-    "share": "share"
+    "share": "share",
+    "properties": "home_work",
+    "businesses": "storefront",
+    "streetview": "streetview",
+    "aimode": "travel_explore",
+    "calculator": "calculate",
+    "csv": "download",
+    "needscheck": "warning",
+    "passed": "check_circle",
+    "awaiting": "schedule"
   },
   "assets": [
     {
@@ -727,6 +737,168 @@
       },
       "role": "interface_icon",
       "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "streetview",
+      "path": "assets/ui-icons/streetview.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/streetview/materialsymbolsrounded/streetview_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/streetview/materialsymbolsrounded/streetview_wght300_24px.svg",
+      "bytes": 657,
+      "sha256": "bac48ab1162757c71962ea93317fc9656a579f690815eb3cc965ccd689c0d06d",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "travel_explore",
+      "path": "assets/ui-icons/travel_explore.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/travel_explore/materialsymbolsrounded/travel_explore_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/travel_explore/materialsymbolsrounded/travel_explore_wght300_24px.svg",
+      "bytes": 1101,
+      "sha256": "b543bae11ab4f0800ef8030a9dbcca4596497a003dabcdc7ed9b8628af00ddd1",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "storefront",
+      "path": "assets/ui-icons/storefront.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/storefront/materialsymbolsrounded/storefront_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/storefront/materialsymbolsrounded/storefront_wght300_24px.svg",
+      "bytes": 1398,
+      "sha256": "3adf4c6fa78d1cd844b1015f4a3474f01ca8017bcef5873969a9086e5e95a0aa",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "home_work",
+      "path": "assets/ui-icons/home_work.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/home_work/materialsymbolsrounded/home_work_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/home_work/materialsymbolsrounded/home_work_wght300_24px.svg",
+      "bytes": 1847,
+      "sha256": "71357c67cf096ed76727bd7e0cf59218ee832fbbbb16e0f6b88c2bb2d8746b1c",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "calculate",
+      "path": "assets/ui-icons/calculate.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/calculate/materialsymbolsrounded/calculate_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/calculate/materialsymbolsrounded/calculate_wght300_24px.svg",
+      "bytes": 1812,
+      "sha256": "4aca80c0a50c80eaf3272261912f4527f0beaa7bec44525f67c37dd19e5b0a27",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "warning",
+      "path": "assets/ui-icons/warning.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/warning/materialsymbolsrounded/warning_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/warning/materialsymbolsrounded/warning_wght300_24px.svg",
+      "bytes": 741,
+      "sha256": "5befef50c35baef7606528319130e7bddb5fcf0f3a858c27f7c6d11dfba09f48",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "check_circle",
+      "path": "assets/ui-icons/check_circle.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/check_circle/materialsymbolsrounded/check_circle_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/check_circle/materialsymbolsrounded/check_circle_wght300_24px.svg",
+      "bytes": 811,
+      "sha256": "502dba46bc8fa4266c0dc4cce111981884b8d1a3b2a3370e34cdf1f81a73aeae",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "schedule",
+      "path": "assets/ui-icons/schedule.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/schedule/materialsymbolsrounded/schedule_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/schedule/materialsymbolsrounded/schedule_wght300_24px.svg",
+      "bytes": 786,
+      "sha256": "4313e5f4cb2b1524223309dfaa748efa9df3a38ca82d7f631c450abb93097cb6",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "fit_screen",
+      "path": "assets/ui-icons/fit_screen.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/fit_screen/materialsymbolsrounded/fit_screen_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/fit_screen/materialsymbolsrounded/fit_screen_wght300_24px.svg",
+      "bytes": 1483,
+      "sha256": "cd7de9227381e921801342f3a7ec93f33fd5f63b191e462ec9c11c7f0373a32c",
+      "axes": {
+        "FILL": 0,
+        "wght": 300,
+        "GRAD": 0,
+        "opsz": 24
+      },
+      "role": "interface_icon",
+      "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
     }
   ],
   "adapter": {
@@ -743,7 +915,7 @@
     "New product-owned glyph extension is not a promotion into the canonical LDS shared subset."
   ],
   "validation": {
-    "sourceSVGFiles": "37 UTF-8 SVGs from pinned official source, original path bytes retained",
+    "sourceSVGFiles": "46 UTF-8 SVGs from pinned official source, original path bytes retained",
     "nativeOpticalSize": 24,
     "renderReview": "pending root desktop/narrow light/dark review"
   }

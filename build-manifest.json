@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.8",
-  "builtAtUtc": "2026-10-20T04:26:07.582761+00:00",
+  "revision": "1.9",
+  "builtAtUtc": "2026-10-20T10:26:37.232702+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -34,13 +34,13 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.8-browser-checks.json",
-  "publicationAudit": "qa/revision-1.8-publication-audit.json",
+  "browserReceipt": "qa/revision-1.9-browser-checks.json",
+  "publicationAudit": "qa/revision-1.9-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 69557,
-      "sha256": "5c656dfcaa2debbbc90c5199bca0e01347d563e8cc10db3d7a43c2e001a482f9",
+      "bytes": 81114,
+      "sha256": "f44c81e9940d46b33f5830dac7e4b84225a6227156c301280b5efd03581f91f2",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 318568,
-      "sha256": "db309e556e2f0064b1b0098bf28682296aee2c880ffe1f17b9cf51b5a24623c2",
+      "bytes": 394415,
+      "sha256": "b7d2c8c953a2e5cea4dd592a6b91a8de2e955b97b5330af0ffc5c9916f512707",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -442,9 +442,25 @@
       ]
     },
     {
+      "path": "assets/ui-icons/calculate.svg",
+      "bytes": 1812,
+      "sha256": "4aca80c0a50c80eaf3272261912f4527f0beaa7bec44525f67c37dd19e5b0a27",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/check.svg",
       "bytes": 361,
       "sha256": "140bec93faf182e3e08c686184d6e3a23acc9782641411688d03abe137cc4491",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/check_circle.svg",
+      "bytes": 811,
+      "sha256": "502dba46bc8fa4266c0dc4cce111981884b8d1a3b2a3370e34cdf1f81a73aeae",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -493,6 +509,14 @@
       "path": "assets/ui-icons/download.svg",
       "bytes": 815,
       "sha256": "43fe2948740aca9f784eb1634c49405f15bc78aec7b70e0aef49dc7e3b843d05",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/fit_screen.svg",
+      "bytes": 1483,
+      "sha256": "cd7de9227381e921801342f3a7ec93f33fd5f63b191e462ec9c11c7f0373a32c",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -549,6 +573,14 @@
       "path": "assets/ui-icons/home.svg",
       "bytes": 753,
       "sha256": "8abfc7c2b027419ce9e30bfa80a2b27e3aa808b8e8c8ce7e8832096326328458",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/home_work.svg",
+      "bytes": 1847,
+      "sha256": "71357c67cf096ed76727bd7e0cf59218ee832fbbbb16e0f6b88c2bb2d8746b1c",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -658,6 +690,14 @@
       ]
     },
     {
+      "path": "assets/ui-icons/schedule.svg",
+      "bytes": 786,
+      "sha256": "4313e5f4cb2b1524223309dfaa748efa9df3a38ca82d7f631c450abb93097cb6",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/school.svg",
       "bytes": 1066,
       "sha256": "aa19a32ced303b19baab867c0146df9ba45a9942fb63d3ee1c87593efb8e8fac",
@@ -682,9 +722,41 @@
       ]
     },
     {
+      "path": "assets/ui-icons/storefront.svg",
+      "bytes": 1398,
+      "sha256": "3adf4c6fa78d1cd844b1015f4a3474f01ca8017bcef5873969a9086e5e95a0aa",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/streetview.svg",
+      "bytes": 657,
+      "sha256": "bac48ab1162757c71962ea93317fc9656a579f690815eb3cc965ccd689c0d06d",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/travel_explore.svg",
+      "bytes": 1101,
+      "sha256": "b543bae11ab4f0800ef8030a9dbcca4596497a003dabcdc7ed9b8628af00ddd1",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/videocam.svg",
       "bytes": 578,
       "sha256": "f7151c37266f95dea4e29cbeec8e5ecad565d820351d148275442c3acfc75d2a",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/warning.svg",
+      "bytes": 741,
+      "sha256": "5befef50c35baef7606528319130e7bddb5fcf0f3a858c27f7c6d11dfba09f48",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -750,8 +822,18 @@
     },
     {
       "path": "data/buildings.geojson",
-      "bytes": 33391356,
-      "sha256": "6c7db649888386de6953befe16035b70215694e470e7e8e78f6eeac35e37a1d5",
+      "bytes": 33435967,
+      "sha256": "76995074a940db0c5bce52f6dde30e74fb8827232747301cfea9ce5e37a71bb4",
+      "mimeTypes": [
+        "application/geo+json",
+        "application/json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "data/businesses.geojson",
+      "bytes": 375333,
+      "sha256": "42343244418de7e56db1b38267a3cf1ed6b0301a6202fefa05f5f126deb429e8",
       "mimeTypes": [
         "application/geo+json",
         "application/json",
@@ -760,8 +842,8 @@
     },
     {
       "path": "data/catalog.json",
-      "bytes": 92046,
-      "sha256": "b3de626d772201e3bd73978966f646654413a1edf27f2b23ecfd35656cc269f8",
+      "bytes": 95473,
+      "sha256": "607fb7b23456c99600bcbc89a08b37b43a55ba2d22f52c20061c4e5449d6b0d6",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -860,8 +942,8 @@
     },
     {
       "path": "data/municipal-summary.json",
-      "bytes": 55706,
-      "sha256": "3709f86a4c024b21dfabfc691673645646eb22a00828f4b88badf02ba215d9c0",
+      "bytes": 61086,
+      "sha256": "a1f58b24555856c0e92d2f931ad0d965fe20db24a94a79f820cd058302fb5861",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -880,8 +962,8 @@
     },
     {
       "path": "data/parcel-tax.json",
-      "bytes": 3293511,
-      "sha256": "38350cef92304b45fccfe9950bc5f7c972af11f58e5144bcfbf92686d5b35b1d",
+      "bytes": 5078001,
+      "sha256": "37c8f79d4ab1f51e30f31d19e1662dcb88f1af95e15b92c282a86a471f11a0d7",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -970,8 +1052,8 @@
     },
     {
       "path": "data/terrain-source.json",
-      "bytes": 2657,
-      "sha256": "9aca4e714bd6660431caebf41381aabde0d70ccbea49212eab6f24acc122e507",
+      "bytes": 2877,
+      "sha256": "b6ddd968f4cad37f4798c7c6a9de473e5cb84f2d923a7041344364acac47f7a3",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1045,16 +1127,16 @@
     },
     {
       "path": "index.html",
-      "bytes": 15271,
-      "sha256": "08142fa0237a2fc95daccdb9d0e343bafa904ad30ec26fbe07d38c27446d0a9f",
+      "bytes": 15289,
+      "sha256": "ae3e937281512b0138fcef589c1850542ba02f0c97bdb8e171aab5594b1d0d18",
       "mimeTypes": [
         "text/html"
       ]
     },
     {
       "path": "map-layers.css",
-      "bytes": 13922,
-      "sha256": "71a4eed3baef3a4d114834ff1d8e377c0446365717d81a74bb85ce6ae61c069f",
+      "bytes": 19289,
+      "sha256": "b6f72588741a3ef8c96e4c35262e48671599571700bf663213429519c4d10de6",
       "mimeTypes": [
         "text/css"
       ]
@@ -1078,8 +1160,8 @@
     },
     {
       "path": "missions.js",
-      "bytes": 12018,
-      "sha256": "959606835cc428083c6a1c61bb56268c0beb712451bb5e943ab80917802ed0b5",
+      "bytes": 13716,
+      "sha256": "dbbe67ac12839f9412cd7c4aa359f6b0a75f5f289059f1d30e89675194c2e748",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1095,8 +1177,8 @@
     },
     {
       "path": "public-aggregate.js",
-      "bytes": 11371,
-      "sha256": "6cfe5cd00d463bf8aea1e75c7bdaf1c29fb3af1e94425eefbc0448b5e172909d",
+      "bytes": 12666,
+      "sha256": "cfa9f3393cba5777d54fde6df56860cd74e1748e2edeb87d50739697302ebae3",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1137,8 +1219,8 @@
     },
     {
       "path": "qa/check-public-aggregate.cjs",
-      "bytes": 6803,
-      "sha256": "789b0d4f97fa95f1c1075fb6cc859e6d5b0676f4f0549dfcb10655ec7f5845fa",
+      "bytes": 6849,
+      "sha256": "cff916303e6a451cf1a292c93790c9e42600e13a512cca050a8a752f92512f53",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
@@ -1159,8 +1241,8 @@
     },
     {
       "path": "qa/check-tax-engine.cjs",
-      "bytes": 10866,
-      "sha256": "8e3124a2a99278751ec99b15b5511d0d9c84ba1d4bf4c037eba7b190862b18ce",
+      "bytes": 14874,
+      "sha256": "700e2700ef7ae183c81cc2e5282e29e8e9fba3cf72a484e08028eff148552043",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
@@ -1170,8 +1252,8 @@
     },
     {
       "path": "qa/check-terrain-3d.cjs",
-      "bytes": 8093,
-      "sha256": "8c5915c55e842bd98084f282b8a50d6b8329d2641e745180560139d38240de88",
+      "bytes": 14704,
+      "sha256": "5cfa8253002024e5ca148831fde0e3d0ea0431e3f485c523e58742e7b14ea0fa",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
@@ -1608,6 +1690,56 @@
       ]
     },
     {
+      "path": "qa/revision-1.9-accessibility-checks.json",
+      "bytes": 5423,
+      "sha256": "ab7be58a3be44aea0e2d327e2565e493bed4f39c4054df8abe918b78f5acf978",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.9-browser-checks.json",
+      "bytes": 9975,
+      "sha256": "143bdb856c9c4c3da4261f87f7846f0ce0fd943cc262440e2c5ab3abb713ebb9",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.9-publication-audit.json",
+      "bytes": 6917,
+      "sha256": "5f6fbe1f0c2ab83916a56f4ffaf9a4fc30350cf82e2332aeb470ab9c99ba6fd1",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.9-terrain3d-benchmark.json",
+      "bytes": 4843,
+      "sha256": "2f7d71b7245ef535e6f3ab49a4c07e7bf2010a93206db2082863a01be4e091d1",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-1.9-terrain3d-fixtures.json",
+      "bytes": 1133,
+      "sha256": "778ba4c18ba48616ade334b827d7878b64b68f22207ec2d708abdeab35c0392f",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "qa/verifier-fixture-checks.json",
       "bytes": 574,
       "sha256": "c58815981ae54b36b4b1d0b1c966c3bd3e0c5953b7e88c4c096a82ea8c6b8de8",
@@ -1819,8 +1951,8 @@
     },
     {
       "path": "reference/tax-map-method.md",
-      "bytes": 23533,
-      "sha256": "27c9bab5a0bebd19bf88cdeb1b7d980014addb633ccb08385d02c2c16db95361",
+      "bytes": 32544,
+      "sha256": "bd64c6317b476e9a16e81abff1849db463be622f1ae174ea0acfccfb0d439ccd",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1829,8 +1961,8 @@
     },
     {
       "path": "reference/terrain-contract.json",
-      "bytes": 9766,
-      "sha256": "fabe190c2873e83a98562fd641296016d2c8a5ab48dd852deb9aba3e82678fb3",
+      "bytes": 15093,
+      "sha256": "0648269348766f684605ab9a47351e0e09f2cf498aa0cee12b9f30c4b16682bb",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1839,8 +1971,8 @@
     },
     {
       "path": "reference/terrain-contract.md",
-      "bytes": 15650,
-      "sha256": "cd049297ac976118935597c6129328e98724b228a91b980eeaaffc0353fdc7e7",
+      "bytes": 21974,
+      "sha256": "e3cac06f64c246b37d2d9c306eb7f61cd712e98e6780b31072bd47010a502f61",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1859,8 +1991,8 @@
     },
     {
       "path": "reference/ui-icons.manifest.json",
-      "bytes": 34371,
-      "sha256": "6f4c71ffe680d586f69842e86d33b0018e4661f0f8f9234b98d4d0ae013d5fdc",
+      "bytes": 42790,
+      "sha256": "dc3dce7843416c90ce7b095e0088b5853b60866befaba88dd7849cfbc57141c4",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -2015,8 +2147,8 @@
     },
     {
       "path": "tax-engine.js",
-      "bytes": 20073,
-      "sha256": "9a658cb921274be298b3ffd8e4498b5f925a6f023e22feb37025d86746b1a676",
+      "bytes": 27340,
+      "sha256": "fccac70686f67f7d0806c00f6bce2036e479be6c002fc40ccd48564dcb0df709",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -2024,8 +2156,17 @@
     },
     {
       "path": "terrain-3d.js",
-      "bytes": 43149,
-      "sha256": "02eba6586bcd3f9f7e323e550253812324d00c8d9df365566f967626209df552",
+      "bytes": 32122,
+      "sha256": "80fc9fbef423e48fa7d399bc07b223f8ad69dbffd8f13d2aa6339d5bb92c4bdf",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "terrain-dem-worker.js",
+      "bytes": 22538,
+      "sha256": "35ea7fcbfe35387a18b6b355eba178c8471c5eec33053930ec494165002ba186",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -2071,8 +2212,8 @@
     },
     {
       "path": "ui-icons.js",
-      "bytes": 34631,
-      "sha256": "580bb7df2be978eebfaa6a3af0e7ee9a38bbaccd7a9bee84764c0f849b2538c4",
+      "bytes": 45031,
+      "sha256": "fdfe8ef67f2e8d55f704e6bb6386765150bc4a8ff4458d0c9f0970f21fbb1946",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -2161,6 +2302,34 @@
         "application/json",
         "application/geo+json",
         "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-contour/LICENSE.txt",
+      "bytes": 3481,
+      "sha256": "b4a3261f4af65db24e6a2ca23093ac25619e6fe0b5ca5ec75fb09a49817b5c8d",
+      "mimeTypes": [
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-contour/SOURCE.md",
+      "bytes": 771,
+      "sha256": "39d898b11c4c2776112fee38d258ebada543bc7d32152fb626a3fbe78c90cdf4",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/maplibre-contour/maplibre-contour.min.js",
+      "bytes": 31240,
+      "sha256": "055e45d0a76aaeaaf5a96765b8ce524abba3272456be75e715081e235ebd1262",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
       ]
     },
     {
@@ -3253,8 +3422,8 @@
   "releaseState": "source_release_provider_attestation_separate",
   "originalGISDatasets": 16,
   "additionalMunicipalSummaryViews": 5,
-  "runtimeDatasetsWhenSummaryReady": 21,
-  "additionalSourceReceivedAt": "2026-10-19",
+  "runtimeDatasetsWhenSummaryReady": 23,
+  "additionalSourceReceivedAt": "2026-10-20",
   "additionalSourceFiles": 15,
   "publicSummary": {
     "path": "data/municipal-summary.json",
@@ -3262,8 +3431,8 @@
     "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.7",
-  "previousPublishedCommit": "90b46d154d8de3dc6e5c75ff4576323a192f6a44",
+  "previousPublishedRevision": "1.8",
+  "previousPublishedCommit": "66de01a00941630a3bb87b01ad14ae2ba6b66d62",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 3,
   "additionalMunicipalFilesInspectedThisUpdate": 6,
@@ -3284,15 +3453,22 @@
     "rawDEMRehosted": false,
     "runtimeCatalogOverrideOnly": true,
     "inline3D": true,
-    "module": "terrain-3d.js",
+    "module": "terrain-3d.js 2.0.0",
     "modeParameter": "mode=2d|3d",
     "samePage": true,
     "external3DTabRequired": false,
     "pixelRegistration": "native_cell_centres",
-    "nodata3D": "geometry_absent",
+    "nodata3D": "measured layers absent (sentinel -9999, transparent); surface gap-filled from measured neighbours only",
     "meshDEMStateSeparateFromBasemap": true,
     "nativeApproxResolutionMetres": 30,
-    "baselineDataFilesPreserved": 22
+    "baselineDataFilesPreserved": 22,
+    "worker": "terrain-dem-worker.js",
+    "renderer": "maplibre-native-terrain (CityMETER technique)",
+    "overzoom": "clamped Catmull-Rom 12 -> 14 in worker",
+    "surfaceBeyondDistrict": "FABDEM from the same service, shape and shading only",
+    "northUp": true,
+    "defaultVerticalExaggeration": 2,
+    "contours": "maplibre-contour 0.1.1 (BSD-3) in worker"
   },
   "missionNavigation": {
     "module": "missions.js",
@@ -3321,19 +3497,19 @@
     "officialAssessment": false
   },
   "dataFilesChangedThisRevision": [
-    "data/parcels.geojson",
-    "data/buildings.geojson",
-    "data/houses.geojson",
     "data/parcel-tax.json",
-    "data/population-grid.geojson",
-    "data/population-structure.json",
+    "data/buildings.geojson",
+    "data/businesses.geojson",
     "data/catalog.json",
-    "data/metadata.json"
+    "data/municipal-summary.json",
+    "data/terrain-source.json"
   ],
   "analyticViews": [
     "taxmap",
     "appraisal",
-    "popgrid"
+    "popgrid",
+    "properties",
+    "businesses"
   ],
   "revision18": {
     "sourceReceived": "2026-10-19",
@@ -3384,20 +3560,89 @@
     "terrainPalettes": "OH3 palettes as an owner-approved exception for ground height only; see reference/terrain-palettes.json",
     "publicSafety": "House-number fields keep numbers only (surveyor notes removed); survey status per point is not published (only whether a point is a new survey position); building use is published only in groups (rented or used by others, parking or storage, farming or livestock, and one group for everything else including owner-occupied, vacant and not stated); the population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
   },
-  "patches": [
-    {
-      "date": "2026-10-20",
-      "change": "2D terrain drawn as one canvas for the whole view (no per-tile canvases); 3D terrain receives mouse, trackpad and touch gestures again (a basemap style had switched off pointer events on every MapLibre canvas).",
-      "browserReceiptFlow": "terrainGestures"
+  "patches": [],
+  "accessibilityReceipt": "qa/revision-1.9-accessibility-checks.json",
+  "terrain3dBenchmark": "qa/revision-1.9-terrain3d-benchmark.json",
+  "revision19": {
+    "sourceReceived": {
+      "pds3_2563": "2026-10-20",
+      "vatRegistrants": "data.go.th, downloaded 2026-10-17"
     },
-    {
-      "date": "2026-10-20",
-      "change": "Tax and appraisal maps use the LDS 0.9.7 41-sample LUT on fixed city-wide ranges; figures set in JetBrains Mono (technical/data role); sliders for new land and building prices move the map; buildings, house points and parcels show the titles under them and the set of titles likely taxed together (joined by one building, s.42 para 2 proxy).",
-      "browserReceiptFlows": [
-        "assumptionSliders",
-        "titleSets"
-      ],
-      "method": "reference/tax-map-method.md"
-    }
-  ]
+    "owners2563": {
+      "titles": 34861,
+      "owners": 20938,
+      "parcelsWithOwner": 29098,
+      "ownerCodesOnMap": 18567,
+      "assumption": "ownership unchanged since 2563; 2569 debtor links take precedence",
+      "houseNumberAgreementWhereVerifiable": {
+        "owner2563Links": [
+          5128,
+          6822
+        ],
+        "bridgeTo2569": [
+          1152,
+          1537
+        ]
+      },
+      "codeAreaLinksDroppedForHouseNumberConflict": 508
+    },
+    "taxLinkage": {
+      "parcelsOnRoll": 34918,
+      "byDeedNumber": 22703,
+      "byHouseNumbers": 3975,
+      "bridged2563": 8240,
+      "parcelsWithTax2569": 34573,
+      "tax2569OnMapTHB": 27882712.16,
+      "zeroProvenExempt": 18115,
+      "taxedParcelsOutsideBoundaryLine": 59,
+      "impossiblePrintAsUnknown": 1
+    },
+    "scenario2570AtCurrentPrices": {
+      "currentMethodTHB": 27882712.16,
+      "withAllFixesTHB": 29349630.21,
+      "gainTHB": 1466918.05,
+      "byFixAloneTHB": {
+        "mixedUse": 851319,
+        "combine": 379871,
+        "rented": 82093,
+        "newBuildings": 76184,
+        "mainHomeOnce": 45069,
+        "juristic": 28601,
+        "agriShare": 3444,
+        "combineBuilding": 0
+      }
+    },
+    "buildingRoll": {
+      "onRoll": 12628,
+      "rollRecordsLinked": 13584,
+      "houseNumberAbsentTitleComplete": 115,
+      "houseNumberAbsentTitleHasUnlinked": 531,
+      "houseNumberOnOtherTitle": 3021,
+      "parcelOnRollNoPoint": 11703,
+      "parcelNotOnRoll": 6219,
+      "noParcel": 4532
+    },
+    "properties": {
+      "multiParcel": 3286,
+      "parcelsInMultiParcel": 8888,
+      "largestParcels": 96,
+      "withGainCityWide": 660,
+      "gainSumTHB": 1102259
+    },
+    "businesses": {
+      "juristicRows": 1069,
+      "pinned": 661,
+      "notPlaced": 408,
+      "naturalPersonsNotPublished": 138,
+      "officialWebsites": {
+        "companies": 29,
+        "pins": 37,
+        "rule": "two independent sources"
+      }
+    },
+    "mapPopups": "compact peek: title, 2-3 key figures (1 on phones), a count of things to check, details and Street View actions",
+    "phones": "no page-level sideways scroll at 320-412 px in Thai and English; wide tables scroll in their own focusable regions",
+    "icons": "owner approved 12 interface roles on 20 Oct 2026; 9 new Material Symbols Rounded glyphs from the pinned source commit (streetview, travel_explore, storefront, home_work, calculate, warning, check_circle, schedule, fit_screen); download, search and layers reused; see reference/ui-icons.manifest.json",
+    "publicSafety": "Owner names, natural-person registrants, ID and tax numbers, addresses and deed numbers are not published; owner codes are random; Google AI questions carry no coordinates or IDs. See qa/revision-1.9-publication-audit.json."
+  }
 }

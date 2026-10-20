@@ -13,6 +13,7 @@
   "encoding": "terrarium",
   "decode": "R * 256 + G + B / 256 - 32768",
   "noData": "alpha 0; preserve transparent, no fallback or zero substitution",
+  "noData3D": "Revision 1.9: in 3D, height colour, contours and relief statistics stay absent (transparent, never zero); only the surface shape fills an alpha-0 sample from measured neighbours so no zero wall appears.",
   "unit": "m",
   "unit_basis": "Terrain consumer elevation convention/UI; manifest does not have a standalone unit field",
   "verticalDatum": null,

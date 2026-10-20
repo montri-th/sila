@@ -12,6 +12,11 @@
     taxmap: {label: ['ภาษีที่ดินรายแปลง', 'Land tax by parcel'], kind: 'parcel-choropleth',
       benefit: ['ดูภาษีที่ประเมินปี 2569 ของแต่ละแปลง เทียบกับภาษีปี 2570 ที่คาดไว้ ทั้งวิธีเดิมและตามข้อเสนอ', 'Compare each parcel’s 2569 assessed tax with 2570 estimates under the current method and with proposed fixes'],
       supplements: ['tax'], tools: ['tax-calculator']},
+    properties: {label: ['ทรัพย์สินรายเจ้าของ: ภาษีที่เพิ่มได้', 'Properties by owner: tax that can be added'], kind: 'parcel-choropleth',
+      benefit: ['แผนที่ทำงาน: ทรัพย์สินคือแปลงที่ติดกันของเจ้าของเดียวกันพร้อมอาคาร ดูว่าภาษีปี 2570 ตามข้อเสนอเพิ่มจากวิธีเดิมกี่บาท กี่เปอร์เซ็นต์ และควรจัดการรายใดก่อน', 'Work map: a property is the adjoining parcels of one owner with their buildings; see how much the 2570 tax with fixes adds over the current method, in baht and percent, and which to handle first'],
+      supplements: ['tax'], tools: ['tax-calculator']},
+    businesses: {label: ['ธุรกิจนิติบุคคลที่จดทะเบียน VAT', 'VAT-registered companies'], kind: 'points',
+      benefit: ['ดูบริษัทและห้างหุ้นส่วนที่จดทะเบียนภาษีมูลค่าเพิ่มในตำบลศิลา ตั้งอยู่บนทรัพย์สินใด และค้นข้อมูลกิจการต่อด้วย Google AI Mode', 'See companies and partnerships registered for VAT in Sila, which property they sit on, and look them up further with Google AI Mode']},
     appraisal: {label: ['ราคาประเมินที่ดินรายแปลง', 'Land appraisal by parcel'], kind: 'parcel-choropleth',
       benefit: ['ดูราคาประเมินที่ดิน บาทต่อตารางวา ทีละแปลงตามขอบโฉนด', 'See the land appraisal price in baht per square wah for each parcel']},
     buildings: {label: ['อาคาร บ้านเลขที่ และบัญชีภาษี', 'Buildings, house numbers and the tax roll'], kind: 'polygons',
@@ -44,7 +49,7 @@
   });
 
   const MISSIONS = Object.freeze([
-    {id: 'tax', icon: 'parcels', label: ['ภาษีและรายได้', 'Tax and revenue'], layers: ['taxmap', 'appraisal', 'buildings', 'houses']},
+    {id: 'tax', icon: 'parcels', label: ['ภาษีและรายได้', 'Tax and revenue'], layers: ['taxmap', 'properties', 'appraisal', 'buildings', 'houses', 'businesses']},
     {id: 'flood', icon: 'flood', label: ['น้ำท่วมและภัยพิบัติ', 'Flood and disaster'], layers: ['terrain', 'waterways', 'popgrid', 'roads', 'cctv']},
     {id: 'care', icon: 'population', label: ['ดูแลคนและสาธารณสุข', 'Care and public health'], layers: ['popgrid', 'population', 'health', 'education']},
     {id: 'works', icon: 'roads', label: ['โยธาและบริการสาธารณะ', 'Public works and services'], layers: ['roads', 'publicfacilities', 'cctv', 'education', 'religion', 'buildings']},
@@ -71,7 +76,7 @@
   });
 
   const UNIT = Object.freeze({
-    taxmap: ['แปลง', 'parcels'], appraisal: ['แปลง', 'parcels'], overview: ['หมู่บ้าน', 'villages'], houses: ['จุด', 'points'],
+    taxmap: ['แปลง', 'parcels'], properties: ['ทรัพย์สิน', 'properties'], businesses: ['ราย', 'businesses'], appraisal: ['แปลง', 'parcels'], overview: ['หมู่บ้าน', 'villages'], houses: ['จุด', 'points'],
     buildings: ['อาคาร', 'buildings'], parcels: ['แปลง', 'parcels'], roads: ['ช่วงถนน', 'segments'], cctv: ['กล้อง', 'cameras'],
     education: ['แห่ง', 'places'], health: ['แห่ง', 'places'], religion: ['แห่ง', 'places'], publicfacilities: ['พื้นที่', 'areas'],
     waterways: ['แหล่งน้ำ', 'features'], population: ['หมู่บ้าน', 'villages'], popgrid: ['ช่อง', 'cells'], terrain: ['ภาพ', 'view'],

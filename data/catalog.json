@@ -987,9 +987,9 @@
    "geojson": "data/parcels.geojson",
    "sourceFolders": [],
    "caveats": [
-    "2569 tax per title from the PDS 7 roll (LTAX export received 19 Oct 2026), joined to parcels by deed number; titles joined through house numbers instead are marked as a weaker link.",
-    "Missing values stay blank, never zero; a 0 THB tax appears only where the roll proves the title fully exempt.",
-    "The PDS exports carry no owner name or taxpayer code, so owner portfolios (s.40 farm allowance, s.42 para 2 combining) and per-parcel payments are not computed, except titles on the debtor list.",
+    "2569 tax per title from the PDS 7 roll (LTAX export received 19 Oct 2026), joined to parcels by deed number, through house numbers (weaker), or through the 2563 PDS 3 list (deed or map code and area, received 20 Oct 2026).",
+    "Missing values stay blank, never zero; a 0 THB tax appears only where the roll proves the title fully exempt; a printed tax above 3% of the title value is impossible under the Act and is shown as unknown.",
+    "Owners come from the 2563 PDS 3 list and are assumed unchanged since 2563; owner names are never published (random codes). Payment status is shown only for titles on the 2569 debtor list.",
     "2570 figures are scenarios: the current method scales 2569 tax by the change in the legal formula; proposed fixes add the difference from corrected inputs. Not an assessment."
    ],
    "scopeCounts": {
@@ -1031,6 +1031,120 @@
     }
    },
    "attributes": "data/parcel-tax.json"
+  },
+  {
+   "id": "properties",
+   "label": "ทรัพย์สินรายเจ้าของ: ภาษีที่เพิ่มได้",
+   "group": "Land",
+   "status": "source_supplied_20261020",
+   "geometryType": "polygon",
+   "count": 23781,
+   "mappedCount": 40920,
+   "geojson": "data/parcels.geojson",
+   "sourceFolders": [],
+   "caveats": [
+    "A property is the adjoining parcels (shared boundary of at least 1 m) of one owner in the 2563 PDS 3 list, with the buildings on them; a single owned parcel is its own property.",
+    "Owners are assumed unchanged since 2563; titles sold, inherited or subdivided since then can carry the wrong owner. Check the deed before acting.",
+    "The gain is 2570 with the selected fixes minus the 2570 current method, summed over the property’s parcels that have a 2569 tax. A scenario, not an assessment.",
+    "Owner names are never published; owner codes are random. A business located on a property is not necessarily its owner."
+   ],
+   "scopeCounts": {
+    "municipality": 23733,
+    "villages": {
+     "v01": 963,
+     "v02": 2949,
+     "v03": 1836,
+     "v04": 633,
+     "v05": 291,
+     "v06": 185,
+     "v07": 923,
+     "v08": 633,
+     "v09": 205,
+     "v10": 886,
+     "v11": 590,
+     "v12": 1444,
+     "v13": 545,
+     "v14": 1718,
+     "v15": 1344,
+     "v16": 944,
+     "v17": 1208,
+     "v18": 493,
+     "v19": 306,
+     "v20": 624,
+     "v21": 701,
+     "v22": 565,
+     "v23": 395,
+     "v24": 387,
+     "v25": 665,
+     "v26": 2172,
+     "v27": 565,
+     "v28": 638
+    },
+    "elections": {
+     "e01": 7396,
+     "e02": 7219,
+     "e03": 9472
+    }
+   },
+   "attributes": "data/parcel-tax.json"
+  },
+  {
+   "group": "Location",
+   "sourceFolders": [],
+   "id": "businesses",
+   "label": "ธุรกิจนิติบุคคลที่จดทะเบียน VAT",
+   "status": "open_data_20261017",
+   "geometryType": "point",
+   "count": 661,
+   "mappedCount": 661,
+   "geojson": "data/businesses.geojson",
+   "notPlaced": {
+    "juristic": 408,
+    "individuals": 138
+   },
+   "caveats": [
+    "Juristic VAT registrants from the Revenue Department open data (data.go.th), downloaded 17 Oct 2026, pinned where the registered house number and moo match a survey point or the address names a deed; sole proprietors are not published.",
+    "No tax IDs, addresses or deed numbers are published. The list gives no business type and may include closed businesses.",
+    "A business located on a property is not necessarily the land owner.",
+    "An official website is shown only where the company’s own site was confirmed by two independent sources (checked 20 Oct 2026); it describes the company, not the Sila branch."
+   ],
+   "scopeCounts": {
+    "municipality": 654,
+    "villages": {
+     "v01": 18,
+     "v02": 115,
+     "v03": 58,
+     "v05": 3,
+     "v06": 3,
+     "v07": 9,
+     "v08": 12,
+     "v09": 1,
+     "v10": 10,
+     "v11": 6,
+     "v12": 33,
+     "v13": 21,
+     "v14": 57,
+     "v15": 65,
+     "v16": 11,
+     "v17": 20,
+     "v18": 4,
+     "v19": 14,
+     "v20": 20,
+     "v21": 15,
+     "v22": 16,
+     "v23": 8,
+     "v24": 37,
+     "v25": 25,
+     "v26": 45,
+     "v27": 27,
+     "v28": 8
+    },
+    "elections": {
+     "e01": 255,
+     "e02": 215,
+     "e03": 191
+    }
+   }
   },
   {
    "id": "appraisal",
