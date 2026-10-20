@@ -12,5 +12,9 @@
   position: absolute;
   left: 0;
   top: 0;
+}
+/* Only the street-map bridge inside Leaflet ignores the pointer. The 3D terrain map (#terrain-3d) sits outside
+   .leaflet-container and must receive drag, wheel, trackpad and touch gestures on its own canvas. */
+.leaflet-container .maplibregl-canvas {
   pointer-events: none;
 }

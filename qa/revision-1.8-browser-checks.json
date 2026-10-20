@@ -1,6 +1,6 @@
 {
  "schema": "sila-browser-checks/1.8",
- "checkedAtUtc": "2026-10-20T00:46:27.312644+00:00",
+ "checkedAtUtc": "2026-10-20T02:13:42.693350+00:00",
  "base": "local preview of the revision-1.8 tree (python http.server, loopback)",
  "browser": "Chromium 141.0.7390.37",
  "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
@@ -231,6 +231,17 @@
    "focusOutline": "solid 2px",
    "legendHasUnmatchedGroup": true,
    "pageErrors": []
+  },
+  "terrainGestures": {
+   "wheelZooms": true,
+   "pinchZooms": true,
+   "sidewaysSwipePans": true,
+   "dragPans": true,
+   "pageErrors": [],
+   "phoneOneFingerPans": true,
+   "phonePinchZooms": true,
+   "terrain2DSingleCanvas": true,
+   "terrain2DReadyAfterZoom": true
   }
  },
  "summary": {

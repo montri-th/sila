@@ -122,6 +122,7 @@
     }
     return lut;
   }
+  const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
   function renderTerrain(heights, width, height, mpp, o = {}) {
     const out = new Uint8ClampedArray(width * height * 4), dark = o.theme === 'dark';
     const lut = o.colorOn === false ? null : o.lut, lo = o.lo, hi = o.hi, span = hi - lo;
@@ -135,42 +136,57 @@
       return (a + (q[b] > q[a] ? (h - q[a]) / (q[b] - q[a]) : 0)) / 100;
     };
     const colour = !!(lut && Number.isFinite(lo) && Number.isFinite(hi) && span > 0);
+    // Height -> colour index, tabulated from tOf (4096 steps across the colour range) so each pixel is one lookup.
+    let tBase = 0, tInv = 0, tTab = null; const tN = 4096;
+    if (colour) {
+      const a = q ? q[0] : lo, b = q ? q[100] : hi, step = (b - a) / tN;
+      tBase = a; tInv = step > 0 ? 1 / step : 0; tTab = new Uint8Array(tN + 1);
+      for (let i = 0; i <= tN; i++) tTab[i] = Math.round(tOf(a + i * step) * 255);
+    }
+    // Canvas pixels per CSS pixel: line widths and fading are measured in CSS pixels, so a sharper canvas keeps the same look.
+    const ls = o.lineScale > 0 ? o.lineScale : 1;
     const interval = o.contourOn === false ? 0 : (o.interval > 0 ? o.interval : 0), major = interval * (o.major || 5), band = o.bands > 0 ? o.bands : 0;
     // Over the height colours, lines use the same dark ink in both themes, as the colours themselves do; with shading only they follow the theme.
     const ink = colour || !dark;
     const line = o.lineRGB || (ink ? [24, 35, 39] : [241, 244, 239]), opacity = Number.isFinite(o.opacity) ? o.opacity : 0.85;
     const alt = Math.PI / 4, az = 315 * Math.PI / 180, flat = Math.sin(alt);
-    const light = [Math.sin(az) * Math.cos(alt), Math.cos(az) * Math.cos(alt), Math.sin(alt)], shadeAlpha = dark ? 180 : 160;
-    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
-      const i = y * width + x, h = heights[i];
-      const l = heights[y * width + Math.max(0, x - 1)], r = heights[y * width + Math.min(width - 1, x + 1)];
-      const t = heights[Math.max(0, y - 1) * width + x], b = heights[Math.min(height - 1, y + 1) * width + x];
-      if (!(Number.isFinite(h) && Number.isFinite(l) && Number.isFinite(r) && Number.isFinite(t) && Number.isFinite(b))) continue;
-      const dx = (r - l) / ((x === 0 || x === width - 1 ? 1 : 2) * mpp), dy = (t - b) / ((y === 0 || y === height - 1 ? 1 : 2) * mpp);
-      const norm = Math.hypot(dx, dy, 1), illumination = Math.max(0, (-dx * light[0] - dy * light[1] + light[2]) / norm), delta = illumination - flat;
-      const k = i * 4;
-      let R, G, B, A;
-      if (colour) {
-        const hv = band ? (Math.floor(h / band) + 0.5) * band : h;   // banded: one colour per band, sampled at its middle
-        const li = Math.round(tOf(hv) * 255) * 3, s2 = Math.min(1.2, Math.max(0.45, 1 + 1.4 * delta));
-        R = lut[li] * s2; G = lut[li + 1] * s2; B = lut[li + 2] * s2; A = 255 * opacity;
-      } else {
-        R = G = B = delta >= 0 ? 255 : 0; A = Math.min(shadeAlpha, Math.abs(delta) * shadeAlpha * 1.6);
-      }
-      if (interval) {
-        // Distance to the nearest contour in pixels: |h - nearest level| / |grad h| (both in metres per pixel).
-        const g = Math.max(Math.hypot(dx, dy) * mpp, 1e-9), dMinor = Math.abs(h / interval - Math.round(h / interval)) * interval / g;
-        const dMajor = Math.abs(h / major - Math.round(h / major)) * major / g;
-        // Fade lines that would sit closer than about 2-5 px apart (steep banks), so dense steps never merge into a band.
-        // Lines fade out where they would crowd: minor lines need about 10 px between them, major lines 8 px.
-        const fadeMinor = Math.min(1, Math.max(0, (interval / g - 4) / 6)), fadeMajor = Math.min(1, Math.max(0, (major / g - 3) / 5));
-        const a = Math.max(Math.min(1, Math.max(0, 1.0 - dMinor)) * 0.5 * fadeMinor, Math.min(1, Math.max(0, 1.5 - dMajor)) * 0.85 * fadeMajor) * (ink ? 1 : 0.7);
-        if (a > 0) {
-          const base = A / 255, la = a, outA = la + base * (1 - la);
-          R = (line[0] * la + R * base * (1 - la)) / outA; G = (line[1] * la + G * base * (1 - la)) / outA; B = (line[2] * la + B * base * (1 - la)) / outA; A = outA * 255;
+    const L0 = Math.sin(az) * Math.cos(alt), L1 = Math.cos(az) * Math.cos(alt), L2 = Math.sin(alt), shadeAlpha = dark ? 180 : 160;
+    const lineA = ink ? 1 : 0.7, A0 = 255 * opacity;
+    for (let y = 0; y < height; y++) {
+      const row = y * width, up = (y > 0 ? y - 1 : 0) * width, dn = (y < height - 1 ? y + 1 : height - 1) * width;
+      const dyDiv = (y === 0 || y === height - 1 ? 1 : 2) * mpp;
+      for (let x = 0; x < width; x++) {
+        const i = row + x, h = heights[i];
+        if (h !== h) continue;
+        const l = heights[row + (x > 0 ? x - 1 : 0)], r = heights[row + (x < width - 1 ? x + 1 : width - 1)], t = heights[up + x], b = heights[dn + x];
+        if (l !== l || r !== r || t !== t || b !== b) continue;
+        const dx = (r - l) / ((x === 0 || x === width - 1 ? 1 : 2) * mpp), dy = (t - b) / dyDiv;
+        const g2 = dx * dx + dy * dy;
+        let illumination = (-dx * L0 - dy * L1 + L2) / Math.sqrt(g2 + 1); if (illumination < 0) illumination = 0;
+        const delta = illumination - flat, k = i * 4;
+        let R, G, B, A;
+        if (colour) {
+          const hv = band ? (Math.floor(h / band) + 0.5) * band : h;   // banded: one colour per band, sampled at its middle
+          let ti = (hv - tBase) * tInv; ti = ti <= 0 ? 0 : ti >= tN ? tN : ti | 0;
+          const li = tTab[ti] * 3; let s2 = 1 + 1.4 * delta; s2 = s2 < 0.45 ? 0.45 : s2 > 1.2 ? 1.2 : s2;
+          R = lut[li] * s2; G = lut[li + 1] * s2; B = lut[li + 2] * s2; A = A0;
+        } else {
+          R = G = B = delta >= 0 ? 255 : 0; A = Math.min(shadeAlpha, Math.abs(delta) * shadeAlpha * 1.6);
         }
+        if (interval) {
+          // Distance to the nearest contour in CSS pixels: |h - nearest level| / |grad h| (height metres per CSS pixel).
+          const g = Math.max(Math.sqrt(g2) * mpp * ls, 1e-9), fm = h / interval, fM = h / major;
+          const dMinor = Math.abs(fm - Math.round(fm)) * interval / g, dMajor = Math.abs(fM - Math.round(fM)) * major / g;
+          // Lines fade out where they would crowd: minor lines need about 10 px between them, major lines 8 px.
+          const fadeMinor = clamp01((interval / g - 4) / 6), fadeMajor = clamp01((major / g - 3) / 5);
+          const a = Math.max(clamp01(1.0 - dMinor) * 0.5 * fadeMinor, clamp01(1.5 - dMajor) * 0.85 * fadeMajor) * lineA;
+          if (a > 0) {
+            const base = A / 255, outA = a + base * (1 - a);
+            R = (line[0] * a + R * base * (1 - a)) / outA; G = (line[1] * a + G * base * (1 - a)) / outA; B = (line[2] * a + B * base * (1 - a)) / outA; A = outA * 255;
+          }
+        }
+        out[k] = R; out[k + 1] = G; out[k + 2] = B; out[k + 3] = A;
       }
-      out[k] = R; out[k + 1] = G; out[k + 2] = B; out[k + 3] = A;
     }
     return out;
   }
@@ -180,127 +196,170 @@
     return heights;
   }
   function percentile(sorted, q) { return sorted.length ? sorted[Math.min(sorted.length - 1, Math.max(0, Math.round(q * (sorted.length - 1))))] : null; }
+  /* Revision 1.8.1: one canvas for the whole view instead of one canvas per tile. Heights are resampled from the
+     source tiles into a single grid, so hillshade and contour lines are continuous across tile edges, and the picture
+     is written with putImageData into a CPU-backed canvas (no canvas-to-canvas copies, no per-tile GPU textures). */
+  const MAX_LAT = 85.0511287798;
   function createLayer({coverage, source = DEFAULT_SOURCE, theme = 'light', pane = 'overlayPane', style = {}, onStatus = () => {}} = {}) {
     if (!root.L) throw new Error('Leaflet must be loaded first');
     if (!coverage || !coverage.properties || coverage.properties.district_code !== '4001') throw new Error('Only verified district 4001 is supported');
     source = {...DEFAULT_SOURCE, ...source, tiles: source.tileUrl || source.tiles || DEFAULT_SOURCE.tiles};
     if (source.tiles !== DEFAULT_SOURCE.tiles || source.maxNativeZoom !== 12) throw new Error('Unverified terrain source contract');
-    const polygons = polygonsOf(coverage), bounds = bboxOf(polygons), active = new Map(), natives = new Map();
+    const polygons = polygonsOf(coverage), cache = new Map(), resolved = new Set(), failed = new Set();
     const stats = {requested: 0, rendered: 0, skipped: 0, errors: 0, pending: 0};
-    let generation = 0, current = {...style};
+    let current = {...style}, frame = null, seq = 0, timer = null, map = null, canvas = null, ctx = null, maskCanvas = null;
     if (current.colors && !current.lut) current.lut = rampLUT(current.colors);
-    const scratch = document.createElement('canvas'); scratch.width = scratch.height = 256;
     const emit = (state, detail = {}) => { try { onStatus({state, ...stats, source: source.dataset, maxNativeZoom: 12, ...detail}); } catch (_) {} };
     const tileUrl = c => source.tiles.replace('{z}', c.z).replace('{x}', c.x).replace('{y}', c.y);
-    async function fetchHeights(c, signal) {
-      const response = await fetch(tileUrl(c), {mode: 'cors', credentials: 'omit', signal, cache: 'no-store'});
+    async function fetchHeights(c) {
+      const response = await fetch(tileUrl(c), {mode: 'cors', credentials: 'omit'});
       if (!response.ok) throw new Error(`Terrain tile HTTP ${response.status}`);
       const bitmap = await createImageBitmap(await response.blob(), {premultiplyAlpha: 'none', colorSpaceConversion: 'none'});
       try {
         if (bitmap.width !== 256 || bitmap.height !== 256) throw new Error('Unexpected DEM tile dimensions');
         const c2 = document.createElement('canvas'); c2.width = c2.height = 256;
-        const ctx = c2.getContext('2d', {willReadFrequently: true}); ctx.drawImage(bitmap, 0, 0);
-        return decodeImage(ctx.getImageData(0, 0, 256, 256).data);
+        const ctx2 = c2.getContext('2d', {willReadFrequently: true}); ctx2.drawImage(bitmap, 0, 0);
+        return decodeImage(ctx2.getImageData(0, 0, 256, 256).data);
       } finally { bitmap.close(); }
     }
-    function nativeTile(x, y) {
-      const key = x + '/' + y;
-      if (natives.has(key)) { const e = natives.get(key); natives.delete(key); natives.set(key, e); return e; }
-      const c = {z: 12, x, y};
-      const e = intersectsBounds(tileBounds(c), polygons) ? fetchHeights(c).catch(() => null) : Promise.resolve(null);
-      natives.set(key, e);
-      while (natives.size > 64) natives.delete(natives.keys().next().value);
+    // Source tiles (z <= 12) keyed z/x/y; tiles outside district 4001 are never requested. A failed tile is retried on the next view.
+    function sourceTile(z, x, y) {
+      const key = z + '/' + x + '/' + y;
+      if (cache.has(key)) { const e = cache.get(key); cache.delete(key); cache.set(key, e); return e; }
+      let e;
+      if (!intersectsBounds(tileBounds({z, x, y}), polygons)) { stats.skipped++; e = Promise.resolve(null); resolved.add(key); }
+      else {
+        stats.requested++; stats.pending++;
+        e = fetchHeights({z, x, y}).then(v => { failed.delete(key); return v; }, error => {
+          stats.errors++; failed.add(key); cache.delete(key); emit('error', {message: error.message, tile: key}); return null;
+        }).finally(() => { stats.pending = Math.max(0, stats.pending - 1); resolved.add(key); });
+      }
+      cache.set(key, e);
+      while (cache.size > 96) { const old = cache.keys().next().value; cache.delete(old); resolved.delete(old); }
       return e;
     }
-    async function resampled(c) {
-      const s = 2 ** (c.z - 12), nx = Math.floor(c.x / s), ny = Math.floor(c.y / s), ox = (c.x - nx * s) * 256 / s, oy = (c.y - ny * s) * 256 / s;
-      const span = 256 / s, needL = ox < 1, needR = ox + span > 255, needT = oy < 1, needB = oy + span > 255;
-      const keys = [[0, 0]];
-      if (needL) keys.push([-1, 0]); if (needR) keys.push([1, 0]); if (needT) keys.push([0, -1]); if (needB) keys.push([0, 1]);
-      if (needL && needT) keys.push([-1, -1]); if (needR && needT) keys.push([1, -1]); if (needL && needB) keys.push([-1, 1]); if (needR && needB) keys.push([1, 1]);
-      const tiles = new Map(await Promise.all(keys.map(async ([dx, dy]) => [dx + ',' + dy, await nativeTile(nx + dx, ny + dy)])));
-      if (!tiles.get('0,0')) throw new Error('Native terrain tile unavailable');
-      const H = (gi, gj) => { const tx = Math.floor(gi / 256), ty = Math.floor(gj / 256), t = tiles.get(tx + ',' + ty); return t ? t[(gj - ty * 256) * 256 + (gi - tx * 256)] : NaN; };
-      const out = new Float32Array(256 * 256);
-      for (let py = 0; py < 256; py++) {
-        const fy = oy + (py + 0.5) / s - 0.5, j0 = Math.floor(fy), ty = fy - j0;
-        for (let px = 0; px < 256; px++) {
-          const fx = ox + (px + 0.5) / s - 0.5, i0 = Math.floor(fx), tx = fx - i0;
-          const a = H(i0, j0), b = H(i0 + 1, j0), cc = H(i0, j0 + 1), d = H(i0 + 1, j0 + 1);
-          out[py * 256 + px] = a + (b - a) * tx + (cc - a) * ty + (a - b - cc + d) * tx * ty;
+    const projectX = (lon, scale) => (lon + 180) / 360 * scale;
+    const projectY = (lat, scale) => { const r = Math.max(-MAX_LAT, Math.min(MAX_LAT, lat)) * Math.PI / 180; return (1 - Math.asinh(Math.tan(r)) / Math.PI) / 2 * scale; };
+    function coverageMask(Wr, Hr, zoom, gx0, gy0, r) {
+      if (!maskCanvas) maskCanvas = document.createElement('canvas');
+      if (maskCanvas.width !== Wr || maskCanvas.height !== Hr) { maskCanvas.width = Wr; maskCanvas.height = Hr; }
+      const mc = maskCanvas.getContext('2d', {willReadFrequently: true}), scale = 256 * 2 ** zoom;
+      mc.clearRect(0, 0, Wr, Hr); mc.beginPath();
+      for (const polygon of polygons) for (const ring of polygon) {
+        ring.forEach((p, i) => { const X = (projectX(p[0], scale) - gx0) * r, Y = (projectY(p[1], scale) - gy0) * r; i ? mc.lineTo(X, Y) : mc.moveTo(X, Y); });
+        mc.closePath();
+      }
+      mc.fillStyle = '#ffffff'; mc.fill('evenodd');
+      const data = mc.getImageData(0, 0, Wr, Hr).data, mask = new Uint8Array(Wr * Hr);
+      for (let i = 0; i < mask.length; i++) mask[i] = data[i * 4 + 3];
+      return mask;
+    }
+    const PAD = 0.2, PIXEL_BUDGET = 2.4e6;
+    function resolutionFor(W, H) {
+      const dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+      return Math.max(1, Math.min(2, dpr, Math.sqrt(PIXEL_BUDGET / (W * H))));
+    }
+    function schedule(delay = 30) { clearTimeout(timer); timer = setTimeout(update, delay); }
+    async function update() {
+      timer = null;
+      if (!map) return;
+      const my = ++seq, size = map.getSize();
+      if (size.x < 2 || size.y < 2) return;
+      const zoom = map.getZoom(), center = map.getCenter();
+      const min = map.containerPointToLayerPoint([-size.x * PAD, -size.y * PAD]).round();
+      const W = Math.round(size.x * (1 + 2 * PAD)), H = Math.round(size.y * (1 + 2 * PAD));
+      const origin = map.getPixelOrigin(), gx0 = min.x + origin.x, gy0 = min.y + origin.y;   // global display pixels at this zoom
+      const sz = Math.max(0, Math.min(12, Math.round(zoom))), k = 2 ** (sz - zoom), n = 2 ** sz;   // source zoom and source px per display px
+      const tx0 = Math.max(0, Math.floor(gx0 * k / 256)), tx1 = Math.min(n - 1, Math.floor((gx0 + W) * k / 256));
+      const ty0 = Math.max(0, Math.floor(gy0 * k / 256)), ty1 = Math.min(n - 1, Math.floor((gy0 + H) * k / 256));
+      if (tx1 < tx0 || ty1 < ty0 || (tx1 - tx0 + 1) * (ty1 - ty0 + 1) > 1024) { emit('error', {message: 'Terrain view outside the tile budget'}); return; }
+      const need = [];
+      for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) if (intersectsBounds(tileBounds({z: sz, x: tx, y: ty}), polygons)) need.push([tx, ty]);
+      if (need.length > 80) { emit('error', {message: 'District tile budget exceeded'}); return; }
+      if (need.some(([x, y]) => !resolved.has(sz + '/' + x + '/' + y))) emit('loading', {scope: 'district:4001', overzoomIsVisualOnly: true});
+      const tiles = await Promise.all(need.map(([x, y]) => sourceTile(sz, x, y)));
+      if (my !== seq || !map) return;
+      // Source mosaic around the frame (one spare cell each side); missing tiles stay NaN, never zero.
+      const mx0 = Math.floor(gx0 * k) - 1, my0 = Math.floor(gy0 * k) - 1;
+      const mw = Math.ceil((gx0 + W) * k) - mx0 + 2, mh = Math.ceil((gy0 + H) * k) - my0 + 2;
+      const mosaic = new Float32Array(mw * mh).fill(NaN);
+      need.forEach(([tx, ty], index) => {
+        const t = tiles[index]; if (!t) return;
+        const ox = tx * 256 - mx0, oy = ty * 256 - my0;
+        const x0 = Math.max(0, ox), x1 = Math.min(mw, ox + 256), y0 = Math.max(0, oy), y1 = Math.min(mh, oy + 256);
+        for (let y = y0; y < y1; y++) mosaic.set(t.subarray((y - oy) * 256 + (x0 - ox), (y - oy) * 256 + (x1 - ox)), y * mw + x0);
+      });
+      // Bilinear between source cell centres; a sample touching a missing cell is NaN (transparent, no extrapolation).
+      const r = resolutionFor(W, H), Wr = Math.round(W * r), Hr = Math.round(H * r), heights = new Float32Array(Wr * Hr);
+      const xs = new Float64Array(Wr);
+      for (let px = 0; px < Wr; px++) xs[px] = (gx0 + (px + 0.5) * W / Wr) * k - 0.5 - mx0;
+      for (let py = 0; py < Hr; py++) {
+        const sy = (gy0 + (py + 0.5) * H / Hr) * k - 0.5 - my0, j0 = Math.floor(sy), fy = sy - j0, row0 = j0 * mw, row1 = row0 + mw, out = py * Wr;
+        for (let px = 0; px < Wr; px++) {
+          const sx = xs[px], i0 = Math.floor(sx), fx = sx - i0;
+          const a = mosaic[row0 + i0], b = mosaic[row0 + i0 + 1], c = mosaic[row1 + i0], d = mosaic[row1 + i0 + 1];
+          heights[out + px] = a + (b - a) * fx + (c - a) * fy + (a - b - c + d) * fx * fy;
         }
       }
-      return out;
+      const mask = coverageMask(Wr, Hr, zoom, gx0, gy0, Wr / W);
+      const mpp = 40075016.686 * Math.cos(center.lat * Math.PI / 180) / (256 * 2 ** zoom) * W / Wr;
+      frame = {heights, mask, W, H, Wr, Hr, r: Wr / W, zoom, gx0, gy0, mpp, sourceZoom: sz, tiles: need.length};
+      paint(); place();
+      stats.rendered++;
+      const missing = need.some(([x, y]) => failed.has(sz + '/' + x + '/' + y));
+      emit(missing ? 'partial' : 'ready', {renderer: 'single-canvas', width: Wr, height: Hr});
     }
-    function paint(canvas) {
-      const t = canvas._terrain; if (!t) return;
-      const ctx = canvas.getContext('2d');
-      scratch.getContext('2d').putImageData(new ImageData(renderTerrain(t.heights, 256, 256, t.mpp, {...current, theme}), 256, 256), 0, 0);
-      ctx.clearRect(0, 0, 256, 256); ctx.save(); clipCoverage(ctx, polygons, t.coords, 256); ctx.drawImage(scratch, 0, 0); ctx.restore();
+    function paint() {
+      if (!frame || !canvas) return;
+      const f = frame, rgba = renderTerrain(f.heights, f.Wr, f.Hr, f.mpp, {...current, theme, lineScale: f.r});
+      const m = f.mask;
+      for (let i = 0, a = 3; i < m.length; i++, a += 4) { const v = m[i]; if (v !== 255) rgba[a] = v ? rgba[a] * v / 255 : 0; }
+      if (canvas.width !== f.Wr || canvas.height !== f.Hr) { canvas.width = f.Wr; canvas.height = f.Hr; }
+      ctx.putImageData(new ImageData(rgba, f.Wr, f.Hr), 0, 0);
+      canvas.style.width = f.W + 'px'; canvas.style.height = f.H + 'px';
     }
-    const Layer = root.L.GridLayer.extend({
-      createTile(coords, done) {
-        const canvas = document.createElement('canvas'); canvas.width = canvas.height = 256;
-        const tileKey = `${coords.z}/${coords.x}/${coords.y}`, seq = generation;
-        const rect = tileBounds(coords);
-        if (coords.z > 22 || coords.z < 0 || !intersectsBounds(rect, polygons)) {
-          stats.skipped++; queueMicrotask(() => done(null, canvas)); return canvas;
-        }
-        const controller = new AbortController(); active.set(canvas, controller);
-        stats.requested++; stats.pending++; emit('loading');
-        (async () => {
-          try {
-            const heights = coords.z <= 12 ? await fetchHeights(coords, controller.signal) : await resampled(coords);
-            if (seq !== generation || controller.signal.aborted) { done(null, canvas); return; }
-            const midLat = (rect[1] + rect[3]) / 2;
-            canvas._terrain = {heights, coords, mpp: 40075016.686 * Math.cos(midLat * Math.PI / 180) / (2 ** coords.z * 256), bounds: rect};
-            paint(canvas);
-            stats.rendered++; done(null, canvas);
-          } catch (error) {
-            canvas.getContext('2d').clearRect(0, 0, 256, 256);
-            if (error.name !== 'AbortError' && seq === generation) { stats.errors++; emit('error', {message: error.message, tile: tileKey}); }
-            done(null, canvas);
-          } finally {
-            active.delete(canvas); stats.pending = Math.max(0, stats.pending - 1);
-            if (seq === generation) emit(stats.pending ? 'loading' : stats.errors ? 'partial' : 'ready');
-          }
-        })();
-        return canvas;
-      },
-      onRemove(map) {
-        generation++; for (const controller of active.values()) controller.abort(); active.clear();
-        root.L.GridLayer.prototype.onRemove.call(this, map); emit('removed');
-      },
-      onAdd(map) {
+    // Keeps the last picture under the same ground while the map moves or zooms, until the next frame is ready.
+    function place() {
+      if (!frame || !canvas || !map) return;
+      const s = 2 ** (map.getZoom() - frame.zoom), origin = map.getPixelOrigin();
+      root.L.DomUtil.setTransform(canvas, root.L.point(frame.gx0 * s - origin.x, frame.gy0 * s - origin.y), s === 1 ? undefined : s);
+    }
+    const onMoveEnd = () => schedule(30);
+    const Layer = root.L.Layer.extend({
+      initialize(options) { root.L.setOptions(this, options); },
+      onAdd(m) {
+        map = m;
+        canvas = document.createElement('canvas'); canvas.className = 'sila-terrain-surface';
+        canvas.style.cssText = 'position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none';
+        canvas.setAttribute('aria-hidden', 'true');
+        ctx = canvas.getContext('2d', {willReadFrequently: true});
+        m.getPane(this.options.pane).appendChild(canvas);
+        m.on('moveend resize', onMoveEnd); m.on('zoom viewreset', place);
         emit('loading', {scope: 'district:4001', overzoomIsVisualOnly: true});
-        root.L.GridLayer.prototype.onAdd.call(this, map);
+        if (frame) { paint(); place(); }
+        schedule(0);
+      },
+      onRemove(m) {
+        seq++; clearTimeout(timer); timer = null;
+        m.off('moveend resize', onMoveEnd); m.off('zoom viewreset', place);
+        if (canvas) canvas.remove();
+        canvas = ctx = null; map = null; emit('removed');
       }
     });
-    const layer = new Layer({pane, tileSize: 256, maxNativeZoom: 22, minNativeZoom: 0, minZoom: 0, maxZoom: 22,
-      bounds: [[bounds[1], bounds[0]], [bounds[3], bounds[2]]], noWrap: true, updateWhenIdle: true,
-      keepBuffer: 0, opacity: 1, attribution: source.attribution});
-    layer.on('tileunload', event => { const c = active.get(event.tile); if (c) c.abort(); });
-    const tilesNow = () => Object.values(layer._tiles || {}).map(t => t.el).filter(el => el && el._terrain);
-    layer.refresh = () => { for (const el of tilesNow()) paint(el); return layer; };
+    const layer = new Layer({pane, attribution: source.attribution});
+    layer.refresh = () => { paint(); return layer; };
     layer.setStyle = next => { current = {...current, ...next}; if (next.colors) current.lut = rampLUT(next.colors); return layer.refresh(); };
     layer.getStyle = () => ({...current, lut: undefined});
     /* Heights actually drawn in the given view: 0.5/99.5 percentiles for colour, 1/99 for relief (as in CityMETER). */
     layer.measureRange = viewBounds => {
-      const [w, s, e, n] = viewBounds, values = [];
-      for (const el of tilesNow()) {
-        const t = el._terrain, b = t.bounds;
-        if (b[0] > e || b[2] < w || b[1] > n || b[3] < s) continue;
-        const nz = 2 ** t.coords.z;
-        for (let py = 2; py < 256; py += 4) {
-          const lat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (t.coords.y + py / 256) / nz))) * 180 / Math.PI;
-          if (lat < s || lat > n) continue;
-          for (let px = 2; px < 256; px += 4) {
-            const lon = (t.coords.x + px / 256) / nz * 360 - 180;
-            if (lon < w || lon > e) continue;
-            const v = t.heights[py * 256 + px];
-            if (Number.isFinite(v) && pointInCoverage([lon, lat], polygons)) values.push(v);
-          }
-        }
+      if (!frame) return null;
+      const [w, s, e, n] = viewBounds, f = frame, scale = 256 * 2 ** f.zoom;
+      const x0 = Math.max(0, Math.floor((projectX(w, scale) - f.gx0) * f.r)), x1 = Math.min(f.Wr - 1, Math.ceil((projectX(e, scale) - f.gx0) * f.r));
+      const y0 = Math.max(0, Math.floor((projectY(n, scale) - f.gy0) * f.r)), y1 = Math.min(f.Hr - 1, Math.ceil((projectY(s, scale) - f.gy0) * f.r));
+      const step = Math.max(1, Math.round(4 * f.r)), values = [];
+      for (let y = y0 + (step >> 1); y <= y1; y += step) for (let x = x0 + (step >> 1); x <= x1; x += step) {
+        const i = y * f.Wr + x; if (f.mask[i] < 128) continue;
+        const v = f.heights[i]; if (v === v) values.push(v);
       }
       if (values.length < 16) return null;
       values.sort((a, b) => a - b);
@@ -309,6 +368,7 @@
     };
     layer.getSourceContract = () => ({...source, districtCode: '4001', noData: 'transparent', quantitativeFloodModel: false});
     layer.setTheme = value => { theme = value === 'dark' ? 'dark' : 'light'; return layer.refresh(); };
+    layer.getFrameInfo = () => frame && {width: frame.Wr, height: frame.Hr, cssWidth: frame.W, cssHeight: frame.H, zoom: frame.zoom, sourceZoom: frame.sourceZoom, tiles: frame.tiles};
     return layer;
   }
   const api = Object.freeze({createLayer, decodeHeight, defaultSource: DEFAULT_SOURCE, rampLUT,

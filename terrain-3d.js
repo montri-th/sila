@@ -394,6 +394,19 @@
       map.addSource('sila-3d-outside-mask', {type:'geojson', data:{type:'FeatureCollection',features:fs}}); map.addLayer({id:'sila-3d-outside-mask', type:'fill', source:'sila-3d-outside-mask', paint:{'fill-color':theme === 'light' ? '#FFFFFF' : '#11191D','fill-opacity':.72}});
     }
     function install() { if (destroyed) return; clearTimeout(styleTimer); styleReady = true; addMask(); layer = makeLayer(); map.addLayer(layer); syncVisible(); }
+    // Trackpad: a two-finger swipe that starts mostly sideways pans the view; an up/down swipe, a mouse wheel or a
+    // pinch (ctrl+wheel) keeps MapLibre's zoom. The choice is held for the whole gesture so it never flips midway.
+    { const el = map.getCanvasContainer(); let mode = null, last = 0, dx = 0, dy = 0, raf = 0;
+      el.addEventListener('wheel', e => {
+        if (e.ctrlKey || e.deltaMode !== 0) { mode = null; return; }
+        const now = performance.now();
+        if (!mode || now - last > 220) mode = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? 'pan' : 'zoom';
+        last = now;
+        if (mode !== 'pan') return;
+        e.preventDefault(); e.stopImmediatePropagation();
+        dx += e.deltaX; dy += e.deltaY;
+        if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (!destroyed && (dx || dy)) map.panBy([dx, dy], {duration: 0}); dx = dy = 0; });
+      }, {capture: true, passive: false}); }
     map.on('style.load', install);
     if (mode === 'street' && !streetStyles[theme]) upgradeStreet();
     // DEM and base-map requests have separate lifecycles. First valid mesh

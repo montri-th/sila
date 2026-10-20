@@ -6,7 +6,7 @@
   "passed": 26,
   "failed": 0,
   "scope": "Independent deterministic decoding, valid-cell geometry, cell-centred registration, conservative polygon/hole clip, neighbour seam, Mercator scale/precision, zoom handoff and bounded native district tile selection. Synthetic DEM values only; no browser/framebuffer/orbit/texture attestation.",
-  "moduleSHA256": "354394e6248c72d642968aec83c5e84a4c679b19236675f3ece8e3a2146ffd49",
+  "moduleSHA256": "02eba6586bcd3f9f7e323e550253812324d00c8d9df365566f967626209df552",
   "testsSHA256": "8c5915c55e842bd98084f282b8a50d6b8329d2641e745180560139d38240de88",
   "coverageSHA256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
   "separateBrowserReceipt": "revision-1.8-browser-checks.json",

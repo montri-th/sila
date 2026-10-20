@@ -7,7 +7,7 @@
   "passed": 21,
   "failed": 0,
   "files": {
-    "module_sha256": "981591af8054ee2d7fb0e2a7d6f2c6635d36034490e1a2a22a423917c9c69754",
+    "module_sha256": "7fd6814e15ed50c4fa9d2d6a9314c5967a62a16b7b07575a2fcbc97d1a4f6798",
     "coverage_sha256": "8a27f00b2c16c52e9955499c5c83b75236f7fd022bb88f0229101ee5aa71ef7e",
     "tests_sha256": "955dcd2f2358490505a2ffa8f23b3f817a183d7daa4541d35ed9bc52a3899132"
   },

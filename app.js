@@ -893,8 +893,8 @@
     });
     $("terrain-view-help").textContent = S.mode === "3d"
       ? (TOUCH()
-        ? text("ลากนิ้วเดียวเพื่อเลื่อน · บิดสองนิ้วเพื่อหมุน ลากสองนิ้วขึ้นลงเพื่อเอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag one finger to pan · twist two fingers to rotate, slide them up or down to tilt · height is exaggerated to show form")
-        : text("ลากเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · right-drag to rotate/tilt · height is exaggerated to show form"))
+        ? text("ลากนิ้วเดียวเพื่อเลื่อน · จีบหรือถ่างสองนิ้วเพื่อซูม · บิดสองนิ้วเพื่อหมุน ลากสองนิ้วขึ้นลงเพื่อเอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag one finger to pan · pinch to zoom · twist two fingers to rotate, slide them up or down to tilt · height is exaggerated to show form")
+        : text("ลากเพื่อเลื่อน · หมุนล้อ จีบทัชแพด หรือปัดสองนิ้วขึ้นลงเพื่อซูม · ปัดสองนิ้วซ้ายขวาเพื่อเลื่อน · คลิกขวาลากเพื่อหมุน/เอียง · ความสูงขยายให้เห็นรูปทรง ไม่ใช่ความสูงจริง", "Drag to pan · wheel, pinch or two-finger swipe up/down to zoom · two-finger swipe sideways to pan · right-drag to rotate/tilt · height is exaggerated to show form"))
       : text("อ่านตำแหน่งใน 2D · เปลี่ยนเป็น 3D เพื่อดูรูปทรงพื้นที่", "Inspect locations in 2D · switch to 3D to explore terrain form");
     const status = active ? terrainStateLabel() : "";
     if ($("terrain-view-status").textContent !== status) $("terrain-view-status").textContent = status;
@@ -2083,6 +2083,18 @@
     $("map").addEventListener("wheel", () => S.interactionRevision++, {
       passive: true,
     });
+    // Trackpad: a two-finger swipe that starts mostly sideways pans; up/down swipes, mouse wheels and pinches zoom as before.
+    { let mode = null, last = 0, dx = 0, dy = 0, raf = 0;
+      $("map").addEventListener("wheel", (e) => {
+        if (e.ctrlKey || e.deltaMode !== 0) { mode = null; return; }
+        const now = performance.now();
+        if (!mode || now - last > 220) mode = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? "pan" : "zoom";
+        last = now;
+        if (mode !== "pan") return;
+        e.preventDefault(); e.stopImmediatePropagation(); S.interactionRevision++;
+        dx += e.deltaX; dy += e.deltaY;
+        if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (dx || dy) S.map.panBy([dx, dy], { animate: false }); dx = dy = 0; });
+      }, { capture: true, passive: false }); }
     $("map").addEventListener("click", (e) => {
       if (e.target.closest(".leaflet-control-zoom")) S.interactionRevision++;
     });
