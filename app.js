@@ -765,6 +765,9 @@
     } else if (S.dataset === "properties") {
       const t = propScopeTotals();
       items = [[moneyShort(t.gain), text("ภาษีปี 2570 ที่เพิ่มได้ต่อปี", "2570 tax that can be added a year")], [t.nGain, text("ทรัพย์สินที่ควรตรวจ", "properties to check")], [moneyShort(t.new70), text("ปี 2570 ตามข้อเสนอ ของแปลงที่มีเจ้าของ", "2570 with fixes, owned parcels")]];
+    } else if (["negotiate", "agriwatch", "portfolio"].includes(S.dataset) && !S.cache.get(dataset().geojson)) {
+      /* Parcels still loading: the headline shows the no-figure dash rather than a zero (EVID-05). */
+      items = [[null, text("กำลังเปิดข้อมูลแปลง", "loading parcels")]];
     } else if (S.dataset === "negotiate") {
       const t = initiativeTotals(), e = t && S.initiative ? t.list.find((x) => x.id === S.initiative) : null;
       if (S.initiative) items = [[`+${moneyShort(e ? e.sum : 0)}`, text(`เก็บเพิ่มได้ต่อปี · ${initiativeShort(S.initiative)}`, `a year · ${initiativeShort(S.initiative)}`)], [e ? e.parcels : 0, text("แปลงที่ต้องเจรจา", "titles to negotiate")], [t && t.gain ? `${fixed(((e ? e.sum : 0) / t.gain) * 100, 0)} %` : null, text("ของยอดเก็บเพิ่มได้ทั้งหมด", "of the total gain")]];

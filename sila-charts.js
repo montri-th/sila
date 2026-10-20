@@ -83,7 +83,7 @@
       const catRenderer = horizontal ? am5xy.AxisRendererY.new(rootAm, { minGridDistance: 18, inversed: true, minorGridEnabled: false }) : am5xy.AxisRendererX.new(rootAm, { minGridDistance: 24 });
       catRenderer.grid.template.setAll({ visible: false });
       catRenderer.labels.template.setAll({ fontFamily: FONT_UI, fontSize: horizontal ? 12 : 11, fill: am5.color(ink), oversizedBehavior: horizontal ? 'truncate' : 'wrap', maxWidth: horizontal ? 128 : 96, textAlign: horizontal ? 'end' : 'center', paddingTop: horizontal ? 0 : 4 });
-      const valRenderer = horizontal ? am5xy.AxisRendererX.new(rootAm, { minGridDistance: 56 }) : am5xy.AxisRendererY.new(rootAm, { minGridDistance: 28 });
+      const valRenderer = horizontal ? am5xy.AxisRendererX.new(rootAm, { minGridDistance: 84 }) : am5xy.AxisRendererY.new(rootAm, { minGridDistance: 28 });
       valRenderer.grid.template.setAll({ stroke: am5.color(hair), strokeOpacity: 1 });
       valRenderer.labels.template.setAll({ fontFamily: FONT_DATA, fontSize: 11, fill: am5.color(muted) });
       const catAxis = (horizontal ? chart.yAxes : chart.xAxes).push(am5xy.CategoryAxis.new(rootAm, { categoryField: 'category', renderer: catRenderer }));
@@ -102,5 +102,5 @@
     return { dispose: () => dispose(el), root: rootAm };
   }
 
-  root.SilaCharts = Object.freeze({ render, dispose, disposeAll, prune, format: fmt, unitFor, version: '1.0.1', available: () => !!lib() });
+  root.SilaCharts = Object.freeze({ render, dispose, disposeAll, prune, format: fmt, unitFor, version: '1.0.2', available: () => !!lib() });
 })(typeof window !== 'undefined' ? window : globalThis);

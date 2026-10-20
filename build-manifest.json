@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "2.0",
-  "builtAtUtc": "2026-10-20T16:54:01.407091+00:00",
+  "revision": "2.0.1",
+  "builtAtUtc": "2026-10-20T17:12:50.824940+00:00",
   "releaseDateBangkok": "2026-10-21",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 486184,
-      "sha256": "698d0cacb4deaa55e2114f2bb5537458dcb70e0a57f905cc0dff74816e2dbba5",
+      "bytes": 486510,
+      "sha256": "9e76a355686c19a916b91b1a4c314c12bdf461125c85294263012dbb20daf3e8",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1226,7 +1226,7 @@
     {
       "path": "index.html",
       "bytes": 16029,
-      "sha256": "6901dc6c02a528a04dad9b9a069d3b89f1e6ec99dadf16e6cc7ca6aee20bfd79",
+      "sha256": "092a637ca303ca798c568f301b58be4afd96eef8ec8ddbe736e9fdbe5ce35465",
       "mimeTypes": [
         "text/html"
       ]
@@ -1839,8 +1839,8 @@
     },
     {
       "path": "qa/revision-2.0-accessibility-checks.json",
-      "bytes": 6410,
-      "sha256": "568f85178351f178aea27e8709272fb138c4109a598b99274adffd78458381c8",
+      "bytes": 6548,
+      "sha256": "2912a110355dab46e56d974119bba070f79d63512a985c44b9e209a4c4509ce2",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1850,7 +1850,7 @@
     {
       "path": "qa/revision-2.0-browser-checks.json",
       "bytes": 23371,
-      "sha256": "2eb357b21bfab1a573e1ea1bd447c6485509b09650c9d516610ae1c07bec85b6",
+      "sha256": "1c94544d5026f1da8fd815c97cee039c4d3f7b1617a6891260680465a3693cbd",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -2259,7 +2259,7 @@
     {
       "path": "sila-charts.js",
       "bytes": 9379,
-      "sha256": "1edac39914e6b61c8314a48c6238b0bb4d1202a533dcc3ebeac07863f863eb64",
+      "sha256": "e003c024f80a02fc07a07fdda89793e67232d884cfab7c0fb0738733bfad5484",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -3900,5 +3900,19 @@
     "streetView": "Google Maps pin link first (never blank); facing panorama second with “if imagery exists”; tools/streetview-coverage.py prepares an offline coverage file when the municipality supplies a key (never stored)",
     "icons": "owner approval pending for payments, volunteer_activism, construction, explore, handshake, agriculture, leaderboard, pets, water_damage, tune, bar_chart (Material Symbols Rounded, pinned source commit)",
     "publicSafety": "No owner names, natural-person registrants, ID or tax numbers, addresses or deed numbers; random owner codes; flood scenario layers withheld pending review. See qa/revision-2.0-publication-audit.json."
-  }
+  },
+  "patches": [
+    {
+      "id": "2.0.1",
+      "dateBangkok": "2026-10-21",
+      "afterCommit": "4f48ecfb3ed5d2dcb07a0f286da1c61dd00eb42f",
+      "changes": [
+        "summary: while the parcel layer loads, the three tax maps show the no-figure dash with “loading parcels” instead of zeros",
+        "charts: value-axis labels spaced at 84 px so wide panels do not crowd the thousands labels",
+        "local preview server allows shell.css, sila-charts.js and the terrain worker",
+        "app.js and sila-charts.js cache keys 2.0.1; browser and accessibility receipts re-run on the patched code"
+      ],
+      "foundBy": "opening the live 2.0 site in Chrome on a Mac (Apple M5): first paint showed +0 while 3 MB of parcels loaded"
+    }
+  ]
 }

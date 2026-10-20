@@ -1,6 +1,6 @@
 {
  "schema": "sila-accessibility-checks/2.0",
- "checkedAtUtc": "2026-10-20T16:18:36.818319+00:00",
+ "checkedAtUtc": "2026-10-20T17:05:14.859556+00:00",
  "base": "local preview of the revision-2.0 tree (python http.server, loopback)",
  "tool": "axe-core 4.10.2",
  "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
@@ -215,7 +215,8 @@
   "keyboard": "Tab order measured on 21 Oct 2026 (landing, 1440 px): skip link, home, language and theme options, map, area shape, zoom in, zoom out, Leaflet attribution, fit to area, panel splitter, five mission tabs, map select, boundary select, overview/records/sources tabs, panel content, initiative rows. Every stop shows a 2 px solid focus outline; the back button is skipped while disabled. Enter on a mission tab re-renders the tabs and returns focus to the selected tab; Enter on an explanation summary opens it and keeps focus (qa/revision-2.0-browser-checks.json flow keyboard). On phones the sheet handle is a labelled button (aria-expanded).",
   "language": "html lang follows the page language; summary titles, map select, boundary select, legend, charts and cards switch with it",
   "targets": "Checkboxes are 18 px but sit inside full-width labels at least 44 px tall, which are the click and tap targets; map controls are 44 x 44 px; mission tabs 56 px tall (50 px on 320 px phones)",
-  "motion": "The bottom sheet animates its height for 0.2 s and not at all under prefers-reduced-motion; charts draw without animation (the amCharts Animated theme is not bundled)"
+  "motion": "The bottom sheet animates its height for 0.2 s and not at all under prefers-reduced-motion; charts draw without animation (the amCharts Animated theme is not bundled)",
+  "loading": "While the parcel layer loads, the summary shows the no-figure dash with 'loading parcels' rather than zeros (patch 2.0.1)"
  },
  "notCovered": [
   "screen readers on real devices",
