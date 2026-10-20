@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "1.8",
-  "builtAtUtc": "2026-10-19T21:25:37.622368+00:00",
+  "builtAtUtc": "2026-10-20T00:46:52.904144+00:00",
   "releaseDateBangkok": "2026-10-20",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 69405,
-      "sha256": "32e2b28676c92459d21921111ba8f2ac77eeb21940055b9fb0bc26b480a68d52",
+      "bytes": 69557,
+      "sha256": "5c656dfcaa2debbbc90c5199bca0e01347d563e8cc10db3d7a43c2e001a482f9",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 277656,
-      "sha256": "f1c52012502019a8161bb8088d851c709c93a122d7695851ef0b3e18aeb62fc1",
+      "bytes": 278163,
+      "sha256": "d9a10e3ea77df823953ee898fd57d29e961ef59190138e46a7877a3e51c6c487",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1046,15 +1046,15 @@
     {
       "path": "index.html",
       "bytes": 15257,
-      "sha256": "1bb5ba48f31cae94ebf3f4374d30845fa7a35cc522bd0897667c01892f15740a",
+      "sha256": "b5f7f7f4560a3d744ccbcee11bb1089d1d07147985bcc496c44fb9b2c88cb3f3",
       "mimeTypes": [
         "text/html"
       ]
     },
     {
       "path": "map-layers.css",
-      "bytes": 11533,
-      "sha256": "11ebd16cad5b2154edb028d8b32adc9cef62076ff886ae8416908a543ebec827",
+      "bytes": 11721,
+      "sha256": "f3b720f9090e2109a7b781c45ea975ef55ad38929b426ec0c67e0b494f528925",
       "mimeTypes": [
         "text/css"
       ]
@@ -1558,9 +1558,19 @@
       ]
     },
     {
+      "path": "qa/revision-1.8-accessibility-checks.json",
+      "bytes": 3176,
+      "sha256": "1cec83a6220c401a9bb7156e3d16a833adbf980746cdd151881a0c0a4d5a151b",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "qa/revision-1.8-browser-checks.json",
       "bytes": 5337,
-      "sha256": "d9b17863366a60bd7d6678d22988cdd01594a95f837145e1cc8c9251661fdbd6",
+      "sha256": "bd7954c5de32969bb877a665053ebee66f5a80538e03af999fe3610477688c95",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1569,8 +1579,8 @@
     },
     {
       "path": "qa/revision-1.8-publication-audit.json",
-      "bytes": 5996,
-      "sha256": "7b6e96a0a70f7b07e8aff28b7627ec9c7145c3ac55bdb37eedcb3cefe0debb2a",
+      "bytes": 5882,
+      "sha256": "8e12464a05d02a782d7547eaec24825fa006a6f3eb5edf8ff3fd9bfdfaa64810",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
