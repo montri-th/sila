@@ -10,7 +10,7 @@
 .layer-controls{padding:0 24px}
 .layer-controls:empty{display:none}
 .control-card{margin:4px 0 12px;padding:12px 14px;border:1px solid var(--hairline);border-radius:12px;background:var(--card);display:grid;gap:10px}
-.control-card h3{margin:0;font-size:14px;font-weight:600;line-height:1.5}
+.control-card h3,.control-card h2.control-title{margin:0;font-size:14px;font-weight:600;line-height:1.5}
 .control-field{display:grid;gap:4px;font-size:13px;color:var(--secondary)}
 .control-field select{min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--alt);color:var(--primary);font:inherit;font-size:14px}
 .control-field select:focus-visible,.control-field input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
