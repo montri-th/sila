@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "2.0.1",
-  "builtAtUtc": "2026-10-20T17:12:50.824940+00:00",
+  "builtAtUtc": "2026-10-20T17:13:12.466739+00:00",
   "releaseDateBangkok": "2026-10-21",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -39,8 +39,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 94500,
-      "sha256": "44921ecbaf1c7e4b4f5f7d3b4a700d83756345f48113dee7f7539e2578c9a3a5",
+      "bytes": 94929,
+      "sha256": "828691313182ed94fb37c01c98aa08f45297bd71e8109672247ccba82c39308e",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -3909,7 +3909,6 @@
       "changes": [
         "summary: while the parcel layer loads, the three tax maps show the no-figure dash with “loading parcels” instead of zeros",
         "charts: value-axis labels spaced at 84 px so wide panels do not crowd the thousands labels",
-        "local preview server allows shell.css, sila-charts.js and the terrain worker",
         "app.js and sila-charts.js cache keys 2.0.1; browser and accessibility receipts re-run on the patched code"
       ],
       "foundBy": "opening the live 2.0 site in Chrome on a Mac (Apple M5): first paint showed +0 while 3 MB of parcels loaded"

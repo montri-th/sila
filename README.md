@@ -1,6 +1,6 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "2.0"
+artifact_revision: "2.0.1"
 updated_on: "2026-10-20"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
@@ -57,6 +57,8 @@ municipal_writes: false
 **ดูแลคน** แยก **สัตว์เลี้ยง: สุนัขและแมว** และ **กลุ่มเปราะบางและผู้รับการดูแล** เป็นแผนที่คนละรายการในงานดูแลคน ไม่ปนกันในแผงเดียวอีก
 
 **Street View** ปุ่มแรกเปิด Google Maps พร้อมหมุดที่จุดนั้น (ไม่เปิดจอดำ) ปุ่ม Street View ที่หันเข้าหาแปลงเป็นปุ่มที่สองและบอกว่า "ถ้ามีภาพ" ถ้าเทศบาลมีคีย์ Google Maps Platform สคริปต์ [tools/streetview-coverage.py](tools/streetview-coverage.py) ตรวจความครอบคลุมแบบออฟไลน์แล้วซ่อนปุ่มที่ไม่มีภาพ คีย์ไม่อยู่ในคลัง
+
+**รุ่นย่อย 2.0.1** ระหว่างโหลดแปลง 3 MB สรุปด้านบนขึ้น “—” พร้อม “กำลังเปิดข้อมูลแปลง” แทนเลขศูนย์ และป้ายแกนกราฟห่างขึ้นบนจอกว้าง (พบเมื่อเปิดรุ่น 2.0 ใน Chrome จริง)
 
 **ไอคอนใหม่ (รออนุมัติ)** Material Symbols Rounded จาก commit เดิม: payments, volunteer_activism, construction, explore (งาน 5 กลุ่ม) · handshake, agriculture, leaderboard (แผนที่ใหม่) · pets, water_damage, tune, bar_chart ดู [reference/ui-icons.manifest.json](reference/ui-icons.manifest.json)
 
