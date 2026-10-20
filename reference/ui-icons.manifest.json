@@ -21,7 +21,8 @@
     "decision": "artifact_owned_subset_extension_for_requested_interface_roles",
     "canonicalDesignSystemPromotion": false,
     "fullICON01ConformanceClaim": false,
-    "ownerApproval20261020": "Owner approved the full set of 12 interface roles on 20 Oct 2026 (16:50): street_view → Street View, travel_explore → Google AI Mode, storefront → businesses, home_work → properties, calculate → tax calculator, download → CSV, search → search, layers → layers, warning → needs check, check_circle → passed, schedule → awaiting data, fit_screen → fit area. Nine glyphs are new; download, search and layers were already in the set."
+    "ownerApproval20261020": "Owner approved the full set of 12 interface roles on 20 Oct 2026 (16:50): street_view → Street View, travel_explore → Google AI Mode, storefront → businesses, home_work → properties, calculate → tax calculator, download → CSV, search → search, layers → layers, warning → needs check, check_circle → passed, schedule → awaiting data, fit_screen → fit area. Nine glyphs are new; download, search and layers were already in the set.",
+    "ownerRequest20261020Revision20": "Owner asked on 20 Oct 2026 (21:41) for icons for the five confirmed work groups and for the new maps; proposed set: payments → tax, flood → flood, volunteer_activism → care, construction → works, explore → area, handshake → negotiation plan, agriculture → farmland watch, leaderboard → owner ranking, pets → dogs and cats, water_damage → flood sites, tune → map settings, bar_chart → charts. Owner approval pending."
   },
   "roles": {
     "overview": "dashboard",
@@ -69,7 +70,18 @@
     "csv": "download",
     "needscheck": "warning",
     "passed": "check_circle",
-    "awaiting": "schedule"
+    "awaiting": "schedule",
+    "tax": "payments",
+    "care": "volunteer_activism",
+    "works": "construction",
+    "area": "explore",
+    "negotiate": "handshake",
+    "agriwatch": "agriculture",
+    "portfolio": "leaderboard",
+    "pets": "pets",
+    "floodsites": "water_damage",
+    "settings": "tune",
+    "chart": "bar_chart"
   },
   "assets": [
     {
@@ -899,6 +911,116 @@
       },
       "role": "interface_icon",
       "adoption": "retain_exact_source_svg; inline_adapter_adds_currentColor_and_accessibility_attributes_only"
+    },
+    {
+      "glyph": "payments",
+      "path": "assets/ui-icons/payments.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/payments/materialsymbolsrounded/payments_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/payments/materialsymbolsrounded/payments_wght300_24px.svg",
+      "bytes": 1098,
+      "sha256": "f3e8fefba9842b526b08ed5a5bbfa545e9746d6816410b681f4e98fbb9cf96de"
+    },
+    {
+      "glyph": "volunteer_activism",
+      "path": "assets/ui-icons/volunteer_activism.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/volunteer_activism/materialsymbolsrounded/volunteer_activism_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/volunteer_activism/materialsymbolsrounded/volunteer_activism_wght300_24px.svg",
+      "bytes": 1830,
+      "sha256": "b111e2ce494c7bfd9c47e15c850fccf034133fddeb3ef1c4ecd4b3b5125d96c6"
+    },
+    {
+      "glyph": "construction",
+      "path": "assets/ui-icons/construction.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/construction/materialsymbolsrounded/construction_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/construction/materialsymbolsrounded/construction_wght300_24px.svg",
+      "bytes": 1240,
+      "sha256": "ad5ad3c6341d7b98bc1b3a81f1a2130d389ab35e7bc16b077531a2a631334f14"
+    },
+    {
+      "glyph": "explore",
+      "path": "assets/ui-icons/explore.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/explore/materialsymbolsrounded/explore_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/explore/materialsymbolsrounded/explore_wght300_24px.svg",
+      "bytes": 867,
+      "sha256": "e83ebcd25ba14f9d6e53387de234fbe5387e3ffccd2fe218878f4b22d3995c00"
+    },
+    {
+      "glyph": "handshake",
+      "path": "assets/ui-icons/handshake.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/handshake/materialsymbolsrounded/handshake_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/handshake/materialsymbolsrounded/handshake_wght300_24px.svg",
+      "bytes": 2386,
+      "sha256": "d0d1735d069ca1574a77b64bb67e94e8f461b7e1af03d741572e86a41994be6e"
+    },
+    {
+      "glyph": "agriculture",
+      "path": "assets/ui-icons/agriculture.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/agriculture/materialsymbolsrounded/agriculture_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/agriculture/materialsymbolsrounded/agriculture_wght300_24px.svg",
+      "bytes": 1601,
+      "sha256": "6b086a79b91b30838c0eb466c2cb27a2302a5e43f283cd87e55c6b728bbbf6cc"
+    },
+    {
+      "glyph": "leaderboard",
+      "path": "assets/ui-icons/leaderboard.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/leaderboard/materialsymbolsrounded/leaderboard_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/leaderboard/materialsymbolsrounded/leaderboard_wght300_24px.svg",
+      "bytes": 521,
+      "sha256": "c2b806f47c7a96221c5b91b71bea0d9a5ea3370147fdeee6830e65cf4108b3bc"
+    },
+    {
+      "glyph": "pets",
+      "path": "assets/ui-icons/pets.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/pets/materialsymbolsrounded/pets_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/pets/materialsymbolsrounded/pets_wght300_24px.svg",
+      "bytes": 1088,
+      "sha256": "905a0282ad1a7fec252ecee545303ee01fe8b82f0429c96f84b9dffa813e0fec"
+    },
+    {
+      "glyph": "water_damage",
+      "path": "assets/ui-icons/water_damage.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/water_damage/materialsymbolsrounded/water_damage_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/water_damage/materialsymbolsrounded/water_damage_wght300_24px.svg",
+      "bytes": 773,
+      "sha256": "a498a7fead34f05a2083f2bae2d195a12deecc04a11637d8dcd83eee2d44186c"
+    },
+    {
+      "glyph": "tune",
+      "path": "assets/ui-icons/tune.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/tune/materialsymbolsrounded/tune_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/tune/materialsymbolsrounded/tune_wght300_24px.svg",
+      "bytes": 1428,
+      "sha256": "d60aca3dcc090d731662352a21146616588fed10ced8724ad41c2f89f6434fe1"
+    },
+    {
+      "glyph": "bar_chart",
+      "path": "assets/ui-icons/bar_chart.svg",
+      "sourceRepository": "google/material-design-icons",
+      "sourceCommit": "737e3324305806514d7909874fa1818ae1808232",
+      "sourcePath": "symbols/web/bar_chart/materialsymbolsrounded/bar_chart_wght300_24px.svg",
+      "sourceUrl": "https://github.com/google/material-design-icons/blob/737e3324305806514d7909874fa1818ae1808232/symbols/web/bar_chart/materialsymbolsrounded/bar_chart_wght300_24px.svg",
+      "bytes": 715,
+      "sha256": "7f464accdac9ad9e319eddd8e6887d7e64212adf6c208c5f549bb1b9b7ecedd9"
     }
   ],
   "adapter": {
@@ -917,6 +1039,8 @@
   "validation": {
     "sourceSVGFiles": "46 UTF-8 SVGs from pinned official source, original path bytes retained",
     "nativeOpticalSize": 24,
-    "renderReview": "pending root desktop/narrow light/dark review"
+    "renderReview": "pending root desktop/narrow light/dark review",
+    "assetCount": 57,
+    "checkedOn": "2026-10-20"
   }
 }

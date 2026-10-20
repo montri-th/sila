@@ -1,6 +1,6 @@
 {
   "schema": "sila-inline-terrain-contract/2.0",
-  "revision": "1.9",
+  "revision": "2.0",
   "preparedOn": "2026-10-20",
   "publicationState": "source_contract_provider_and_runtime_proof_separate",
   "sourceMetadata": "data/terrain-source.json",
@@ -186,7 +186,7 @@
     "supersededIn": "1.9: replaced by renderer3D (MapLibre native terrain); kept as the 1.6-1.8 history"
   },
   "renderer3D": {
-    "revision": "1.9",
+    "revision": "2.0",
     "module": "terrain-3d.js 2.0.0",
     "worker": "terrain-dem-worker.js",
     "engine": "MapLibre GL JS 6.12.0 raster-dem terrain (level-of-detail mesh, render-to-texture drape)",
@@ -258,5 +258,14 @@
       "automaticAvailable": true,
       "url": "ex=<value> when not 2; ex=auto for automatic; ext=<5..30> target share; a legacy link with only ext opens automatic"
     }
+  },
+  "closedLowGround": {
+    "revision": "2.0",
+    "status": "code shipped; data file withheld until the owner reviews the pictures (public flood-risk communication is human-reviewed first)",
+    "file": "data/flood-lowground.geojson",
+    "method": "priority-flood depression filling on the z12 FABDEM tiles (~36.6 m pixels), depth = filled - ground, cells >= 0.3 m, components >= 3 cells, bbox + ~3 km with edge cells as outlets",
+    "scale": "LDS 0.9.7 water, 5 classes by deepest point (0.3-0.5, 0.5-1, 1-2, 2-4, >=4 m), identical in both themes",
+    "meaning": "where water can stand before it spills; not a flood forecast; ignores drains, built channels and rainfall; FABDEM vertical error about 1 m",
+    "mode": "2D only, toggle in the height-colour card"
   }
 }

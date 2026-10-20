@@ -977,6 +977,65 @@
    }
   },
   {
+   "id": "floodsites",
+   "label": "จุดศึกษาน้ำท่วม 16 จุด (ข้อเสนอ 17 ต.ค. 2569)",
+   "group": "Flood",
+   "status": "ready_with_caveats",
+   "geometryType": "point",
+   "count": 16,
+   "mappedCount": 16,
+   "nullOrUnusableGeometryCount": 0,
+   "displayRepairCount": 0,
+   "geojson": "data/flood-sites.geojson",
+   "sourceFolders": [],
+   "sourceUrl": null,
+   "sourceCRS": [
+    "EPSG:4326"
+   ],
+   "caveats": [
+    "Reference points of the 16 sites in the owner's flood study (CityChat v7, 17 Oct 2569): 11 matched approximately from the municipal plan's figures, 4 representative of a named area (2, 5, 12, 16), 1 pinned by the coordinator (4); 0 surveyed. They mark the area to visit, not the lowest point or a pipe mouth.",
+    "Causes, options and sequence are quoted from the study, which builds on the municipal flood plan 2564-2567 and the coordinator's notes; no site has verified levels, capacity or rights yet.",
+    "The study's 10-50 cm water scenarios and corridor lines are not published on the map until the owner reviews them (public flood-risk communication is human-reviewed first)."
+   ],
+   "insideMunicipalityCount": 16,
+   "scopeCountMethod": "point in supplied boundary",
+   "privacy": "no personal data; place names only",
+   "nativeGrain": "study site",
+   "scopeCounts": {
+    "municipality": 16,
+    "villages": {
+     "v26": 4,
+     "v15": 2,
+     "v21": 1,
+     "v20": 4,
+     "v14": 2,
+     "v27": 1,
+     "v03": 2,
+     "v01": 0,
+     "v02": 0,
+     "v04": 0,
+     "v05": 0,
+     "v06": 0,
+     "v07": 0,
+     "v08": 0,
+     "v09": 0,
+     "v10": 0,
+     "v11": 0,
+     "v12": 0,
+     "v13": 0,
+     "v16": 0,
+     "v17": 0,
+     "v18": 0,
+     "v19": 0,
+     "v22": 0,
+     "v23": 0,
+     "v24": 0,
+     "v25": 0,
+     "v28": 0
+    }
+   }
+  },
+  {
    "id": "taxmap",
    "label": "ภาษีที่ดินรายแปลง",
    "group": "Land",
@@ -1254,6 +1313,173 @@
     }
    },
    "attributes": "data/population-structure.json"
+  },
+  {
+   "id": "negotiate",
+   "label": "แผนการเจรจา: เก็บเพิ่มได้ตามกลุ่มข้อเสนอ",
+   "group": "Land",
+   "status": "derived_20261020",
+   "geometryType": "polygon",
+   "count": 1410,
+   "mappedCount": 40920,
+   "geojson": "data/parcels.geojson",
+   "sourceFolders": [],
+   "caveats": [
+    "Gain per title = 2570 tax with the selected fixes minus the 2570 current method, where the current method is the 2569 bill (PDS 7) scaled by the title’s own law-based price change. Since revision 2.0 the gain is measured against the bill, never against the engine’s own reconstruction of 2569.",
+    "Each title’s gain is allocated to the fixes that raise it; the remainder, where the roll already bills below the law-based figure from the same price, area and use, is a check item (rollBelow), not a proposal.",
+    "Titles the roll bills above the law-based figure (for example vacant land at an escalated s.43 rate) add nothing and are listed separately for reconciliation.",
+    "Scenario, not an assessment. Owners from the 2563 PDS 3 list are assumed unchanged; owner names are never published.",
+    "The count is the number of titles whose gain over the 2569 bill is at least 0.50 THB after leaving out roll-below-computation gaps under 100 THB per title (rounding and depreciation noise); 8,654 titles have any positive gain at all."
+   ],
+   "scopeCounts": {
+    "municipality": 40776,
+    "villages": {
+     "v01": 1368,
+     "v02": 4897,
+     "v03": 3144,
+     "v04": 815,
+     "v05": 437,
+     "v06": 250,
+     "v07": 1674,
+     "v08": 989,
+     "v09": 311,
+     "v10": 1285,
+     "v11": 1052,
+     "v12": 2922,
+     "v13": 953,
+     "v14": 2455,
+     "v15": 2422,
+     "v16": 1517,
+     "v17": 2363,
+     "v18": 812,
+     "v19": 835,
+     "v20": 1168,
+     "v21": 1226,
+     "v22": 1179,
+     "v23": 726,
+     "v24": 557,
+     "v25": 1183,
+     "v26": 3318,
+     "v27": 1040,
+     "v28": 1227
+    },
+    "elections": {
+     "e01": 13402,
+     "e02": 11817,
+     "e03": 15851
+    }
+   },
+   "attributes": "data/parcel-tax.json"
+  },
+  {
+   "id": "agriwatch",
+   "label": "เกษตรบนที่ดินราคาสูง ควรเพ่งเล็ง",
+   "group": "Land",
+   "status": "derived_20261020",
+   "geometryType": "polygon",
+   "count": 279,
+   "mappedCount": 40920,
+   "geojson": "data/parcels.geojson",
+   "sourceFolders": [],
+   "caveats": [
+    "Titles the 2569 roll records as agricultural (wholly or in part) whose land value is at least 5 million THB. The potential is the law-based tax if the land were vacant (s.43 base rate, no relief) minus the 2569 bill; it is not evidence that the land is unused.",
+    "Agricultural use must meet the joint ministerial criteria (minimum planting density and the like); only a site check decides. Buildings on the title and survey signals are hints for the visit.",
+    "Scenario figures from the same prices and areas as the roll. Owner names are never published."
+   ],
+   "scopeCounts": {
+    "municipality": 40776,
+    "villages": {
+     "v01": 1368,
+     "v02": 4897,
+     "v03": 3144,
+     "v04": 815,
+     "v05": 437,
+     "v06": 250,
+     "v07": 1674,
+     "v08": 989,
+     "v09": 311,
+     "v10": 1285,
+     "v11": 1052,
+     "v12": 2922,
+     "v13": 953,
+     "v14": 2455,
+     "v15": 2422,
+     "v16": 1517,
+     "v17": 2363,
+     "v18": 812,
+     "v19": 835,
+     "v20": 1168,
+     "v21": 1226,
+     "v22": 1179,
+     "v23": 726,
+     "v24": 557,
+     "v25": 1183,
+     "v26": 3318,
+     "v27": 1040,
+     "v28": 1227
+    },
+    "elections": {
+     "e01": 13402,
+     "e02": 11817,
+     "e03": 15851
+    }
+   },
+   "attributes": "data/parcel-tax.json"
+  },
+  {
+   "id": "portfolio",
+   "label": "เจ้าของรายใหญ่ เรียงตามราคาประเมินรวม",
+   "group": "Land",
+   "status": "derived_20261020",
+   "geometryType": "polygon",
+   "count": 18567,
+   "mappedCount": 40920,
+   "geojson": "data/parcels.geojson",
+   "sourceFolders": [],
+   "caveats": [
+    "Every owner code from the 2563 PDS 3 list (assumed unchanged) with its titles on the map, the appraised land value and the value of buildings the roll links to those titles, the 2569 bill and the 2570 scenario figures.",
+    "Building value is known only for roll-linked buildings; other buildings count as unknown, not zero. Owner names are never published; codes are random.",
+    "A portfolio can include titles outside the municipal boundary line that are on the Sila roll."
+   ],
+   "scopeCounts": {
+    "municipality": 23733,
+    "villages": {
+     "v01": 963,
+     "v02": 2949,
+     "v03": 1836,
+     "v04": 633,
+     "v05": 291,
+     "v06": 185,
+     "v07": 923,
+     "v08": 633,
+     "v09": 205,
+     "v10": 886,
+     "v11": 590,
+     "v12": 1444,
+     "v13": 545,
+     "v14": 1718,
+     "v15": 1344,
+     "v16": 944,
+     "v17": 1208,
+     "v18": 493,
+     "v19": 306,
+     "v20": 624,
+     "v21": 701,
+     "v22": 565,
+     "v23": 395,
+     "v24": 387,
+     "v25": 665,
+     "v26": 2172,
+     "v27": 565,
+     "v28": 638
+    },
+    "elections": {
+     "e01": 7396,
+     "e02": 7219,
+     "e03": 9472
+    }
+   },
+   "attributes": "data/parcel-tax.json"
   }
  ],
  "folders": [

@@ -166,3 +166,50 @@ console.log(JSON.stringify({status: 'passed', checks, scope: 'Synthetic portfoli
   assert.equal(j1.byProperty.get('pc1').reasons.get('juristic'), 1000); checks++;
   console.log(JSON.stringify({status: 'passed', ownerChecks: 17}));
 }
+// 19 Revision 2.0: the baseline is the 2569 bill, gains are allocated to fixes, the remainder is a roll check item;
+//    bills above the law-based figure add nothing; vacancy is inferred from the s.43 escalation; farmland watch; owner ranking.
+{
+  const m = model([
+    // Mixed-use title: law tax at 0.02% on 10M residence = 2,000; roll billed 1,500 (below). With mixedUse (40% commercial):
+    // 6M at 0.02% = 1,200 + 4M at 0.3% = 12,000 -> 13,200. Gain vs bill = 11,700; the fix explains 11,200, the roll gap 500.
+    {id: 'x1', landValue: 6e6, bldValue: 4e6, use: 'res', comShare: 0.4, tp: 'P1', tax69: 1500},
+    // Vacant land 20M billed at 0.6% = 120,000 while the law-based first-step rate is 0.3% = 60,000: billed above, no gain,
+    // and the escalation says it has been vacant 4-6 years.
+    {id: 'v1', landValue: 20e6, use: 'vacant', tp: 'P2', tax69: 120000},
+    // Vacant land 10M billed at the base 0.3% = 30,000: vacant 1-3 years, next step 0.6% in 2570-2572.
+    {id: 'v2', landValue: 10e6, use: 'vacant', tp: 'P3', tax69: 30000},
+    // Farmland 60M of an individual billed 0 (relief): if found unused it would be 0.3% on 50M + 0.4% on 10M = 190,000.
+    {id: 'f1', landValue: 60e6, use: 'agri', tp: 'P4', tax69: 0},
+    // Farmland 4M: below the 5M watch threshold.
+    {id: 'f2', landValue: 4e6, use: 'agri', tp: 'P4', tax69: 0},
+  ], {P1: {type: 'individual'}, P2: {type: 'individual'}, P3: {type: 'individual'}, P4: {type: 'individual'}});
+  const r = E.run(m, {strategies: new Set(['mixedUse']), appraisalAdjPct: 0});
+  const x = r.byParcel.get('x1');
+  eq(x.assessed69, 1500, 'baseline is the bill'); eq(x.law69, 2000, 'law-based 2569 from the same data'); eq(x.old70, 1500, '2570 current method = bill at the same prices');
+  eq(x.new70, 13200, '2570 with the mixed-use fix'); eq(x.gain, 11700, 'gain is measured against the bill');
+  eq(x.alloc.get('mixedUse'), 11200, 'the fix explains its own effect'); eq(x.alloc.get('rollBelow'), 500, 'the remainder is the roll check item');
+  assert.equal(x.dominant, 'mixedUse'); checks++;
+  const v1 = r.byParcel.get('v1');
+  eq(v1.gain, 0, 'a bill above the law-based figure adds nothing'); eq(v1.rollAbove, 60000, 'the excess is listed, not deducted');
+  assert.equal(v1.vacancy.steps, 1); assert.equal(v1.vacancy.yearsMin, 4); assert.equal(v1.vacancy.yearsMax, 6); checks += 3;
+  assert.equal(v1.vacancy.startEarliest, 2564); assert.equal(v1.vacancy.startLatest, 2566); eq(v1.vacancy.nextRate, 0.009, 'next step 0.9%'); checks += 2;
+  const v2 = r.byParcel.get('v2');
+  assert.equal(v2.vacancy.steps, 0); assert.equal(v2.vacancy.yearsMin, 1); assert.equal(v2.vacancy.yearsMax, 3); eq(v2.vacancy.nextRate, 0.006, 'next step 0.6%'); checks += 3;
+  assert.equal(v2.vacancy.nextStepEarliest, 2570); assert.equal(v2.vacancy.nextStepLatest, 2572); checks += 2;
+  eq(r.totals.rollAbove69, 60000, 'city total of bills above the computation'); assert.equal(r.totals.parcelsRollAbove, 1); checks++;
+  // f1 (60M farmland, individual): law-based 0.01% on the 10M above the 50M relief = 1,000 while the roll billed 0, so it joins the check item.
+  eq(r.byParcel.get('f1').law69, 1000, 'farmland above the relief'); eq(r.byParcel.get('f1').alloc.get('rollBelow'), 1000, 'unexplained gap is a check item');
+  const audit = r.byStrategy.find((s) => s.id === 'rollBelow'); assert.ok(audit, 'audit entry present'); eq(audit.alloc, 1500, 'audit allocation city-wide (500 + 1,000)');
+  // Farmland watch: only f1 qualifies at the 5M threshold; potential = tax if vacant - billed.
+  const w = E.agriWatch(m, r, 5e6);
+  assert.equal(w.length, 1); assert.equal(w[0].id, 'f1'); checks += 2;
+  eq(w[0].ifVacant, 190000, 'vacant-land tax on 60M'); eq(w[0].potential, 190000, 'potential against a 0 bill');
+  assert.equal(E.agriWatch(m, r, 3e6).length, 2); checks++;
+  // Owner ranking: P4 holds 64M of land (largest), P2 20M, P1 10M (6M land + 4M building), P3 10M land.
+  const o = E.ownerRanking(m, r);
+  assert.deepStrictEqual([...o.map((t) => t.code)], ['P4', 'P2', 'P1', 'P3']); checks++;
+  const p1 = o.find((t) => t.code === 'P1');
+  eq(p1.value, 10e6, 'land plus roll-linked building'); assert.equal(p1.bldKnown, 1); eq(p1.gain, 11700, 'owner gain sums the titles'); eq(p1.assessed69, 1500, 'owner bill');
+  assert.equal(o[0].rank, 1); assert.equal(o.find((t) => t.code === 'P4').parcels.length, 2); checks += 2;
+  console.log(JSON.stringify({status: 'passed', revision20Checks: 33}));
+}

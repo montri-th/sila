@@ -1,0 +1,231 @@
+{
+ "schema": "sila-accessibility-checks/2.0",
+ "checkedAtUtc": "2026-10-20T16:18:36.818319+00:00",
+ "base": "local preview of the revision-2.0 tree (python http.server, loopback)",
+ "tool": "axe-core 4.10.2",
+ "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
+ "views": [
+  {
+   "view": "negotiate-dark-th",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-init-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-record",
+   "viewport": "1440x900",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "negotiate-explain-open",
+   "viewport": "1440x900",
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "agriwatch-light",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "agriwatch-list-en",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "portfolio-dark",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "portfolio-owner-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "portfolio-list",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-dark-th",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-record-calc",
+   "viewport": "1440x900",
+   "rulesPassed": 31,
+   "violations": []
+  },
+  {
+   "view": "taxmap-colour-table-open",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "properties-list-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "properties-card",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "businesses-card-en",
+   "viewport": "1440x900",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "buildings-tax-card",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "houses-sources-en",
+   "viewport": "1440x900",
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "floodsites-dark",
+   "viewport": "1440x900",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "floodsites-record-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "terrain-2d-light-en",
+   "viewport": "1440x900",
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "popgrid-light",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "caregroups-definitions",
+   "viewport": "1440x900",
+   "rulesPassed": 52,
+   "violations": []
+  },
+  {
+   "view": "animals-en",
+   "viewport": "1440x900",
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "roads",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "overview-en",
+   "viewport": "1440x900",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "map-settings-open",
+   "viewport": "1440x900",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-negotiate-peek",
+   "viewport": "390x844",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-negotiate-full",
+   "viewport": "390x844",
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-record",
+   "viewport": "390x844",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-portfolio-owner",
+   "viewport": "390x844",
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "phone-floodsites-light",
+   "viewport": "390x844",
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-animals",
+   "viewport": "390x844",
+   "rulesPassed": 47,
+   "violations": []
+  }
+ ],
+ "manualChecks": {
+  "contrast": "Measured on 21 Oct 2026 from computed styles with alpha-blended backgrounds on the negotiation plan (overview, list, record), flood sites (overview, record, zoomed numbers) and owner card, dark and light themes, basemap none, 1440 and 390 px. Lowest text contrast 4.64:1 (light theme, 11 px muted sub-line of an initiative row on the raised card); popup check flag 5.21:1 (light, 11.5 px); summary labels, chart captions and map hint 5.29:1 (light, 11 px); dark theme lowest 5.94:1. Selected mission tab: identity gradient ends 8.24-8.69:1 (dark, dark ink) and 4.93-5.35:1 (light, white ink). Chart text is drawn on canvas by amCharts in the same ink and secondary colours over the card background (not measured per glyph). All measured elements sit on a card or panel background, none on map tiles.",
+  "keyboard": "Tab order measured on 21 Oct 2026 (landing, 1440 px): skip link, home, language and theme options, map, area shape, zoom in, zoom out, Leaflet attribution, fit to area, panel splitter, five mission tabs, map select, boundary select, overview/records/sources tabs, panel content, initiative rows. Every stop shows a 2 px solid focus outline; the back button is skipped while disabled. Enter on a mission tab re-renders the tabs and returns focus to the selected tab; Enter on an explanation summary opens it and keeps focus (qa/revision-2.0-browser-checks.json flow keyboard). On phones the sheet handle is a labelled button (aria-expanded).",
+  "language": "html lang follows the page language; summary titles, map select, boundary select, legend, charts and cards switch with it",
+  "targets": "Checkboxes are 18 px but sit inside full-width labels at least 44 px tall, which are the click and tap targets; map controls are 44 x 44 px; mission tabs 56 px tall (50 px on 320 px phones)",
+  "motion": "The bottom sheet animates its height for 0.2 s and not at all under prefers-reduced-motion; charts draw without animation (the amCharts Animated theme is not bundled)"
+ },
+ "notCovered": [
+  "screen readers on real devices",
+  "real phones (the owner tests on the officers’ devices)",
+  "zoom to 200% on desktop browsers",
+  "chart text drawn on canvas (no DOM for axe; captions carry the declaration in the DOM)"
+ ],
+ "browser": "Chromium 141.0.7390.37",
+ "summary": {
+  "views": 34,
+  "violations": 0
+ }
+}

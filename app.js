@@ -4,6 +4,7 @@
   const PublicAggregates = window.SilaPublicAggregates || {ids:[],icons:{},valid:()=>false,get:()=>null,entries:()=>[],render:()=>"",localized:v=>String(v ?? ""),valueLabel:m=>({number:m?.value ?? "—",state:""})};
   const Missions = window.SilaMissions;
   const TAX_STRATEGIES = window.SilaTaxEngine?.STRATEGIES || [];
+  const TAX_AUDIT = window.SilaTaxEngine?.AUDIT || null;   // revision 2.0: the roll-below-law check item, allocated like a fix
   const DEFAULT_STRATEGIES = ["combine", "combineBuilding", "agriShare", "mainHomeOnce", "juristic", "mixedUse", "rented", "newBuildings"];
   // Links saved before revision 1.9 carry the old default set; they open with the new default instead.
   const OLD_DEFAULT_FIX = "agriShare.combine.combineBuilding.mixedUse.newBuildings.rented";
@@ -41,7 +42,7 @@
       ? "—"
       : Number(v).toLocaleString("en-US", { maximumFractionDigits: digits });
   const S = {
-    legendCollapsed: typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(max-width: 1100px)").matches : false,
+    sheet: "peek",
     lang: "th",
     theme: "dark",
     dataset: "buildings",
@@ -96,6 +97,9 @@
     bldAdj: 0,
     propMetric: "thb",
     propSort: "thb",
+    initiative: null,      // revision 2.0: negotiation map filter (one initiative id) or null for all
+    owner: null,           // revision 2.0: owner code focused on the owner-ranking map
+    agriMin: 5e6,          // revision 2.0: farmland watch threshold on land value (THB)
     lutRefs: {},
     popMetric: "t",
     buildingView: "type",
@@ -110,6 +114,8 @@
     terrainRangeLock: false,
     terrainRange: { lo: 150, hi: 210 },
     terrainContours: true,
+    terrainLowground: true,
+    lowgroundStatus: "unknown",   // unknown | ready | missing (the file is published only after the owner's review)
     terrainStepChoice: "auto",
     terrainStep: 1,
     terrainStepNote: null,
@@ -141,6 +147,7 @@
     buildings: ["รูปอาคาร", "Building footprints"],
     basemap: ["พื้นหลัง", "Basemap"],
     settings: ["ตัวเลือก", "Options"],
+    mapSettings: ["ตั้งค่าแผนที่", "Map settings"],
     back: ["ย้อนกลับ", "Back"],
     fit: ["ดูเต็มพื้นที่", "Fit area"],
     overview: ["ภาพรวม", "Overview"],
@@ -182,6 +189,12 @@
     election: ["เขตเลือกตั้ง 3 เขต", "3 electoral areas"],
     parcels: ["แปลงที่ดิน (แผนที่ภาษี)", "Parcels (tax map)"],
     flood: ["แผนแก้น้ำท่วม 16 จุด", "Flood-fix plan · 16 sites"],
+    floodsites: ["จุดศึกษาน้ำท่วม 16 จุด", "16 flood study sites"],
+    negotiate: ["แผนการเจรจา: เก็บเพิ่มได้ตามกลุ่มข้อเสนอ", "Negotiation plan: gains by initiative"],
+    agriwatch: ["เกษตรบนที่ดินราคาสูง ควรเพ่งเล็ง", "High-value farmland to watch"],
+    portfolio: ["เจ้าของรายใหญ่ เรียงตามราคาประเมินรวม", "Largest owners by appraised value"],
+    caregroups: ["กลุ่มเปราะบางและผู้รับการดูแล (ยอดรวม)", "Vulnerable groups and care recipients (totals)"],
+    animals: ["สัตว์เลี้ยง: สุนัขและแมว (ยอดรวม)", "Pets: dogs and cats (totals)"],
     terrain: ["ที่สูงที่ต่ำ 2D และ 3D", "High and low ground in 2D and 3D"],
   };
   const colors = {
@@ -194,6 +207,7 @@
     houses: "mint",
     buildings: "yellow",
     roads: "apricot",
+    floodsites: "blue",
     cctv: "sky",
     education: "lime",
     health: "coral",
@@ -295,7 +309,12 @@
           sourceFolders: ["ขอบเขต28หมู่บ้าน", "ขอบเขตทม.ศิลา"],
           sourceUrl: S.metadata?.sourceFolder,
         }
-      : S.catalog.datasets.find((d) => d.id === id);
+      : S.catalog.datasets.find((d) => d.id === id) || aggregateDataset(id);
+  /* Municipality-wide totals with no geography (care register, animal workbook) are layers of their own in 2.0. */
+  const AGGREGATE_LAYERS = new Set(["caregroups", "animals"]);
+  const aggregateDataset = (id) => AGGREGATE_LAYERS.has(id) && PublicAggregates.get(S.publicSummary, id)
+    ? { id, label: PublicAggregates.localized(PublicAggregates.get(S.publicSummary, id).label, S.lang), group: "Living", status: "ready_with_caveats", count: null, geojson: null, aggregate: true }
+    : undefined;
   const publicAggregate = (id = S.dataset) => PublicAggregates.get(S.publicSummary, id);
   const publicAggregateView = (tab) => PublicAggregates.render(S.publicSummary, S.dataset, { language: S.lang, tab, scopeLabel: scopeLabel() });
   const datasetIcon = (id, size) => window.SilaIcons.dataset(PublicAggregates.icons[id] || id, { size });
@@ -439,6 +458,9 @@
     };
     if (S.dataset === "taxmap" || (S.dataset === "buildings" && S.buildingView === "tax")) { params.scenario = S.taxScenario; params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); }
     if (S.dataset === "properties") { params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); if (S.propMetric === "pct") params.pm = "pct"; }
+    if (["negotiate", "agriwatch", "portfolio"].includes(S.dataset)) { params.adj = String(S.appraisalAdj); params.badj = String(S.bldAdj); params.fix = [...S.taxStrategies].sort().join("."); }
+    if (S.dataset === "negotiate" && S.initiative) params.init = S.initiative;
+    if (S.dataset === "portfolio" && S.owner) params.owner = S.owner;
     if (S.dataset === "appraisal" && S.appraisalAdj) params.adj = String(S.appraisalAdj);
     if (S.dataset === "popgrid") params.metric = S.popMetric;
     if (S.dataset === "buildings" && S.buildingView !== "type") params.view = S.buildingView;
@@ -448,6 +470,7 @@
       if (S.terrainMapping !== "equalize") params.map = S.terrainMapping;
       if (S.terrainRangeLock && S.terrainRange) params.lock = `${Math.round(S.terrainRange.lo * 10) / 10}~${Math.round(S.terrainRange.hi * 10) / 10}`;
       if (!S.terrainContours) params.ct = "0";
+      if (!S.terrainLowground) params.low = "0";
       if (S.terrainStepChoice !== "auto") params.step = String(S.terrainStepChoice);
     }
     if (S.dataset === "terrain" && S.mode === "3d") {
@@ -476,6 +499,8 @@
     S.bldAdj = Number.isFinite(badj) ? Math.max(-30, Math.min(100, Math.round(badj))) : 0;
     if (q.has("fix")) S.taxStrategies = q.get("fix") === OLD_DEFAULT_FIX ? new Set(DEFAULT_STRATEGIES) : new Set(String(q.get("fix")).split(".").filter(k => TAX_STRATEGIES.some(s => s.id === k)));
     S.propMetric = q.get("pm") === "pct" ? "pct" : "thb";
+    S.initiative = INITIATIVE_ORDER.includes(q.get("init")) ? q.get("init") : null;
+    S.owner = /^T-[A-Z0-9]{6}$/.test(q.get("owner") || "") ? q.get("owner") : null;
     S.popMetric = ["t", "c", "a", "o", "m", "f"].includes(q.get("metric")) ? q.get("metric") : "t";
     S.buildingView = ["type", "tax", "registry", "roll", "straddle", "use"].includes(q.get("view")) ? q.get("view") : "type";
     S.listFilter = null;
@@ -488,6 +513,7 @@
     S.terrainBands = q.get("bands") !== "0";
     S.terrainMapping = q.get("map") === "linear" ? "linear" : "equalize";
     S.terrainContours = q.get("ct") !== "0";
+    S.terrainLowground = q.get("low") !== "0";
     const step = Number(q.get("step"));
     S.terrainStepChoice = CONTOUR_STEPS.includes(step) ? step : "auto";
     const lock = String(q.get("lock") || "").split("~").map(Number);
@@ -595,25 +621,29 @@
   function layerCount(id) {
     if (id === "terrain") return "2D/3D";
     if (id === "overview") return `${num(S.metadata.villages.length)} ${text("หมู่บ้าน", "villages")}`;
-    if (id === "popgrid") return null;
+    if (id === "popgrid" || AGGREGATE_LAYERS.has(id)) return null;
+    if (id === "population") return `${num(populationFor())} ${text("คน", "people")}`;
     const d = dataset(id);
     if (!d) return null;
     const n = countFor(id, S.scope) ?? (S.scope.type === "municipality" ? d.insideMunicipalityCount ?? d.count : null);
     return n == null ? null : `${num(n)} ${text(...(Missions.unit[id] || ["รายการ", "records"]))}`;
   }
   function defaultLayer() {
-    return dataset("taxmap") ? "taxmap" : dataset("appraisal") ? "appraisal" : "buildings";
+    return dataset("negotiate") ? "negotiate" : dataset("taxmap") ? "taxmap" : dataset("appraisal") ? "appraisal" : "buildings";
   }
   function renderPicker() {
     const mount = $("layer-picker");
     if (!mount) return;
-    const focused = document.activeElement?.id;
-    mount.innerHTML = Missions.renderSelectors({ mission: S.mission, layer: S.dataset }, {
+    const active = document.activeElement, focused = active?.id, onTab = !!active?.closest?.(".mission-tab");
+    mount.innerHTML = Missions.renderTabs({ mission: S.mission, layer: S.dataset }, {
       language: S.lang,
       available: (id) => id === "overview" || Boolean(dataset(id)),
       count: layerCount,
+      icon: (role) => window.SilaIcons.icon(role, { size: 22 }),
     });
-    if (focused === "mission-select" || focused === "layer-select") $(focused)?.focus();
+    /* Keyboard users keep their place: a re-render after Enter on a mission tab focuses the selected tab. */
+    if (focused === "layer-select") $(focused)?.focus();
+    else if (onTab) mount.querySelector(`[data-mission="${S.mission}"]`)?.focus();
   }
   function setMission(id, push = true) {
     if (!Missions.byId(id) || id === S.mission) return;
@@ -661,7 +691,7 @@
     }
     const sep = `<span class="breadcrumb-separator" aria-hidden="true">${window.SilaIcons.icon("next",{size:16})}</span>`;
     const municipality = text("เทศบาลเมืองศิลา", "Sila Municipality");
-    $("breadcrumbs").innerHTML = `${window.SilaIcons.icon("municipality",{size:20})}<span>${text("ประเทศไทย", "Thailand")}</span>${sep}<span>${text("ขอนแก่น", "Khon Kaen")}</span>${sep}${S.scope.type === "municipality" && !S.record ? `<strong aria-current="location">${esc(municipality)}</strong>` : `<button data-scope="sila">${esc(municipality)}</button>`}${S.scope.type !== "municipality" ? `${sep}${S.record ? `<button data-close-record>${esc(scopeLabel())}</button>` : `<strong aria-current="location">${esc(scopeLabel())}</strong>`}` : ""}${S.record ? `${sep}<strong aria-current="location">${esc(S.record.properties.label || S.record.properties.id)}</strong>` : ""}`;
+    $("breadcrumbs").innerHTML = `${S.scope.type === "municipality" && !S.record ? `<strong aria-current="location">${esc(municipality)}</strong>` : `<button data-scope="sila">${esc(municipality)}</button>`}${S.scope.type !== "municipality" ? `${sep}${S.record ? `<button data-close-record>${esc(scopeLabel())}</button>` : `<strong aria-current="location">${esc(scopeLabel())}</strong>`}` : ""}${S.record ? `${sep}<strong aria-current="location">${esc(S.record.properties.label || S.record.properties.id)}</strong>` : ""}`;
     $("back").disabled =
       S.scope.type === "municipality" && !S.record && !S.choice;
     document
@@ -735,6 +765,21 @@
     } else if (S.dataset === "properties") {
       const t = propScopeTotals();
       items = [[moneyShort(t.gain), text("ภาษีปี 2570 ที่เพิ่มได้ต่อปี", "2570 tax that can be added a year")], [t.nGain, text("ทรัพย์สินที่ควรตรวจ", "properties to check")], [moneyShort(t.new70), text("ปี 2570 ตามข้อเสนอ ของแปลงที่มีเจ้าของ", "2570 with fixes, owned parcels")]];
+    } else if (S.dataset === "negotiate") {
+      const t = initiativeTotals(), e = t && S.initiative ? t.list.find((x) => x.id === S.initiative) : null;
+      if (S.initiative) items = [[`+${moneyShort(e ? e.sum : 0)}`, text(`เก็บเพิ่มได้ต่อปี · ${initiativeShort(S.initiative)}`, `a year · ${initiativeShort(S.initiative)}`)], [e ? e.parcels : 0, text("แปลงที่ต้องเจรจา", "titles to negotiate")], [t && t.gain ? `${fixed(((e ? e.sum : 0) / t.gain) * 100, 0)} %` : null, text("ของยอดเก็บเพิ่มได้ทั้งหมด", "of the total gain")]];
+      else items = [[t ? `+${moneyShort(t.gain)}` : null, text("เก็บเพิ่มได้ต่อปี", "can be added a year")], [t ? t.parcels : null, text("แปลงที่ต้องเจรจา", "titles to negotiate")], [t && t.billed ? `+${fixed((t.gain / t.billed) * 100, 1)} %` : null, text("เพิ่มจากที่เรียกเก็บปี 2569", "over the 2569 bill")]];
+    } else if (S.dataset === "agriwatch") {
+      const l = agriWatchScope();
+      items = [[`+${moneyShort(l.reduce((a, w) => a + (w.potential || 0), 0))}`, text("ต่อปี ถ้าตรวจพบว่าไม่ได้ทำประโยชน์", "a year if found unused")], [l.length, text("แปลงเกษตรมูลค่า 5 ล้านขึ้นไป", "farm titles worth 5M+")], [moneyShort(l.reduce((a, w) => a + (w.billed69 || 0), 0)), text("เรียกเก็บปี 2569 ตามอัตราเกษตร", "billed in 2569 at farm rates")]];
+    } else if (S.dataset === "portfolio") {
+      const o = S.owner ? ownerRec(S.owner) : null;
+      if (o) items = [[moneyShort(o.value), text(`มูลค่าประเมินรวม · อันดับ ${num(o.rank)}`, `appraised value · #${num(o.rank)}`)], [o.parcels.length, text("แปลงของรายนี้", "parcels held")], [o.gain >= 0.5 ? `+${moneyShort(o.gain)}` : moneyShort(0), text("เก็บเพิ่มได้ต่อปี", "can be added a year")]];
+      else {
+        const l = ownersInScope();
+        const tot = l.reduce((a, o) => a + o.value, 0), top10 = l.slice(0, 10).reduce((a, o) => a + o.value, 0);
+        items = [[l.length, text("เจ้าของในบัญชีปี 2563", "owners in the 2563 list")], [moneyShort(tot), text("มูลค่าประเมินรวม", "appraised value in total")], [tot ? `${fixed((top10 / tot) * 100, 1)} %` : null, text("ถือโดย 10 อันดับแรก", "held by the top 10")]];
+      }
     } else if (S.dataset === "businesses") {
       /* Pinned businesses in the selected area, the same count as the panel (no per-area table in metadata). */
       const fs = S.cache.get(dataset()?.geojson) ? currentFeatures() : null;
@@ -755,7 +800,7 @@
     else items = [[c, `${unitOf(S.dataset)}${text("ในพื้นที่นี้", " in this area")}`]];
     $("summary-title").textContent = label(S.dataset);
     const cityWide = agg || ["appraisal", "popgrid"].includes(S.dataset) || (S.dataset === "taxmap" && S.scope.type !== "village");
-    $("summary-eyebrow").textContent = cityWide ? text("ยอดรวมทั้งเทศบาลเมืองศิลา", "Sila city-wide totals") : scopeLabel();
+    $("summary-eyebrow").innerHTML = (cityWide ? text("ยอดรวมทั้งเทศบาลเมืองศิลา", "Sila city-wide totals") : esc(scopeLabel())) + (S.scope.type !== "municipality" ? `<button type="button" class="summary-scope" data-scope="sila">${text("ดูทั้งเมือง", "Whole city")}</button>` : "");
     $("summary-metrics").innerHTML = items
       .map(
         ([v, k]) =>
@@ -804,10 +849,14 @@
   function overviewContent() {
     if (publicAggregate()) return publicAggregateView("overview");
     if (S.dataset === "flood") return floodContent();
+    if (S.dataset === "floodsites") return floodSitesContent();
     if (S.dataset === "parcels") return parcelContent();
     if (S.dataset === "terrain") return terrainContent() + supplementsHTML();
     if (S.dataset === "taxmap") return taxmapContent();
     if (S.dataset === "properties") return propertiesContent();
+    if (S.dataset === "negotiate") return negotiateContent();
+    if (S.dataset === "agriwatch") return agriWatchContent();
+    if (S.dataset === "portfolio") return portfolioContent();
     if (S.dataset === "businesses") return businessesContent();
     if (S.dataset === "appraisal") return appraisalContent();
     if (S.dataset === "popgrid") return popgridContent();
@@ -921,6 +970,7 @@
   function renderTerrainControls() {
     const active = S.dataset === "terrain";
     $("terrain-view-controls").hidden = !active;
+    $("terrain-view-panel").hidden = !active;
     if (active) document.body.dataset.terrainView = S.mode;
     else delete document.body.dataset.terrainView;
     document.querySelectorAll("[data-terrain-mode]").forEach(button => {
@@ -1104,6 +1154,7 @@
       + `<label class="check-item"><input type="checkbox" id="terrain-contours"${S.terrainContours ? " checked" : ""}><span>${text("แสดงเส้นชั้นความสูง", "Show contour lines")}<small>${text("เส้นหนาทุก 5 ช่วง", "Bold every fifth line")}</small></span></label>`
       + (S.terrainContours ? `<label class="control-field"><span>${text("ระยะห่างระหว่างเส้น", "Contour interval")}</span><select id="terrain-step">${stepOpts.map(([id, l]) => `<option value="${id}"${String(S.terrainStepChoice) === id ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>` : "")
       + (S.terrainStepNote ? `<p class="small-note" role="status">${esc(S.terrainStepNote)}</p>` : "")
+      + (S.lowgroundStatus === "ready" ? `<label class="check-item"><input type="checkbox" id="terrain-lowground"${S.terrainLowground ? " checked" : ""}${S.mode === "3d" ? " disabled" : ""}><span>${text("ที่ลุ่มปิดล้อม (น้ำขังได้ก่อนล้นออก)", "Closed low ground (ponds before it spills)")}<small>${text("จาก FABDEM 30 ม. เติมแอ่งถึงระดับล้น · ภาพคัดกรอง ไม่ใช่แผนที่เสี่ยงภัย · 2D เท่านั้น", "From 30 m FABDEM, depressions filled to the spill level · screening picture, not a risk map · 2D only")}</small></span></label>` : "")
       + (fine ? `<p class="small-note">${text("เส้นที่ละเอียดกว่า 1 ม. แสดงรูปทรงจากแบบจำลอง FABDEM ไม่ใช่ระดับที่สำรวจจริง (FABDEM คลาดเคลื่อนเฉลี่ยราว 1.1 ม. ในเขตเมือง และ 2.9 ม. ในพื้นที่ป่า)", "Lines finer than 1 m show the shape of the FABDEM model, not surveyed levels (FABDEM’s mean error is about 1.1 m in built-up areas and 2.9 m in forest)")}</p>` : "")
       + `<p class="small-note">${text("สีความสูงใช้ชุดสี OH3 แบบเดียวกับ CityMETER เป็นข้อยกเว้นนอก LDS 0.9.7 เฉพาะชั้นนี้ เพราะ LDS ยังไม่มีสเกลความสูงพื้นดิน ความสูงไม่ใช่ระดับน้ำหรือความเสี่ยงน้ำท่วม", "Height colours use the OH3 palettes as in CityMETER, an exception to LDS 0.9.7 for this layer only, because LDS has no land-height scale yet. Height is not water level or flood risk.")}</p></div>`;
   }
@@ -1210,6 +1261,7 @@
     if(mode==="2d")hideTerrain3D();
     S.mode=mode;S.terrain3DError=false;
     if(mode==="3d"&&!S.terrain3DVisible&&!S.terrain3D)S.terrain3DStatus={state:"loading"};
+    if(mode==="3d")clearLowground();
     renderPanel();if(push)syncURL();
     if(mode==="2d")drawTerrain();
     await syncTerrainView();
@@ -1243,6 +1295,9 @@
       );
     }
     if (S.dataset === "properties" && S.cache.has(dataset().geojson)) return propertyListHTML();
+    if (S.dataset === "negotiate" && S.cache.has(dataset().geojson)) return negotiateListHTML();
+    if (S.dataset === "agriwatch" && S.cache.has(dataset().geojson)) return agriWatchListHTML();
+    if (S.dataset === "portfolio") return ownerListHTML();
     if (dataset().geojson && !S.cache.has(dataset().geojson))
       return notice(
         text("กำลังเปิดรายการ", "Loading records"),
@@ -1427,6 +1482,7 @@
         : S.tab === "list"
           ? recordsContent()
           : sourcesContent();
+    mountCharts();
     if ($("context-actions")) {
       window.SilaContextActions.render({
       mount: $("context-actions"),
@@ -1458,7 +1514,7 @@
     }
     const f = S.record;
     const rows = recordRows(f);
-    const portfolio = S.dataset === "properties" ? propertyCardHTML(f) : S.dataset === "buildings" ? buildingTitlesHTML(f) : S.dataset === "houses" ? titleSetHTML(parcelAttr(f.properties.parcelId)?.bgrp, f.properties.parcelId) : ["taxmap", "appraisal"].includes(S.dataset) ? portfolioHTML(f.properties.id) + titleSetHTML(parcelAttr(f.properties.id)?.bgrp, f.properties.id) + parcelBuildingsHTML(f.properties.id)
+    const portfolio = S.dataset === "properties" ? propertyCardHTML(f) : S.dataset === "buildings" ? buildingTitlesHTML(f) : S.dataset === "houses" ? titleSetHTML(parcelAttr(f.properties.parcelId)?.bgrp, f.properties.parcelId) : ["taxmap", "appraisal", "negotiate", "agriwatch", "portfolio"].includes(S.dataset) ? portfolioHTML(f.properties.id) + titleSetHTML(parcelAttr(f.properties.id)?.bgrp, f.properties.id) + parcelBuildingsHTML(f.properties.id)
       + (parcelAttr(f.properties.id) ? `<div class="record-actions"><button type="button" class="mini-action" data-tool="tax-calculator" data-parcel="${esc(f.properties.id)}">${ui("calculator", 18)}${text("เปิดแปลงนี้ในเครื่องคิดภาษี", "Open this parcel in the tax calculator")}</button></div><p class="small-note">${esc(calculatorNote(f.properties.id))}</p>` : "") : "";
     el.hidden = false;
     const ext = externalActionsHTML(f);
@@ -1545,7 +1601,8 @@
   }
 
   /* ---------- Revision 1.8: analytical layers, hover, popups, record cards ---------- */
-  const CHORO_LAYERS = new Set(["taxmap", "properties", "appraisal", "popgrid"]);
+  const CHORO_LAYERS = new Set(["taxmap", "properties", "appraisal", "popgrid", "negotiate", "agriwatch", "portfolio"]);
+  const PARCEL_TAX_LAYERS = new Set(["taxmap", "negotiate", "agriwatch", "portfolio"]);   // parcel layers whose record is the title on the roll
   const POINT_LAYERS = new Set(["houses", "businesses", "cctv", "education", "health", "religion"]);
   const fixed = (v, digits) => Number(v).toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
   const money = (v, digits = 0) => v == null || !Number.isFinite(Number(v)) ? text("ยังไม่มีข้อมูลส่วนนี้", "Not available") : `${fixed(v, digits)} ${text("บาท", "THB")}`;
@@ -1575,7 +1632,101 @@
     }
     if (S.dataset === "popgrid") return p.suppressed ? null : p.hidden?.includes(S.popMetric) ? "<5" : p[S.popMetric];
     if (S.dataset === "properties") { const k = propKeyOf(p.id); if (!k) return null; const v = propValue(k); return v === Infinity ? 1e6 : v; }
+    if (S.dataset === "negotiate") {
+      const r = taxRow(p.id);
+      if (!r || r.gain == null) return null;                                  // not on the roll: no data
+      if (S.initiative) { const a = r.alloc.get(S.initiative) || 0; return a >= (S.initiative === TAX_AUDIT?.id ? AUDIT_MIN : 0.5) ? a : 0; }
+      return negotiateGain(r);
+    }
+    if (S.dataset === "agriwatch") { const w = agriWatchRow(p.id); return w ? (w.potential ?? null) : undefined; }   // undefined: out of scope (not watched)
+    if (S.dataset === "portfolio") { const o = ownerOf(p.id); return o ? o.value : null; }
     return null;
+  }
+  /* ---------- Revision 2.0: negotiation plan, farmland watch, owner ranking ---------- */
+  const AUDIT_MIN = 100;   // THB per title: smaller gaps between the bill and the law-based figure are rounding and depreciation noise
+  const INITIATIVE_ORDER = ["mixedUse", "combine", "rented", "newBuildings", "mainHomeOnce", "juristic", "agriShare", "combineBuilding", "rollBelow"];
+  const INITIATIVE_SERIES = { mixedUse: "coral", combine: "blue", rented: "apricot", newBuildings: "teal", mainHomeOnce: "yellow", juristic: "sky", agriShare: "lime", combineBuilding: "mint", rollBelow: "slate" };
+  const initiativeColor = (id) => catHex(INITIATIVE_SERIES[id] || "slate") || "#8AA4AA";
+  const initiativeInk = (id) => S.tokens?.categoricalSeries.values.find((v) => v.name === (INITIATIVE_SERIES[id] || "slate"))?.[S.theme]?.ink || initiativeColor(id);
+  const initiativeLabel = (id) => text(...(STRATEGY_BY_ID.get(id)?.label || [id, id]));
+  const initiativeShort = (id) => text(...(INITIATIVE_SHORT[id] || STRATEGY_BY_ID.get(id)?.label || [id, id]));
+  const INITIATIVE_SHORT = {
+    mixedUse: ["แยกชั้นค้าขาย", "Split shop floors"], combine: ["รวมแปลงติดกัน", "Combine parcels"], rented: ["บ้านให้เช่า", "Rented homes"], newBuildings: ["อาคารตกบัญชี", "Missing buildings"],
+    mainHomeOnce: ["บ้านหลักคนละแห่ง", "One main home"], juristic: ["นิติบุคคล", "Companies"], agriShare: ["เกษตรครั้งเดียว", "One farm allowance"], combineBuilding: ["โฉนดที่อาคารคร่อม", "Titles under one roof"], rollBelow: ["บัญชีต่ำกว่าที่คำนวณ", "Roll below the law"],
+  };
+  const INITIATIVE_HOW = {
+    mixedUse: ["ขอผังการใช้รายชั้นและภาพถ่าย แล้วแบ่งตามสัดส่วนที่ใช้ค้าขาย (ม.38)", "Ask for the floor-use layout and photos, then split by the commercial share (s.38)"],
+    combine: ["ตรวจชื่อในโฉนดที่ติดกันว่าเป็นคนเดียวกัน แล้วรวมมูลค่าเป็นฐานเดียว (ม.42 วรรคสอง)", "Check the adjoining deeds carry one owner, then combine the value into one base (s.42 para 2)"],
+    rented: ["ขอสัญญาเช่าหรือยืนยันผู้อยู่ ถ้าให้เช่าทั้งหลัง สิทธิบ้านหลังหลักหมดไป (ม.41)", "Ask for the lease or confirm the occupant; a fully rented house loses main-home relief (s.41)"],
+    newBuildings: ["ออกตรวจอาคารที่สำรวจพบ บันทึกขนาดและปีสร้าง แล้วเพิ่มในบัญชี (ม.35)", "Inspect the surveyed building, record its size and year, then add it to the roll (s.35)"],
+    mainHomeOnce: ["ตรวจทะเบียนบ้านของเจ้าของ คนหนึ่งได้ยกเว้นบ้านหลังหลักแห่งเดียว (ม.41)", "Check the owner’s house registration; one person gets one main-home relief (s.41)"],
+    juristic: ["ตรวจประเภทผู้เสียภาษี นิติบุคคลไม่ได้ยกเว้นเกษตรและบ้านหลังหลัก (ม.40, ม.41)", "Check the taxpayer type; companies get no farm or main-home relief (s.40, s.41)"],
+    agriShare: ["รวมที่ดินเกษตรของบุคคลเดียวกันทั้งเขต ยกเว้น 50 ล้านบาทครั้งเดียว (ม.40)", "Add up one person’s farmland in the district; the 50 million relief applies once (s.40)"],
+    combineBuilding: ["ตรวจชื่อในโฉนดที่อาคารหลังเดียวกันคร่อม", "Check the owners of titles under one building"],
+    rollBelow: ["เทียบบัญชีกับการคำนวณทีละโฉนด: ราคา เนื้อที่ การใช้ อาคาร และข้อยกเว้นเฉพาะราย", "Reconcile the bill with the computation title by title: price, area, use, buildings and case reliefs"],
+  };
+  /* The gain shown on the negotiation map: the allocated gain of the title, but the audit part only when material. */
+  function negotiateGain(r) {
+    let g = 0;
+    for (const [id, a] of r.alloc) if (a >= (id === TAX_AUDIT?.id ? AUDIT_MIN : 0.5)) g += a;
+    return g;
+  }
+  const dominantOf = (r) => { let best = 0, id = null; for (const [k, a] of r.alloc) { const min = k === TAX_AUDIT?.id ? AUDIT_MIN : 0.5; if (a >= min && a > best) { best = a; id = k; } } return id; };
+  /* Per-initiative totals inside the selected boundary (parcels in view with a 2569 bill). Cached per run and scope. */
+  function initiativeTotals() {
+    const fs = currentFeatures(), res = S.taxResult;
+    if (!res) return null;
+    if (S.initCache?.fs === fs && S.initCache.res === res) return S.initCache.t;
+    const by = new Map(INITIATIVE_ORDER.map((id) => [id, { id, sum: 0, parcels: 0 }]));
+    let gain = 0, parcels = 0, billed = 0, rollAbove = 0, nAbove = 0, rollBelowSmall = 0, nSmall = 0;
+    for (const f of fs) {
+      const r = taxRow(f.properties.id);
+      if (!r || r.assessed69 == null) continue;
+      billed += r.assessed69;
+      if (r.rollAbove >= 0.5) { rollAbove += r.rollAbove; nAbove++; }
+      const g = negotiateGain(r);
+      if (g >= 0.5) { gain += g; parcels++; }
+      for (const [id, a] of r.alloc) {
+        if (id === TAX_AUDIT?.id && a < AUDIT_MIN) { rollBelowSmall += a; nSmall++; continue; }
+        if (a < 0.5) continue;
+        const e = by.get(id) || by.set(id, { id, sum: 0, parcels: 0 }).get(id); e.sum += a; e.parcels++;
+      }
+    }
+    /* Initiatives by size; the roll check item (not a negotiation) always last. */
+    const audit = TAX_AUDIT?.id;
+    const t = { gain, parcels, billed, rollAbove, nAbove, rollBelowSmall, nSmall, list: [...by.values()].filter((e) => e.parcels).sort((a, b) => (a.id === audit) - (b.id === audit) || b.sum - a.sum) };
+    S.initCache = { fs, res, t };
+    return t;
+  }
+  /* Farmland watch rows from the engine, keyed by parcel; recomputed per run. */
+  function agriWatchRows() {
+    const res = S.taxResult;
+    if (!res || !S.parcelTax) return [];
+    if (S.agriCache?.res === res && S.agriCache.min === S.agriMin) return S.agriCache.list;
+    const list = window.SilaTaxEngine.agriWatch(S.parcelTax, res, S.agriMin);
+    S.agriCache = { res, min: S.agriMin, list, by: new Map(list.map((w) => [w.id, w])) };
+    return list;
+  }
+  const agriWatchRow = (id) => { agriWatchRows(); return S.agriCache?.by.get(id) || null; };
+  /* Owner ranking from the engine; `ownerOf(parcel)` resolves the owner record of a title. */
+  function ownerRanking() {
+    const res = S.taxResult;
+    if (!res || !S.parcelTax) return [];
+    if (S.ownerCache?.res === res) return S.ownerCache.list;
+    const list = window.SilaTaxEngine.ownerRanking(S.parcelTax, res);
+    S.ownerCache = { res, list, by: new Map(list.map((o) => [o.code, o])) };
+    return list;
+  }
+  const ownerRec = (code) => { ownerRanking(); return code ? S.ownerCache?.by.get(code) || null : null; };
+  const ownerOf = (parcelId) => ownerRec(parcelAttr(parcelId)?.tp || null);
+  const ownerTypeText = (o) => o?.type === "juristic" ? text(...(OWNER_KIND[o.kind] || ["นิติบุคคล", "juristic person"])) : o?.type === "individual" ? text("บุคคลธรรมดา", "individual") : text("ไม่ทราบประเภท", "type unknown");
+  /* Vacancy inferred from the roll (s.43), as a short sentence for cards and lists. */
+  function vacancyText(v) {
+    if (!v) return "";
+    const pct = (r) => `${(r * 100).toFixed(1).replace(/\.0$/, "")}%`;
+    return v.steps === 0
+      ? text(`ทิ้งว่างปีที่ 1–3 ตามอัตราที่เรียกเก็บ ${pct(v.rate)} · ถ้ายังทิ้งว่าง อัตราขึ้นเป็น ${pct(v.nextRate)} ระหว่างปี ${v.nextStepEarliest}–${v.nextStepLatest}`, `Vacant for 1–3 years at the billed ${pct(v.rate)} · if still vacant, the rate rises to ${pct(v.nextRate)} between ${v.nextStepEarliest} and ${v.nextStepLatest} BE`)
+      : text(`เรียกเก็บ ${pct(v.rate)} แปลว่าทิ้งว่างมาแล้ว ${v.yearsMin}–${v.yearsMax} ปี (เริ่มราวปี ${v.startEarliest}–${v.startLatest}) · อัตราขึ้นเป็น ${pct(v.nextRate)} ระหว่างปี ${v.nextStepEarliest}–${v.nextStepLatest}`, `Billed at ${pct(v.rate)}, so vacant for ${v.yearsMin}–${v.yearsMax} years (since about ${v.startEarliest}–${v.startLatest} BE) · the rate rises to ${pct(v.nextRate)} between ${v.nextStepEarliest} and ${v.nextStepLatest} BE`);
   }
   /* LDS 0.9.7: tax and appraisal use the approved 41-sample LUT (as in CityMETER), one exact sample per bin, no interpolation.
      Thresholds are equal-count cut points of a FIXED reference for the whole municipality (2569 roll tax, the current
@@ -1633,6 +1784,10 @@
       const base = defaultTaxRun();
       const vals = kind === "delta" ? [...(base?.byParcel.values() || [])].map((r) => r.delta) : unitValues(base, "delta");
       cuts = lutCutsOf(vals.filter((x) => x != null && Math.abs(x) >= 1).map(Math.abs), 20);
+    } else if (kind === "agriPotential") {
+      cuts = lutCutsOf(agriWatchRows().map((w) => w.potential).filter((x) => x != null && x >= 1), 20);
+    } else if (kind === "ownerValue") {
+      cuts = lutCutsOf(ownerRanking().map((o) => o.value).filter((x) => x > 0), LUT_STEPS);
     } else if (kind === "propGain" || kind === "propPct") {
       // Properties gaining at the default settings (same prices, every available fix): equal-count ranges, fixed thereafter.
       const base = defaultTaxRun(), pct = kind === "propPct";
@@ -1691,6 +1846,29 @@
       S.classing = sequential(lutRef("price"), appraisalTitle(), text("บาทต่อตารางวา", "THB per square wah"), text("ช่วงสีจากราคาประเมินรอบปัจจุบันทั้งเมือง แต่ละช่วงมีจำนวนแปลงเท่า ๆ กัน", "Ranges from the current city-wide appraisal, an equal number of parcels in each"));
       return;
     }
+    if (S.dataset === "negotiate") {
+      if (S.initiative) {
+        S.classing = { kind: "lutdiv", oneSided: true, scaleId: "delta", lut: lut("delta"), cuts: lutRef("propGain"), neutral: 0.5,
+          title: text(`เก็บเพิ่มได้ · ${initiativeShort(S.initiative)}`, `Can be added · ${initiativeShort(S.initiative)}`), unit: text("บาทต่อปี ต่อแปลง · เทียบกับที่เรียกเก็บปี 2569", "THB a year per parcel · against the 2569 bill"),
+          refNote: text("ช่วงสีเดียวกับแผนที่ทรัพย์สิน · แปลงที่กลุ่มนี้ไม่มีผลเป็นสีกลาง", "Same ranges as the property map · parcels this initiative does not touch are neutral") };
+      } else {
+        S.classing = { kind: "categorical", title: text("กลุ่มข้อเสนอที่เพิ่มได้มากที่สุดในแปลง", "Initiative adding most on the parcel"), unit: text("แปลงที่เก็บเพิ่มได้ เทียบกับที่เรียกเก็บปี 2569 · แปลงที่ไม่เพิ่มเป็นสีกลาง", "Parcels that can add tax over the 2569 bill · unchanged parcels are neutral"),
+          items: INITIATIVE_ORDER.filter((id) => id !== "combineBuilding").map((id) => ({ id, label: initiativeShort(id), color: initiativeColor(id) })) };
+      }
+      return;
+    }
+    if (S.dataset === "agriwatch") {
+      S.classing = { kind: "lut", scaleId: "price", lut: lut("price"), cuts: lutRef("agriPotential"), title: text("ภาษีที่จะเพิ่มถ้าพบว่าไม่ได้ทำประโยชน์", "Tax added if found unused"),
+        unit: text("บาทต่อปี ต่อแปลง · อัตราที่ดินว่างเปล่า 0.3% ลบที่เรียกเก็บปี 2569 · เฉพาะแปลงเกษตรที่มูลค่าที่ดิน 5 ล้านบาทขึ้นไป", "THB a year per parcel · vacant-land rate 0.3% minus the 2569 bill · farmland titles worth 5 million THB or more"),
+        refNote: text("แปลงอื่นไม่ระบายสี · เป็นขนาดถ้าตรวจพบ ไม่ใช่ข้อสรุปว่าไม่ได้ทำประโยชน์", "Other parcels are not coloured · a size if a check finds the land unused, not a finding") };
+      return;
+    }
+    if (S.dataset === "portfolio") {
+      S.classing = { kind: "lut", scaleId: "price", lut: lut("price"), cuts: lutRef("ownerValue"), title: text("มูลค่าประเมินรวมของเจ้าของแปลงนี้", "Appraised value of this parcel’s owner"),
+        unit: text("บาท · ที่ดินทุกแปลงของเจ้าของ บวกสิ่งปลูกสร้างที่บัญชีผูกได้ · เจ้าของตามบัญชีปี 2563", "THB · all the owner’s land plus roll-linked buildings · owners per the 2563 list"),
+        refNote: text("ช่วงสีจากเจ้าของทุกรายในเมือง แต่ละช่วงมีจำนวนเท่า ๆ กัน · แปลงที่ไม่รู้เจ้าของเป็นลายเส้น", "Ranges from every owner in the city, equal counts per range · parcels with no owner are hatched") };
+      return;
+    }
     /* Population cells keep seven LDS classes with their hidden and <5 states. */
     const feats = currentFeatures();
     const vals = feats.map(layerValue).filter((v) => typeof v === "number");
@@ -1700,6 +1878,7 @@
   }
   function classColor(v) {
     const c = S.classing;
+    if (c.kind === "categorical") return c.items.find((x) => x.id === v)?.color || null;
     if (c.kind === "lut" || c.kind === "lutdiv") return lutHex(c, v);
     if (c.kind === "diverging") return c.colors[SilaScales.divergingIndex(v, c.cuts, c.neutral, 3)];
     return c.colors[Math.min(c.colors.length - 1, SilaScales.classIndex(v, c.breaks))];
@@ -1710,6 +1889,14 @@
     /* Data classes are drawn at full opacity so map colours equal the legend HEX in both themes (no opacity change to data colour). */
     const base = { stroke: true, color: stroke, weight: S.dataset === "popgrid" ? 0.8 : 0.35, opacity: 0.9, fill: true, fillOpacity: 1 };
     if (!c) return { ...base, fillColor: SilaScales.noData("price", S.theme) };
+    if (v === undefined) return { ...base, fill: false, color: S.theme === "light" ? "#C9D1CC" : "#2E3A3A", weight: 0.3, opacity: 0.8 };   // out of scope: bare basemap, faint outline
+    if (c.kind === "categorical") {
+      const r = taxRow(f.properties.id), dom = r ? dominantOf(r) : null;
+      if (v == null) return { ...base, fillColor: SilaScales.hatch(S.theme) || SilaScales.noData("price", S.theme) };
+      if (!(v > 0) || !dom) return { ...base, fillColor: S.theme === "light" ? "#E6EAE6" : "#20292B" };   // on the roll, nothing to add: neutral
+      return { ...base, fillColor: classColor(dom) };
+    }
+    if (c.oneSided && v === 0) return { ...base, fillColor: S.theme === "light" ? "#E6EAE6" : "#20292B" };   // on the roll, this initiative adds nothing
     // Hidden and <5 cells are UI states, not data classes: a neutral fill plus a dashed outline (non-colour cue).
     if (S.dataset === "popgrid" && f.properties.suppressed) return { ...base, fillColor: S.theme === "light" ? "#DDE2DE" : "#26302F", dashArray: "3 3", color: S.theme === "light" ? "#5F6B66" : "#8C968F", weight: 1 };
     if (v === "<5") return { ...base, fillColor: S.theme === "light" ? "#DDE2DE" : "#26302F", dashArray: "5 2", color: S.theme === "light" ? "#3D4744" : "#C4CECA", weight: 1.2 };
@@ -1835,7 +2022,7 @@
     if (S.dataset === "houses") return p.houseNumber ? text(`บ้านเลขที่ ${p.houseNumber}`, `House ${p.houseNumber}`) : text(`จุดสำรวจ #${p.sourceRecord}`, `Survey point #${p.sourceRecord}`);
     if (S.dataset === "properties") { const k = propKeyOf(p.id); return k ? propName(k) : p.code ? text(`แปลง ${p.code}`, `Parcel ${p.code}`) : p.label; }
     if (S.dataset === "businesses") return p.label + (p.branch && p.branch !== "head" ? text(` (สาขา ${p.branch})`, ` (branch ${p.branch})`) : "");
-    if (["taxmap", "appraisal", "parcels"].includes(S.dataset)) return p.code ? text(`แปลง ${p.code}`, `Parcel ${p.code}`) : p.label;
+    if (["taxmap", "appraisal", "parcels", "negotiate", "agriwatch", "portfolio"].includes(S.dataset)) return p.code ? text(`แปลง ${p.code}`, `Parcel ${p.code}`) : p.label;
     if (S.dataset === "buildings") return (sv(p.type) || text("อาคาร", "Building")) + ` #${p.sourceRecord}`;
     if (S.dataset === "popgrid") return text("ช่อง 250 ม.", "250 m cell");
     return p.label || p.id;
@@ -1859,6 +2046,9 @@
         if (u?.kind === "group") out.push(esc(text(`ชุดโฉนด ${num(S.parcelTax.buildingGroups.get(u.id)?.length || 0)} โฉนดที่น่าจะคิดรวมกัน`, `Set of ${num(S.parcelTax.buildingGroups.get(u.id)?.length || 0)} titles likely taxed together`)));
         else if (!u) out.push(text("โฉนดใต้อาคารยังจับคู่กับบัญชีภาษีไม่ได้", "Titles under it are not matched to the tax roll"));
       }
+    } else if (S.dataset === "floodsites") {
+      out.push(esc(p.cause));
+      out.push(esc(floodStatusText(p)));
     } else if (S.dataset === "appraisal") {
       const a = parcelAttr(p.id);
       out.push(a?.price != null ? `<span class="hover-value">${num(a.price)}</span> ${text("บาท/ตร.ว.", "THB/sq wah")}` : text("ยังไม่มีราคาประเมินของแปลงนี้", "No appraisal for this parcel yet"));
@@ -1871,6 +2061,22 @@
         out.push(`${esc(taxScenarioLabel(S.taxScenario))}: <span class="hover-value">${v == null ? "—" : (S.taxScenario === "delta" && v > 0 ? "+" : "") + fixed(v, 2)}</span> ${text("บาท", "THB")}`);
         if (S.taxScenario === "assessed69" && r.status69 !== "unknown") out.push(statusText(r.status69));
       }
+    } else if (S.dataset === "negotiate") {
+      const r = taxRow(p.id);
+      if (!r || r.assessed69 == null) out.push(text("ยังไม่พบแปลงนี้ในบัญชีภาษี", "Not found on the tax roll"));
+      else {
+        const g = negotiateGain(r), dom = dominantOf(r);
+        out.push(g >= 0.5 ? `${text("เก็บเพิ่มได้", "Can be added")}: <span class="hover-value">+${fixed(g, 0)}</span> ${text("บาทต่อปี", "THB a year")}` : text(`เรียกเก็บปี 2569 ${fixed(r.assessed69, 0)} บาท · ไม่มีส่วนเพิ่ม`, `Billed ${fixed(r.assessed69, 0)} THB in 2569 · nothing to add`));
+        if (dom) out.push(esc(initiativeShort(dom)));
+      }
+    } else if (S.dataset === "agriwatch") {
+      const w = agriWatchRow(p.id);
+      if (!w) out.push(text("ไม่อยู่ในกลุ่มเพ่งเล็ง", "Not in the watch list"));
+      else out.push(`${text("ถ้าพบว่าไม่ได้ทำประโยชน์ เพิ่ม", "If found unused, adds")}: <span class="hover-value">+${fixed(w.potential ?? 0, 0)}</span> ${text("บาทต่อปี", "THB a year")}`, esc(text(`มูลค่าที่ดิน ${moneyShort(w.landValue)} · เรียกเก็บปี 2569 ${fixed(w.billed69 ?? 0, 0)} บาท`, `Land ${moneyShort(w.landValue)} · billed ${fixed(w.billed69 ?? 0, 0)} THB in 2569`)));
+    } else if (S.dataset === "portfolio") {
+      const o = ownerOf(p.id);
+      if (!o) out.push(text("ยังไม่พบเจ้าของในบัญชีปี 2563", "No owner in the 2563 list"));
+      else out.push(`${text("เจ้าของอันดับ", "Owner rank")} <span class="hover-value">${num(o.rank)}</span> · ${esc(text(`${num(o.parcels.length)} แปลง · มูลค่ารวม ${moneyShort(o.value)}`, `${num(o.parcels.length)} parcels · ${moneyShort(o.value)}`))}`);
     } else if (S.dataset === "businesses") {
       out.push(esc(businessKindText(p)));
       if (p.site) out.push(esc(p.site));
@@ -1944,15 +2150,12 @@
        layer, a one-line notice when there is something to check, and two actions; everything else is in the panel. */
     const narrow = (S.map.getContainer().clientWidth || 999) < 520;
     const peek = rows.slice(0, narrow ? 1 : 3), nFlags = recordFlagList(f).length;
-    const svTitle = sv?.facing ? text("เปิด Street View หันมาทางนี้", "Open Street View facing this place") : text("เปิด Street View ใกล้ตำแหน่งนี้", "Open Street View near this place");
-    const svLink = sv ? `<a class="popup-link ext-link" data-popup-sv href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer" title="${esc(svTitle)}">${window.SilaIcons?.icon("streetview", { size: 16 }) || ""}<span>Street View</span>${extMark()}</a>` : "";
+    /* Revision 2.0: the popup's map link opens Google Maps with a pin here (never a blank panorama); the facing Street View link is on the card. */
+    const svTitle = text("เปิด Google Maps ที่จุดนี้ในแท็บใหม่", "Open Google Maps here in a new tab");
+    const svLink = sv ? `<a class="popup-link ext-link" href="${esc(sv.pinHref)}" target="_blank" rel="noopener noreferrer" title="${esc(svTitle)}">${window.SilaIcons?.icon("map", { size: 16 }) || ""}<span>Google Maps</span>${extMark()}</a>` : "";
     const flagLine = nFlags ? `<p class="popup-flag">${ui("needscheck")}<span>${text(`มีข้อควรตรวจ ${num(nFlags)} ข้อ`, `${num(nFlags)} thing${nFlags > 1 ? "s" : ""} to check`)}</span></p>` : "";
     const html = `<div class="popup-peek"><p class="popup-title">${esc(featureTitle(f))}</p>${peek.length ? `<dl class="popup-dl">${peek.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>` : ""}${flagLine}<div class="popup-actions"><button type="button" class="popup-more" data-record-focus>${window.SilaIcons?.icon("info", { size: 16 }) || ""}<span>${text("รายละเอียด", "Details")}</span></button>${svLink}</div></div>`;
-    if (sv && !S.cache.has(ROADS_PATH())) fetchJSON(ROADS_PATH()).then(() => {
-      const a = document.querySelector("[data-popup-sv]"), nsv = streetView(f);
-      if (a && S.popup?.isOpen?.()) { a.href = nsv.href; if (nsv.facing) a.title = text("เปิด Street View หันมาทางนี้", "Open Street View facing this place"); }
-    }).catch(() => {});
-    S.popup = L.popup({ maxWidth: narrow ? 248 : 276, minWidth: narrow ? 240 : 250, className: "sila-popup", autoPanPaddingTopLeft: [12, 60], autoPanPaddingBottomRight: [12, 12], closeButton: true }).setLatLng(latlng || featureCenter(f)).setContent(html).openOn(S.map);
+    S.popup = L.popup({ maxWidth: narrow ? 248 : 276, minWidth: narrow ? 240 : 250, className: "sila-popup", autoPanPaddingTopLeft: [12, 60], autoPanPaddingBottomRight: [12, 12 + sheetCover()], closeButton: true }).setLatLng(latlng || featureCenter(f)).setContent(html).openOn(S.map);
     // Numerals and link cues are added just after insertion; re-measure so the peek is panned fully into view.
     const opened = S.popup;
     requestAnimationFrame(() => requestAnimationFrame(() => { if (S.popup === opened && opened.isOpen()) opened.update(); }));
@@ -1969,8 +2172,16 @@
       }
       return lead.concat(rows.slice(0, 2)).slice(0, 7);
     }
+    if (S.dataset === "floodsites") return rows.slice(0, 4);
     if (S.dataset === "properties") {   // the peek leads with the gain and the priority, then the size
       const pick = [text("เพิ่มได้ต่อปี", "Can be added a year"), text("ลำดับที่ควรจัดการ", "Priority rank"), text("แปลงในทรัพย์สิน", "Parcels in the property")];
+      const lead = pick.map((k) => rows.find((x) => x[0] === k)).filter(Boolean);
+      return lead.concat(rows.filter((x) => !lead.includes(x))).slice(0, 8);
+    }
+    if (S.dataset === "negotiate" || S.dataset === "agriwatch" || S.dataset === "portfolio") {
+      const pick = S.dataset === "negotiate" ? [text("เก็บเพิ่มได้ต่อปี", "Can be added a year"), text("กลุ่มข้อเสนอ", "Initiatives"), text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed")]
+        : S.dataset === "agriwatch" ? [text("ถ้าพบว่าไม่ได้ทำประโยชน์", "If found unused"), text("มูลค่าที่ดิน", "Land value"), text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed")]
+        : [text("เจ้าของ (บัญชีปี 2563)", "Owner (2563 list)"), text("ภาษีปี 2569 ที่ประเมิน", "2569 assessed"), text("มูลค่าที่ดิน", "Land value")];
       const lead = pick.map((k) => rows.find((x) => x[0] === k)).filter(Boolean);
       return lead.concat(rows.filter((x) => !lead.includes(x))).slice(0, 8);
     }
@@ -1989,6 +2200,20 @@
   function recordRows(f) {
     const p = f.properties, rows = [], villageNames = (p.villageIds || []).map((id) => { const v = S.metadata.villages.find((x) => x.id === id); return v ? (S.lang === "th" ? v.label : `Village ${v.number} · ${v.name}`) : id; }).join(", ");
     const add = (k, v) => { if (v != null && v !== "") rows.push([k, v]); };
+    if (S.dataset === "floodsites") {
+      add(text("สาเหตุตามข้อมูลเดิม", "Cause on record"), esc(p.cause));
+      add(text("ทางเลือกแรก", "First option"), esc(p.option1));
+      add(text("ทางเลือกเพิ่ม", "Further option"), esc(p.option2));
+      add(text("ทางรับ · ลำดับเริ่มงาน", "Receiver · sequence"), esc(p.receiver));
+      add(text("สิ่งที่ควรทำก่อน", "What to do first"), esc(p.firstAction));
+      if (p.options?.length) add(text("เลือกเมื่อ", "Choose when"), `<ul class="plain-list">${p.options.map((o) => `<li><strong>${esc(o.option)}</strong> · ${esc(o.when)}</li>`).join("")}</ul>`);
+      add(text("แนวสำรวจตามถนน", "Survey route along roads"), p.surveyRouteM ? esc(text(`ประมาณ ${num(p.surveyRouteM)} เมตร · ไม่ใช่ระยะท่อที่สำรวจแล้ว`, `about ${num(p.surveyRouteM)} m · not a surveyed pipe length`)) : null);
+      add(text("หมู่บ้าน", "Village"), esc(villageNames));
+      add(text("สถานะพิกัด", "Coordinate status"), esc(floodStatusText(p, true)));
+      add(text("หมายเหตุ", "Note"), p.areaNote ? esc(p.areaNote) : null);
+      add(text("ที่มา", "Source"), esc(p.sourceNote));
+      return rows;
+    }
     if (S.dataset === "houses") {
       add(text("บ้านเลขที่", "House number"), esc(p.houseNumber || text("ไม่มีในแบบสำรวจ", "Not in survey")));
       add(text("หมู่บ้าน", "Village"), esc(villageNames));
@@ -2024,8 +2249,23 @@
       add(text("พื้นที่หลังคา", "Roof area"), `${num(p.areaM2)} ${text("ตร.ม.", "m²")}`);
       add(text("มูลค่าอาคารประมาณ", "Estimated building value"), p.estValue != null ? money(p.estValue) : text("ยังคิดไม่ได้", "Not calculable"));
       add(text("ตั้งอยู่บนแปลง", "Parcels under it"), p.parcelCount ? `${num(p.parcelCount)} ${text("แปลง", p.parcelCount === 1 ? "parcel" : "parcels")}` : text("ไม่ตรงแปลงใด", "No parcel match"));
-    } else if (["taxmap", "appraisal"].includes(S.dataset)) {
+    } else if (["taxmap", "appraisal", "negotiate", "agriwatch", "portfolio"].includes(S.dataset)) {
       const a = parcelAttr(p.id), r = taxRow(p.id);
+      if (S.dataset === "negotiate" && r && r.assessed69 != null) {
+        const g = negotiateGain(r);
+        add(text("เก็บเพิ่มได้ต่อปี", "Can be added a year"), g >= 0.5 ? `<strong>+${esc(money(g, 0))}</strong>` : text("ไม่มีส่วนเพิ่ม", "Nothing to add"));
+        const parts = [...r.alloc.entries()].filter(([id, v]) => v >= (id === TAX_AUDIT?.id ? AUDIT_MIN : 0.5)).sort((x, y) => y[1] - x[1]);
+        if (parts.length) add(text("กลุ่มข้อเสนอ", "Initiatives"), parts.map(([id, v]) => `<span class="init-chip" style="--chip:${initiativeColor(id)}">${esc(initiativeShort(id))} +${esc(fixed(v, 0))}</span>`).join(" "));
+        if (r.rollAbove >= 0.5) add(text("บัญชีเรียกเก็บสูงกว่าที่คำนวณ", "Roll bills above the computation"), esc(text(`${money(r.rollAbove, 0)} · ไม่หักออก ตรวจเหตุ`, `${money(r.rollAbove, 0)} · not deducted; check why`)));
+      }
+      if (S.dataset === "agriwatch") {
+        const w = agriWatchRow(p.id);
+        if (w) { add(text("ถ้าพบว่าไม่ได้ทำประโยชน์", "If found unused"), `<strong>+${esc(money(w.potential ?? 0, 0))}</strong> ${text("ต่อปี", "a year")}`); add(text("คิดจากอัตราที่ดินว่างเปล่า", "Vacant-land basis"), esc(text(`${money(w.ifVacant, 0)} ต่อปี (0.3% ของมูลค่าที่ดิน ไม่มียกเว้น)`, `${money(w.ifVacant, 0)} a year (0.3% of land value, no relief)`))); }
+      }
+      if (S.dataset === "portfolio") {
+        const o = ownerOf(p.id);
+        if (o) add(text("เจ้าของ (บัญชีปี 2563)", "Owner (2563 list)"), `<button type="button" class="portfolio-link" data-owner="${esc(o.code)}">${esc(text(`อันดับ ${num(o.rank)} · รหัส ${o.code}`, `Rank ${num(o.rank)} · code ${o.code}`))}</button> · ${esc(ownerTypeText(o))}`);
+      }
       add(text("รหัสแปลง", "Parcel code"), esc(p.code || "—"));
       add(text("หมู่บ้าน", "Village"), esc(villageNames));
       if (a?.sqwa != null) add(text("เนื้อที่ตามบัญชี", "Area on the roll"), esc(sqwaText(a.sqwa)));
@@ -2039,6 +2279,7 @@
         add(text("การชำระปี 2569", "2569 payment"), statusHTML(r.status69));
         add(text("ปี 2570 วิธีเดิม", "2570 current method"), money(r.old70, 2));
         add(text("ปี 2570 ตามข้อเสนอ", "2570 with fixes"), money(r.new70, 2));
+        if (r.vacancy) add(text("ทิ้งว่าง (ม.43)", "Vacancy (s.43)"), esc(vacancyText(r.vacancy)));
       }
     } else if (S.dataset === "businesses") {
       add(text("ชื่อจดทะเบียน", "Registered name"), esc(p.label));
@@ -2102,13 +2343,13 @@
     if (S.dataset === "buildings" && p.roll === "house_no_elsewhere") flags.push(text("บ้านเลขที่อยู่ในบัญชีแต่ผูกกับโฉนดอื่น · ตรวจโฉนด", "House number on the roll under another title · check the deed"));
     if (S.dataset === "buildings" && p.attrFrom === "near") flags.push(text("ผูกหมุดจากระยะใกล้ ไม่ได้อยู่ในรูปอาคาร · ตรวจตำแหน่ง", "Joined from a nearby point, not inside the outline · check position"));
     if (S.dataset === "houses" && !p.buildingId) flags.push(text("หมุดนี้ยังไม่มีรูปอาคาร · อาจเป็นอาคารใหม่หรือหมุดวางคลาด", "No footprint for this point · possibly a new building or a misplaced point"));
-    if (["taxmap", "appraisal"].includes(S.dataset)) {
+    if (["taxmap", "appraisal", "negotiate", "agriwatch", "portfolio"].includes(S.dataset)) {
       if (p.straddleBuildings) flags.push(text(`มีอาคาร ${p.straddleBuildings} หลังคร่อมแปลงนี้กับแปลงข้างเคียง`, `${p.straddleBuildings} building(s) span this and a neighbouring parcel`));
       const pa = parcelAttr(p.id);
       if (pa?.missBld) flags.push(text(`อาคาร ${pa.missBld} หลังมีบ้านเลขที่แต่เลขนั้นไม่อยู่ในบัญชีสิ่งปลูกสร้าง · ควรตรวจ`, `${pa.missBld} building(s) have a house number absent from the building roll · check`));
       if (pa?.link === "house") flags.push(text("จับคู่โฉนดผ่านบ้านเลขที่ ไม่ใช่เลขโฉนด", "Title matched through house numbers, not the deed"));
       if (pa && pa.tax69 === 0 && ["other", "vacant"].concat(pa.mainHome ? [] : ["res"]).includes(pa.use) && (pa.landValue || 0) > 0) flags.push(text("ภาษี 0 บาท แต่บัญชีไม่ได้ระบุเป็นบ้านหลังหลักหรือเกษตร · ตรวจเหตุยกเว้นในบัญชี", "0 THB tax, but the roll records neither a main home nor farm use · check the exemption on the roll"));
-      const reasons = S.dataset === "taxmap" ? (taxRow(p.id)?.reasons || []).map((r) => r[S.lang === "en" ? 1 : 0]) : [];
+      const reasons = PARCEL_TAX_LAYERS.has(S.dataset) ? (taxRow(p.id)?.reasons || []).map((r) => r[S.lang === "en" ? 1 : 0]) : [];
       if (reasons.length) flags.push(text(`ปี 2570 ตามข้อเสนอ ต่างจากวิธีเดิมเพราะ: ${reasons.join(" · ")} (สมมติจากแบบสำรวจ ต้องตรวจก่อน)`, `2570 with fixes differs because of: ${reasons.join(" · ")} (assumed from the survey; check first)`));
     }
     return flags;
@@ -2144,13 +2385,22 @@
       + `<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${esc(noDataLabel)}</span></div>`;
     // The range list scrolls inside the legend, so the scroll box takes keyboard focus (axe scrollable-region-focusable).
     const table = `<details class="lut-table"><summary>${text(`ช่วงสีทั้งหมด ${rows.length} ช่วง`, `All ${rows.length} colour ranges`)}</summary><div class="lut-scroll" role="region" tabindex="0" aria-label="${esc(text(`ช่วงสี ${rows.length} ช่วงของ${c.title}`, `${rows.length} colour ranges of ${c.title}`))}"><ul>${rows.map(([col, label]) => `<li><span class="legend-chip" style="background:${col}"></span><span>${esc(label)}</span></li>`).join("")}</ul></div></details>`;
-    return `<div class="legend-title">${esc(c.title)}</div>${bar}${endRow}<div class="legend-classes">${extra}</div><div class="legend-unit">${esc(c.unit)}</div><div class="legend-unit">${esc(text(`41 สีตาม LDS · ${c.refNote} · ช่วงคงที่ เปลี่ยนปีหรือเลื่อนแถบแล้วสีเปลี่ยนตามจำนวนเงิน`, `41 LDS colours · ${c.refNote} · fixed ranges, so colours follow the amount when the year or sliders change`))}</div>${table}`;
+    const method = `<p class="legend-unit">${esc(text(`41 สีตาม LDS · ${c.refNote} · ช่วงคงที่ เปลี่ยนปีหรือเลื่อนแถบแล้วสีเปลี่ยนตามจำนวนเงิน`, `41 LDS colours · ${c.refNote} · fixed ranges, so colours follow the amount when the year or sliders change`))}</p>`;
+    return `<div class="legend-title">${esc(c.title)}</div>${bar}${endRow}<div class="legend-classes">${extra}</div><div class="legend-unit">${esc(c.unit)}</div>${table.replace('<div class="lut-scroll"', method + '<div class="lut-scroll"')}`;
   }
   function analyticalLegend() {
     const c = S.classing;
     if (!c) return "";
+    if (c.kind === "categorical") {
+      const neutral = S.theme === "light" ? "#E6EAE6" : "#20292B";
+      const rows = c.items.map((it) => `<div class="legend-class"><span class="legend-chip" style="background:${it.color}"></span><span>${esc(it.label)}</span></div>`).join("")
+        + `<div class="legend-class"><span class="legend-chip" style="background:${neutral}"></span><span>${text("ไม่เพิ่ม", "Nothing to add")}</span></div>`
+        + `<div class="legend-class"><span class="legend-chip" data-state="no-data" style="background-color:${SilaScales.noData("price", S.theme)}"></span><span>${text("ยังไม่อยู่ในบัญชีภาษี", "Not on the roll")}</span></div>`;
+      return `<div class="legend-title">${esc(c.title)}</div><div class="legend-classes legend-classes-cat">${rows}</div><div class="legend-unit">${esc(c.unit)}</div>`;
+    }
     if (c.kind === "lut" || c.kind === "lutdiv") {
-      const noData = S.dataset === "appraisal" ? text("ยังไม่มีราคาประเมิน", "No appraisal yet") : S.dataset === "properties" ? text("ไม่พบเจ้าของในบัญชีปี 2563 หรือไม่มีตัวเลขภาษี (ไม่ใช่ศูนย์)", "No owner in the 2563 list or no tax figure (not zero)") : text("ไม่มีตัวเลขภาษีของแปลงนี้ (ไม่ใช่ศูนย์)", "No tax figure for this parcel (not zero)");
+      const noData = S.dataset === "appraisal" ? text("ยังไม่มีราคาประเมิน", "No appraisal yet") : S.dataset === "properties" ? text("ไม่พบเจ้าของในบัญชีปี 2563 หรือไม่มีตัวเลขภาษี (ไม่ใช่ศูนย์)", "No owner in the 2563 list or no tax figure (not zero)")
+        : S.dataset === "portfolio" ? text("ไม่พบเจ้าของในบัญชีปี 2563", "No owner in the 2563 list") : S.dataset === "agriwatch" ? text("ไม่มีตัวเลขภาษีปี 2569 (ไม่ใช่ศูนย์)", "No 2569 figure (not zero)") : text("ไม่มีตัวเลขภาษีของแปลงนี้ (ไม่ใช่ศูนย์)", "No tax figure for this parcel (not zero)");
       return lutLegendHTML(c, noData, S.dataset === "taxmap" && c.kind === "lut" ? text("0 บาท (บัญชีระบุว่ายกเว้นทั้งหมด)", "0 THB (the roll shows it fully exempt)") : null);
     }
     let rows = "";
@@ -2209,6 +2459,8 @@
       html = `<div class="control-card">${taxAssumptionsHTML()}</div>`;
     } else if (S.dataset === "properties") {
       html = `<div class="control-card"><span class="control-field">${text("สีบนแผนที่แสดง", "Map colours show")}</span><div class="segmented" role="group" aria-label="${text("เลือกตัวเลขที่ใช้ระบายสี", "Choose the figure for the colours")}">${[["thb", ["เพิ่มกี่บาท", "THB added"]], ["pct", ["เพิ่มกี่เปอร์เซ็นต์", "Percent added"]]].map(([id, l]) => `<button type="button" data-prop-metric="${id}" aria-pressed="${id === S.propMetric}">${esc(text(...l))}</button>`).join("")}</div>${taxAssumptionsHTML(false)}</div>`;
+    } else if (S.dataset === "negotiate" || S.dataset === "agriwatch" || S.dataset === "portfolio") {
+      html = "";   // assumptions live inside the explanation block of these maps
     } else if (S.dataset === "appraisal") {
       html = `<div class="control-card"><fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>${adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)}<p id="adj-note" class="small-note">${text("ที่ 0% แผนที่แสดงราคารอบปัจจุบัน เมื่อเลื่อนแถบ แผนที่และตัวเลขแสดงราคาที่สมมติ ช่วงสีคงเดิม สีจึงเปลี่ยนตามราคา · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569", "At 0% the map shows the current round; moving the slider shows assumed prices on the same colour ranges, so colours follow the price · the Treasury is due to publish new prices on 1 Dec 2569")}</p></fieldset></div>`;
     } else if (S.dataset === "popgrid") {
@@ -2232,10 +2484,10 @@
     const fixes = TAX_STRATEGIES.map((s) => `<label class="check-item"><input type="checkbox" data-strategy="${s.id}"${S.taxStrategies.has(s.id) && avail(s) ? " checked" : ""}${avail(s) ? "" : " disabled"}><span>${esc(text(...s.label))}<small>${esc(text(...(avail(s) ? s.basis : window.SilaTaxEngine.OWNER_REASON)))}</small></span></label>`).join("");
     const on = TAX_STRATEGIES.filter((s) => S.taxStrategies.has(s.id) && avail(s)).length;
     return (withScenario ? `<label class="control-field"><span>${text("สีบนแผนที่แสดง", "Map colours show")}</span><select id="tax-scenario">${scen}</select></label>` : "")
-      + `<fieldset class="assumptions"><legend>${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>`
+      + `<details class="fix-details"${S.appraisalAdj || S.bldAdj ? " open" : ""}><summary>${text(`สมมติราคาประเมินรอบใหม่${S.appraisalAdj || S.bldAdj ? ` (ที่ดิน ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}% · อาคาร ${S.bldAdj > 0 ? "+" : ""}${S.bldAdj}%)` : " (เท่าเดิม)"}`, `Assumed new appraisal round${S.appraisalAdj || S.bldAdj ? ` (land ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}% · buildings ${S.bldAdj > 0 ? "+" : ""}${S.bldAdj}%)` : " (unchanged)"}`)}</summary><fieldset class="assumptions"><legend class="sr-only">${text("สมมติราคาประเมินรอบใหม่ (กรมธนารักษ์)", "Assumed new appraisal round (Treasury)")}</legend>`
       + adjSliderHTML("appraisal-adj", text("ราคาที่ดิน เทียบรอบปัจจุบัน", "Land prices vs the current round"), S.appraisalAdj)
       + adjSliderHTML("building-adj", text("ราคาสิ่งปลูกสร้าง เทียบรอบปัจจุบัน", "Building prices vs the current round"), S.bldAdj)
-      + `<p id="adj-note" class="small-note">${text("มีผลกับภาษีปี 2570 · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569 ระหว่างนี้ใช้แถบนี้สมมติ · ถ้าแผนที่แสดงปี 2569 อยู่ เลื่อนแถบแล้วจะเปลี่ยนไปแสดงปี 2570 ตามข้อเสนอ · ยังไม่ได้คิดค่าเสื่อมอาคารที่เพิ่มขึ้นหนึ่งปี", "Applies to the 2570 tax · the Treasury is due to publish new prices on 1 Dec 2569; until then use these to assume · if the map shows 2569, moving a slider switches it to 2570 with fixes · one more year of building depreciation is not included")}</p></fieldset>`
+      + `<p id="adj-note" class="small-note">${text("มีผลกับภาษีปี 2570 · กรมธนารักษ์มีกำหนดประกาศราคาใหม่ 1 ธ.ค. 2569 ระหว่างนี้ใช้แถบนี้สมมติ · ถ้าแผนที่แสดงปี 2569 อยู่ เลื่อนแถบแล้วจะเปลี่ยนไปแสดงปี 2570 ตามข้อเสนอ · ยังไม่ได้คิดค่าเสื่อมอาคารที่เพิ่มขึ้นหนึ่งปี", "Applies to the 2570 tax · the Treasury is due to publish new prices on 1 Dec 2569; until then use these to assume · if the map shows 2569, moving a slider switches it to 2570 with fixes · one more year of building depreciation is not included")}</p></fieldset></details>`
       + `<details class="fix-details"${!withScenario || S.taxScenario === "new70" || S.taxScenario === "delta" ? " open" : ""}><summary>${text(`ข้อเสนอที่คิดรวมในปี 2570 ตามข้อเสนอ (เลือก ${on} ข้อ)`, `Fixes in 2570 with fixes (${on} selected)`)}</summary><fieldset class="check-list"><legend class="sr-only">${text("ข้อเสนอที่คิดรวม", "Fixes included")}</legend>${fixes}</fieldset></details>`;
   }
   /* ---------- Revision 1.9: properties = adjoining parcels of one owner with their buildings ----------
@@ -2256,7 +2508,7 @@
   const propName = (key) => (key?.[0] === "g" ? text(`ทรัพย์สิน ${propCode(key)}`, `Property ${propCode(key)}`) : text(`ทรัพย์สินแปลงเดียว · แปลง ${propCode(key)}`, `Single-parcel property · parcel ${propCode(key)}`));
   const pctLabel = (p) => (p == null ? "—" : p === Infinity ? text("จาก 0 บาท", "from 0 THB") : `${p >= 0 ? "+" : ""}${fixed(p, Math.abs(p) >= 10 ? 0 : 1)}%`);
   const propOwnerCode = (key) => { for (const id of propParcels(key)) { const tp = parcelAttr(id)?.tp; if (tp) return tp; } return null; };
-  const STRATEGY_BY_ID = new Map(TAX_STRATEGIES.map((x) => [x.id, x]));
+  const STRATEGY_BY_ID = new Map([...TAX_STRATEGIES, ...(TAX_AUDIT ? [TAX_AUDIT] : [])].map((x) => [x.id, x]));
   /* Ranked work list: properties whose 2570 tax with fixes exceeds the current method, largest gain first (cached per run). */
   function propRanking() {
     const res = S.taxResult;
@@ -2310,22 +2562,261 @@
     const f = currentFeatures().find((x) => ids.has(x.properties.id));
     if (!f) { toast(text("ทรัพย์สินนี้ไม่อยู่ในขอบเขตที่เลือก", "This property is not in the selected boundary")); return; }
     selectRecord(f);
-    if (S.selectedLayer && S.map && !S.terrain3DVisible) { S.interactionRevision++; S.map.fitBounds(S.selectedLayer.getBounds(), { padding: [64, 64], maxZoom: 19, animate: false }); openPopupFor(f); }
+    if (S.selectedLayer && S.map && !S.terrain3DVisible) { S.interactionRevision++; S.map.fitBounds(S.selectedLayer.getBounds(), { ...fitPad(64), maxZoom: 19, animate: false }); openPopupFor(f); }
   }
   function propertiesContent() {
     if (!S.taxResult?.byProperty) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
     const t = propScopeTotals(), where = S.scope.type === "municipality" ? text("ทั้งเมือง", "whole city") : scopeLabel();
-    const box = (label, value, note, emph) => `<div class="total-box"${emph ? ' data-emphasis="true"' : ""}><small>${esc(label)}</small><strong>${value}</strong>${note ? `<span>${esc(note)}</span>` : ""}</div>`;
     const fixRows = [...t.byFix.entries()].filter(([, d]) => d >= 0.5).sort((a, b) => b[1] - a[1]);
     const sm = S.parcelTax?.summary?.ownersFrom2563;
-    return `<section class="panel-section"><h2 class="sr-only">${text("ทรัพย์สินรายเจ้าของ", "Properties by owner")}</h2><div class="totals-grid">`
-      + box(text(`ภาษีปี 2570 ที่เพิ่มได้ต่อปี · ${where}`, `2570 tax that can be added a year · ${where}`), esc(moneyShort(t.gain)), text(`จาก ${num(t.nGain)} ทรัพย์สิน`, `from ${num(t.nGain)} properties`), true)
-      + box(text(`ปี 2570 วิธีเดิม · ${where}`, `2570 current method · ${where}`), esc(moneyShort(t.old70)), text(`ตามข้อเสนอ ${moneyShort(t.new70)}`, `with fixes ${moneyShort(t.new70)}`))
-      + box(text(`ทรัพย์สินที่มีเจ้าของในบัญชีปี 2563 · ${where}`, `Properties with a 2563 owner · ${where}`), esc(num(t.n)), text("รวมทรัพย์สินแปลงเดียว", "including single-parcel ones"))
-      + `</div><button type="button" class="more-button" data-open-tab="list">${text(`ดูรายการที่ควรจัดการก่อน (${num(t.nGain)})`, `See what to handle first (${num(t.nGain)})`)}</button>`
-      + (fixRows.length ? `<details class="supplement" open><summary>${text("ภาษีที่เพิ่มได้ แยกตามข้อเสนอ", "Tax that can be added, by fix")}</summary><div class="supplement-body"><table class="data-table"><thead><tr><th>${text("ข้อเสนอ", "Fix")}</th><th class="num">${text("บาทต่อปี (สมมติ)", "THB a year (scenario)")}</th></tr></thead><tbody>${fixRows.map(([id, d]) => `<tr><td>${esc(text(...(STRATEGY_BY_ID.get(id)?.label || [id, id])))}</td><td class="num">${esc(fixed(d, 0))}</td></tr>`).join("")}</tbody></table><p class="small-note">${text("แต่ละแถวคิดข้อเสนอทีละข้อ ผลรวมจึงต่างจากยอดที่คิดพร้อมกันได้เล็กน้อย", "Each row applies one fix alone, so rows can differ slightly from the combined total")}</p></div></details>` : "")
-      + `<p class="small-note">${text("เรียงลำดับตามเงินที่เพิ่มได้ต่อปี (ปี 2570 ตามข้อเสนอ ลบ วิธีเดิม) จากมากไปน้อย ทรัพย์สินที่ได้ลำดับต้นคุ้มค่าที่จะตรวจก่อน แต่ทุกรายต้องตรวจโฉนด ทะเบียนบ้าน และการใช้จริงก่อนแจ้งประเมิน", "Ranked by the tax that can be added a year (2570 with fixes minus the current method), largest first. Top properties are worth checking first, but every case needs the deed, house registration and actual use checked before any assessment")}</p>`
-      + `<p class="small-note">${text(`เจ้าของมาจากบัญชี ภ.ด.ส.3 ปี 2563 ที่เทศบาลส่งมา สมมติว่ายังไม่เปลี่ยน${sm ? ` · ผูกเจ้าของกับแปลงในบัญชีภาษีได้ ${num(sm.parcelsWithOwner)} แปลง` : ""} · ชื่อเจ้าของไม่แสดงบนเว็บ ใช้รหัสสุ่มแทน`, `Owners come from the 2563 PDS 3 list supplied by the municipality and are assumed unchanged${sm ? ` · ${num(sm.parcelsWithOwner)} parcels on the roll have an owner` : ""} · owner names are not shown; random codes are used`)}</p>`
+    const chart = fixRows.length ? chartHTML("props-fixes", { type: "bars", items: fixRows.map(([id, d]) => ({ id, label: initiativeShort(id), value: Math.round(d), color: initiativeColor(id) })), format: "money" }, text(`บาทต่อปีที่เพิ่มได้ แยกตามข้อเสนอ คิดทีละข้อ · ${where}`, `THB a year that can be added, by fix applied alone · ${where}`), Math.max(130, 26 * fixRows.length + 40)) : "";
+    return `<section class="panel-section"><h2 class="sr-only">${text("ทรัพย์สินรายเจ้าของ", "Properties by owner")}</h2>`
+      + statsGrid([statHTML(t.old70, text("ปี 2570 วิธีเดิม", "2570 current method"), { small: true }), statHTML(t.new70, text("ปี 2570 ตามข้อเสนอ", "2570 with fixes"), { small: true }), statHTML(t.n, text("ทรัพย์สินที่มีเจ้าของในบัญชีปี 2563", "Properties with a 2563 owner"), { format: "count", small: true })])
+      + `<button type="button" class="more-button" data-open-tab="list">${text(`ดูรายการที่ควรจัดการก่อน (${num(t.nGain)})`, `See what to handle first (${num(t.nGain)})`)}</button>`
+      + chart
+      + explainHTML(text("วิธีคิดและข้อจำกัด", "Method and limits"),
+        noteP("ทรัพย์สิน = แปลงที่ขอบติดกันของเจ้าของเดียวกันพร้อมอาคาร เรียงตามเงินที่เพิ่มได้ต่อปี (ปี 2570 ตามข้อเสนอ ลบ วิธีเดิม) จากมากไปน้อย รายต้น ๆ คุ้มค่าที่จะตรวจก่อน แต่ทุกรายต้องตรวจโฉนด ทะเบียนบ้าน และการใช้จริงก่อนแจ้งประเมิน · แต่ละแท่งในกราฟคิดข้อเสนอทีละข้อ ผลรวมจึงต่างจากยอดที่คิดพร้อมกันเล็กน้อย", "A property is the adjoining parcels of one owner with their buildings, ranked by the tax that can be added a year (2570 with fixes minus the current method). The top ones are worth checking first, but every case needs the deed, house registration and actual use checked before any assessment · each bar applies one fix alone, so the bars differ slightly from the combined total")
+        + noteP(`เจ้าของมาจากบัญชี ภ.ด.ส.3 ปี 2563 ที่เทศบาลส่งมา สมมติว่ายังไม่เปลี่ยน${sm ? ` · ผูกเจ้าของกับแปลงในบัญชีภาษีได้ ${num(sm.parcelsWithOwner)} แปลง` : ""} · ชื่อเจ้าของไม่แสดงบนเว็บ ใช้รหัสสุ่มแทน`, `Owners come from the 2563 PDS 3 list supplied by the municipality and are assumed unchanged${sm ? ` · ${num(sm.parcelsWithOwner)} parcels on the roll have an owner` : ""} · owner names are not shown; random codes are used`))
+      + `</section>` + supplementsHTML() + notesLink();
+  }
+
+  /* ---------- Revision 2.0 panel pieces: stats, charts, explanations ---------- */
+  /* Big number per LDS technical/data role: the figure in JetBrains Mono with its unit small beside it, the label under it.
+     `value` is a number (formatted by `format`) or a ready string; null renders the no-data dash with a short reason. */
+  const moneyParts = (v) => { const a = Math.abs(v); return a >= 1e6 ? [fixed(v / 1e6, 2), text("ล้านบาท", "M THB")] : [num(Math.round(v)), text("บาท", "THB")]; };
+  function statHTML(value, label, opts = {}) {
+    const fmtv = opts.format || "money";
+    let n, u = opts.unit || "";
+    if (value == null || (typeof value === "number" && !Number.isFinite(value))) { n = "—"; u = opts.noData || text("ยังไม่มีตัวเลข", "No figure"); }
+    else if (typeof value === "string") n = value;
+    else if (fmtv === "money") [n, u] = moneyParts(value);
+    else if (fmtv === "percent") { n = fixed(value, Math.abs(value) >= 10 ? 0 : 1); u = "%"; }
+    else n = num(value, opts.digits || 0);
+    const sign = typeof value === "number" && opts.signed && value > 0 ? "+" : "";
+    return `<div class="stat${opts.emphasis ? " stat-emphasis" : ""}${opts.small ? " stat-small" : ""}"><strong class="stat-value"><span class="num">${sign}${esc(n)}</span>${u ? `<small class="stat-unit">${esc(u)}</small>` : ""}</strong><span class="stat-label">${esc(label)}</span>${opts.note ? `<span class="stat-note">${esc(opts.note)}</span>` : ""}</div>`;
+  }
+  const statsGrid = (items) => `<div class="stats-grid">${items.join("")}</div>`;
+  /* Charts are registered by id here and mounted after the HTML is in the DOM; the spec carries the DATAVIZ-01 declaration. */
+  S.charts = new Map();
+  function chartHTML(id, spec, caption, height = 200) {
+    S.charts.set(id, spec);
+    return `<figure class="chart-figure"><div class="chart" data-chart-id="${esc(id)}" style="height:${height}px" role="img" aria-label="${esc(caption)}"></div><figcaption>${esc(caption)}</figcaption></figure>`;
+  }
+  window.addEventListener("sila:am5-ready", () => mountCharts());
+  function mountCharts() {
+    const C = window.SilaCharts;
+    if (!C || !C.available()) return;
+    C.prune();
+    document.querySelectorAll("[data-chart-id]").forEach((el) => {
+      if (el.dataset.mounted === S.theme + S.lang + (el.dataset.specRev || "")) return;
+      const spec = S.charts.get(el.dataset.chartId);
+      if (!spec) return;
+      C.render(el, spec, { theme: S.theme, lang: S.lang });
+      el.dataset.mounted = S.theme + S.lang + (el.dataset.specRev || "");
+    });
+  }
+  /* A collapsed explanation block: everything an officer does not need at first glance goes here (one layer deeper). */
+  const explainHTML = (title, bodyHTML, open = false) => bodyHTML ? `<details class="explain"${open ? " open" : ""}><summary>${ui("info")}<span>${esc(title)}</span></summary><div class="explain-body">${bodyHTML}</div></details>` : "";
+  const noteP = (th, en) => `<p class="small-note">${text(th, en)}</p>`;
+  const whereText = () => (S.scope.type === "municipality" ? text("ทั้งเมือง", "whole city") : scopeLabel());
+
+  /* ---------- Revision 2.0: negotiation plan ---------- */
+  function negotiateContent() {
+    const t = initiativeTotals();
+    if (!t) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
+    const where = whereText();
+    const items = t.list.map((e) => ({ id: e.id, label: initiativeShort(e.id), value: Math.round(e.sum), color: initiativeColor(e.id) }));
+    const chart = items.length ? chartHTML("negotiate-bars", { type: "bars", items, format: "money", emphasis: S.initiative || null }, text(`บาทต่อปีที่เก็บเพิ่มได้ แยกตามกลุ่มข้อเสนอ · ${where} · เทียบกับที่เรียกเก็บปี 2569 ราคาประเมินเท่าเดิม`, `THB a year that can be added, by initiative · ${where} · against the 2569 bill at current prices`), Math.max(140, 26 * items.length + 40)) : "";
+    const rows = t.list.map((e) => `<button type="button" class="init-row${S.initiative === e.id ? " is-active" : ""}" data-initiative="${esc(e.id)}" aria-pressed="${S.initiative === e.id}"><span class="init-swatch" style="background:${initiativeColor(e.id)}"></span><span class="init-name">${esc(initiativeShort(e.id))}<small>${esc(text(`${num(e.parcels)} แปลง`, `${num(e.parcels)} parcels`))}</small></span><span class="init-amount num">+${esc(moneyShort(e.sum))}</span></button>`).join("");
+    const picked = S.initiative ? t.list.find((e) => e.id === S.initiative) : null;
+    const focus = S.initiative ? `<div class="focus-card"><div class="focus-head"><span class="init-swatch" style="background:${initiativeColor(S.initiative)}"></span><strong>${esc(initiativeShort(S.initiative))}</strong><button type="button" class="quiet" data-initiative="">${text("ดูทุกกลุ่ม", "All initiatives")}</button></div>`
+      + statsGrid([statHTML(picked ? picked.sum : 0, text("เก็บเพิ่มได้ต่อปี", "Can be added a year"), { signed: true, emphasis: true }), statHTML(picked ? picked.parcels : 0, text("แปลงที่ต้องเจรจา", "Titles to negotiate"), { format: "count" })])
+      + `<p class="focus-how">${ui("done")}<span>${esc(text(...(INITIATIVE_HOW[S.initiative] || ["", ""])))}</span></p>`
+      + `<button type="button" class="more-button" data-show-list="initiative">${text("ดูรายการแปลง เรียงจากมากไปน้อย", "List the titles, largest first")}</button>`
+      + explainHTML(text("ฐานกฎหมายและข้อสมมติ", "Legal basis and assumptions"), `<p>${esc(text(...(STRATEGY_BY_ID.get(S.initiative)?.basis || ["", ""])))}</p>`) + `</div>` : "";
+    const totals = S.taxResult.totals;
+    return `<section class="panel-section"><h2 class="sr-only">${text("แผนการเจรจา", "Negotiation plan")}</h2>`
+      + focus + chart + `<div class="init-list">${rows}</div>`
+      + (t.nAbove ? `<p class="small-note">${text(`อีก ${num(t.nAbove)} แปลง บัญชีเรียกเก็บสูงกว่าที่คำนวณได้ รวม ${moneyShort(t.rollAbove)} (ส่วนใหญ่คือที่ทิ้งว่างที่คิดอัตราสะสม) ไม่หักออกจากยอด`, `${num(t.nAbove)} more titles are billed above the computed figure, ${moneyShort(t.rollAbove)} in total (mostly vacant land at an escalated rate); not deducted`)}</p>` : "")
+      + explainHTML(text("วิธีคิดและข้อจำกัด", "Method and limits"),
+        noteP(`ส่วนเพิ่มของแต่ละแปลง = ภาษีตามกฎหมายเมื่อใช้ข้อเสนอที่เลือก ลบ ยอดที่เทศบาลเรียกเก็บปี 2569 ของแปลงนั้น (ภ.ด.ส.7) ถ้าคำนวณได้ต่ำกว่าที่เรียกเก็บ ถือว่าไม่มีส่วนเพิ่ม · แบ่งส่วนเพิ่มให้ข้อเสนอที่ทำให้ภาษีสูงขึ้น ส่วนที่เหลือคือบัญชีเรียกเก็บต่ำกว่าที่คำนวณจากข้อมูลเดียวกัน ซึ่งต้องตรวจทีละโฉนด ไม่ใช่ข้อเสนอ · ส่วนต่างต่ำกว่า ${num(AUDIT_MIN)} บาทต่อโฉนด (${num(t.nSmall)} โฉนด รวม ${moneyShort(t.rollBelowSmall)}) ไม่นำมานับ เพราะเป็นผลของการปัดเศษและค่าเสื่อม`,
+          `A title’s gain = the law-based tax with the selected fixes minus what the municipality billed for it in 2569 (PDS 7); a computed figure below the bill adds nothing. The gain is allocated to the fixes that raise the tax; the rest is the roll billing below the law-based figure from the same data, a title-by-title check rather than a proposal. Gaps under ${num(AUDIT_MIN)} THB per title (${num(t.nSmall)} titles, ${moneyShort(t.rollBelowSmall)}) are left out as rounding and depreciation noise.`)
+        + noteP(`ทั้งเมือง: เรียกเก็บปี 2569 ${moneyShort(totals.assessed69)} · คำนวณตามกฎหมายจากข้อมูลเดียวกันโดยไม่ใช้ข้อเสนอ ${moneyShort(totals.law69)} · ปี 2570 ตามข้อเสนอ ${moneyShort(totals.new70)} · ทุกข้อเป็นสมมติฐาน ต้องตรวจโฉนด ทะเบียนบ้าน และการใช้จริงก่อนแจ้งประเมิน เจ้าของมาจากบัญชีปี 2563 สมมติว่ายังไม่เปลี่ยน`,
+          `Whole city: billed ${moneyShort(totals.assessed69)} in 2569 · law-based figure from the same data without fixes ${moneyShort(totals.law69)} · 2570 with fixes ${moneyShort(totals.new70)} · every item is a scenario; check the deed, house registration and actual use before any assessment. Owners from the 2563 list, assumed unchanged.`)
+        + taxAssumptionsHTML(false))
+      + `</section>` + supplementsHTML() + notesLink();
+  }
+  function negotiateListHTML() {
+    const q = S.search.trim().toLowerCase(), init = S.initiative;
+    const rowsAll = currentFeatures().map((f) => { const r = taxRow(f.properties.id); if (!r) return null; const v = init ? (r.alloc.get(init) || 0) : negotiateGain(r); const min = init === TAX_AUDIT?.id ? AUDIT_MIN : 0.5; return v >= min ? { f, r, v } : null; }).filter(Boolean);
+    let list = rowsAll.sort((a, b) => b.v - a.v);
+    if (q) list = list.filter((x) => searchText(x.f).includes(q));
+    const rows = list.slice(0, S.page).map(({ f, r, v }) => {
+      const dom = init || dominantOf(r);
+      return `<button class="area-row row-figure" data-record="${esc(f.properties.id)}"><span class="area-name">${esc(featureTitle(f))}<span class="area-meta">${dom ? `<span class="init-chip" style="--chip:${initiativeColor(dom)}">${esc(initiativeShort(dom))}</span> ` : ""}${esc(text(`เรียกเก็บปี 2569 ${fixed(r.assessed69, 0)} บาท`, `billed ${fixed(r.assessed69, 0)} THB in 2569`))}${r.vacancy ? " · " + esc(text(`ทิ้งว่าง ${r.vacancy.yearsMin}–${r.vacancy.yearsMax} ปี`, `vacant ${r.vacancy.yearsMin}–${r.vacancy.yearsMax} yrs`)) : ""}</span></span><span class="row-amount num">+${esc(fixed(v, 0))}<small>${text("บาท/ปี", "THB/yr")}</small></span></button>`;
+    }).join("");
+    return searchInput() + (init ? `<div class="filter-row"><span class="init-chip" style="--chip:${initiativeColor(init)}">${esc(initiativeShort(init))}</span><button type="button" class="quiet" data-initiative="">${text("ดูทุกกลุ่ม", "All initiatives")}</button></div>` : "")
+      + `<div class="section-title"><h2>${text("แปลงที่ควรเจรจาก่อน", "Titles to negotiate first")}</h2><span>${num(list.length)} ${text("แปลง", "titles")}</span></div><div class="area-list">${rows}</div>`
+      + (!list.length ? `<div class="empty-state"><h3>${text("ไม่มีแปลงในกลุ่มนี้ในขอบเขตที่เลือก", "No titles for this group in the selected boundary")}</h3></div>` : "")
+      + (list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : "")
+      + `<button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดรายการ · CSV", "Download the list · CSV")}</button>`;
+  }
+  function exportNegotiateCSV() {
+    const init = S.initiative, min = (id) => (id === TAX_AUDIT?.id ? AUDIT_MIN : 0.5);
+    const list = currentFeatures().map((f) => { const r = taxRow(f.properties.id); if (!r) return null; const v = init ? (r.alloc.get(init) || 0) : negotiateGain(r); return v >= (init ? min(init) : 0.5) ? { f, r, v } : null; }).filter(Boolean).sort((a, b) => b.v - a.v);
+    const r2 = (v) => (v == null || !Number.isFinite(Number(v)) ? "" : Math.round(Number(v) * 100) / 100);
+    const cols = ["parcelCode", "village", "billed2569THB", "lawBased2569THB", "tax2570CurrentMethodTHB", "tax2570WithFixesTHB", "gainVsBillTHB", "leadInitiative", "allocation", "rollAboveTHB", "vacancyYears", "vacancyRateNow"];
+    const quote = (v) => { let c = String(v ?? ""); if (/^[=+@\-\t\r]/.test(c)) c = "'" + c; return '"' + c.replace(/"/g, '""') + '"'; };
+    const lines = list.map(({ f, r, v }) => [f.properties.code || f.properties.id, villageNamesOf(f).join("|"), r2(r.assessed69), r2(r.law69), r2(r.old70), r2(r.new70), r2(v), dominantOf(r) || "", [...r.alloc.entries()].filter(([id, a]) => a >= min(id)).map(([id, a]) => `${id}:${Math.round(a)}`).join("|"), r2(r.rollAbove), r.vacancy ? `${r.vacancy.yearsMin}-${r.vacancy.yearsMax}` : "", r.vacancy ? r.vacancy.rate : ""].map(quote).join(","));
+    downloadCSV(cols, lines, `sila-negotiation-${init || "all"}-${S.scope.id}-20261020.csv`, text("ดาวน์โหลดรายการเจรจา", "Downloaded the negotiation list"));
+  }
+  function downloadCSV(cols, lines, name, msg) {
+    const csv = "﻿" + cols.join(",") + "\r\n" + lines.join("\r\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const a = document.createElement("a"); a.href = url; a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast(msg);
+  }
+
+  /* ---------- Revision 2.0: farmland on high-value land ---------- */
+  function agriWatchScope() {
+    const keys = new Set(currentFeatures().map((f) => f.properties.id));
+    return agriWatchRows().filter((w) => keys.has(w.id));
+  }
+  function agriWatchContent() {
+    if (!S.taxResult) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
+    const list = agriWatchScope(), where = whereText();
+    const pot = list.reduce((a, w) => a + (w.potential || 0), 0), billed = list.reduce((a, w) => a + (w.billed69 || 0), 0), value = list.reduce((a, w) => a + w.landValue, 0);
+    const bands = [[50e6, Infinity, text("50 ล้านขึ้นไป", "50M and above")], [20e6, 50e6, text("20–50 ล้าน", "20–50M")], [10e6, 20e6, text("10–20 ล้าน", "10–20M")], [5e6, 10e6, text("5–10 ล้าน", "5–10M")]];
+    const items = bands.map(([lo, hi, label]) => ({ id: `${lo}`, label, value: Math.round(list.filter((w) => w.landValue >= lo && w.landValue < hi).reduce((a, w) => a + (w.potential || 0), 0)), color: catHex("lime") || "#BECE7E" })).filter((x) => x.value > 0);
+    const chart = items.length ? chartHTML("agri-bands", { type: "bars", items, format: "money" }, text(`บาทต่อปีที่จะเพิ่มถ้าพบว่าไม่ได้ทำประโยชน์ แยกตามมูลค่าที่ดินของแปลง · ${where}`, `THB a year added if found unused, by the parcel’s land value · ${where}`), 150) : "";
+    const bld = list.filter((w) => w.buildingsOnTitle || w.surveyBuilding).length, jur = list.filter((w) => w.ownerType === "juristic").length;
+    return `<section class="panel-section"><h2 class="sr-only">${text("เกษตรบนที่ดินราคาสูง", "High-value farmland")}</h2>`
+      + chart
+      + statsGrid([statHTML(value, text("มูลค่าที่ดินรวม", "Land value in total"), { small: true }), statHTML(bld, text("แปลงที่มีอาคารในบัญชีหรือจากสำรวจ", "Titles with a building on the roll or survey"), { format: "count", small: true }), statHTML(jur, text("เจ้าของเป็นนิติบุคคล", "Company-owned"), { format: "count", small: true })])
+      + `<button type="button" class="more-button" data-show-list="agri">${text("ดูรายการแปลง เรียงจากมากไปน้อย", "List the titles, largest first")}</button>`
+      + explainHTML(text("วิธีคิดและข้อจำกัด", "Method and limits"),
+        noteP("แปลงที่บัญชีปี 2569 ระบุการใช้เป็นเกษตร (ทั้งแปลงหรือบางส่วน) และมูลค่าที่ดินตั้งแต่ 5 ล้านบาท · ตัวเลขคือภาษีถ้าถือเป็นที่ดินว่างเปล่า (0.3% ไม่มียกเว้น) ลบที่เรียกเก็บปี 2569 · เกษตรต้องเข้าเกณฑ์ประกาศกระทรวง เช่น ความหนาแน่นของต้นไม้ต่อไร่ การตรวจในพื้นที่เท่านั้นที่ตัดสินได้ ถ้าทิ้งว่างต่อเนื่อง อัตราจะเพิ่มอีก 0.3% ทุก 3 ปีตาม ม.43", "Titles the 2569 roll records as agricultural (wholly or partly) with land worth 5 million THB or more · the figure is the tax if treated as vacant land (0.3%, no relief) minus the 2569 bill · farming must meet the ministerial criteria (planting density per rai and the like); only a site check decides. If left vacant, the rate rises another 0.3% every 3 years (s.43)")
+        + noteP("บุคคลธรรมดาได้ยกเว้นที่ดินเกษตร 50 ล้านบาทแรก แปลงที่ถูกต้องตามเกณฑ์จึงเสียภาษีน้อยหรือไม่เสียเลย นี่จึงเป็นขนาดถ้าตรวจพบว่าไม่ได้ทำประโยชน์ ไม่ใช่ข้อสรุป", "Individuals are relieved on the first 50 million THB of farmland, so a title that meets the criteria pays little or nothing; this is the size if a check finds the land unused, not a finding"))
+      + `</section>` + supplementsHTML() + notesLink();
+  }
+  function agriWatchListHTML() {
+    const q = S.search.trim().toLowerCase();
+    let list = agriWatchScope();
+    if (q) list = list.filter((w) => [w.code, w.id, w.tp].join(" ").toLowerCase().includes(q));
+    const rows = list.slice(0, S.page).map((w) => `<button class="area-row row-figure" data-record="${esc(w.id)}"><span class="area-name">${esc(text(`แปลง ${w.code || w.id}`, `Parcel ${w.code || w.id}`))}<span class="area-meta">${esc(text(`ที่ดิน ${moneyShort(w.landValue)} · เรียกเก็บ ${fixed(w.billed69 ?? 0, 0)} บาท`, `land ${moneyShort(w.landValue)} · billed ${fixed(w.billed69 ?? 0, 0)} THB`))}${w.buildingsOnTitle || w.surveyBuilding ? " · " + text("มีอาคาร", "has building") : ""}${w.ownerType === "juristic" ? " · " + text("นิติบุคคล", "company") : ""}</span></span><span class="row-amount num">+${esc(fixed(w.potential ?? 0, 0))}<small>${text("บาท/ปี", "THB/yr")}</small></span></button>`).join("");
+    return searchInput() + `<div class="section-title"><h2>${text("แปลงเกษตรที่ควรเพ่งเล็ง", "Farmland to watch")}</h2><span>${num(list.length)} ${text("แปลง", "titles")}</span></div><div class="area-list">${rows}</div>`
+      + (!list.length ? `<div class="empty-state"><h3>${text("ไม่มีแปลงเกษตรมูลค่า 5 ล้านบาทขึ้นไปในขอบเขตนี้", "No farmland worth 5 million THB or more in this boundary")}</h3></div>` : "")
+      + (list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : "")
+      + `<button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดรายการ · CSV", "Download the list · CSV")}</button>`;
+  }
+  function exportAgriCSV() {
+    const list = agriWatchScope(), r2 = (v) => (v == null || !Number.isFinite(Number(v)) ? "" : Math.round(Number(v) * 100) / 100);
+    const cols = ["parcelCode", "village", "landValueTHB", "areaSqWah", "pricePerSqWah", "agriShare", "billed2569THB", "taxIfVacantTHB", "potentialTHB", "ownerType", "buildingOnRoll", "buildingSurveyed"];
+    const quote = (v) => { let c = String(v ?? ""); if (/^[=+@\-\t\r]/.test(c)) c = "'" + c; return '"' + c.replace(/"/g, '""') + '"'; };
+    const vname = (v) => { const x = S.metadata.villages.find((y) => y.id === v); return x ? villageLabel(x) : v || ""; };
+    downloadCSV(cols, list.map((w) => [w.code || w.id, vname(w.v), r2(w.landValue), r2(w.sqwa), r2(w.price), w.agriShare, r2(w.billed69), r2(w.ifVacant), r2(w.potential), w.ownerType || "", w.buildingsOnTitle ? 1 : 0, w.surveyBuilding ? 1 : 0].map(quote).join(",")), `sila-farmland-watch-${S.scope.id}-20261020.csv`, text("ดาวน์โหลดรายการเกษตรที่ควรเพ่งเล็ง", "Downloaded the farmland watch list"));
+  }
+
+  /* ---------- Revision 2.0: owners by appraised value ---------- */
+  function ownersInScope() {
+    const list = ownerRanking();
+    if (S.scope.type === "municipality") return list;
+    const keys = new Set();
+    for (const f of currentFeatures()) { const tp = parcelAttr(f.properties.id)?.tp; if (tp) keys.add(tp); }
+    return list.filter((o) => keys.has(o.code));
+  }
+  function portfolioContent() {
+    if (!S.taxResult) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีไม่ได้", "Tax data is not open yet"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
+    if (S.owner) return ownerCardHTML(S.owner) + supplementsHTML() + notesLink();
+    const list = ownersInScope(), where = whereText();
+    const top = list.slice(0, 10);
+    const items = top.map((o) => ({ id: o.code, label: text(`อันดับ ${o.rank}`, `#${o.rank}`), value: Math.round(o.value), color: o.type === "juristic" ? (catHex("blue") || "#6196D1") : (catHex("teal") || "#49C0BC") }));
+    const chart = items.length ? chartHTML("owner-top", { type: "bars", items, format: "money" }, text(`มูลค่าประเมินรวม (ที่ดินและสิ่งปลูกสร้างที่บัญชีผูกได้) ของเจ้าของ 10 อันดับแรก · ${where} · น้ำเงิน = นิติบุคคล เขียว = บุคคลธรรมดา`, `Appraised value (land plus roll-linked buildings) of the top 10 owners · ${where} · blue = company, green = individual`), 300) : "";
+    const totalValue = list.reduce((a, o) => a + o.value, 0), top10 = top.reduce((a, o) => a + o.value, 0);
+    const rows = top.map((o) => ownerRowHTML(o)).join("");
+    return `<section class="panel-section"><h2 class="sr-only">${text("เจ้าของรายใหญ่", "Largest owners")}</h2>`
+      + chart + `<div class="section-title"><h2>${text("10 อันดับแรก", "Top 10")}</h2></div><div class="area-list">${rows}</div>`
+      + `<button type="button" class="more-button" data-show-list="owners">${text("ดูทั้งหมดและค้นหาเจ้าของ", "See all and search owners")}</button>`
+      + explainHTML(text("วิธีคิดและข้อจำกัด", "Method and limits"), noteP("มูลค่ารวม = ราคาประเมินที่ดินทุกแปลงของเจ้าของในบัญชีภาษี บวกมูลค่าสิ่งปลูกสร้างที่บัญชีผูกกับโฉนดได้ อาคารที่ผูกไม่ได้ไม่นับ (ไม่ใช่ศูนย์) · เจ้าของตามบัญชี ภ.ด.ส.3 ปี 2563 สมมติว่ายังไม่เปลี่ยน · ไม่แสดงชื่อ ใช้รหัสสุ่ม · ค้นได้ด้วยรหัสเจ้าของหรือรหัสแปลง", "Total = appraised land value of every title the owner holds on the roll plus roll-linked buildings; unlinked buildings are not counted (not zero) · owners per the 2563 PDS 3 list, assumed unchanged · no names, random codes · search by owner code or parcel code"))
+      + `</section>`;
+  }
+  function ownerRowHTML(o) {
+    return `<button class="area-row row-figure" data-owner="${esc(o.code)}"><span class="area-name"><span class="rank-badge">${num(o.rank)}</span> ${esc(text(`รหัส ${o.code}`, `Code ${o.code}`))}<span class="area-meta">${esc(ownerTypeText(o))} · ${esc(text(`${num(o.parcels.length)} แปลง · ภาษีปี 2569 ${moneyShort(o.assessed69)}`, `${num(o.parcels.length)} parcels · 2569 tax ${moneyShort(o.assessed69)}`))}${o.gain >= 1 ? " · " + esc(text(`เพิ่มได้ +${moneyShort(o.gain)}`, `can add +${moneyShort(o.gain)}`)) : ""}</span></span><span class="row-amount num">${esc(moneyParts(o.value)[0])}<small>${esc(moneyParts(o.value)[1])}</small></span></button>`;
+  }
+  function ownerListHTML() {
+    const q = S.search.trim().toLowerCase();
+    let list = ownersInScope();
+    if (q) list = list.filter((o) => [o.code, ...o.parcels.map(codeOf)].join(" ").toLowerCase().includes(q));
+    return searchInput() + `<div class="section-title"><h2>${text("เจ้าของเรียงตามมูลค่าประเมินรวม", "Owners by appraised value")}</h2><span>${num(list.length)} ${text("ราย", "owners")}</span></div><div class="area-list">${list.slice(0, S.page).map(ownerRowHTML).join("")}</div>`
+      + (!list.length ? `<div class="empty-state"><h3>${text("ไม่พบเจ้าของที่ค้นหา", "No matching owner")}</h3></div>` : "")
+      + (list.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : "")
+      + `<p class="inline-note">${text("ค้นได้ด้วยรหัสเจ้าของ (T-XXXXXX) หรือรหัสแปลง", "Search by owner code (T-XXXXXX) or parcel code")}</p><button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดรายการเจ้าของ · CSV", "Download the owner list · CSV")}</button>`;
+  }
+  function ownerCardHTML(code) {
+    const o = ownerRec(code);
+    if (!o) return `<section class="panel-section">${notice(text("ไม่พบเจ้าของรหัสนี้", "No owner with this code"), "")}<button type="button" class="more-button" data-owner="">${text("กลับไปรายการ", "Back to the list")}</button></section>`;
+    const tp = S.parcelTax.taxpayers.get(code);
+    const uses = Object.entries(o.uses).sort((a, b) => b[1] - a[1]).map(([u, n]) => `${text(...(window.SilaTaxEngine.USE_LABEL[u] || [u, u]))} ${num(n)}`).join(" · ");
+    const parcels = o.parcels.map((id) => ({ id, a: parcelAttr(id), r: taxRow(id) })).sort((x, y) => (y.a?.landValue || 0) + (y.a?.bldValue || 0) - ((x.a?.landValue || 0) + (x.a?.bldValue || 0)));
+    const rows = parcels.slice(0, S.page).map(({ id, a, r }) => `<button class="area-row row-figure" data-goto="portfolio|${esc(id)}"><span class="area-name">${esc(text(`แปลง ${codeOf(id)}`, `Parcel ${codeOf(id)}`))}<span class="area-meta">${a?.useLabel ? esc(text(...a.useLabel)) : ""}${a?.mainHome ? " · " + text("บ้านหลังหลัก", "main home") : ""}${r && r.assessed69 != null ? " · " + esc(text(`ภาษีปี 2569 ${fixed(r.assessed69, 0)} บาท`, `2569 tax ${fixed(r.assessed69, 0)} THB`)) : ""}${r && r.gain >= 1 ? " · " + esc(text(`เพิ่มได้ +${fixed(r.gain, 0)}`, `can add +${fixed(r.gain, 0)}`)) : ""}</span></span><span class="row-amount num">${esc(moneyParts((a?.landValue || 0) + (a?.bldValue || 0))[0])}<small>${esc(moneyParts((a?.landValue || 0) + (a?.bldValue || 0))[1])}</small></span></button>`).join("");
+    const villages = o.villages.map((v) => { const x = S.metadata.villages.find((y) => y.id === v); return x ? villageLabel(x) : v; });
+    return `<section class="panel-section owner-card"><div class="focus-head"><strong>${esc(text(`เจ้าของอันดับ ${num(o.rank)} · รหัส ${o.code}`, `Owner #${num(o.rank)} · code ${o.code}`))}</strong><button type="button" class="quiet" data-owner="">${text("ทุกราย", "All owners")}</button></div><p class="owner-type">${esc(ownerTypeText(o))}${tp?.src === "2563" ? " · " + text("ตามบัญชีปี 2563", "per the 2563 list") : ""}${tp?.status69 && tp.status69 !== "unknown" ? " · " + statusHTML(tp.status69) : ""}</p>`
+      + statsGrid([statHTML(o.value, text("มูลค่าประเมินรวม", "Appraised value"), { emphasis: true, note: text(`ที่ดิน ${moneyShort(o.landValue)} · อาคาร ${o.bldKnown ? moneyShort(o.bldValue) : text("ยังไม่มีตัวเลข", "no figure")}`, `land ${moneyShort(o.landValue)} · buildings ${o.bldKnown ? moneyShort(o.bldValue) : text("", "no figure")}`) }), statHTML(o.parcels.length, text("แปลงบนแผนที่", "Parcels on the map"), { format: "count" }), statHTML(o.assessed69, text("ภาษีปี 2569", "2569 tax")), statHTML(o.gain >= 0.5 ? o.gain : 0, text("เก็บเพิ่มได้ต่อปี", "Can be added a year"), { signed: true })])
+      + `<p class="small-note">${esc(uses)}${villages.length ? " · " + esc(villages.slice(0, 4).join(", ")) + (villages.length > 4 ? esc(text(` และอีก ${villages.length - 4} หมู่บ้าน`, ` and ${villages.length - 4} more`)) : "") : ""}</p>`
+      + `<div class="record-actions"><button type="button" class="mini-action" data-highlight-taxpayer="${esc(o.code)}">${ui("fit", 18)}${text("ดูทุกแปลงบนแผนที่", "Show every parcel on the map")}</button></div>`
+      + `<div class="section-title"><h2>${text("แปลงของเจ้าของรายนี้", "This owner’s parcels")}</h2><span>${num(o.parcels.length)}</span></div><div class="area-list">${rows}</div>${o.parcels.length > S.page ? `<button class="more-button" data-more>${text("ดูเพิ่มอีก 60 รายการ", "Show 60 more")}</button>` : ""}`
+      + `<button class="more-button" data-export>${ui("csv", 18)}${text("ดาวน์โหลดแปลงของรายนี้ · CSV", "Download this owner’s parcels · CSV")}</button>`
+      + explainHTML(text("ข้อจำกัด", "Limits"), noteP("เจ้าของตามบัญชี ภ.ด.ส.3 ปี 2563 สมมติว่ายังไม่เปลี่ยน ชื่อไม่แสดง · มูลค่าสิ่งปลูกสร้างนับเฉพาะที่บัญชีผูกกับโฉนดได้ · ส่วนเพิ่มคิดเทียบกับที่เรียกเก็บปี 2569", "Owner per the 2563 PDS 3 list, assumed unchanged; no names · building value only where the roll links it to a title · the gain is against the 2569 bill")) + `</section>`;
+  }
+  function exportOwnersCSV() {
+    const r2 = (v) => (v == null || !Number.isFinite(Number(v)) ? "" : Math.round(Number(v) * 100) / 100);
+    const quote = (v) => { let c = String(v ?? ""); if (/^[=+@\-\t\r]/.test(c)) c = "'" + c; return '"' + c.replace(/"/g, '""') + '"'; };
+    if (S.owner) {
+      const o = ownerRec(S.owner); if (!o) return;
+      const cols = ["ownerCode", "parcelCode", "use", "mainHome", "landValueTHB", "buildingValueTHB", "billed2569THB", "tax2570WithFixesTHB", "gainVsBillTHB"];
+      downloadCSV(cols, o.parcels.map((id) => { const a = parcelAttr(id), r = taxRow(id); return [o.code, codeOf(id), a?.use || "", a?.mainHome ? 1 : 0, r2(a?.landValue), r2(a?.bldValue), r2(r?.assessed69), r2(r?.new70), r2(r?.gain)].map(quote).join(","); }), `sila-owner-${o.code}-20261020.csv`, text("ดาวน์โหลดแปลงของเจ้าของรายนี้", "Downloaded this owner’s parcels"));
+      return;
+    }
+    const q = S.search.trim().toLowerCase();
+    let list = ownersInScope();
+    if (q) list = list.filter((o) => [o.code, ...o.parcels.map(codeOf)].join(" ").toLowerCase().includes(q));
+    const cols = ["rank", "ownerCode", "ownerType", "parcels", "landValueTHB", "buildingValueTHB", "buildingsKnown", "totalValueTHB", "billed2569THB", "tax2570WithFixesTHB", "gainVsBillTHB", "properties"];
+    downloadCSV(cols, list.map((o) => [o.rank, o.code, o.type === "juristic" ? `juristic:${o.kind || ""}` : o.type || "", o.parcels.length, r2(o.landValue), r2(o.bldValue), o.bldKnown, r2(o.value), r2(o.assessed69), r2(o.new70), r2(o.gain), o.properties].map(quote).join(",")), `sila-owners-${S.scope.id}-20261020.csv`, text("ดาวน์โหลดรายการเจ้าของ", "Downloaded the owner list"));
+  }
+  /* Focus one owner: card in the panel, every parcel outlined on the map. */
+  function setOwner(code, push = true) {
+    S.owner = code || null;
+    S.page = 60; S.search = "";
+    if (S.owner) highlightTaxpayer(S.owner); else highlightTaxpayer(null);
+    renderPanel();
+    if (push) syncURL();
+  }
+  function setInitiative(id, push = true) {
+    S.initiative = id && INITIATIVE_ORDER.includes(id) ? id : null;
+    S.page = 60;
+    restyleLayer();
+    renderPanel();
+    if (push) syncURL(true);
+  }
+  /* ---------- Revision 2.0: the 16 flood study sites ---------- */
+  const FLOOD_STATUS = { approximate: ["จับคู่ภาพเอกสารโดยประมาณ", "matched approximately from the plan's figure"], representative: ["ตัวแทนบริเวณ ยังต้องชี้หมุดจริง", "representative of the area; the real spot is still to be pointed out"], coordinator: ["หมุดจากผู้ประสานงาน", "pinned by the coordinator"], surveyed: ["รังวัดภาคสนามแล้ว", "surveyed in the field"] };
+  const floodStatusText = (p, long = false) => text(...(FLOOD_STATUS[p.coordStatus] || FLOOD_STATUS.approximate)) + (long && p.searchRadiusM ? text(` · วงค้นหา ${num(p.searchRadiusM)} ม.`, ` · search radius ${num(p.searchRadiusM)} m`) : "") + (long ? text(" · ยังไม่มีจุดใดรับรองจากรังวัด", " · no site is survey-certified yet") : "");
+  function floodSitesContent() {
+    const fs = currentFeatures(), where = whereText();
+    const by = (k) => fs.filter((f) => f.properties.coordStatus === k).length;
+    const items = [{ id: "approximate", label: text("โดยประมาณ", "Approximate"), value: by("approximate"), color: catHex("blue") }, { id: "representative", label: text("ตัวแทนบริเวณ", "Representative"), value: by("representative"), color: catHex("sky") }, { id: "coordinator", label: text("ผู้ประสานงานชี้", "Coordinator pin"), value: by("coordinator"), color: catHex("teal") }, { id: "surveyed", label: text("รังวัดแล้ว", "Surveyed"), value: by("surveyed"), color: catHex("mint") }];
+    const phases = [[text("1 · เปิดปลายทางและส่วนคอด", "1 · Open the outlets and pinch points"), text("ห้วยศิลา ลำน้ำพอง บึงทุ่งสร้าง และช่องลอดตามแนวกั้น ตรวจระดับน้ำปลายทาง สิทธิ์ และช่องผ่าน คืนทางที่อุดตันได้ก่อน", "Huai Sila, the Phong, Bueng Thung Sang and the culverts through the barriers: check outlet levels, rights and openings; clear blocked paths first")],
+      [text("2 · ทางลำเลียงและสองแถวรับน้ำ", "2 · Conveyance and the two intake rows"), text("ขุดลอกคืนร่องเดิม เตรียมทางลำเลียงก่อนเปิดคลองดักตีนเนิน ทำเป็นช่วงพร้อมพื้นที่หน่วง แล้วเชื่อมรางแถวสองเมื่อปลายรับพร้อม", "Dredge the old channels and prepare the conveyance before opening the foothill intercept canal, in stages with detention, then join the second-row drains once the outlet is ready")],
+      [text("3 · เชื่อมซอยและติดตามผล", "3 · Connect the lanes and follow up"), text("เพิ่มทางรับย่อยเมื่อทางหลักพร้อม ตรวจรอยน้ำและเวลาระบายหลังฝนที่ 16 จุดและพื้นที่ปลายทาง", "Add lane intakes once the mains are ready; check water marks and drain-down time after rain at the 16 sites and downstream")]];
+    return `<section class="panel-section"><h2 class="sr-only">${text("จุดศึกษาน้ำท่วม", "Flood study sites")}</h2>`
+      + chartHTML("floodsites-status", { type: "bars", items, format: "count" }, text(`สถานะพิกัดของ ${num(fs.length)} จุด · ${where} · พิกัดบอกบริเวณที่จะลงพื้นที่ ไม่ใช่จุดน้ำลึกสุดหรือปากท่อ`, `Coordinate status of ${num(fs.length)} sites · ${where} · points mark the area to visit, not the lowest point or a pipe mouth`), 150)
+      + `<div class="section-title"><h2>${text("ลำดับงานตามข้อเสนอ", "Sequence in the study")}</h2></div><ol class="phase-list">${phases.map(([h, b]) => `<li><strong>${h}</strong><span>${b}</span></li>`).join("")}</ol>`
+      + `<button type="button" class="more-button" data-open-tab="list">${text("ดูทั้ง 16 จุด พร้อมสาเหตุและทางเลือก", "See all 16 sites with cause and options")}</button>`
+      + explainHTML(text("ที่มาและข้อจำกัด", "Source and limits"),
+        noteP("จุดและข้อความมาจากข้อเสนอการป้องกันและแก้ปัญหาน้ำท่วม เทศบาลเมืองศิลา (CityChat ฉบับ 7, 17 ต.ค. 2569) ซึ่งต่อยอดแผนแก้ปัญหาน้ำท่วมของเทศบาล พ.ศ. 2564–2567 และข้อมูลจากผู้ประสานงาน · ตารางจัดลำดับงานเริ่มตรวจและแก้ส่วนคอด ไม่ใช่อันดับความรุนแรงของน้ำท่วมที่วัดแล้ว", "Sites and text come from the flood prevention study for Sila Municipality (CityChat edition 7, 17 Oct 2569), which builds on the municipal flood plan 2564–2567 and the coordinator's notes · the sequence orders survey and pinch-point work, not measured flood severity")
+        + noteP("ข้อเสนอมีฉากน้ำสมมติ 10–50 ซม. และแนวสำรวจตามถนนของแต่ละจุด บนข้อมูลระดับ 30 ม. ชั้นข้อมูลเหล่านี้ยังไม่แสดงบนแผนที่จนกว่าเจ้าของงานจะตรวจ เพราะการสื่อสารความเสี่ยงต่อสาธารณะต้องผ่านคนก่อนเสมอ", "The study's 10–50 cm water scenarios and road survey corridors (on 30 m elevation data) are not on the map until the owner reviews them: public flood-risk communication always passes a person first")
+        + noteP("ยังไม่มีจุดใดรับรองระดับและพิกัดจากรังวัด ต้องตรวจระดับ ความจุ สิทธิ์ และผู้ดูแลก่อนใช้จริง", "No site has survey-certified levels or coordinates; check levels, capacity, rights and the responsible body before use"))
       + `</section>` + supplementsHTML() + notesLink();
   }
   function businessesContent() {
@@ -2522,7 +3013,13 @@
     const params = { api: "1", map_action: "pano", viewpoint: `${at[1].toFixed(6)},${at[0].toFixed(6)}` };
     if (facing) params.heading = String(Math.round(bearingDeg(at, aim)));
     params.pitch = "0"; params.fov = "80";
-    return { href: "https://www.google.com/maps/@?" + new URLSearchParams(params).toString(), facing };
+    /* Revision 2.0: the pin link opens Google Maps at the place itself (never a black screen); the panorama link stays
+       as the second step, since estate roads often have no Google imagery. `cover` is the offline coverage check when the
+       municipality supplies a key (tools/streetview-coverage.py); unknown means the panorama may or may not exist. */
+    const cover = S.svCoverage?.[f.properties.id] ?? null;
+    const pin = targetPoint(f);
+    return { href: "https://www.google.com/maps/@?" + new URLSearchParams(params).toString(), facing, cover,
+      pinHref: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(`${pin[1].toFixed(6)},${pin[0].toFixed(6)}`) };
   }
   const aiModeURL = (q) => "https://www.google.com/search?udm=50&q=" + encodeURIComponent(q);
   /* Questions carry only a place in words, a registered business name or a general legal question: no coordinates, owner code, tax figure, house number or name of a person. */
@@ -2548,13 +3045,15 @@
     return out;
   }
   const extMark = () => `${window.SilaIcons?.icon("external", { size: 16, className: "ext-icon" }) || ""}<span class="sr-only">${text(" (เปิดแท็บใหม่)", " (opens a new tab)")}</span>`;
+  const svLabel = (sv) => (sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place")) + (sv.cover === true ? "" : text(" · ถ้ามีภาพ", " · if imagery exists"));
   function externalActionsHTML(f) {
     if (!f?.geometry || S.dataset === "popgrid") return "";
     const sv = streetView(f);
     return `<div class="record-section external-actions"><h3>${text("ตรวจจากหน้าจอก่อนลงพื้นที่", "Check from the screen before a site visit")}</h3><div class="record-actions">`
-      + `<a class="mini-action ext-link" data-sv-link href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("streetview", { size: 18 }) || ""}<span data-sv-label>${sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place")}</span>${extMark()}</a>`
+      + `<a class="mini-action ext-link" href="${esc(sv.pinHref)}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("map", { size: 18 }) || ""}<span>${text("เปิด Google Maps ที่จุดนี้", "Open Google Maps here")}</span>${extMark()}</a>`
+      + (sv.cover === false ? "" : `<a class="mini-action ext-link" data-sv-link href="${esc(sv.href)}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("streetview", { size: 18 }) || ""}<span data-sv-label>${esc(svLabel(sv))}</span>${extMark()}</a>`)
       + aiQuestions(f).map(([label, q]) => `<a class="mini-action ext-link" href="${esc(aiModeURL(q))}" target="_blank" rel="noopener noreferrer">${window.SilaIcons?.icon("travel_explore", { size: 18 }) || ""}<span>${esc(label)}</span>${extMark()}</a>`).join("")
-      + `</div><p class="small-note">${text("เปิดบริการของ Google ในแท็บใหม่ · Street View ใช้ตำแหน่งบนถนน ส่วนคำถามถึง Google AI ใช้ชื่อถนน หมู่บ้าน ชื่อธุรกิจที่จดทะเบียน หรือคำถามกฎหมายทั่วไปเท่านั้น ไม่ส่งพิกัด รหัสเจ้าของ ตัวเลขภาษี หรือบ้านเลขที่ · ภาพ Street View อาจเก่า ดูวันที่ในภาพ ถนนบางเส้นยังไม่มีภาพของ Google ถ้าขึ้นว่าไม่มีภาพ ให้ลากหมุดรูปคนสีเหลืองใน Google Maps ไปวางบนเส้นสีฟ้าที่ใกล้ที่สุด · คำตอบของ AI เป็นข้อมูลประกอบ ต้องตรวจกับเอกสารก่อนใช้", "Opens Google in a new tab · Street View uses a road position; questions to Google AI use only road and village names, registered business names or general legal questions, never coordinates, owner codes, tax figures or house numbers · Street View imagery can be old; check its date. Some roads have no Google imagery; if none shows, drag the yellow figure in Google Maps onto the nearest blue line · AI answers are leads to verify against documents before use")}</p></div>`;
+      + `</div>` + explainHTML(text("ก่อนเปิด", "Before you open"), noteP("เปิดบริการของ Google ในแท็บใหม่ · ปุ่มแรกเปิดแผนที่พร้อมหมุดที่จุดนี้ จากนั้นลากหมุดรูปคนสีเหลืองไปวางบนเส้นสีฟ้าที่ใกล้ที่สุดได้ · ปุ่ม Street View ยืนบนถนนหน้าแปลงและหันเข้าหาแปลง แต่ถนนในหมู่บ้านจัดสรรหลายเส้นยังไม่มีภาพของ Google จอจะว่าง ไม่ใช่ความผิดพลาดของข้อมูลเทศบาล · ภาพอาจเก่า ดูวันที่ในภาพ · คำถามถึง Google AI ใช้ชื่อถนน หมู่บ้าน หรือชื่อธุรกิจที่จดทะเบียนเท่านั้น ไม่ส่งพิกัด รหัสเจ้าของ ตัวเลขภาษี หรือบ้านเลขที่ คำตอบเป็นข้อมูลประกอบ ต้องตรวจกับเอกสารก่อนใช้", "Opens Google in a new tab · the first button opens the map with a pin here; from there drag the yellow figure onto the nearest blue line · the Street View button stands on the road in front of the parcel facing it, but many estate roads have no Google imagery, so the screen stays blank; that is not a municipal data error · imagery can be old, check its date · questions to Google AI use only road, village or registered business names, never coordinates, owner codes, tax figures or house numbers; answers are leads to verify against documents")) + `</div>`;
   }
   /* Roads open on request; when they arrive, turn the Street View link toward the place. */
   function refreshStreetView(f) {
@@ -2565,7 +3064,7 @@
       if (!a) return;
       a.href = sv.href;
       const lab = a.querySelector("[data-sv-label]");
-      if (lab) lab.textContent = sv.facing ? text("Street View หันมาทางนี้", "Street View facing this place") : text("Street View ใกล้ตำแหน่งนี้", "Street View near this place");
+      if (lab) lab.textContent = svLabel(sv);
     }).catch(() => {});
   }
   /* ---------- tax engine glue ---------- */
@@ -2621,10 +3120,31 @@
   function taxmapContent() {
     const debtors = S.taxResult ? currentFeatures().filter((f) => LIST_FILTERS.debtors.test(f.properties)).length : 0;
     const fixes = S.taxResult ? currentFeatures().filter((f) => LIST_FILTERS.fixes.test(f.properties)).length : 0;
-    return `<section class="panel-section"><h2 class="sr-only">${text("ภาษีรายแปลง", "Tax by parcel")}</h2>${taxTotalsHTML()}${fixes ? `<button type="button" class="more-button" data-show-list="fixes">${text("ดูแปลงที่ข้อเสนอทำให้ภาษีเปลี่ยน เรียงจากมากไปน้อย", "List parcels the fixes change most")} (${num(fixes)})</button>` : ""}${debtors ? `<button type="button" class="more-button" data-show-list="debtors">${text("ดูแปลงที่อยู่ในบัญชีลูกหนี้ปี 2569", "List parcels on the 2569 debtor list")} (${num(debtors)})</button><p class="small-note">${esc(text(`ผูกกับโฉนดบนแผนที่ได้ ${num(S.parcelTax?.taxpayers?.size || 0)} จาก ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} รายในบัญชีลูกหนี้ 30 ก.ย. 2569 แสดงเฉพาะแปลงที่โฉนดมีภาษีของตัวเอง`, `${num(S.parcelTax?.taxpayers?.size || 0)} of the ${num(S.parcelTax?.summary?.cityTotals?.debtors2569 || 0)} debtors on the 30 Sep 2569 list could be linked to mapped titles; only parcels whose title has its own tax are listed`))}</p>` : ""}<button type="button" class="more-button" data-tool="tax-calculator">${ui("calculator", 18)}${text("คิดภาษีแปลงเดียวด้วยมือ", "Work out one parcel by hand")}</button><p class="small-note">${text("คลิกหรือแตะแปลงเพื่อดูภาษี อาคารในบัญชี และอาคารที่สำรวจพบแต่ไม่อยู่ในบัญชี ไฟล์ ภ.ด.ส. ที่ได้รับไม่มีชื่อหรือรหัสผู้เสียภาษีต่อโฉนด จึงยังรวมทุกแปลงของเจ้าของคนเดียว (ม.40 ม.42) และแบ่งการชำระรายแปลงไม่ได้ ยกเว้นโฉนดที่อยู่ในบัญชีลูกหนี้", "Click or tap a parcel for its tax, buildings on the roll and surveyed buildings missing from it. The PDS files carry no owner name or taxpayer code per title, so owner portfolios (s.40, s.42) and per-parcel payments are not available yet, except for titles on the debtor list.")}</p></section>`
-      + `<details class="supplement" open><summary>${text("ผลของข้อเสนอแต่ละข้อ (ทั้งเมือง)", "Effect of each fix (whole city)")}</summary><div class="supplement-body">${strategyTableHTML()}</div></details>`
+    const all = S.taxResult?.totals, sm = S.parcelTax?.summary, c = sm?.cityTotals;
+    if (!all) return `<section class="panel-section">${notice(text("ยังเปิดข้อมูลภาษีรายแปลงไม่ได้", "Parcel tax data could not open"), text("ลองโหลดหน้าใหม่", "Try reloading the page"))}</section>`;
+    const vid = S.scope.type === "village" ? S.scope.id : null, vt = vid ? S.taxResult.byVillage?.get(vid) : null;
+    const t = vt || all, where = vt ? scopeLabel() : text("ทั้งเมือง", "whole city");
+    const n69 = vt ? (S.parcelTax?.parcels || []).filter((p) => p.v === vid && p.tax69 != null).length : all.parcels69;
+    const adj = S.appraisalAdj || S.bldAdj ? text(`ราคาที่ดิน ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}% · อาคาร ${S.bldAdj > 0 ? "+" : ""}${S.bldAdj}%`, `land ${S.appraisalAdj > 0 ? "+" : ""}${S.appraisalAdj}% · buildings ${S.bldAdj > 0 ? "+" : ""}${S.bldAdj}%`) : text("ราคาประเมินเท่าเดิม", "same appraisal");
+    const items = [{ id: "a69", label: text("เรียกเก็บ 2569", "Billed 2569"), value: Math.round(t.assessed69), color: catHex("slate") }];
+    if (c && !vt) items.push({ id: "r69", label: text("รับชำระ 2569", "Received 2569"), value: Math.round(c.receiptsTaxYear2569), color: catHex("sky") });
+    items.push({ id: "o70", label: text("2570 วิธีเดิม", "2570 current"), value: Math.round(t.old70), color: catHex("slate") }, { id: "n70", label: text("2570 ตามข้อเสนอ", "2570 with fixes"), value: Math.round(t.new70), color: catHex("teal") });
+    const chart = chartHTML("taxmap-years", { type: "columns", items, format: "money", emphasis: "n70" }, text(`ภาษีที่ดินและสิ่งปลูกสร้าง บาทต่อปี · ${where} · ${num(n69)} แปลงที่จับคู่กับบัญชีได้ · ${adj}`, `Land and building tax, THB a year · ${where} · ${num(n69)} matched titles · ${adj}`), 190);
+    const gain = t.new70 - t.old70;
+    const strat = (S.taxResult?.byStrategy || []).filter((r) => r.delta >= 0.5).sort((a, b) => b.delta - a.delta);
+    const stratChart = strat.length && !vt ? chartHTML("taxmap-fixes", { type: "bars", items: strat.map((r) => ({ id: r.id, label: initiativeShort(r.id), value: Math.round(r.delta), color: initiativeColor(r.id) })), format: "money" }, text("ผลของข้อเสนอแต่ละข้อเมื่อคิดทีละข้อ บาทต่อปี · ทั้งเมือง · ยอดรวมในแผนการเจรจาคิดพร้อมกันครั้งเดียว", "Effect of each fix applied alone, THB a year · whole city · the negotiation plan combines them once"), Math.max(130, 26 * strat.length + 40)) : "";
+    return `<section class="panel-section"><h2 class="sr-only">${text("ภาษีรายแปลง", "Tax by parcel")}</h2>`
+      + (S.scope.type === "election" ? `<p class="small-note">${text("ภาษีรายเขตเลือกตั้งยังไม่ได้แยก ตัวเลขเป็นของทั้งเมือง", "Tax is not split by electoral area; figures are city-wide")}</p>` : "")
+      + chart
+      + statsGrid([statHTML(gain, text("ตามข้อเสนอ เพิ่มจากวิธีเดิมต่อปี", "Fixes add a year over the current method"), { signed: true, small: true }), c && !vt ? statHTML(c.debt2569, text(`ลูกหนี้ปี 2569 · ${num(c.debtors2569)} ราย`, `2569 debtors · ${num(c.debtors2569)}`), { small: true }) : ""])
+      + `<div class="action-stack">${fixes ? `<button type="button" class="more-button" data-show-list="fixes">${text("ดูแปลงที่ข้อเสนอทำให้ภาษีเปลี่ยน", "List parcels the fixes change")} (${num(fixes)})</button>` : ""}${debtors ? `<button type="button" class="more-button" data-show-list="debtors">${text("ดูแปลงในบัญชีลูกหนี้ปี 2569", "List parcels on the 2569 debtor list")} (${num(debtors)})</button>` : ""}<button type="button" class="more-button" data-tool="tax-calculator">${ui("calculator", 18)}${text("คิดภาษีแปลงเดียวด้วยมือ", "Work out one parcel by hand")}</button></div>`
+      + stratChart
       + `<details class="supplement"><summary>${text("ภาษีรายหมู่บ้าน", "Tax by village")}</summary><div class="supplement-body">${villageTaxTableHTML()}</div></details>`
-      + supplementsHTML() + notesLink();
+      + explainHTML(text("ตัวเลขนี้มาจากไหน", "Where these figures come from"),
+        (sm ? noteP(`จับคู่โฉนดกับแปลงได้ ${num(sm.parcelsOnRoll)} แปลง (เลขโฉนด ${num(sm.parcelsDeedMatched)} · ผ่านบ้านเลขที่ ${num(sm.parcelsHouseNoMatched)}) · ภาษี 0 บาทแสดงเฉพาะโฉนดที่บัญชีระบุว่ายกเว้นทั้งหมด${sm.parcelsOutsideBoundary ? ` · ${num(sm.parcelsOutsideBoundary)} โฉนดในบัญชีอยู่นอกเขตเทศบาล จึงไม่อยู่ในรายการ` : ""}`, `${num(sm.parcelsOnRoll)} titles matched to parcels (${num(sm.parcelsDeedMatched)} by deed · ${num(sm.parcelsHouseNoMatched)} by house number) · 0 THB is shown only where the roll records a full exemption${sm.parcelsOutsideBoundary ? ` · ${num(sm.parcelsOutsideBoundary)} titles on the roll lie outside the municipality and are left out` : ""}`) : "")
+        + (c && c.assessedRegister2569 != null && c.receiptsTaxYear2569 != null && c.debt2569 != null ? noteP(`บัญชีประเมินปี 2569 รวม ${moneyShort(c.assessedRegister2569)} สูงกว่ารับชำระรวมลูกหนี้ราว ${moneyShort(c.assessedRegister2569 - c.receiptsTaxYear2569 - c.debt2569)} ไฟล์ที่ได้รับอธิบายส่วนต่างไม่ครบ เช่น ชำระในชื่ออื่น หรือใบแจ้งตีกลับ ควรกระทบยอดกับกองคลังก่อนใช้ตัวเลขนี้`, `The 2569 assessment register (${moneyShort(c.assessedRegister2569)}) exceeds receipts plus debtors by about ${moneyShort(c.assessedRegister2569 - c.receiptsTaxYear2569 - c.debt2569)}; the files do not fully explain the gap, so reconcile with the treasury before using it`) : "")
+        + noteP("ปี 2570 วิธีเดิม = ยอดที่เรียกเก็บปี 2569 ปรับตามราคาประเมินที่สมมติ · ตามข้อเสนอ = คิดใหม่ตามกฎหมายด้วยข้อเสนอที่เลือกไว้ ทุกข้อเป็นสมมติฐาน ต้องตรวจโฉนดและการใช้จริงก่อนแจ้งประเมิน · คลิกหรือแตะแปลงเพื่อดูภาษี อาคารในบัญชี และอาคารที่สำรวจพบแต่ไม่อยู่ในบัญชี", "2570 current method = the 2569 bill scaled by the assumed appraisal · with fixes = recomputed under the law with the selected fixes; every item is a scenario, check deeds and actual use before any assessment · click or tap a parcel for its tax, buildings on the roll and surveyed buildings missing from it"))
+      + `</section>` + supplementsHTML() + notesLink();
   }
   /* Median appraisal per village from the matched parcels (a parcel counts in the village holding most of it). */
   function villagePriceTableHTML() {
@@ -2706,7 +3226,7 @@
     if (!f && S.scope.type !== "municipality") { await selectScope("sila"); f = find(); }
     if (!f) { toast(text("ไม่พบรายการนี้ในชั้นข้อมูล", "This record is not in the layer")); return; }
     selectRecord(f);
-    if (S.selectedLayer) { S.interactionRevision++; S.map.fitBounds(S.selectedLayer.getBounds(), { padding: [64, 64], maxZoom: 19, animate: false }); openPopupFor(f); }
+    if (S.selectedLayer) { S.interactionRevision++; S.map.fitBounds(S.selectedLayer.getBounds(), { ...fitPad(64), maxZoom: 19, animate: false }); openPopupFor(f); }
   }
   function genericLayerContent() {
     const chip = Missions?.status[dataset()?.status] ? `<span class="status-label">${esc(text(...Missions.status[dataset().status]))}</span>` : "";
@@ -2723,7 +3243,7 @@
     if (!feats.length) return;
     S.highlightLayer = L.geoJSON({ type: "FeatureCollection", features: feats }, { pane: "selected", interactive: false, style: { color: mapToken("selectedStroke"), weight: 3, dashArray: "6 4", fill: false, opacity: 1 } }).addTo(S.map);
     S.interactionRevision++;
-    S.map.fitBounds(S.highlightLayer.getBounds(), { padding: [48, 48], maxZoom: 18, animate: false });
+    S.map.fitBounds(S.highlightLayer.getBounds(), { ...fitPad(48), maxZoom: 18, animate: false });
   }
   function titleCardHTML(a) {
     const rows = [];
@@ -2781,6 +3301,8 @@
     S.boundaryRenderer = L.svg({ pane: "boundary" });
     S.map.createPane("features");
     S.map.getPane("features").style.zIndex = 360;
+    S.map.createPane("symbols");
+    S.map.getPane("symbols").style.zIndex = 380;
     S.map.createPane("selected");
     S.map.getPane("selected").style.zIndex = 390;
     S.map.getPane("selected").style.pointerEvents = "none";
@@ -2790,17 +3312,8 @@
     S.maskRenderer = L.svg({ pane: "outsideMask" });
     setBasemap();
     S.map.on("dragstart", () => S.interactionRevision++);
-    // While a popup is open on phones and tablets, the folded legend steps aside so it cannot cover the popup's buttons.
-    /* A popup never sits under the legend: when they overlap, the legend steps aside until the popup closes or moves clear. */
-    const legendClash = () => {
-      const st = document.querySelector(".map-stage"), pop = document.querySelector(".leaflet-popup"), lg = $("map-legend");
-      let clash = false;
-      if (st && pop && lg) { lg.style.visibility = ""; const a = pop.getBoundingClientRect(), b = lg.getBoundingClientRect(); clash = b.width > 0 && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top; }
-      st?.classList.toggle("popup-over-legend", clash);
-    };
-    S.map.on("popupopen", () => { document.querySelector(".map-stage")?.classList.add("popup-open"); requestAnimationFrame(() => requestAnimationFrame(legendClash)); });
-    S.map.on("popupclose", () => { const st = document.querySelector(".map-stage"); st?.classList.remove("popup-open"); st?.classList.remove("popup-over-legend"); });
-    S.map.on("moveend", () => { if (S.popup?.isOpen?.()) legendClash(); });
+    S.map.on("popupopen", () => document.querySelector(".map-stage")?.classList.add("popup-open"));
+    S.map.on("popupclose", () => document.querySelector(".map-stage")?.classList.remove("popup-open"));
     $("map").addEventListener("wheel", () => S.interactionRevision++, {
       passive: true,
     });
@@ -2823,14 +3336,15 @@
     installHover();
     S.map.on("zoomend", () => {
       $("map").dataset.zoom = String(S.map.getZoom());
+      syncSymbols();
+      // Flood site numbers only once the sites are apart (zoom 14 and closer); the tooltip and list carry them at any zoom.
+      if (S.siteLabels && S.featureLayer && S.dataset === "floodsites") { const show = S.map.getZoom() >= 14; if (show && !S.featureLayer.hasLayer(S.siteLabels)) S.featureLayer.addLayer(S.siteLabels); else if (!show && S.featureLayer.hasLayer(S.siteLabels)) S.featureLayer.removeLayer(S.siteLabels); }
     });
     S.map.on("moveend", () => {
       const c=S.map.getCenter();
       Object.assign($("map").dataset,{longitude:String(c.lng),latitude:String(c.lat),zoom:String(S.map.getZoom())});
       if (S.dataset === "terrain" && !S.terrain3DVisible) scheduleTerrainSurface();
     });
-    const context=document.querySelector(".map-context");
-    new ResizeObserver(()=>{$("basemap-caption").style.top=Math.max(62,context.offsetTop+context.offsetHeight+8)+"px";}).observe(context);
     new ResizeObserver(() => {S.map.invalidateSize({ pan: false });S.terrain3D?.resize();}).observe(
       $("map"),
     );
@@ -2897,6 +3411,11 @@
       .addTo(S.map);
   }
 
+  /* Bottom-sheet layout (phones and tablets): the sheet covers the lower part of the full-height map,
+     so fits keep their target in the visible part above it. */
+  const sheetLayout = () => typeof window !== "undefined" && !!window.matchMedia && window.matchMedia("(max-width: 899px)").matches;
+  const sheetCover = () => { if (!sheetLayout()) return 0; const r = $("inspector")?.getBoundingClientRect(), m = $("map")?.getBoundingClientRect(); return r && m ? Math.max(0, Math.round(m.bottom - r.top)) : 0; };
+  const fitPad = (x, y = x) => ({ paddingTopLeft: [x, y], paddingBottomRight: [x, y + sheetCover()] });
   function fitScope() {
     const b = scopeData().bbox;
     if (!b) return;
@@ -2906,7 +3425,7 @@
         [b[3], b[2]],
       ],
       {
-        padding: [16, 24],
+        ...fitPad(24, 16),
         maxZoom: S.scope.type === "municipality" ? 13 : 16,
         animate: false,
       },
@@ -3096,6 +3615,14 @@
           }
         : undefined,
     });
+    // Flood study sites carry their number beside the dot so officers can match them with the study and the plan.
+    if (id === "floodsites") {
+      const labels = L.geoJSON(fc, { pane: "features", interactive: false, pointToLayer: (f, ll) => L.marker(ll, { pane: "features", interactive: false, keyboard: false, icon: L.divIcon({ className: "site-number", html: `<span>${esc(String(f.properties.site).padStart(2, "0"))}</span>`, iconSize: [28, 18], iconAnchor: [-8, 9] }) }) });
+      S.siteLabels = labels;
+      const group = L.featureGroup([main]);
+      if (S.map.getZoom() >= 14) group.addLayer(labels);
+      return group;
+    }
     // A neutral underlay keeps original category HEX legible without recoloring data.
     // Both layers are non-interactive; source geometry remains the central picking authority.
     if (["roads", "parcels", "waterways"].includes(id)) {
@@ -3135,15 +3662,117 @@
         },
       }).addTo(S.map);
     } else S.terrainLayer.setTheme?.(S.theme);
+    drawLowground();
     drawLegend();
+  }
+  /* ---------- Revision 2.0: closed low ground on the terrain map ----------
+     Depressions in FABDEM filled to their spill level (priority flood); depth = how deep water could stand before it
+     spills over the lowest rim. Drawn in 2D with the LDS 'water' sequential scale (5 classes, same colours in both
+     themes); the data file ships only after the owner's review of the flood pictures. */
+  const LOWGROUND_FILE = "data/flood-lowground.geojson";
+  const LOWGROUND_CLASSES = [[0.3, "0.3–0.5"], [0.5, "0.5–1"], [1, "1–2"], [2, "2–4"], [4, "≥ 4"]];
+  const lowgroundClass = (d) => { let k = 0; for (let i = 0; i < LOWGROUND_CLASSES.length; i++) if (d >= LOWGROUND_CLASSES[i][0]) k = i; return k; };
+  const lowgroundColors = () => { try { return window.SilaScales.classes("water", 5); } catch (_) { return null; } };
+  function clearLowground() { if (S.lowgroundLayer) { S.map.removeLayer(S.lowgroundLayer); S.lowgroundLayer = null; } }
+  async function drawLowground() {
+    clearLowground();
+    if (S.dataset !== "terrain" || !S.terrainLowground || S.mode === "3d" || S.lowgroundStatus === "missing") return;
+    let fc = S.cache.get(LOWGROUND_FILE);
+    if (!fc) {
+      try { fc = await fetchJSON(LOWGROUND_FILE); S.lowgroundStatus = "ready"; renderLayerControls(); }
+      catch (_) { S.lowgroundStatus = "missing"; return; }
+      if (S.dataset !== "terrain" || !S.terrainLowground || S.mode === "3d") return;
+    }
+    S.lowgroundStatus = "ready";
+    const cols = lowgroundColors();
+    if (!cols) return;
+    S.lowgroundLayer = L.geoJSON(fc, { pane: "features", interactive: true, bubblingMouseEvents: false,
+      style: (f) => ({ color: "#182327", weight: 0.6, opacity: 0.7, fillColor: cols[lowgroundClass(f.properties.depthMaxM)], fillOpacity: 0.72 }),
+      onEachFeature: (f, l) => l.bindTooltip(`<strong>${esc(text("ที่ลุ่มปิดล้อม", "Closed low ground"))}</strong>${esc(text(`ลึกสุด ${num(f.properties.depthMaxM, 1)} ม. · เฉลี่ย ${num(f.properties.depthMeanM, 1)} ม. · ${num(Math.round(f.properties.areaSqm / 1600))} ไร่ · ล้นที่ระดับ ${num(f.properties.spillLevelM, 1)} ม.`, `deepest ${num(f.properties.depthMaxM, 1)} m · mean ${num(f.properties.depthMeanM, 1)} m · ${num(Math.round(f.properties.areaSqm / 10000 * 10) / 10)} ha · spills at ${num(f.properties.spillLevelM, 1)} m`))}`, { sticky: true, direction: "top", className: "sila-hover" }) }).addTo(S.map);
+  }
+  function lowgroundLegendHTML() {
+    if (S.dataset !== "terrain" || !S.terrainLowground || S.mode === "3d" || S.lowgroundStatus !== "ready") return "";
+    const cols = lowgroundColors();
+    if (!cols) return "";
+    return `<div class="legend-title" style="margin-top:8px">${text("ที่ลุ่มปิดล้อม · ลึกได้ก่อนล้น (เมตร)", "Closed low ground · depth before it spills (m)")}</div><div class="legend-classes">${LOWGROUND_CLASSES.map(([, l], i) => `<div class="legend-class"><span class="legend-chip" style="background:${cols[i]}"></span><span>${esc(l)}</span></div>`).join("")}</div><div class="legend-unit">${text("เติมแอ่งใน FABDEM 30 ม. ถึงระดับล้น คลาดเคลื่อนราว 1 ม. · บอกว่าน้ำขังได้ตรงไหน ไม่ใช่ว่าจะท่วม · ไม่รวมท่อระบายและทางน้ำที่สร้างขึ้น", "FABDEM 30 m depressions filled to the spill level, about 1 m error · where water can stand, not a flood forecast · ignores drains and built channels")}</div>`;
+  }
+  /* ---------- Revision 2.0: headline symbols, the AHA at city zoom ----------
+     At city zoom the parcels that matter are too small to see, so the largest figures are drawn as proportional circles
+     at parcel centroids: negotiation (gain, coloured by the initiative that explains most of it), farmland watch (potential)
+     and the top 10 owners (one circle on each owner's most valuable parcel, numbered by rank). The circles hide from
+     zoom 16, where the parcels themselves are legible, and the figure is always printed in the tooltip, popup and list. */
+  const SYMBOL_MAX = 60, SYMBOL_HIDE_ZOOM = 16;
+  const centroidOf = (geom) => {
+    const ring = geom.type === "Polygon" ? geom.coordinates[0] : geom.type === "MultiPolygon" ? geom.coordinates.map((p) => p[0]).sort((a, b) => b.length - a.length)[0] : null;
+    if (!ring || !ring.length) return null;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const [x, y] of ring) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    return [(y0 + y1) / 2, (x0 + x1) / 2];
+  };
+  function symbolRows() {
+    if (!S.taxResult || !S.parcelTax) return [];
+    if (S.dataset === "negotiate") {
+      const init = S.initiative;
+      return currentFeatures().map((f) => { const r = taxRow(f.properties.id); if (!r) return null; const v = init ? (r.alloc.get(init) || 0) : negotiateGain(r); return v >= 1 ? { f, v, color: initiativeColor(init || dominantOf(r) || "rollBelow"), tip: `${featureTitle(f)} · ${text(`เก็บเพิ่มได้ +${fixed(v, 0)} บาท/ปี`, `can add +${fixed(v, 0)} THB/yr`)}` } : null; }).filter(Boolean).sort((a, b) => b.v - a.v).slice(0, SYMBOL_MAX);
+    }
+    if (S.dataset === "agriwatch") {
+      const by = new Map(agriWatchScope().map((w) => [w.id, w]));
+      return currentFeatures().map((f) => { const w = by.get(f.properties.id); return w && w.potential >= 1 ? { f, v: w.potential, color: catHex("lime"), tip: `${featureTitle(f)} · ${text(`ถ้าไม่ได้ทำประโยชน์ +${fixed(w.potential, 0)} บาท/ปี`, `if unused +${fixed(w.potential, 0)} THB/yr`)}` } : null; }).filter(Boolean).sort((a, b) => b.v - a.v).slice(0, SYMBOL_MAX);
+    }
+    if (S.dataset === "portfolio" && !S.owner) {
+      const byId = new Map(currentFeatures().map((f) => [f.properties.id, f]));
+      return ownersInScope().slice(0, 10).map((o) => {
+        const best = o.parcels.map((id) => ({ id, f: byId.get(id), a: parcelAttr(id) })).filter((x) => x.f).sort((x, y) => (y.a?.landValue || 0) - (x.a?.landValue || 0))[0];
+        return best ? { f: best.f, v: o.value, color: o.type === "juristic" ? catHex("blue") : catHex("teal"), owner: o.code, rank: o.rank, tip: text(`อันดับ ${o.rank} · รหัส ${o.code} · ${moneyShort(o.value)} · ${num(o.parcels.length)} แปลง`, `#${o.rank} · code ${o.code} · ${moneyShort(o.value)} · ${num(o.parcels.length)} parcels`) } : null;
+      }).filter(Boolean);
+    }
+    return [];
+  }
+  function clearSymbols() { if (S.symbolLayer) { S.map.removeLayer(S.symbolLayer); S.symbolLayer = null; } S.symbolCount = 0; }
+  function drawSymbols() {
+    clearSymbols();
+    if (!S.map || S.terrain3DVisible) return;
+    const rows = symbolRows();
+    if (!rows.length) return;
+    const vmax = Math.max(...rows.map((r) => r.v)) || 1;
+    const stroke = mapToken("markerStroke");
+    // Circles scale with the map: full size from about 700 px wide, two-thirds on a 320 px phone.
+    const k = Math.max(0.6, Math.min(1, ($("map")?.clientWidth || 700) / 700));
+    S.symbolLayer = L.layerGroup([], { pane: "symbols" });
+    for (const r of rows) {
+      const ll = centroidOf(r.f.geometry);
+      if (!ll) continue;
+      const radius = (r.rank ? 16 : 7 + 21 * Math.sqrt(r.v / vmax)) * k;
+      const m = L.circleMarker(ll, { pane: "symbols", radius, color: stroke, weight: 1.5, opacity: 0.9, fillColor: r.color, fillOpacity: 0.82, bubblingMouseEvents: false });
+      m.bindTooltip(r.tip, { direction: "top", offset: [0, -radius], className: "sila-hover", sticky: false });
+      m.on("click", (e) => { L.DomEvent.stop(e); if (r.owner) { S.owner = r.owner; if (S.dataset !== "portfolio") setDataset("portfolio"); else setOwner(r.owner); } else selectRecord(r.f, true, true); });
+      S.symbolLayer.addLayer(m);
+      if (r.rank) S.symbolLayer.addLayer(L.marker(ll, { pane: "symbols", interactive: false, icon: L.divIcon({ className: "symbol-rank", html: `<span>${r.rank}</span>`, iconSize: [32, 32], iconAnchor: [16, 16] }) }));
+    }
+    S.symbolCount = rows.length;
+    syncSymbols();
+  }
+  function syncSymbols() {
+    if (!S.symbolLayer || !S.map) return;
+    const show = S.map.getZoom() < SYMBOL_HIDE_ZOOM;
+    if (show && !S.map.hasLayer(S.symbolLayer)) S.symbolLayer.addTo(S.map);
+    else if (!show && S.map.hasLayer(S.symbolLayer)) S.map.removeLayer(S.symbolLayer);
+  }
+  function symbolLegendHTML() {
+    if (!S.symbolCount) return "";
+    const what = S.dataset === "portfolio" ? text("วงกลมมีเลข = เจ้าของ 10 อันดับแรก วางบนแปลงที่มูลค่าสูงสุดของรายนั้น น้ำเงิน นิติบุคคล · เขียว บุคคลธรรมดา · แตะเพื่อเปิดรายนั้น", "Numbered circles = the top 10 owners, on each owner's most valuable parcel; blue company, green individual · tap to open")
+      : text(`วงกลม = ${num(S.symbolCount)} แปลงที่ตัวเลขมากที่สุด ขนาดตามจำนวนเงิน · ซูมเข้าเพื่อเห็นแปลงจริง`, `Circles = the ${num(S.symbolCount)} largest figures, sized by amount · zoom in to see the parcels`);
+    return `<div class="legend-row legend-symbol"><span class="legend-circle"></span><span>${esc(what)}</span></div>`;
   }
   async function drawFeatures(ticket) {
     if (S.dataset !== "terrain" && S.terrainLayer) {
       S.map.removeLayer(S.terrainLayer);
       S.terrainLayer = null;
     }
+    if (S.dataset !== "terrain") clearLowground();
     if (S.featureLayer) S.map.removeLayer(S.featureLayer);
     S.featureLayer = null;
+    clearSymbols();
     if (S.selectedLayer) S.map.removeLayer(S.selectedLayer);
     S.selectedLayer = null;
     const d = dataset();
@@ -3191,6 +3820,7 @@
         : featureGroup({ ...fc, features: scoped }, S.dataset, false).addTo(
             S.map,
           );
+    drawSymbols();
     drawLegend();
     if (S.restoreRecord) {
       const r = fc.features.find((x) => x.properties.id === S.restoreRecord);
@@ -3207,8 +3837,7 @@
     renderRecord();
     renderHeader();
     syncURL();
-    if (matchMedia("(max-width:899px)").matches)
-      $("record-detail").scrollIntoView({ behavior: "auto", block: "start" });
+    if (sheetLayout()) { if (S.sheet === "peek") window.setSheet?.("half"); $("record-detail").scrollIntoView({ behavior: "auto", block: "start" }); }
   }
   function tryDrillAreaAt(latlng) {
     const xy = [latlng.lng, latlng.lat];
@@ -3319,13 +3948,9 @@
     }
     drawLegend();
   }
-  /* On phones and tablets the legend can cover most of the map, so it folds to its title with a toggle (wide screens keep it open). */
+  /* Revision 2.0: the legend lives in the panel under the summary, never on the map. */
   function drawLegend() {
     drawLegendBody();
-    const el = $("map-legend");
-    if (!el || !el.innerHTML.trim()) return;
-    el.dataset.collapsed = S.legendCollapsed ? "true" : "false";
-    el.insertAdjacentHTML("afterbegin", `<button type="button" class="legend-toggle" aria-expanded="${S.legendCollapsed ? "false" : "true"}">${S.legendCollapsed ? text("แสดงคำอธิบายสี", "Show legend") : text("ซ่อนคำอธิบายสี", "Hide legend")}</button>`);
   }
   /* Leaflet's zoom buttons carry English titles; follow the page language. */
   function localizeZoom() {
@@ -3336,7 +3961,7 @@
   const TOUCH = () => typeof window !== "undefined" && !!window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
   function drawLegendBody() {
     if (CHORO_LAYERS.has(S.dataset)) {
-      $("map-legend").innerHTML = analyticalLegend() || `<div class="legend-description">${text("กำลังเปิดข้อมูล", "Loading data")}</div>`;
+      $("map-legend").innerHTML = (analyticalLegend() || `<div class="legend-description">${text("กำลังเปิดข้อมูล", "Loading data")}</div>`) + symbolLegendHTML();
       $("map-context-text").textContent = scopeLabel() + " · " + (TOUCH() ? text("แตะเพื่อดูตัวเลขและรายละเอียด", "Tap to read values and details") : text("ชี้เพื่อดูตัวเลข คลิกเพื่อดูรายละเอียด", "Point to read values, click for details"));
       return;
     }
@@ -3349,7 +3974,7 @@
       const pal = TERRAIN_PALETTES[S.terrainPalette], r = S.terrainRange;
       const bar = pal ? `<div class="legend-title">${text("ความสูงจาก FABDEM (เมตร)", "FABDEM height (metres)")}</div><div class="terrain-bar" style="background:${terrainBarCSS(pal.colors)}" role="img" aria-label="${esc(text(`ไล่สีจาก ${num(r.lo, 1)} ถึง ${num(r.hi, 1)} เมตร`, `Colour ramp from ${num(r.lo, 1)} to ${num(r.hi, 1)} metres`))}"></div><div class="terrain-bar-labels">${terrainTicks().map((v) => `<span>${num(v, 1)}</span>`).join("")}</div><div class="legend-unit">${esc((S.terrainMapping === "equalize" ? text("แต่ละช่วงสีครอบคลุมพื้นที่พอ ๆ กัน ตัวเลขใต้แถบคือความสูงที่แบ่งพื้นที่เป็น 4 ส่วนเท่ากัน · ", "Each colour covers a similar share of the area; the numbers split the area into quarters · ") : "") + (S.terrainRangeLock ? text("ล็อกช่วงสีไว้", "Colour range locked") : text("สียืดตามความสูงที่เห็น (ตัดบนล่าง 0.5%) สีเดียวกันต่างมุมมองอาจไม่ใช่ความสูงเดียวกัน", "Colours fit the heights in view (0.5% trimmed); the same colour in another view can mean another height")))}</div>` : "";
       const contour = S.terrainContours ? `<div class="legend-row"><span class="legend-line terrain-contour-sample${TERRAIN_PALETTES[S.terrainPalette] ? " on-colour" : ""}"></span><span>${esc(text(`เส้นชั้นความสูงทุก ${stepText(S.terrainStep)} ม. · เส้นหนาทุก ${stepText(S.terrainStep * 5)} ม.`, `Contours every ${stepText(S.terrainStep)} m · bold every ${stepText(S.terrainStep * 5)} m`))}</span></div>${S.terrainStep < 1 ? `<div class="legend-unit">${text("ละเอียดกว่าความคลาดเคลื่อนของ FABDEM ใช้ดูรูปทรง ไม่ใช่ระดับสำรวจ", "Finer than FABDEM’s error: shows form, not surveyed levels")}</div>` : ""}` : "";
-      $("map-legend").innerHTML = `${bar}${contour}<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div><div class="legend-description">${esc(S.mode === "3d" ? text("3D · รูปทรงพื้นที่ ไม่ใช่ความเสี่ยงน้ำท่วม", "3D · terrain form, not flood risk") : text("ความสูงพื้นดิน ไม่ใช่ระดับน้ำหรือความเสี่ยงน้ำท่วม", "Ground height, not water level or flood risk"))}</div><div class="legend-description">${esc(terrainStateLabel())}</div>`;
+      $("map-legend").innerHTML = `${bar}${contour}${lowgroundLegendHTML()}<div class="legend-row"><span class="legend-line" style="border-color:${mapToken("activeLayer")}"></span><span>${esc(boundaryLabel())}</span></div><div class="legend-description">${esc(S.mode === "3d" ? text("3D · รูปทรงพื้นที่ ไม่ใช่ความเสี่ยงน้ำท่วม", "3D · terrain form, not flood risk") : text("ความสูงพื้นดิน ไม่ใช่ระดับน้ำหรือความเสี่ยงน้ำท่วม", "Ground height, not water level or flood risk"))}</div><div class="legend-description">${esc(terrainStateLabel())}</div>`;
       $("map-context-text").textContent = scopeLabel() + " · " + text("FABDEM เฉพาะอำเภอเมืองขอนแก่น", "FABDEM within Mueang Khon Kaen district only");
       return;
     }
@@ -3405,6 +4030,7 @@
       drawOutsideMask();
       await drawFeatures(ticket);
       if (ticket !== S.ticket) return;
+      if (S.dataset === "portfolio" && S.owner && S.highlightTaxpayer !== S.owner) highlightTaxpayer(S.owner);
       await drawOverlays(ticket);
       if (ticket !== S.ticket) return;
       if (fit && interactionRevision === S.interactionRevision) fitScope();
@@ -3471,6 +4097,8 @@
     if (layer !== "overview" && !dataset(layer)) return;
     S.mission = Missions.missionFor(layer, resolved.mission || S.mission);
     if (layer !== S.dataset) { hideTerrain3D(); S.mode = "2d"; S.terrain3DError = false; }
+    if (layer !== "portfolio" && S.owner) { S.owner = null; if (S.highlightTaxpayer) highlightTaxpayer(null); }
+    if (layer !== "negotiate") S.initiative = null;
     S.dataset = layer;
     S.record = null;
     S.choice = null;
@@ -3512,7 +4140,7 @@
     await refreshMap({ fit: true });
   }
   function selectRecord(f, push = true, fromMap = false) {
-    const source = { taxmap: "parcels", properties: "parcels", appraisal: "parcels", popgrid: "population-grid" }[S.dataset] || S.dataset;
+    const source = { taxmap: "parcels", properties: "parcels", appraisal: "parcels", negotiate: "parcels", agriwatch: "parcels", portfolio: "parcels", popgrid: "population-grid" }[S.dataset] || S.dataset;
     if (
       (f?.properties?.datasetId !== source && f?.properties?.datasetId !== S.dataset) ||
       !filterFeatures({ features: [f] }).length
@@ -3528,10 +4156,10 @@
     if (S.map && !S.terrain3DVisible) openPopupFor(f, S.lastClickLatLng && S.pickIndex ? S.lastClickLatLng : null);
     S.lastClickLatLng = null;
     const card = $("record-detail");
-    // On stacked (phone) layouts a map tap keeps the map in view: the popup shows the key figures and its
-    // "See all details" button scrolls to the card. Elsewhere the card scrolls into its own panel.
-    const stacked = card && $("map") && card.getBoundingClientRect().top >= $("map").getBoundingClientRect().bottom - 1;
-    if (card && !card.hidden && !(fromMap && stacked)) card.scrollIntoView({ behavior: "auto", block: "nearest" });
+    // Phones and tablets: a map tap keeps the map in view (the popup shows the key figures and its "See all details"
+    // button lifts the sheet); a record chosen from a list lifts a peeking sheet to half so the card is visible.
+    if (sheetLayout()) { if (!fromMap && S.sheet === "peek") window.setSheet?.("half"); }
+    if (card && !card.hidden && !(fromMap && sheetLayout())) card.scrollIntoView({ behavior: "auto", block: "nearest" });
   }
   function closeRecord(push = true) {
     S.record = null;
@@ -3545,6 +4173,9 @@
   }
   function exportCSV() {
     if (S.dataset === "properties") return exportPropertiesCSV();
+    if (S.dataset === "negotiate") return exportNegotiateCSV();
+    if (S.dataset === "agriwatch") return exportAgriCSV();
+    if (S.dataset === "portfolio") return exportOwnersCSV();
     if (publicAggregate()) { toast(text("หน้านี้เผยเฉพาะข้อมูลสรุป ไม่มีรายการรายบุคคลให้ดาวน์โหลด", "This view contains public summaries only; no individual rows are downloadable.")); return; }
     const lf = activeListFilter();
     const q = S.search.trim().toLowerCase();
@@ -3619,6 +4250,7 @@
       if (CHORO_LAYERS.has(S.dataset)) { computeClassing(); S.featureLayer.setStyle(choroplethStyle); }
       else if (S.dataset === "buildings") { computeClassing(); S.featureLayer.setStyle(buildingStyle); }
     }
+    drawSymbols();
     drawLegend();
     if (S.record) { renderRecord(); if (S.popup) openPopupFor(S.record, S.popup.getLatLng()); }
   }
@@ -3664,6 +4296,7 @@
       if (t.id === "terrain-bands") { S.terrainBands = t.checked; applyTerrainSurface(); renderLayerControls(); drawLegend(); syncURL(true); $("terrain-bands")?.focus(); return; }
       if (t.id === "terrain-lock") { S.terrainRangeLock = t.checked; if (!t.checked) updateTerrainSurface(true); renderLayerControls(); drawLegend(); syncURL(true); $("terrain-lock")?.focus(); return; }
       if (t.id === "terrain-contours") { S.terrainContours = t.checked; updateTerrainSurface(true); renderLayerControls(); syncURL(true); $("terrain-contours")?.focus(); return; }
+      if (t.id === "terrain-lowground") { S.terrainLowground = t.checked; drawLowground(); drawLegend(); syncURL(true); $("terrain-lowground")?.focus(); return; }
       if (t.id === "terrain-step") { S.terrainStepChoice = t.value === "auto" ? "auto" : Number(t.value); updateTerrainSurface(true); renderLayerControls(); syncURL(true); $("terrain-step")?.focus(); return; }
       if (t.id === "appraisal-adj" || t.id === "building-adj") { readAdj(t); applyAssumptions(); return; }
     });
@@ -3685,6 +4318,18 @@
         applyAutoExaggeration(true);
       }
     });
+    /* Phones and tablets: the panel is a bottom sheet over the map (peek / half / full). The handle cycles the states,
+       a swipe on it moves one step, and a record opened from the map lifts a peeking sheet to half. */
+    const handle = $("sheet-handle");
+    const SHEET_ORDER = ["peek", "half", "full"];
+    const applySheet = () => { document.body.dataset.sheet = S.sheet; handle.setAttribute("aria-expanded", String(S.sheet !== "peek")); handle.setAttribute("aria-label", S.sheet === "full" ? text("ย่อแผงข้อมูล", "Collapse the panel") : text("ขยายแผงข้อมูล", "Expand the panel")); };
+    window.setSheet = (state) => { if (!SHEET_ORDER.includes(state)) return; S.sheet = state; applySheet(); };
+    applySheet();
+    handle.addEventListener("click", () => setSheet(SHEET_ORDER[(SHEET_ORDER.indexOf(S.sheet) + 1) % SHEET_ORDER.length]));
+    { let y0 = null;
+      handle.addEventListener("touchstart", (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+      handle.addEventListener("touchend", (e) => { if (y0 == null) return; const dy = e.changedTouches[0].clientY - y0; y0 = null; if (Math.abs(dy) < 24) return; e.preventDefault(); const i = SHEET_ORDER.indexOf(S.sheet); setSheet(SHEET_ORDER[Math.max(0, Math.min(2, i + (dy < 0 ? 1 : -1)))]); });
+    }
     const splitter = $("panel-splitter");
     const setSplit = value => { const percent=Math.max(36,Math.min(64,value)); document.querySelector(".workspace").style.setProperty("--map-share",percent+"%"); splitter.setAttribute("aria-valuenow",String(Math.round(percent))); };
     splitter.addEventListener("pointerdown",e=>{splitter.setPointerCapture(e.pointerId);splitter.dataset.dragging="true";});
@@ -3693,7 +4338,6 @@
     splitter.addEventListener("pointercancel",()=>delete splitter.dataset.dragging);
     splitter.addEventListener("keydown",e=>{if(!["ArrowLeft","ArrowRight","Home"].includes(e.key))return;e.preventDefault();setSplit(e.key==="Home"?50:Number(splitter.getAttribute("aria-valuenow"))+(e.key==="ArrowLeft"?-2:2));});
     document.addEventListener("click", (e) => {
-      if (e.target.closest(".legend-toggle")) { S.legendCollapsed = !S.legendCollapsed; drawLegend(); $("map-legend")?.querySelector(".legend-toggle")?.focus(); return; }
       const pb = e.target.closest("[data-parcel-buildings]");
       if (pb) { showParcelBuildings(pb.dataset.parcelBuildings); return; }
       if (!e.target.closest(".header-settings")) document.querySelector(".header-settings").open=false;
@@ -3711,6 +4355,12 @@
       if (bview) { S.buildingView = bview.dataset.buildingView; renderLayerControls(); restyleLayer(); renderSummary(); syncURL(true); $(`layer-controls`).querySelector(`[data-building-view="${S.buildingView}"]`)?.focus(); return; }
       const hl = e.target.closest("[data-highlight-taxpayer]");
       if (hl) { highlightTaxpayer(hl.dataset.highlightTaxpayer); return; }
+      const missionBtn = e.target.closest("[data-mission]");
+      if (missionBtn) { setMission(missionBtn.dataset.mission); return; }
+      const initBtn = e.target.closest("[data-initiative]");
+      if (initBtn) { setInitiative(initBtn.dataset.initiative || null); return; }
+      const ownerBtn = e.target.closest("[data-owner]");
+      if (ownerBtn) { if (S.dataset !== "portfolio") { S.owner = ownerBtn.dataset.owner || null; setDataset("portfolio"); } else setOwner(ownerBtn.dataset.owner || null); return; }
       if (e.target.closest("[data-record-focus]")) { const card = document.querySelector("#record-detail .record-card"); card?.scrollIntoView({ behavior: "auto", block: "start" }); card?.focus({ preventScroll: true }); return; }
       const mission = e.target.closest("[data-mission]");
       if (mission) {
@@ -3769,7 +4419,7 @@
       const showList = e.target.closest("[data-show-list]");
       if (showList) {
         S.tab = "list";
-        S.listFilter = showList.dataset.showList || null;
+        S.listFilter = ["initiative", "agri", "owners"].includes(showList.dataset.showList) ? null : showList.dataset.showList || null;
         S.page = 60;
         renderPanel();
         $("tab-list")?.focus();
@@ -3808,7 +4458,7 @@
         S.interactionRevision++;
         if (bounds.isValid())
           S.map.fitBounds(bounds, {
-            padding: [48, 48],
+            ...fitPad(48),
             maxZoom: 19,
             animate: false,
           });
@@ -3816,7 +4466,7 @@
       if (e.target.closest("[data-focus-record]") && S.selectedLayer) {
         S.interactionRevision++;
         S.map.fitBounds(S.selectedLayer.getBounds(), {
-          padding: [48, 48],
+          ...fitPad(48),
           maxZoom: 18,
           animate: false,
         });
@@ -4046,7 +4696,8 @@
     installExternalCues();
     try {
       let scales, parcelTax;
-      [S.catalog, S.metadata, S.docs, S.tokens, S.publicSummary, S.terrainSource, S.terrainCoverage, scales, parcelTax, S.popStructure] = await Promise.all([
+      let svCover;
+      [S.catalog, S.metadata, S.docs, S.tokens, S.publicSummary, S.terrainSource, S.terrainCoverage, scales, parcelTax, S.popStructure, svCover] = await Promise.all([
         fetchJSON("data/catalog.json"),
         fetchJSON("data/metadata.json"),
         fetchJSON("reference/document-catalog.json"),
@@ -4057,13 +4708,15 @@
         fetchJSON("reference/lds-analytical-subset.json").catch(() => null),
         fetchJSON("data/parcel-tax.json").catch(() => null),
         fetchJSON("data/population-structure.json").catch(() => null),
+        fetchJSON("data/streetview-coverage.json").catch(() => null),   // optional: written offline by tools/streetview-coverage.py
       ]);
+      S.svCoverage = svCover?.byRecord || null;
       if (!window.SilaScales?.load(scales)) S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "appraisal", "popgrid"].includes(d.id));
       if (parcelTax && window.SilaTaxEngine) {
         try { S.parcelTax = window.SilaTaxEngine.prepare(parcelTax); S.parcelTaxStatus = "ready"; }
         catch (e) { console.error(e); S.parcelTaxStatus = "error"; }
       } else S.parcelTaxStatus = "unavailable";
-      if (S.parcelTaxStatus !== "ready") S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "properties", "appraisal"].includes(d.id));
+      if (S.parcelTaxStatus !== "ready") S.catalog.datasets = S.catalog.datasets.filter((d) => !["taxmap", "properties", "appraisal", "negotiate", "agriwatch", "portfolio"].includes(d.id));
       if (!S.popStructure) S.catalog.datasets = S.catalog.datasets.filter((d) => d.id !== "popgrid");
       if (S.terrainSource && S.terrainCoverage) {
         Object.assign(S.catalog.datasets.find(d => d.id === "terrain"), {status:"ready_external_dem",sourceMetadata:"data/terrain-source.json",coverageMetadata:"data/terrain-coverage.geojson"});

@@ -1,0 +1,219 @@
+/* Revision 2.0 shell over the LDS 0.9.7 foundation tokens in styles.css.
+   The map is the page: nothing floats on it except zoom, fit/back and the 2D/3D switch. Legend, summary,
+   hints, basemap and overlay settings live in the panel. Desktop: map + resizable panel. Phones and tablets:
+   the panel is a bottom sheet (peek / half / full) over a full-height map, map controls stay above it.
+   Big numbers use the technical/data role (JetBrains Mono digits, unit and label in Bai Jamjuree, never crammed).
+   No decorative bracket or coloured left rail (LAYOUT-01); targets 44px (CTRL-01). */
+:root { --header-h: 56px; --panel-x: 16px; }
+
+/* ---------- header ---------- */
+.app-header { height: var(--header-h); min-height: var(--header-h); padding: 0 16px; gap: 14px; }
+.brand .cc-header-logo { width: 128px; }
+.header-title { gap: 8px; }
+.header-title > span { font-size: 11px; }
+.header-title strong { font-size: 14px; }
+.header-actions { gap: 4px; }
+.header-settings { position: relative; }
+.header-settings > summary { list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 12px; }
+.header-settings > summary::-webkit-details-marker { display: none; }
+.header-settings > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.header-settings-panel { position: absolute; right: 0; top: calc(100% + 6px); z-index: 1200; display: grid; gap: 4px; min-width: 160px; padding: 8px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+.header-settings-panel button { justify-content: flex-start; min-height: 40px; }
+.officer-label { margin-left: 4px; }
+
+/* ---------- workspace: desktop ---------- */
+.workspace { height: calc(100dvh - var(--header-h)); min-height: 560px; grid-template-columns: minmax(0, var(--map-share)) 8px minmax(0, 1fr); }
+.map-workspace { height: 100%; min-height: 0; }
+.map-stage { flex: 1; min-height: 0; border: 0; }
+#map { min-height: 0; }
+.map-controls { top: 110px; right: 10px; bottom: auto; flex-direction: column; gap: 6px; z-index: 800; }
+.map-control { width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 10px; justify-content: center; font-size: 0; box-shadow: none; }
+.map-control > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.map-control .sila-ui-icon { width: 22px; height: 22px; }
+.map-control:disabled { opacity: 0.4; }
+.map-stage .leaflet-top.leaflet-right { top: 10px; right: 10px; }
+.map-stage .leaflet-control-zoom { margin: 0 !important; border-radius: 10px !important; overflow: hidden; }
+.terrain-view-controls { position: absolute; z-index: 800; top: 10px; left: 10px; flex: none; gap: 0; }
+.terrain-view-controls[hidden] { display: none; }
+.terrain-mode-group { padding: 2px; gap: 2px; border-radius: 10px; }
+.terrain-mode-group button { min-width: 48px; min-height: 40px; font-size: 13px; }
+.map-stage[data-renderer="3d"] .map-controls { bottom: auto; }
+.basemap-caption { top: auto; bottom: 22px; left: 10px; max-width: calc(100% - 20px); font-size: 10px; padding: 3px 8px; }
+.map-error { bottom: 48px; }
+.map-context { display: none; }
+.map-legend { position: static; left: auto; bottom: auto; z-index: auto; }   /* a flex item's z-index applies even when static */
+
+/* ---------- panel ---------- */
+.inspector { padding: 0; background: var(--canvas); }
+.inspector > * { flex-shrink: 0; }   /* the panel scrolls; its blocks never squash (a scrollable legend used to collapse to a bar on tablets) */
+.sheet-handle { display: none; }
+.panel-top { position: sticky; top: 0; z-index: 6; padding: 10px var(--panel-x) 8px; background: var(--card); border-bottom: 1px solid var(--hairline); display: grid; gap: 8px; }
+.layer-picker { padding: 0; display: grid; gap: 8px; }
+.mission-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.mission-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 56px; padding: 6px 4px; border: 1px solid var(--hairline); border-radius: 12px; background: var(--alt); color: var(--secondary); font-size: 11.5px; line-height: 1.35; text-align: center; }
+.mission-tab .sila-ui-icon { width: 22px; height: 22px; }
+.mission-tab:hover { background: var(--raised); color: var(--primary); }
+.mission-tab[aria-selected="true"] { background: linear-gradient(100deg, var(--identity-start), var(--identity-end)); border-color: transparent; color: var(--identity-ink); font-weight: 600; }
+.mission-tab[aria-selected="true"]:hover { background: linear-gradient(100deg, var(--identity-start), var(--identity-end)); }
+.mission-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mission-tab[aria-selected="true"]:focus-visible { outline-color: var(--primary); }
+.layer-picker .selector select { font-size: 14px; }
+.scope-row { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 8px; }
+.scope-row .selector select { min-height: 40px; padding: 6px 28px 6px 10px; font-size: 12px; font-weight: 400; background: var(--alt); }
+.scope-row .breadcrumbs { display: none; }
+.inspector-heading[hidden] { display: none; }
+
+/* summary: the first thing an officer reads (AHA-01) */
+.map-summary { padding: 14px var(--panel-x) 10px; background: var(--canvas); border-bottom: 1px solid var(--hairline); }
+.summary-heading { align-items: flex-start; }
+.summary-heading h1, .summary-heading h2 { font-family: "Bai Jamjuree", sans-serif; font-size: 16px; font-weight: 600; line-height: 1.45; }
+.summary-heading small { font-size: 11px; }
+.summary-metrics { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px 14px; margin-top: 10px; }
+.summary-metrics > div { border: 0; padding: 0; min-width: 0; }
+.summary-metrics strong { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; font-size: 26px; line-height: 1.25; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.summary-metrics strong .metric-unit { font-family: "Bai Jamjuree", sans-serif; font-size: 12px; color: var(--secondary); }
+.summary-metrics span { font-size: 12px; line-height: 1.45; margin-top: 3px; }
+.summary-footnote { margin-top: 8px; font-size: 11px; line-height: 1.55; }
+.summary-footnote:empty { display: none; }
+.summary-scope { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 8px; margin-left: 6px; border: 1px solid var(--border); border-radius: 999px; background: var(--alt); color: var(--primary); font-size: 11px; }
+
+/* legend and hint, in the panel */
+.map-legend { margin: 10px var(--panel-x) 0; padding: 8px 12px; max-width: none; max-height: none; overflow: visible; font-size: 12px; border-radius: 10px; }
+.map-legend:empty { display: none; }
+.legend-toggle { display: none !important; }
+.legend-classes { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+.map-hint { display: flex; gap: 8px; align-items: flex-start; margin: 6px var(--panel-x) 0; font-size: 11px; line-height: 1.55; color: var(--muted); }
+.map-hint .status-dot { margin-top: 6px; }
+.layer-controls { padding: 10px var(--panel-x) 0; }
+.layer-controls:empty { display: none; }
+.terrain-view-panel { display: grid; gap: 6px; margin: 10px var(--panel-x) 0; padding: 10px 12px; border: 1px solid var(--hairline); border-radius: 12px; background: var(--card); }
+.terrain-view-panel[hidden] { display: none; }
+.terrain-view-panel .terrain-exaggeration { display: flex; flex-wrap: wrap; }
+.terrain-view-panel .terrain-exaggeration input { flex: 1 1 120px; width: auto; }
+.inspector-tabs { padding: 0 var(--panel-x); margin-top: 12px; }
+.inspector-tabs button { min-height: 44px; font-size: 13px; }
+.tab-content { padding: 16px var(--panel-x) 20px; }
+#context-actions { padding: 0 var(--panel-x); }
+.record-card { margin: 10px var(--panel-x) 0; }
+.map-settings { margin: 0 var(--panel-x) 12px; border: 1px solid var(--hairline); border-radius: 12px; background: var(--card); }
+.map-settings > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; cursor: pointer; list-style: none; font-size: 13px; color: var(--secondary); }
+.map-settings > summary::-webkit-details-marker { display: none; }
+.map-settings > summary::after { content: "+"; margin-left: auto; }
+.map-settings[open] > summary::after { content: "−"; }
+.map-settings > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
+.map-settings-body { display: grid; gap: 10px; padding: 0 12px 12px; }
+.map-settings-body .basemap-picker { flex-wrap: wrap; }
+.map-settings-body #layers-open { width: 100%; justify-content: flex-start; border: 1px solid var(--border); border-radius: 10px; background: var(--alt); }
+.map-settings-body .layer-options { position: static; width: auto; max-width: none; padding: 8px 12px; border-radius: 10px; }
+.inspector-footer { padding: 12px var(--panel-x) 20px; }
+
+/* ---------- panel pieces (revision 2.0) ---------- */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px 14px; margin: 0 0 14px; }
+.stat { min-width: 0; }
+.stat-emphasis { grid-column: 1 / -1; }
+.stat-value { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-weight: 400; font-synthesis: none; font-variant-numeric: tabular-nums; font-size: 24px; line-height: 1.25; color: var(--primary); }
+.stat-emphasis .stat-value { font-size: 30px; }
+.stat-small .stat-value { font-size: 18px; }
+.stat-unit { font-family: "Bai Jamjuree", sans-serif; font-weight: 400; font-size: 12px; color: var(--secondary); }
+.stat-label { display: block; margin-top: 3px; font-size: 12px; line-height: 1.45; color: var(--secondary); }
+.stat-note { display: block; font-size: 11px; line-height: 1.45; color: var(--muted); }
+.chart-figure { margin: 0 0 12px; }
+.chart-figure .chart { width: 100%; min-height: 120px; }
+.chart-figure figcaption { margin-top: 2px; font-size: 11px; line-height: 1.55; color: var(--muted); }
+.init-list { display: grid; gap: 6px; margin: 0 0 12px; }
+.init-row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 12px; border: 1px solid var(--hairline); border-radius: 10px; background: var(--alt); text-align: left; }
+.init-row:hover { background: var(--raised); }
+.init-row.is-active { background: var(--soft); border-color: var(--border); }
+.init-swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(24, 35, 39, 0.35); flex: none; }
+.init-name { font-size: 13px; line-height: 1.4; font-weight: 600; min-width: 0; }
+.init-name small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+.init-amount { font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-weight: 400; font-synthesis: none; font-size: 15px; white-space: nowrap; }
+.init-chip { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px 1px 6px; border: 1px solid var(--hairline); border-radius: 999px; background: var(--alt); font-size: 11px; line-height: 1.6; color: var(--primary); }
+.init-chip::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--chip); border: 1px solid rgba(24, 35, 39, 0.35); flex: none; }
+.focus-card { margin: 0 0 12px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+.focus-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.focus-head strong { font-size: 14px; min-width: 0; }
+.focus-head .quiet { margin-left: auto; min-height: 36px; padding: 4px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 999px; }
+.focus-how { display: flex; gap: 8px; align-items: flex-start; margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: var(--secondary); }
+.focus-how .sila-ui-icon { flex: none; margin-top: 2px; color: var(--secondary); }
+.focus-card .more-button { margin-top: 0; }
+.explain { margin-top: 10px; border-top: 1px solid var(--hairline); }
+.explain > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; font-size: 13px; color: var(--secondary); }
+.explain > summary::-webkit-details-marker { display: none; }
+.explain > summary::after { content: "+"; margin-left: auto; }
+.explain[open] > summary::after { content: "−"; }
+.explain > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.explain > summary .sila-ui-icon { flex: none; }
+.explain-body { display: grid; gap: 8px; padding: 0 0 10px; }
+.explain-body .small-note, .explain-body p { margin: 0; font-size: 12px; line-height: 1.7; color: var(--secondary); }
+.area-row.row-figure { grid-template-columns: minmax(0, 1fr) auto; }
+.row-amount { font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-weight: 400; font-synthesis: none; font-size: 14px; text-align: right; white-space: nowrap; }
+.row-amount small { display: block; font-family: "Bai Jamjuree", sans-serif; font-size: 10px; color: var(--muted); }
+.rank-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; margin-right: 4px; padding: 0 6px; border-radius: 999px; background: var(--soft); font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-weight: 400; font-size: 12px; }
+.owner-type { margin: 0 0 10px; font-size: 12px; color: var(--secondary); }
+
+/* headline symbols on the map and their legend row */
+.symbol-rank { background: transparent; border: 0; }
+.symbol-rank span { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-weight: 400; font-size: 13px; color: #182327; }
+.legend-symbol { margin-top: 6px; align-items: flex-start; }
+.legend-circle { flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; border: 1.5px solid var(--primary); background: var(--soft); }
+
+/* ---------- phones and tablets: full-height map, bottom sheet ---------- */
+@media (max-width: 899px) {
+  :root { --sheet-peek: 42%; --sheet-half: 62%; }
+  .app-header { height: var(--header-h); min-height: var(--header-h); padding: 0 12px; flex-wrap: nowrap; }
+  .workspace { position: relative; display: block; height: calc(100dvh - var(--header-h)); min-height: 0; overflow: hidden; }
+  .map-workspace { position: absolute; inset: 0; }
+  .map-stage, body[data-public-aggregate="true"] .map-stage { height: 100%; min-height: 0; max-height: none; }
+  .panel-splitter { display: none; }
+  /* Municipality-wide totals have no map detail, so the sheet opens at half on these layers. */
+  body[data-public-aggregate="true"][data-sheet="peek"] .inspector { height: var(--sheet-half); }
+  .inspector { position: absolute; left: 0; right: 0; bottom: 0; z-index: 900; height: var(--sheet-peek); max-height: calc(100% - 8px); border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.28); overflow-y: auto; overscroll-behavior: contain; transition: height 0.2s ease; }
+  body[data-sheet="half"] .inspector { height: var(--sheet-half); }
+  body[data-sheet="full"] .inspector { height: calc(100% - 8px); }
+  .sheet-handle { position: sticky; top: 0; z-index: 7; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 28px; height: 28px; padding: 0; border: 0; border-radius: 16px 16px 0 0; background: var(--card); }
+  .sheet-handle > span { width: 40px; height: 4px; border-radius: 2px; background: var(--border); }
+  .sheet-handle:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+  .panel-top { position: static; padding-top: 4px; }   /* scrolls away on phones so the sheet's content gets the room */
+  body[data-sheet="peek"] .scope-row { display: none; }
+  .mission-tab { min-height: 52px; font-size: 11px; }
+  .map-controls { top: 104px; }
+  .summary-metrics strong { font-size: 24px; }
+  .stat-emphasis .stat-value { font-size: 28px; }
+  .map-summary { padding-top: 10px; }
+  .basemap-caption { bottom: calc(var(--sheet-peek) + 6px); }
+  body[data-sheet="half"] .basemap-caption, body[data-sheet="full"] .basemap-caption { display: none; }
+  .map-loading { top: 30%; }
+  .map-error { top: 36%; bottom: auto; transform: translate(-50%, -50%); }
+  .leaflet-bottom.leaflet-left, .leaflet-bottom.leaflet-right { bottom: var(--sheet-peek); }
+  body[data-sheet="half"] .leaflet-bottom.leaflet-left, body[data-sheet="half"] .leaflet-bottom.leaflet-right { bottom: var(--sheet-half); }
+  body[data-sheet="full"] .leaflet-bottom { display: none; }
+}
+@media (max-width: 599px) {
+  :root { --panel-x: 14px; }
+  .header-title { display: none; }
+  .officer-label { display: none; }
+  .brand .cc-header-logo { width: 112px; }
+  .mission-tabs { gap: 4px; }
+  .mission-tab { min-height: 50px; padding: 4px 2px; font-size: 10.5px; }
+  .mission-tab .sila-ui-icon { width: 20px; height: 20px; }
+  .summary-metrics { grid-template-columns: repeat(auto-fit, minmax(124px, 1fr)); gap: 8px 10px; }
+  .summary-metrics strong { overflow-wrap: anywhere; }
+  .summary-metrics strong { font-size: 22px; }
+  .stats-grid { grid-template-columns: repeat(auto-fit, minmax(124px, 1fr)); gap: 10px; }
+  .stat-value { overflow-wrap: anywhere; }
+  .stat-value { font-size: 21px; }
+  .stat-emphasis .stat-value { font-size: 26px; }
+  .legend-classes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+@media (prefers-reduced-motion: reduce) { .inspector { transition: none; } }
+/* stacked actions and in-control details */
+.action-stack { display: grid; gap: 6px; margin: 0 0 12px; }
+.action-stack .more-button { margin: 0; }
+.fix-details .assumptions { margin-top: 6px; border: 0; padding: 0; }
+.phase-list { margin: 0 0 12px; padding-left: 20px; display: grid; gap: 8px; font-size: 13px; line-height: 1.6; }
+.phase-list li > strong { display: block; }
+.phase-list li > span { color: var(--secondary); }
+.plain-list { margin: 0; padding-left: 16px; display: grid; gap: 4px; }
+.site-number { background: transparent; border: 0; }
+.site-number span { display: inline-flex; align-items: center; height: 18px; padding: 0 5px; border-radius: 4px; background: var(--card); border: 1px solid var(--border); color: var(--primary); font-family: "JetBrains Mono", "IBM Plex Sans Thai", monospace; font-size: 11px; line-height: 1; white-space: nowrap; }

@@ -4,7 +4,7 @@
   const REQUIRED_IDS = Object.freeze(['tax', 'business', 'animals', 'healthservices']);
   const IDS = Object.freeze([...REQUIRED_IDS, 'caregroups']);
   const GROUPS = Object.freeze({tax:'Land', business:'Location', animals:'Living', healthservices:'Living', caregroups:'Living'});
-  const ICONS = Object.freeze({tax:'parcels', business:'buildings', animals:'datasets', healthservices:'health', caregroups:'health'});
+  const ICONS = Object.freeze({tax:'parcels', business:'buildings', animals:'pets', healthservices:'health', caregroups:'care'});
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const tr = (value, lang) => typeof value === 'object' && value !== null ? (value[lang] || value.th || value.en || '') : String(value ?? '');
   const word = (th, en, lang) => lang === 'en' ? en : th;

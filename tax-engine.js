@@ -1,4 +1,4 @@
-/* Portfolio land-tax engine for the Sila officer site (revision 1.8).
+/* Portfolio land-tax engine for the Sila officer site (revision 1.8; baseline against the bill since 2.0).
  * Input: data/parcel-tax.json (no names, no ID numbers; taxpayer keys are random codes).
  * 2569 figures come from the municipal roll. 2570 "current method" scales each parcel's 2569 tax by the
  * change in its own law-based tax when land prices move. 2570 "with fixes" adds, on top of that, only the
@@ -168,6 +168,33 @@
     return {parcels, byId, taxpayers, summary, keyedShare, availability, buildingGroups, properties, propertyOf, codes, meta: {asOf: json.asOf, taxYear: json.taxYear}};
   }
 
+  /* Vacancy inferred from the 2569 roll (s.43): the roll bills vacant land at the base rate plus 0.3% per three completed years
+     beyond the first three. 0.6% means the land has been vacant 4-6 years (started in 2564-2566); 0.9% means 7-9 years.
+     Returns null unless the parcel is vacant land with a positive law-based tax. Years are Buddhist Era. */
+  function vacancyFromRoll(p, billed, law69) {
+    if (!p || (p.use !== 'vacant' && !(p.shares && p.shares.vacant === 1)) || !(law69 > 0) || billed == null) return null;
+    const R = RULES(), stepRate = R.vacantStepRate, span = R.vacantStepYears, baseRate = R.tiers.other[0][1];
+    const r = billed / law69, steps = Math.round((r - 1) * baseRate / stepRate);
+    if (!(Math.abs(r - 1 - steps * stepRate / baseRate) < 0.02) || steps < 0) return null;
+    const year = 2569;
+    // steps completed = floor((years - 1) / span) when years > span, so years in [steps*span + 1, (steps+1)*span] (steps >= 1), else 1..span.
+    const yearsMin = steps === 0 ? 1 : steps * span + 1, yearsMax = (steps + 1) * span;
+    return {rate: baseRate + steps * stepRate, steps, yearsMin, yearsMax,
+      startLatest: year - yearsMin + 1, startEarliest: year - yearsMax + 1,
+      nextRate: Math.min(R.vacantRateCap, baseRate + (steps + 1) * stepRate),
+      nextStepEarliest: year + (yearsMax >= (steps + 1) * span ? 1 : (steps + 1) * span + 1 - yearsMax),
+      nextStepLatest: year + (steps + 1) * span + 1 - yearsMin};
+  }
+
+  /* Revision 2.0: the baseline is what the 2569 roll billed on each title. 2570 "current method" scales that bill by the
+     title's own law-based price change; 2570 "with fixes" is the larger of that and the law-based tax with the selected fixes,
+     so the gain of a title is always measured against what it was billed, never against the engine's own reconstruction.
+     Where the roll already bills more than the reconstruction (vacant land at an escalated rate, reliefs the engine cannot see),
+     nothing is added. The gain of a title is allocated to the fixes that raise it and, for the remainder, to "roll below the
+     law-based figure" (rollBelow), which is a check item rather than a proposal. */
+  const AUDIT = Object.freeze({id: 'rollBelow', label: ['บัญชีเรียกเก็บต่ำกว่าที่คำนวณจากข้อมูลเดียวกัน (ต้องตรวจ)', 'Roll bills less than the law-based figure from the same data (check)'],
+    basis: ['ไม่ใช่ข้อเสนอ: ภาษีตามกฎหมายที่คำนวณจากราคา เนื้อที่ และการใช้ในบัญชีเดียวกัน สูงกว่าที่เรียกเก็บปี 2569 อาจเป็นข้อมูลอาคารหรือเนื้อที่ที่ต่างกัน ข้อยกเว้นเฉพาะราย หรือการเรียกเก็บผิด ต้องตรวจทีละโฉนด', 'Not a proposal: the law-based tax from the same price, area and use is above the 2569 bill. Could be a building or area difference, a case-specific relief or a billing error; check title by title']});
+
   function run(model, options = {}) {
     if (!RULES()) throw new Error('Load tax-calculator.js before tax-engine.js');
     const asked = options.strategies instanceof Set ? options.strategies : new Set(options.strategies || []);
@@ -185,8 +212,8 @@
       building: set.has('newBuildings') ? (p => (p.bldValue || 0) + (p.surveyBld > 0 ? p.surveyBld : 0)) : null,
     });
     const byParcel = new Map(), byTaxpayer = new Map(), byVillage = new Map(), byGroup = new Map(), byProperty = new Map();
-    const totals = {assessed69: 0, collected69: 0, old70: 0, new70: 0, parcels69: 0};
-    const stratDelta = new Map(STRATEGIES.map(s => [s.id, {delta: 0, parcels: 0}]));
+    const totals = {assessed69: 0, collected69: 0, law69: 0, old70: 0, new70: 0, gain: 0, rollBelow69: 0, rollAbove69: 0, parcels69: 0, parcelsGain: 0, parcelsRollAbove: 0};
+    const stratDelta = new Map([...STRATEGIES, AUDIT].map(s => [s.id, {delta: 0, alloc: 0, parcels: 0}]));
     // Parcels without a taxpayer stand alone (their own one-title portfolio, type unknown -> treated as individual).
     const groups = new Map(), solo = {type: null, assessed69: null, paid69: null, debt69: null, status69: 'unknown'};
     // Titles joined by one building share a portfolio (it only matters when that fix is on; each title still stands alone otherwise).
@@ -215,63 +242,118 @@
       const combine = joined ? (single.get('combineBuilding') || portfolioTax(rows, tp, oCombine)) : null;
       const ratioPaid = !(tp.assessed69 > 0) ? null : tp.paid69 != null ? Math.min(1, tp.paid69 / tp.assessed69)
         : tp.debt69 != null && tp.debt69 > 0 ? Math.max(0, Math.min(1, (tp.assessed69 - tp.debt69) / tp.assessed69)) : null;
-      const agg = {assessed69: 0, collected69: 0, old70: 0, new70: 0};
+      const agg = {assessed69: 0, collected69: 0, old70: 0, new70: 0, gain: 0};
       for (const p of rows) {
         const assessed = p.tax69;
-        const base69 = law69.get(p.id) || 0, base70 = law70.get(p.id) || 0;
+        const base69 = law69.get(p.id) || 0, base70 = law70.get(p.id) || 0, fix70 = fixed70.get(p.id) || 0;
         let old70 = null;
         if (assessed != null) old70 = base69 > 0 ? assessed * base70 / base69 : assessed + Math.max(0, base70 - base69);
-        const effect = (fixed70.get(p.id) || 0) - base70;
-        const new70 = old70 == null ? null : Math.max(0, old70 + effect);
+        // 2570 with fixes: never below the scaled bill; the gain is what the fixes add above the bill, not above the reconstruction.
+        const new70 = old70 == null ? null : Math.max(old70, fix70);
+        const gain = old70 == null ? null : new70 - old70;
+        const effect = fix70 - base70;                       // what the fixes add to the law-based figure
+        const lawGap69 = assessed == null ? null : base69 - assessed;   // positive: roll below the reconstruction
         const collected = assessed == null ? null : ratioPaid == null ? (tp.status69 === 'none' ? 0 : null) : assessed * ratioPaid;
-        const reasons = [];
+        const reasons = [], alloc = new Map();
+        // Single-fix deltas (law-based) for attribution; allocation keeps the per-title gain measured against the bill.
+        const deltas = [];
         for (const s of STRATEGIES) {
           if (!single.has(s.id)) continue;
           const d = (single.get(s.id).get(p.id) || 0) - base70;
-          // Rows count only parcels that enter the totals (2569 tax known), so rows and totals use the same parcels.
-          if (Math.abs(d) >= 0.5 && assessed != null) { reasons.push(s.label); const sd = stratDelta.get(s.id); sd.delta += d; sd.parcels++; }
+          if (Math.abs(d) >= 0.5 && assessed != null) { reasons.push(s.label); const sd = stratDelta.get(s.id); sd.delta += d; sd.parcels++; if (d > 0) deltas.push([s.id, d]); }
         }
+        if (gain != null && gain >= 0.5) {
+          // The part of the gain the fixes explain (at most their own effect); the rest is the roll sitting below the law-based figure.
+          const fixPart = Math.min(gain, Math.max(0, effect)), audit = gain - fixPart, sum = deltas.reduce((a, [, d]) => a + d, 0);
+          for (const [id, d] of deltas) { const a = sum > 0 ? fixPart * d / sum : 0; if (a >= 0.5) { alloc.set(id, a); stratDelta.get(id).alloc += a; } }
+          if (audit >= 0.5) { alloc.set(AUDIT.id, audit); const sd = stratDelta.get(AUDIT.id); sd.delta += audit; sd.alloc += audit; sd.parcels++; reasons.push(AUDIT.label); }
+        }
+        let dominant = null, best = 0;
+        for (const [id, a] of alloc) if (a > best) { best = a; dominant = id; }
         // A title with no 2569 tax has nothing due of its own, even when its owner is on the debtor list for other items.
         const status69 = assessed === 0 && (tp.status69 === 'unpaid' || tp.status69 === 'partial') ? 'none' : tp.status69;
         const combineEffect = combine ? (combine.get(p.id) || 0) - base70 : 0;
-        const row = {assessed69: assessed, collected69: collected, status69, old70, new70, delta: new70 == null || assessed == null ? null : new70 - assessed, reasons, combineEffect};
+        const rollAbove = assessed != null && old70 != null ? Math.max(0, old70 - fix70) : 0;
+        const row = {assessed69: assessed, collected69: collected, status69, law69: base69, old70, new70, gain, effect, lawGap69, rollAbove,
+          delta: new70 == null || assessed == null ? null : new70 - assessed, reasons, alloc, dominant, combineEffect,
+          vacancy: vacancyFromRoll(p, assessed, base69)};
         byParcel.set(p.id, row);
         if (p.bgrp != null) {
           if (!byGroup.has(p.bgrp)) byGroup.set(p.bgrp, {assessed69: 0, old70: 0, new70: 0, combined70: 0, onRoll: 0, taxed: 0});
           const g = byGroup.get(p.bgrp); g.onRoll++;
           if (assessed != null) { g.taxed++; g.assessed69 += assessed; }
-          if (old70 != null) { g.old70 += old70; g.combined70 += Math.max(0, old70 + combineEffect); }
+          if (old70 != null) { g.old70 += old70; g.combined70 += Math.max(old70, old70 + combineEffect); }
           if (new70 != null) g.new70 += new70;
         }
-        if (assessed != null) { agg.assessed69 += assessed; totals.assessed69 += assessed; totals.parcels69++; }
+        if (assessed != null) { agg.assessed69 += assessed; totals.assessed69 += assessed; totals.parcels69++; totals.law69 += base69;
+          if (lawGap69 > 0) totals.rollBelow69 += lawGap69; else if (lawGap69 < 0) totals.rollAbove69 += -lawGap69; }
         if (collected != null) { agg.collected69 += collected; totals.collected69 += collected; }
         if (old70 != null) { agg.old70 += old70; totals.old70 += old70; }
-        if (new70 != null) { agg.new70 += new70; totals.new70 += new70; }
+        if (new70 != null) { agg.new70 += new70; totals.new70 += new70; agg.gain += gain; totals.gain += gain; if (gain >= 0.5) totals.parcelsGain++; if (rollAbove >= 0.5) totals.parcelsRollAbove++; }
         // Property: adjoining parcels of one owner (grp), or a single owned parcel. Sums only parcels with a 2569 tax.
         if (p.tp) {
           const pk = p.grp != null ? 'g' + p.grp : 'p' + p.id;
-          if (!byProperty.has(pk)) byProperty.set(pk, {key: pk, tp: p.tp, parcels: [], taxed: 0, assessed69: 0, old70: 0, new70: 0, reasons: new Map()});
+          if (!byProperty.has(pk)) byProperty.set(pk, {key: pk, tp: p.tp, parcels: [], taxed: 0, assessed69: 0, old70: 0, new70: 0, gain: 0, reasons: new Map()});
           const e = byProperty.get(pk); e.parcels.push(p.id);
-          if (assessed != null && old70 != null && new70 != null) { e.taxed++; e.assessed69 += assessed; e.old70 += old70; e.new70 += new70; }
-          for (const s of STRATEGIES) {
-            if (!single.has(s.id) || assessed == null) continue;
-            const d = (single.get(s.id).get(p.id) || 0) - base70;
-            if (Math.abs(d) >= 0.5) e.reasons.set(s.id, (e.reasons.get(s.id) || 0) + d);
-          }
+          if (assessed != null && old70 != null && new70 != null) { e.taxed++; e.assessed69 += assessed; e.old70 += old70; e.new70 += new70; e.gain += gain; }
+          for (const [id, a] of alloc) e.reasons.set(id, (e.reasons.get(id) || 0) + a);
         }
         if (p.v) {
-          if (!byVillage.has(p.v)) byVillage.set(p.v, {assessed69: 0, old70: 0, new70: 0});
+          if (!byVillage.has(p.v)) byVillage.set(p.v, {assessed69: 0, old70: 0, new70: 0, gain: 0});
           const vv = byVillage.get(p.v);
-          vv.assessed69 += assessed || 0; vv.old70 += old70 || 0; vv.new70 += new70 || 0;
+          vv.assessed69 += assessed || 0; vv.old70 += old70 || 0; vv.new70 += new70 || 0; vv.gain += gain || 0;
         }
       }
       if (model.taxpayers.has(key)) byTaxpayer.set(key, agg);
     }
-    const byStrategy = STRATEGIES.filter(s => strategies.has(s.id)).map(s => ({id: s.id, label: s.label, ...stratDelta.get(s.id)}));
+    // byStrategy: `delta` is the law-based effect of each fix alone (as in 1.9), `alloc` the part of the gain against the bill
+    // allocated to it, `parcels` the titles it touches. The audit item carries only an allocation.
+    const byStrategy = [...STRATEGIES.filter(s => strategies.has(s.id)), AUDIT].map(s => ({id: s.id, label: s.label, basis: s.basis, ...stratDelta.get(s.id)}));
     return {byParcel, byTaxpayer, byVillage, byGroup, byProperty, byStrategy, totals, factor: f, buildingFactor: bf};
   }
 
-  const api = Object.freeze({STRATEGIES, OWNER_REASON, USE_LABEL, EXEMPT_KINDS, prepare, run, _test: {tiered, portfolioTax, parts}, version: '1.3.0'});
+  /* Revision 2.0 work lists. agriWatch: parcels the roll records as farmland whose land value is high enough that the vacant-land
+     rate (s.43 base, no relief) would be material; `ifVacant` is the law-based tax if the land were vacant, `potential` what that
+     adds over the 2569 bill. Signals are hints for a site check, not findings. */
+  function agriWatch(model, result, minValue = 5e6) {
+    const R = RULES(), T = R.tiers, out = [];
+    for (const p of model.parcels) {
+      const agriShare = p.use === 'agri' ? 1 : p.shares && p.shares.agri > 0 ? p.shares.agri : 0;
+      if (!agriShare || !(p.landValue >= minValue)) continue;
+      const value = p.landValue * agriShare, row = result ? result.byParcel.get(p.id) : null;
+      const billed = p.tax69, ifVacant = tiered(value, T.other), tp = model.taxpayers.get(p.tp) || null;
+      const potential = billed == null ? null : Math.max(0, ifVacant - billed);
+      out.push({id: p.id, code: p.code || null, v: p.v, tp: p.tp || null, ownerType: tp ? tp.type : null, landValue: p.landValue, sqwa: p.sqwa, price: p.price, agriShare, billed69: billed, ifVacant, potential,
+        buildingsOnTitle: (p.bldValue || 0) > 0, surveyBuilding: (p.surveyBld || 0) > 0, mainHome: !!p.mainHome, gain: row ? row.gain : null});
+    }
+    out.sort((a, b) => (b.potential ?? -1) - (a.potential ?? -1) || b.landValue - a.landValue);
+    return out;
+  }
+
+  /* ownerRanking: every taxpayer code with its titles, land and (roll-linked) building value, 2569 bill, 2570 figures and gain,
+     largest total value first. Building value is known only for buildings the roll links to a title; the rest is counted as
+     unknown, not zero. */
+  function ownerRanking(model, result) {
+    const owners = new Map();
+    for (const p of model.parcels) {
+      if (!p.tp) continue;
+      if (!owners.has(p.tp)) { const t = model.taxpayers.get(p.tp); owners.set(p.tp, {code: p.tp, type: t ? t.type : null, kind: t ? t.kind : null, src: t ? t.src : null, status69: t ? t.status69 : 'unknown', parcels: [], landValue: 0, bldValue: 0, bldKnown: 0, value: 0, assessed69: 0, old70: 0, new70: 0, gain: 0, taxed: 0, uses: {}, villages: new Set(), properties: new Set()}); }
+      const o = owners.get(p.tp), row = result ? result.byParcel.get(p.id) : null;
+      o.parcels.push(p.id); o.landValue += p.landValue || 0; if (p.bldValue > 0) { o.bldValue += p.bldValue; o.bldKnown++; }
+      o.value = o.landValue + o.bldValue;
+      if (row && row.assessed69 != null) { o.taxed++; o.assessed69 += row.assessed69; if (row.old70 != null) o.old70 += row.old70; if (row.new70 != null) { o.new70 += row.new70; o.gain += row.gain; } }
+      if (p.use) o.uses[p.use] = (o.uses[p.use] || 0) + 1;
+      if (p.v) o.villages.add(p.v);
+      if (p.grp != null) o.properties.add(p.grp);
+    }
+    const list = [...owners.values()];
+    for (const o of list) { o.villages = [...o.villages]; o.properties = o.properties.size; }
+    list.sort((a, b) => b.value - a.value || b.parcels.length - a.parcels.length || (a.code < b.code ? -1 : 1));
+    list.forEach((o, i) => { o.rank = i + 1; });
+    return list;
+  }
+
+  const api = Object.freeze({STRATEGIES, AUDIT, OWNER_REASON, USE_LABEL, EXEMPT_KINDS, prepare, run, agriWatch, ownerRanking, vacancyFromRoll, _test: {tiered, portfolioTax, parts}, version: '2.0.0'});
   root.SilaTaxEngine = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);

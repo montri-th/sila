@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "1.9",
-  "builtAtUtc": "2026-10-20T11:07:00.383021+00:00",
-  "releaseDateBangkok": "2026-10-20",
+  "revision": "2.0",
+  "builtAtUtc": "2026-10-20T16:54:01.407091+00:00",
+  "releaseDateBangkok": "2026-10-21",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
   "deploymentSource": {
@@ -34,13 +34,13 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-1.9-browser-checks.json",
-  "publicationAudit": "qa/revision-1.9-publication-audit.json",
+  "browserReceipt": "qa/revision-2.0-browser-checks.json",
+  "publicationAudit": "qa/revision-2.0-publication-audit.json",
   "files": [
     {
       "path": "README.md",
-      "bytes": 81984,
-      "sha256": "d228f4be1ce3de52c6cd330c9df4e9a5010f208c381152afb7836f4860a644ae",
+      "bytes": 94500,
+      "sha256": "44921ecbaf1c7e4b4f5f7d3b4a700d83756345f48113dee7f7539e2578c9a3a5",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -49,8 +49,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 395438,
-      "sha256": "17f8ed33f1fd8227d09345c7870780d387662d877b300bcbb418faa95da44d05",
+      "bytes": 486184,
+      "sha256": "698d0cacb4deaa55e2114f2bb5537458dcb70e0a57f905cc0dff74816e2dbba5",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -418,6 +418,14 @@
       ]
     },
     {
+      "path": "assets/ui-icons/agriculture.svg",
+      "bytes": 1601,
+      "sha256": "6b086a79b91b30838c0eb466c2cb27a2302a5e43f283cd87e55c6b728bbbf6cc",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/apartment.svg",
       "bytes": 673,
       "sha256": "91c4c32127b1cd52242a170f5bc7d26de5935438a1947cc9a624653c20a28b25",
@@ -437,6 +445,14 @@
       "path": "assets/ui-icons/assignment.svg",
       "bytes": 1240,
       "sha256": "1a9494b68913a9012285734294d4289c5b9e02e125180950db0e3888298ac0ac",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/bar_chart.svg",
+      "bytes": 715,
+      "sha256": "7f464accdac9ad9e319eddd8e6887d7e64212adf6c208c5f549bb1b9b7ecedd9",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -482,6 +498,14 @@
       ]
     },
     {
+      "path": "assets/ui-icons/construction.svg",
+      "bytes": 1240,
+      "sha256": "ad5ad3c6341d7b98bc1b3a81f1a2130d389ab35e7bc16b077531a2a631334f14",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/dark_mode.svg",
       "bytes": 679,
       "sha256": "744c6b3870182034f985755356ca5fb05bbd8fa5cb558357c9b7ddd82609c983",
@@ -509,6 +533,14 @@
       "path": "assets/ui-icons/download.svg",
       "bytes": 815,
       "sha256": "43fe2948740aca9f784eb1634c49405f15bc78aec7b70e0aef49dc7e3b843d05",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/explore.svg",
+      "bytes": 867,
+      "sha256": "e83ebcd25ba14f9d6e53387de234fbe5387e3ffccd2fe218878f4b22d3995c00",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -557,6 +589,14 @@
       "path": "assets/ui-icons/groups.svg",
       "bytes": 1611,
       "sha256": "ed5ea268487a2af9b2699378b53ad0f4084191cd83b4fd7a2ed3e75ca79cc3d3",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/handshake.svg",
+      "bytes": 2386,
+      "sha256": "d0d1735d069ca1574a77b64bb67e94e8f461b7e1af03d741572e86a41994be6e",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -613,6 +653,14 @@
       "path": "assets/ui-icons/layers.svg",
       "bytes": 835,
       "sha256": "caec20f5accce6da05525a778977ff75dda5316e7489a2a1e960a94751a9d219",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/leaderboard.svg",
+      "bytes": 521,
+      "sha256": "c2b806f47c7a96221c5b91b71bea0d9a5ea3370147fdeee6830e65cf4108b3bc",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -682,6 +730,22 @@
       ]
     },
     {
+      "path": "assets/ui-icons/payments.svg",
+      "bytes": 1098,
+      "sha256": "f3e8fefba9842b526b08ed5a5bbfa545e9746d6816410b681f4e98fbb9cf96de",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/pets.svg",
+      "bytes": 1088,
+      "sha256": "905a0282ad1a7fec252ecee545303ee01fe8b82f0429c96f84b9dffa813e0fec",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/route.svg",
       "bytes": 1077,
       "sha256": "a3dd5fa25bbaacc9ad4cd8a70c9d2c8e06f374fd32956be9a64b0fa07b31cfc1",
@@ -746,9 +810,25 @@
       ]
     },
     {
+      "path": "assets/ui-icons/tune.svg",
+      "bytes": 1428,
+      "sha256": "d60aca3dcc090d731662352a21146616588fed10ced8724ad41c2f89f6434fe1",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
       "path": "assets/ui-icons/videocam.svg",
       "bytes": 578,
       "sha256": "f7151c37266f95dea4e29cbeec8e5ecad565d820351d148275442c3acfc75d2a",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/volunteer_activism.svg",
+      "bytes": 1830,
+      "sha256": "b111e2ce494c7bfd9c47e15c850fccf034133fddeb3ef1c4ecd4b3b5125d96c6",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -765,6 +845,14 @@
       "path": "assets/ui-icons/water.svg",
       "bytes": 1947,
       "sha256": "30172dc0bdc9bd2552e123c6a226bc2063d1c704b05ec15509590428a48dae33",
+      "mimeTypes": [
+        "image/svg+xml"
+      ]
+    },
+    {
+      "path": "assets/ui-icons/water_damage.svg",
+      "bytes": 773,
+      "sha256": "a498a7fead34f05a2083f2bae2d195a12deecc04a11637d8dcd83eee2d44186c",
       "mimeTypes": [
         "image/svg+xml"
       ]
@@ -842,8 +930,8 @@
     },
     {
       "path": "data/catalog.json",
-      "bytes": 95473,
-      "sha256": "607fb7b23456c99600bcbc89a08b37b43a55ba2d22f52c20061c4e5449d6b0d6",
+      "bytes": 102569,
+      "sha256": "109022123fc3bfc349da9f8d67f6877d93461c4e6ecfc6e7e7df09b5024cb6dd",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -911,6 +999,16 @@
       ]
     },
     {
+      "path": "data/flood-sites.geojson",
+      "bytes": 41498,
+      "sha256": "2c71f0a0fb3fe33e912bcffe09cac195409bf3d1fdab581a9c4b4169c9782b74",
+      "mimeTypes": [
+        "application/geo+json",
+        "application/json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "data/health.geojson",
       "bytes": 2133,
       "sha256": "1336307c673e3570b00bf951d5e15aa3beec5113c9c6dcc9ede8766c826c50a5",
@@ -932,8 +1030,8 @@
     },
     {
       "path": "data/metadata.json",
-      "bytes": 46540,
-      "sha256": "57c772a233fbe5da3d9f6c41a8c2dab9bd135c5d247b44e2200be06ff5faec2b",
+      "bytes": 46771,
+      "sha256": "121eb1be4b2d2e0577a0d12aabead1f08a86cd394781f5355d00c34d08655137",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1127,8 +1225,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 15289,
-      "sha256": "1fedb3c6dbaa2d352648367d056d3d2ff8fefa657342ea35af48b785246bd750",
+      "bytes": 16029,
+      "sha256": "6901dc6c02a528a04dad9b9a069d3b89f1e6ec99dadf16e6cc7ca6aee20bfd79",
       "mimeTypes": [
         "text/html"
       ]
@@ -1160,8 +1258,8 @@
     },
     {
       "path": "missions.js",
-      "bytes": 13716,
-      "sha256": "dbbe67ac12839f9412cd7c4aa359f6b0a75f5f289059f1d30e89675194c2e748",
+      "bytes": 19442,
+      "sha256": "2d456d72f7613e84dc945e628b8877304c7a7d57474d54ee3f7ec7036a05c8d3",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1177,8 +1275,8 @@
     },
     {
       "path": "public-aggregate.js",
-      "bytes": 12666,
-      "sha256": "cfa9f3393cba5777d54fde6df56860cd74e1748e2edeb87d50739697302ebae3",
+      "bytes": 12660,
+      "sha256": "32f2ca0394d3d27c768c311e17797c64d4ea6eaaf9b2399cf805a8eb667e14ee",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -1219,8 +1317,8 @@
     },
     {
       "path": "qa/check-public-aggregate.cjs",
-      "bytes": 6849,
-      "sha256": "cff916303e6a451cf1a292c93790c9e42600e13a512cca050a8a752f92512f53",
+      "bytes": 6898,
+      "sha256": "c2a400b3222f4d053ad0231e009519ef64a1d630923fff43c3b9eddfeaad8459",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
@@ -1241,8 +1339,8 @@
     },
     {
       "path": "qa/check-tax-engine.cjs",
-      "bytes": 14874,
-      "sha256": "700e2700ef7ae183c81cc2e5282e29e8e9fba3cf72a484e08028eff148552043",
+      "bytes": 19319,
+      "sha256": "4b4aa4b7b8d9f871bb924f99ec390518a23ca7e47f21cc7e2d1194e14f73527b",
       "mimeTypes": [
         "application/javascript",
         "text/javascript",
@@ -1740,6 +1838,36 @@
       ]
     },
     {
+      "path": "qa/revision-2.0-accessibility-checks.json",
+      "bytes": 6410,
+      "sha256": "568f85178351f178aea27e8709272fb138c4109a598b99274adffd78458381c8",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-2.0-browser-checks.json",
+      "bytes": 23371,
+      "sha256": "2eb357b21bfab1a573e1ea1bd447c6485509b09650c9d516610ae1c07bec85b6",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/revision-2.0-publication-audit.json",
+      "bytes": 7518,
+      "sha256": "8b120531158a283a4e60aaa314b55a15de541a3c076dac5e74b597d9f50d1b17",
+      "mimeTypes": [
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "qa/verifier-fixture-checks.json",
       "bytes": 574,
       "sha256": "c58815981ae54b36b4b1d0b1c966c3bd3e0c5953b7e88c4c096a82ea8c6b8de8",
@@ -1811,8 +1939,8 @@
     },
     {
       "path": "reference/lds-analytical-subset.json",
-      "bytes": 15372,
-      "sha256": "cca9be2b1c5ee635a1d225ba2869c414cd9c3dcd54298dddac03aacdecbee675",
+      "bytes": 20298,
+      "sha256": "77b4a2958fb81278d008e197d5d49d3c9c8bc95aa7fdb65ce728b75ecc125298",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1951,8 +2079,8 @@
     },
     {
       "path": "reference/tax-map-method.md",
-      "bytes": 33271,
-      "sha256": "e49e50c74c1a6ee8ba3f7ef6b0c04fb773a2bedd682441eb38d492e606c216da",
+      "bytes": 43447,
+      "sha256": "f82c48be28e92e249dc62f477613c589885feffe2b371e6977a89d87766734b8",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1961,8 +2089,8 @@
     },
     {
       "path": "reference/terrain-contract.json",
-      "bytes": 15093,
-      "sha256": "0648269348766f684605ab9a47351e0e09f2cf498aa0cee12b9f30c4b16682bb",
+      "bytes": 15863,
+      "sha256": "40c9e847559afe999a089266a4ac9d090d1b4fd25de30dd0ac8c091bf7092aec",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1971,8 +2099,8 @@
     },
     {
       "path": "reference/terrain-contract.md",
-      "bytes": 21974,
-      "sha256": "e3cac06f64c246b37d2d9c306eb7f61cd712e98e6780b31072bd47010a502f61",
+      "bytes": 24920,
+      "sha256": "68fbd56debd8c28cf5b435ab57a65d38b18eff8680368439e10f5835d264b540",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1991,8 +2119,8 @@
     },
     {
       "path": "reference/ui-icons.manifest.json",
-      "bytes": 42790,
-      "sha256": "dc3dce7843416c90ce7b095e0088b5853b60866befaba88dd7849cfbc57141c4",
+      "bytes": 50252,
+      "sha256": "312b54242c303816f8ad23b4a2518955e1bc4419e182ca5a2954f48c835b2cda",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -2113,11 +2241,28 @@
     },
     {
       "path": "server.py",
-      "bytes": 2419,
-      "sha256": "dbc0f72f688ad982860232200208cab9f1f0d179e8cd0a39fbe26925cccdc752",
+      "bytes": 2475,
+      "sha256": "d78a3c5b6d09c4d1d5144d1b9107b92f712570582349cb2d9e7849f3c4513f2f",
       "mimeTypes": [
         "text/plain",
         "application/octet-stream"
+      ]
+    },
+    {
+      "path": "shell.css",
+      "bytes": 18608,
+      "sha256": "74a5eb5aa958a590bfa8394c44181391896e740d27dd2c79217b17c3baeba5f9",
+      "mimeTypes": [
+        "text/css"
+      ]
+    },
+    {
+      "path": "sila-charts.js",
+      "bytes": 9379,
+      "sha256": "1edac39914e6b61c8314a48c6238b0bb4d1202a533dcc3ebeac07863f863eb64",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
       ]
     },
     {
@@ -2147,8 +2292,8 @@
     },
     {
       "path": "tax-engine.js",
-      "bytes": 27340,
-      "sha256": "fccac70686f67f7d0806c00f6bce2036e479be6c002fc40ccd48564dcb0df709",
+      "bytes": 35799,
+      "sha256": "bab11c35247527e53e8f9dd1d57ea320df0ff3d52fe58a446d698e5a839bea70",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -2192,6 +2337,15 @@
       ]
     },
     {
+      "path": "tools/streetview-coverage.py",
+      "bytes": 4500,
+      "sha256": "de7b57a07b65769f1d301538b5444236fc54d8e40ac0c330218e8f73ca338659",
+      "mimeTypes": [
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
       "path": "tools/validation-config.json",
       "bytes": 1870,
       "sha256": "04ad5d755df21860b5b33191cae94660f50944c075c9ec9c731edaeac138eeb6",
@@ -2212,8 +2366,37 @@
     },
     {
       "path": "ui-icons.js",
-      "bytes": 45031,
-      "sha256": "fdfe8ef67f2e8d55f704e6bb6386765150bc4a8ff4458d0c9f0970f21fbb1946",
+      "bytes": 58492,
+      "sha256": "55885c4e8ea4fcb3489a8139549e41decd63d32101930b253a63c38689dac662",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
+      "path": "vendor/amcharts5/LICENSE.md",
+      "bytes": 1699,
+      "sha256": "51c7fed11750e6f7261cf5e4b68add57de988ee9e00792043253309a7e0242c4",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/amcharts5/SOURCE.md",
+      "bytes": 1084,
+      "sha256": "59b0dd06dce3e9d3995c6d229b3609f1af6f5e6d6bd984aff36a1eb289dd7976",
+      "mimeTypes": [
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
+      ]
+    },
+    {
+      "path": "vendor/amcharts5/amcharts5-sila.min.js",
+      "bytes": 632397,
+      "sha256": "f88190e6b341839b5a4f6ce2c1a4fa4bed7d206a4e38aa7f638ee29c769c7033",
       "mimeTypes": [
         "application/javascript",
         "text/javascript"
@@ -3403,7 +3586,7 @@
       ]
     }
   ],
-  "manifestScope": "All tracked files except .gitignore, .nojekyll and this manifest. Restricted sources, internal link tables and screenshots remain outside the repository.",
+  "manifestScope": "All tracked files except .gitignore, .nojekyll and this manifest. Restricted sources, internal link tables, screenshots and the flood draft layers remain outside the repository.",
   "releaseReadiness": "ready_with_bounded_manual_gates_provider_and_live_proof_separate",
   "housePointRendering": {
     "mode": "individual_source_points",
@@ -3422,7 +3605,7 @@
   "releaseState": "source_release_provider_attestation_separate",
   "originalGISDatasets": 16,
   "additionalMunicipalSummaryViews": 5,
-  "runtimeDatasetsWhenSummaryReady": 23,
+  "runtimeDatasetsWhenSummaryReady": 27,
   "additionalSourceReceivedAt": "2026-10-20",
   "additionalSourceFiles": 15,
   "publicSummary": {
@@ -3431,8 +3614,8 @@
     "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.8",
-  "previousPublishedCommit": "66de01a00941630a3bb87b01ad14ae2ba6b66d62",
+  "previousPublishedRevision": "1.9.1",
+  "previousPublishedCommit": "5eeb59d464db2a1c021cd9ac1bdcbfa01f0734f0",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 3,
   "additionalMunicipalFilesInspectedThisUpdate": 6,
@@ -3497,19 +3680,21 @@
     "officialAssessment": false
   },
   "dataFilesChangedThisRevision": [
-    "data/parcel-tax.json",
-    "data/buildings.geojson",
-    "data/businesses.geojson",
     "data/catalog.json",
-    "data/municipal-summary.json",
-    "data/terrain-source.json"
+    "data/metadata.json",
+    "data/flood-sites.geojson (new)",
+    "reference/lds-analytical-subset.json (water scale added)"
   ],
   "analyticViews": [
     "taxmap",
     "appraisal",
     "popgrid",
     "properties",
-    "businesses"
+    "businesses",
+    "negotiate",
+    "agriwatch",
+    "portfolio",
+    "floodsites"
   ],
   "revision18": {
     "sourceReceived": "2026-10-19",
@@ -3560,21 +3745,7 @@
     "terrainPalettes": "OH3 palettes as an owner-approved exception for ground height only; see reference/terrain-palettes.json",
     "publicSafety": "House-number fields keep numbers only (surveyor notes removed); survey status per point is not published (only whether a point is a new survey position); building use is published only in groups (rented or used by others, parking or storage, farming or livestock, and one group for everything else including owner-occupied, vacant and not stated); the population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
   },
-  "patches": [
-    {
-      "id": "1.9.1",
-      "dateBangkok": "2026-10-20",
-      "afterCommit": "bd5b77d5bf3f987d7f73e38e8f67f0b231382277",
-      "changes": [
-        "businesses: the summary card under the map shows pinned businesses and confirmed websites in the selected area instead of a dash",
-        "record cards: Street View note says some Sila roads have no Google imagery and how to find the nearest covered road",
-        "docs: Street View coverage sample in README and reference/tax-map-method.md (6 of 8 links opened imagery in Chrome on 20 Oct 2026)",
-        "app.js cache key 1.9.1; browser and accessibility receipts re-run on the patched code"
-      ],
-      "foundBy": "opening the live 1.9 site in Chrome on a Mac (Apple M5)"
-    }
-  ],
-  "accessibilityReceipt": "qa/revision-1.9-accessibility-checks.json",
+  "accessibilityReceipt": "qa/revision-2.0-accessibility-checks.json",
   "terrain3dBenchmark": "qa/revision-1.9-terrain3d-benchmark.json",
   "revision19": {
     "sourceReceived": {
@@ -3657,5 +3828,77 @@
     "phones": "no page-level sideways scroll at 320-412 px in Thai and English; wide tables scroll in their own focusable regions",
     "icons": "owner approved 12 interface roles on 20 Oct 2026; 9 new Material Symbols Rounded glyphs from the pinned source commit (streetview, travel_explore, storefront, home_work, calculate, warning, check_circle, schedule, fit_screen); download, search and layers reused; see reference/ui-icons.manifest.json",
     "publicSafety": "Owner names, natural-person registrants, ID and tax numbers, addresses and deed numbers are not published; owner codes are random; Google AI questions carry no coordinates or IDs. See qa/revision-1.9-publication-audit.json."
+  },
+  "revision20": {
+    "ownerRequests": "16 items from the owner’s phone and tablet test on 20 Oct 2026; item 1 (current PDS 3 with taxpayer codes) requested from the municipality, not yet received",
+    "baseline": {
+      "rule": "gain per title = law-based 2570 tax with the selected fixes minus the 2569 bill (PDS 7); bills above the law-based figure add nothing and are listed separately; gaps under 100 THB per title are rounding/depreciation noise",
+      "confirmedByOwner": "2026-10-20",
+      "engine": "tax-engine.js 2.0.0",
+      "tests": "qa/check-tax-engine.cjs (+33 checks)"
+    },
+    "cityAtCurrentPrices": {
+      "billed2569THB": 27882712.16,
+      "lawBased2569WithoutFixesTHB": 25893034.92,
+      "withFixes2570THB": 30341357.16,
+      "gainMaterialTHB": 2357411.32,
+      "titlesWithMaterialGain": 1416,
+      "titlesWithMaterialGainOnMap": 1410,
+      "byInitiativeTHB": {
+        "rollBelow": 934901,
+        "newBuildings": 73677,
+        "mainHomeOnce": 43109,
+        "rented": 52374,
+        "mixedUse": 844208,
+        "juristic": 27870,
+        "combine": 380801,
+        "agriShare": 472
+      },
+      "byInitiativeTitles": {
+        "rollBelow": 571,
+        "newBuildings": 48,
+        "mainHomeOnce": 231,
+        "rented": 185,
+        "mixedUse": 331,
+        "juristic": 89,
+        "combine": 11,
+        "agriShare": 2
+      },
+      "rollBelowUnder100THB": {
+        "titles": 7415,
+        "sumTHB": 100143.08
+      },
+      "rollAboveComputationTHB": 3024729.56,
+      "rollAboveTitles": 2343,
+      "vacantLandByEscalationStep": {
+        "0.3pct_1to3years": 2108,
+        "0.6pct_4to6years": 911
+      }
+    },
+    "farmlandWatch": {
+      "threshold": "agricultural use on the roll and land value >= 5,000,000 THB",
+      "titles": 279,
+      "potentialIfUnusedTHB": 8443089,
+      "billed2569THB": 1024187,
+      "withBuilding": 84,
+      "juristic": 6
+    },
+    "owners": {
+      "count": 18567,
+      "appraisedValueTHB": 40694010505,
+      "top10SharePct": 5,
+      "over50M": 26,
+      "rule": "land of every title on the roll plus roll-linked buildings; unlinked buildings not counted; random codes, no names"
+    },
+    "shell": "map fills the column; legend, summary, hint, basemap and overlays in the panel; phones and tablets use a bottom sheet (peek/half/full) over a full-height map; five mission tabs with icons; big numbers in the LDS data role; explanations behind details; amCharts 5 free licence (logo kept) bundled in vendor/amcharts5",
+    "headlineSymbols": "proportional circles for the 60 largest figures (or the top 10 owners) at zoom < 16",
+    "flood": {
+      "sitesLayer": "data/flood-sites.geojson, 16 reference points from the owner’s study v7 (17 Oct 2569) with coordinate status, cause, options, receiver, first action and survey-route length",
+      "gated": "the study’s 10-50 cm scenarios and corridors, and the FABDEM closed-low-ground draft (priority-flood depression filling, 36.6 m pixels), are not published until the owner reviews them; the terrain layer shows the low-ground overlay only when data/flood-lowground.geojson exists"
+    },
+    "care": "care register and pets are separate maps of the care mission",
+    "streetView": "Google Maps pin link first (never blank); facing panorama second with “if imagery exists”; tools/streetview-coverage.py prepares an offline coverage file when the municipality supplies a key (never stored)",
+    "icons": "owner approval pending for payments, volunteer_activism, construction, explore, handshake, agriculture, leaderboard, pets, water_damage, tune, bar_chart (Material Symbols Rounded, pinned source commit)",
+    "publicSafety": "No owner names, natural-person registrants, ID or tax numbers, addresses or deed numbers; random owner codes; flood scenario layers withheld pending review. See qa/revision-2.0-publication-audit.json."
   }
 }
