@@ -1,6 +1,6 @@
 # ข้อเท็จจริงจาก repository ณ เวลาที่ build
 
-> ภาพ snapshot · commit `74e41ec` + การแก้ที่ยังไม่ commit · 2026-10-21T22:35:59+00:00 · ไฟล์ที่ track 447 ไฟล์ · `--check` ไม่เทียบไฟล์นี้แบบไบต์
+> ภาพ snapshot · commit `26c0fd1` + การแก้ที่ยังไม่ commit · 2026-10-21T23:51:03+00:00 · ไฟล์ที่ track 447 ไฟล์ · `--check` ไม่เทียบไฟล์นี้แบบไบต์
 
 | ไฟล์ JS | ไบต์ | บรรทัด | Global |
 |---|---|---|---|
@@ -80,8 +80,8 @@
 ```json
 {
  "schema": "sila-handoff-facts/1",
- "observedAtUtc": "2026-10-21T22:35:59+00:00",
- "observedCommit": "74e41ecbcfed1cff2e4a13de7613d656b0746684",
+ "observedAtUtc": "2026-10-21T23:51:03+00:00",
+ "observedCommit": "26c0fd12323ccd17c054bee8766e9e22ea309bbd",
  "workingTreeDirty": true,
  "trackedFiles": 447,
  "modules": [

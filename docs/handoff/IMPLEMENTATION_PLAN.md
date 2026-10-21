@@ -78,7 +78,7 @@ gantt
 | F-32 | บันทึกผลอนุมัติไอคอน 11 ตัว หรือเปลี่ยนตามที่เจ้าของเลือก | phase-2 | low | 0.5 | S-00 | P-07 | D-08 | blocked |
 | F-33 | ซ่อนลิงก์ Street View ที่ไม่มีภาพ ด้วยไฟล์ตรวจล่วงหน้า | phase-2 | medium | 1 | S-00 | P-08 | D-10 | blocked |
 | F-34 | รีเฟรชข้อมูลภาษีด้วย ภ.ด.ส.3 ปีปัจจุบัน โดยรหัสเจ้าของคงเดิม | phase-2 | high | 2 | S-00 | P-09, P-10 | D-11 | blocked |
-| F-35 | เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14) | phase-2 | medium | 1 | S-00 | P-11 | D-14 | todo |
+| F-35 | บันทึกคำตัดสิน D-14 ในสัญญาแผนที่ดาวเทียม (คงภาพ Google แบบเดิม) | phase-2 | medium | 0.5 | S-00 | P-11 | D-14 | todo |
 | X-50 | ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง | phase-3 | medium | 3 | — | P-12, P-14 | D-12 | done |
 
 ## วิธีใช้กับ vibe coding
@@ -208,13 +208,13 @@ gantt
 
 **D-14 · แผนที่ดาวเทียม: ใช้ URL tile ของ Google ที่สืบทอดจาก CityChat ต่อ หรือเปลี่ยนเป็นแหล่งที่มีใบอนุญาตชัดเจน**
 
-- คำของเจ้าของ (VERBATIM): "ได้"
-- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ใช่
-- สิ่งที่เปลี่ยน: เลิกใช้ URL tile ของ Google และใช้ภาพดาวเทียมที่ใหม่และละเอียดที่สุดเท่าที่ใบอนุญาตเปิดให้ใช้ · เว็บ static นี้ใส่คีย์ไม่ได้ (KEY-01) จึงใช้ EOxCloudless 2025 ของ EOX เป็นค่าเริ่มต้น (Sentinel-2 ราว 10 ม. ใบอนุญาต CC BY-NC-SA 4.0 สำหรับงานไม่เชิงพาณิชย์) และคงภาพปี 2016 ไว้เป็นภาพย้อนหลัง · ภาพละเอียดสูงที่ต้องใช้บัญชีและคีย์ทำในระบบจริงของ CityChat
-- ผลในโค้ดหรือเอกสาร: งาน F-35 เริ่มได้ · คำว่า 'ได้' ตอบคำถามเรื่องใบอนุญาตในชุดพอร์ต (เลิกเรียก tile ของ Google โดยตรง) และวันเดียวกันเจ้าของถามต่อว่า 'อันนี้ใช้ของใหม่ล่าสุดละเอียดสุดที่หาได้ได้มั้ย' (VERBATIM) ผู้เขียนจึงเลือกแหล่งภาพ · เจ้าของยืนยันว่าการใช้ใน CityChat ไม่ใช่เชิงพาณิชย์ (เรื่อง FABDEM) ผู้เขียนใช้เหตุผลเดียวกันกับ EOX 2025 ที่ใช้ CC BY-NC-SA 4.0 เหมือนกัน (Inference)
-- ทางเลือกที่ไม่ใช้: คง URL tile ของ Google: เจ้าของอนุมัติให้เลิก; EOX 2016 เป็นค่าเริ่มต้น (ข้อเสนอเดิม): เจ้าของขอภาพใหม่ล่าสุด; ผู้ให้บริการภาพละเอียดสูงที่ต้องใช้คีย์ เช่น Google Map Tiles API, Esri World Imagery, Mapbox Satellite: ใส่คีย์ในเว็บ static ไม่ได้ (KEY-01); Copernicus Sentinel-2 รายไตรมาส (10 ม. ใช้เชิงพาณิชย์ได้): ต้องทำ tile และดูแลรอบปรับปรุงเอง จึงเก็บไว้เป็นทางสำรอง
-- ความเสี่ยงที่เหลือ: ภาพ 10 ม. ไม่เห็นอาคารรายหลัง · ภาพปี 2025 ใช้ CC BY-NC-SA 4.0 (ไม่เชิงพาณิชย์ แบ่งปันแบบเดียวกัน) ต่างจากภาพปี 2016 ที่ใช้ CC BY 4.0
-- ที่มา: cloudless.eox.at/license-non-commercial (ตรวจ 2026-10-22: ปี 2016 ใช้ CC BY 4.0 ปี 2018–2025 ใช้ CC BY-NC-SA 4.0); reference/satellite-basemap-contract.json
+- คำของเจ้าของ (VERBATIM): "เลือกวิธีเดิม"
+- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ไม่
+- สิ่งที่เปลี่ยน: ใช้ต่อ (ทางเลือกแรก): คง URL tile ของ Google ที่สืบทอดจาก CityChat เป็นแผนที่ดาวเทียมค่าเริ่มต้น แบบเดียวกับ CityChat และ CityMETER ใบอนุญาตยังไม่ยืนยัน (licenseStatus not_verified) · เว็บนี้ทำแบบนี้อยู่แล้วตาม reference/satellite-basemap-contract.json: แสดง Google Maps เป็นแหล่งภาพ ไม่ cache tile และไม่สลับแหล่งภาพเอง เมื่อ Google โหลดไม่ได้ ผู้ใช้เลือกภาพ EOX ปี 2016 ที่ติดป้ายไว้ได้เอง · งาน F-35 บันทึกคำตัดสินนี้ในสัญญา
+- ผลในโค้ดหรือเอกสาร: เจ้าของตอบ 'เลือกวิธีเดิม' เมื่อถามว่าจะเปลี่ยนไปดึงภาพ Google ผ่าน Map Tiles API หรือไม่ (2026-10-22) ผู้เขียนตีความว่าใช้กับเว็บนี้ด้วย เพราะเว็บนี้ใช้ URL เดียวกันที่สืบทอดจาก CityChat (Inference) · ก่อนหน้านั้นวันเดียวกันเจ้าของตอบ 'ได้' ต่อข้อเสนอให้เลิกเรียก tile ของ Google โดยตรง คำตัดสินนี้แทนข้อนั้น
+- ทางเลือกที่ไม่ใช้: ภาพ EOX ปี 2016 เป็นค่าเริ่มต้น (คำแนะนำเดิม): คงเป็นภาพย้อนหลังที่ผู้ใช้เลือกเอง; ผู้ให้บริการที่มีใบอนุญาต เช่น Google Map Tiles API ผ่าน backend ของระบบจริง: เจ้าของเลือกวิธีเดิม; EOxCloudless 2025 เป็นค่าเริ่มต้น (ฉบับแรกของ pull request นี้): เจ้าของเลือกวิธีเดิม
+- ความเสี่ยงที่เหลือ: การดึง tile ของ Google ตรงไม่ผ่าน Map Tiles API จึงน่าจะอยู่นอกเงื่อนไขของ Google (Inference) Google ปิดหรือจำกัดได้ทุกเมื่อ · ห้ามเรียกว่ามีใบอนุญาต ห้าม cache หรือดาวน์โหลด tile
+- ที่มา: คำตอบของเจ้าของ 2026-10-22 06:37 (+07) ในบทสนทนางานพอร์ตเข้า CityChat; landometer.com/v3/citymeter ใช้ mt1.google.com/vt/lyrs=y เช่นกัน (ตรวจ 2026-10-22); reference/satellite-basemap-contract.json (stateRules.fallback)
 
 **D-17 · เผยแพร่ชุดส่งต่องานรุ่น 2.0.2 ขึ้น montri-th/sila อย่างไร**
 
@@ -1161,30 +1161,29 @@ python3 tools/handoff/build_handoff.py --check
 Task F-34 (after the DR-01 exports arrive; D-11 decided that the private archive stays on the owner's computer). Working only where the owner keeps that archive, run the private pipeline on the current-year PDS 3/4/7 exports with the existing owner-code codebook, audit the outputs with tools/publication-audit.py before they enter the repository, then update data/parcel-tax.json, qa/expected-figures.json and the figures quoted in README.md and reference/tax-map-method.md with the new as-of date. Never commit raw exports, link tables, the codebook or the salt. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
 ```
 
-### F-35 · เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14)
+### F-35 · บันทึกคำตัดสิน D-14 ในสัญญาแผนที่ดาวเทียม (คงภาพ Google แบบเดิม)
 
-Switch the satellite basemap to the newest licensed imagery (D-14)
+Record decision D-14 in the satellite basemap contract (keep the inherited Google layer)
 
 | ระยะ | สำคัญ | ประมาณ (Hypothesis) | คำตัดสิน | สถานะ | ขึ้นกับ | แก้ปัญหา | ช่องทาง |
 |---|---|---|---|---|---|---|---|
-| phase-2 | medium | 1 วัน | D-14 | todo | S-00 | P-11 | public-site |
+| phase-2 | medium | 0.5 วัน | D-14 | todo | S-00 | P-11 | public-site |
 
 - อ่านก่อน: reference/satellite-basemap-contract.md, basemap.js
 - ไฟล์ที่เกี่ยวข้อง: basemap.js, reference/satellite-basemap-contract.json, reference/satellite-basemap-contract.md, vendor/satellite-eox-2016
 
 ขั้นตอน
 
-1. Remove the inherited Google tile URL from basemap.js.
-2. Make EOxCloudless 2025 from EOX the default satellite layer: take the exact layer name from the EOX WMTS capabilities (use the latest year listed if 2025 is missing) and show the attribution exactly as cloudless.eox.at/license-non-commercial gives it for that year, with its links.
-3. Keep the 2016 image as the archive option with its CC BY 4.0 attribution (vendor/satellite-eox-2016).
-4. Update reference/satellite-basemap-contract.* (provider, layer, year, licence CC BY-NC-SA 4.0, licenceStatus, attribution) and the LIC-01 rule text, then rebuild the handoff.
-5. Bump basemap.js with a ?v= key and run the checks; look at the satellite view by hand (tests use basemap=none).
+1. Owner decision D-14 (2026-10-22): keep the inherited Google satellite layer. basemap.js already does this; do not change the provider, the tile URL or the default.
+2. In reference/satellite-basemap-contract.json and .md, record D-14 (date, the owner's words, decided by the owner) next to reuseAuthorization; keep licenseStatus not_verified, officialGoogleMapTilesAPI false and downloadedOrCachedGoogleImagery false.
+3. Keep stateRules.fallback as it is: no silent imagery-provider switch. When Google tiles fail the map says Google imagery is unavailable, and the user may choose the labelled 2016 EOX archive (vendor/satellite-eox-2016, CC BY 4.0).
+4. Check by hand on desktop and phone that the Google Maps attribution and the satellite caption (userVisibleCopy) show whenever the Google layer is visible (tests use basemap=none). If basemap.js has to change, add a ?v= key for it and run the checks.
 
 เกณฑ์รับงาน
 
-- no request goes to Google tile hosts
-- attribution matches the licence of each layer
-- contract updated
+- contract records D-14 with the owner's words and date
+- licenseStatus stays not_verified; no API key, cache or download
+- no silent provider switch: Google failure shows Google unavailable and the EOX 2016 archive stays an explicit, labelled choice
 - manual check of the satellite view on desktop and phone recorded in the pull request
 
 คำสั่งตรวจ
@@ -1204,12 +1203,14 @@ python3 tools/handoff/build_handoff.py --check
 
 - put an API key in the page
 - drop attribution
-- use a keyed high-resolution provider in this static site
+- describe the Google layer as licensed
+- prefetch, cache or download Google tiles
+- switch imagery providers automatically
 
 พรอมป์สำหรับ agent
 
 ```text
-Task F-35 (D-14 decided 2026-10-22). Remove the inherited Google tile URL from basemap.js and make EOxCloudless 2025 from EOX the default satellite layer (exact layer name from the EOX WMTS capabilities, exact attribution from cloudless.eox.at/license-non-commercial), keep the 2016 image as the archive option, update reference/satellite-basemap-contract.json and .md and the LIC-01 rule text, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
+Task F-35 (D-14 decided 2026-10-22: keep the inherited Google satellite layer; basemap.js already does this). Do not change the provider or the default. Record D-14 (date, the owner's words, decided by the owner) in reference/satellite-basemap-contract.json and .md, keep licenseStatus not_verified and the no-silent-switch fallback rule, check by hand on desktop and phone that the Google Maps attribution and the satellite caption show with the Google layer, and record that check in the pull request. Never cache or download Google tiles. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
 ```
 
 ### X-50 · ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง
@@ -1663,21 +1664,20 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     "blocks": [
      "F-35"
     ],
-    "decision": "เลิกใช้ URL tile ของ Google และใช้ภาพดาวเทียมที่ใหม่และละเอียดที่สุดเท่าที่ใบอนุญาตเปิดให้ใช้ · เว็บ static นี้ใส่คีย์ไม่ได้ (KEY-01) จึงใช้ EOxCloudless 2025 ของ EOX เป็นค่าเริ่มต้น (Sentinel-2 ราว 10 ม. ใบอนุญาต CC BY-NC-SA 4.0 สำหรับงานไม่เชิงพาณิชย์) และคงภาพปี 2016 ไว้เป็นภาพย้อนหลัง · ภาพละเอียดสูงที่ต้องใช้บัญชีและคีย์ทำในระบบจริงของ CityChat",
-    "ownerWords": "ได้",
+    "decision": "ใช้ต่อ (ทางเลือกแรก): คง URL tile ของ Google ที่สืบทอดจาก CityChat เป็นแผนที่ดาวเทียมค่าเริ่มต้น แบบเดียวกับ CityChat และ CityMETER ใบอนุญาตยังไม่ยืนยัน (licenseStatus not_verified) · เว็บนี้ทำแบบนี้อยู่แล้วตาม reference/satellite-basemap-contract.json: แสดง Google Maps เป็นแหล่งภาพ ไม่ cache tile และไม่สลับแหล่งภาพเอง เมื่อ Google โหลดไม่ได้ ผู้ใช้เลือกภาพ EOX ปี 2016 ที่ติดป้ายไว้ได้เอง · งาน F-35 บันทึกคำตัดสินนี้ในสัญญา",
+    "ownerWords": "เลือกวิธีเดิม",
     "quoteLabel": "VERBATIM",
     "decidedBy": "เจ้าของงาน",
     "decidedAt": "2026-10-22",
-    "delegatedToAuthor": true,
+    "delegatedToAuthor": false,
     "rejectedAlternatives": [
-     "คง URL tile ของ Google: เจ้าของอนุมัติให้เลิก",
-     "EOX 2016 เป็นค่าเริ่มต้น (ข้อเสนอเดิม): เจ้าของขอภาพใหม่ล่าสุด",
-     "ผู้ให้บริการภาพละเอียดสูงที่ต้องใช้คีย์ เช่น Google Map Tiles API, Esri World Imagery, Mapbox Satellite: ใส่คีย์ในเว็บ static ไม่ได้ (KEY-01)",
-     "Copernicus Sentinel-2 รายไตรมาส (10 ม. ใช้เชิงพาณิชย์ได้): ต้องทำ tile และดูแลรอบปรับปรุงเอง จึงเก็บไว้เป็นทางสำรอง"
+     "ภาพ EOX ปี 2016 เป็นค่าเริ่มต้น (คำแนะนำเดิม): คงเป็นภาพย้อนหลังที่ผู้ใช้เลือกเอง",
+     "ผู้ให้บริการที่มีใบอนุญาต เช่น Google Map Tiles API ผ่าน backend ของระบบจริง: เจ้าของเลือกวิธีเดิม",
+     "EOxCloudless 2025 เป็นค่าเริ่มต้น (ฉบับแรกของ pull request นี้): เจ้าของเลือกวิธีเดิม"
     ],
-    "meaning": "งาน F-35 เริ่มได้ · คำว่า 'ได้' ตอบคำถามเรื่องใบอนุญาตในชุดพอร์ต (เลิกเรียก tile ของ Google โดยตรง) และวันเดียวกันเจ้าของถามต่อว่า 'อันนี้ใช้ของใหม่ล่าสุดละเอียดสุดที่หาได้ได้มั้ย' (VERBATIM) ผู้เขียนจึงเลือกแหล่งภาพ · เจ้าของยืนยันว่าการใช้ใน CityChat ไม่ใช่เชิงพาณิชย์ (เรื่อง FABDEM) ผู้เขียนใช้เหตุผลเดียวกันกับ EOX 2025 ที่ใช้ CC BY-NC-SA 4.0 เหมือนกัน (Inference)",
-    "openRisk": "ภาพ 10 ม. ไม่เห็นอาคารรายหลัง · ภาพปี 2025 ใช้ CC BY-NC-SA 4.0 (ไม่เชิงพาณิชย์ แบ่งปันแบบเดียวกัน) ต่างจากภาพปี 2016 ที่ใช้ CC BY 4.0",
-    "source": "cloudless.eox.at/license-non-commercial (ตรวจ 2026-10-22: ปี 2016 ใช้ CC BY 4.0 ปี 2018–2025 ใช้ CC BY-NC-SA 4.0); reference/satellite-basemap-contract.json"
+    "meaning": "เจ้าของตอบ 'เลือกวิธีเดิม' เมื่อถามว่าจะเปลี่ยนไปดึงภาพ Google ผ่าน Map Tiles API หรือไม่ (2026-10-22) ผู้เขียนตีความว่าใช้กับเว็บนี้ด้วย เพราะเว็บนี้ใช้ URL เดียวกันที่สืบทอดจาก CityChat (Inference) · ก่อนหน้านั้นวันเดียวกันเจ้าของตอบ 'ได้' ต่อข้อเสนอให้เลิกเรียก tile ของ Google โดยตรง คำตัดสินนี้แทนข้อนั้น",
+    "openRisk": "การดึง tile ของ Google ตรงไม่ผ่าน Map Tiles API จึงน่าจะอยู่นอกเงื่อนไขของ Google (Inference) Google ปิดหรือจำกัดได้ทุกเมื่อ · ห้ามเรียกว่ามีใบอนุญาต ห้าม cache หรือดาวน์โหลด tile",
+    "source": "คำตอบของเจ้าของ 2026-10-22 06:37 (+07) ในบทสนทนางานพอร์ตเข้า CityChat; landometer.com/v3/citymeter ใช้ mt1.google.com/vt/lyrs=y เช่นกัน (ตรวจ 2026-10-22); reference/satellite-basemap-contract.json (stateRules.fallback)"
    },
    {
     "id": "D-15",
@@ -3353,12 +3353,12 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    "short": "แผนที่ดาวเทียม",
    "phase": "phase-2",
    "priority": "medium",
-   "estimateDays": 1,
+   "estimateDays": 0.5,
    "ownerDecision": "D-14",
    "status": "todo",
    "title": {
-    "th": "เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14)",
-    "en": "Switch the satellite basemap to the newest licensed imagery (D-14)"
+    "th": "บันทึกคำตัดสิน D-14 ในสัญญาแผนที่ดาวเทียม (คงภาพ Google แบบเดิม)",
+    "en": "Record decision D-14 in the satellite basemap contract (keep the inherited Google layer)"
    },
    "problemRefs": [
     "P-11"
@@ -3381,16 +3381,15 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    ],
    "creates": [],
    "steps": [
-    "Remove the inherited Google tile URL from basemap.js.",
-    "Make EOxCloudless 2025 from EOX the default satellite layer: take the exact layer name from the EOX WMTS capabilities (use the latest year listed if 2025 is missing) and show the attribution exactly as cloudless.eox.at/license-non-commercial gives it for that year, with its links.",
-    "Keep the 2016 image as the archive option with its CC BY 4.0 attribution (vendor/satellite-eox-2016).",
-    "Update reference/satellite-basemap-contract.* (provider, layer, year, licence CC BY-NC-SA 4.0, licenceStatus, attribution) and the LIC-01 rule text, then rebuild the handoff.",
-    "Bump basemap.js with a ?v= key and run the checks; look at the satellite view by hand (tests use basemap=none)."
+    "Owner decision D-14 (2026-10-22): keep the inherited Google satellite layer. basemap.js already does this; do not change the provider, the tile URL or the default.",
+    "In reference/satellite-basemap-contract.json and .md, record D-14 (date, the owner's words, decided by the owner) next to reuseAuthorization; keep licenseStatus not_verified, officialGoogleMapTilesAPI false and downloadedOrCachedGoogleImagery false.",
+    "Keep stateRules.fallback as it is: no silent imagery-provider switch. When Google tiles fail the map says Google imagery is unavailable, and the user may choose the labelled 2016 EOX archive (vendor/satellite-eox-2016, CC BY 4.0).",
+    "Check by hand on desktop and phone that the Google Maps attribution and the satellite caption (userVisibleCopy) show whenever the Google layer is visible (tests use basemap=none). If basemap.js has to change, add a ?v= key for it and run the checks."
    ],
    "acceptance": [
-    "no request goes to Google tile hosts",
-    "attribution matches the licence of each layer",
-    "contract updated",
+    "contract records D-14 with the owner's words and date",
+    "licenseStatus stays not_verified; no API key, cache or download",
+    "no silent provider switch: Google failure shows Google unavailable and the EOX 2016 archive stays an explicit, labelled choice",
     "manual check of the satellite view on desktop and phone recorded in the pull request"
    ],
    "verify": [
@@ -3406,9 +3405,11 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    "doNot": [
     "put an API key in the page",
     "drop attribution",
-    "use a keyed high-resolution provider in this static site"
+    "describe the Google layer as licensed",
+    "prefetch, cache or download Google tiles",
+    "switch imagery providers automatically"
    ],
-   "prompt": "Task F-35 (D-14 decided 2026-10-22). Remove the inherited Google tile URL from basemap.js and make EOxCloudless 2025 from EOX the default satellite layer (exact layer name from the EOX WMTS capabilities, exact attribution from cloudless.eox.at/license-non-commercial), keep the 2016 image as the archive option, update reference/satellite-basemap-contract.json and .md and the LIC-01 rule text, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py."
+   "prompt": "Task F-35 (D-14 decided 2026-10-22: keep the inherited Google satellite layer; basemap.js already does this). Do not change the provider or the default. Record D-14 (date, the owner's words, decided by the owner) in reference/satellite-basemap-contract.json and .md, keep licenseStatus not_verified and the no-silent-switch fallback rule, check by hand on desktop and phone that the Google Maps attribution and the satellite caption show with the Google layer, and record that check in the pull request. Never cache or download Google tiles. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py."
   },
   {
    "id": "X-50",
