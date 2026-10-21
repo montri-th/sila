@@ -46,9 +46,6 @@ gantt
 | F-32 | บันทึกผลอนุมัติไอคอน 11 ตัว หรือเปลี่ยนตามที่เจ้าของเลือก | D-08 | S-00 |
 | F-33 | ซ่อนลิงก์ Street View ที่ไม่มีภาพ ด้วยไฟล์ตรวจล่วงหน้า | D-10 | S-00 |
 | F-34 | รีเฟรชข้อมูลภาษีด้วย ภ.ด.ส.3 ปีปัจจุบัน โดยรหัสเจ้าของคงเดิม | DR-01 | S-00 |
-| F-35 | เปลี่ยนแผนที่ดาวเทียมตามใบอนุญาตที่เจ้าของเลือก | D-14 | S-00 |
-| X-50 | ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง | D-12 | R-12, V-20 |
-| X-51 | แยกมุมมองสาธารณะกับมุมมองเจ้าหน้าที่ตามแบบที่อนุมัติ | D-12 | X-50 |
 
 ## เกณฑ์ผ่านแต่ละระยะ
 
@@ -57,7 +54,7 @@ gantt
 | G0 | phase-0 | S-00, S-03 | S-01, S-02, S-04, S-05, S-06 | sh qa/run-unit-checks.sh: 7 of 7 Node checks pass and expected figures current; run_matrix.py: 36 cases all ready, 0 page errors (same-origin HTTP errors included), 0 sideways scroll, 0 legend over the map, 8 of 8 flows; run_a11y.py: 34 views all ready, 0 violations; run_overflow.py: 0 bad runs of 112; publication-audit.py: pass with nothing in notScanned; gen-manifest.py --check: current; build_handoff.py --check: pass; compare_shots.py reports 0 changes when a folder is compared with itself | developer runs the checks; owner reviews the S-00 pull request |
 | G1 | phase-1 | R-10, R-11, R-12, V-20 | R-13, V-21 | sh qa/run-unit-checks.sh: 7 of 7 Node checks pass and expected figures current; run_matrix.py: 36 cases all ready, 0 page errors (same-origin HTTP errors included), 0 sideways scroll, 0 legend over the map, 8 of 8 flows; run_a11y.py: 34 views all ready, 0 violations; run_overflow.py: 0 bad runs of 112; publication-audit.py: pass with nothing in notScanned; gen-manifest.py --check: current; build_handoff.py --check: pass; screenshot comparison against main: 0 non-terrain images over threshold; app.js at most 1,200 lines; no new window globals except SilaApp; a performance receipt exists for the throttled phone profile | owner, after looking at the live site on a phone and a desktop |
 | G2 | phase-2 | — | F-30, F-31, F-32, F-33, F-34, F-35 | the task's owner decision is recorded with VERBATIM words and a date; public risk content has a human review receipt in qa/ (SAFE-01); publication audit passes; baseline criteria still hold | owner, per task |
-| G3 | phase-3 | X-50, X-51 | — | owner-approved design for officer access; role-based access and access logging tested; privacy review of every per-parcel and per-owner view; public site keeps aggregates only, if D-12 chose that | owner |
+| G3 | phase-3 | X-50 | — | owner-reviewed design of the production path: the CityChat port package, decisions recorded 2026-10-22 (D-12); officer login, roles and access logs are built and tested in CityChat, outside this repository; this public prototype keeps its per-parcel layers by owner decision D-12 | owner |
 
 ## งานทั้งหมด
 
@@ -81,9 +78,8 @@ gantt
 | F-32 | บันทึกผลอนุมัติไอคอน 11 ตัว หรือเปลี่ยนตามที่เจ้าของเลือก | phase-2 | low | 0.5 | S-00 | P-07 | D-08 | blocked |
 | F-33 | ซ่อนลิงก์ Street View ที่ไม่มีภาพ ด้วยไฟล์ตรวจล่วงหน้า | phase-2 | medium | 1 | S-00 | P-08 | D-10 | blocked |
 | F-34 | รีเฟรชข้อมูลภาษีด้วย ภ.ด.ส.3 ปีปัจจุบัน โดยรหัสเจ้าของคงเดิม | phase-2 | high | 2 | S-00 | P-09, P-10 | D-11 | blocked |
-| F-35 | เปลี่ยนแผนที่ดาวเทียมตามใบอนุญาตที่เจ้าของเลือก | phase-2 | medium | 1 | S-00 | P-11 | D-14 | blocked |
-| X-50 | ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง | phase-3 | medium | 3 | R-12, V-20 | P-12, P-14 | D-12 | blocked |
-| X-51 | แยกมุมมองสาธารณะกับมุมมองเจ้าหน้าที่ตามแบบที่อนุมัติ | phase-3 | medium | 10 | X-50 | P-12, P-14 | D-12 | blocked |
+| F-35 | เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14) | phase-2 | medium | 1 | S-00 | P-11 | D-14 | todo |
+| X-50 | ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง | phase-3 | medium | 3 | — | P-12, P-14 | D-12 | done |
 
 ## วิธีใช้กับ vibe coding
 
@@ -106,12 +102,12 @@ gantt
 | D-06 | open | เผยแพร่ชั้นที่ลุ่มปิดล้อม (417 แอ่งจาก FABDEM) บนเว็บสาธารณะหรือไม่ | เผยแพร่หลังดูภาพ พร้อมข้อความกำกับและบันทึกการตรวจ / เก็บไว้ใช้ภายใน (มุมมองเจ้าหน้าที่เมื่อมีระบบเข้าสู่ระบบ) / ไม่ใช้ | ดูร่างก่อน (สร้างใหม่ได้ด้วย tools/flood/) ถ้าเผยแพร่ ให้คงข้อความในคำอธิบายสีว่า 'บอกว่าน้ำขังได้ตรงไหน ไม่ใช่การพยากรณ์น้ำท่วม' และบันทึกการตรวจไว้ใน qa/ | F-30 |
 | D-07 | open | เผยแพร่ภาพจำลองระดับน้ำ 10–50 ซม. รายจุดจากรายงานศึกษาหรือไม่ | เผยแพร่รายจุดพร้อมวิธีและข้อจำกัดของรายงาน / เก็บไว้ในรายงานศึกษาเท่านั้น | เก็บไว้ในรายงานก่อน จนกว่าจะมีตำแหน่งที่ตรวจในพื้นที่ของจุดตัวแทน (DR-05) | F-31 |
 | D-08 | open | อนุมัติไอคอนใหม่ 11 ตัวของรุ่น 2.0 หรือไม่ | อนุมัติทั้งหมด / อนุมัติบางตัวและเปลี่ยนที่เหลือ / เปลี่ยนทั้งหมด | ดูบนเว็บจริงทั้งพื้นสว่างและมืด แล้วอนุมัติหรือระบุตัวที่ต้องการแทน | F-32 |
-| D-09 | open | ใบอนุญาต amCharts: ใช้แบบฟรีที่ต้องคงโลโก้ ซื้อแบบเชิงพาณิชย์ หรือเปลี่ยนเป็นกราฟของเราเอง | ใช้แบบฟรีและคงโลโก้ / ซื้อใบอนุญาตเชิงพาณิชย์ / เปลี่ยนเป็นกราฟ SVG ของเราเอง | ใช้แบบฟรีสำหรับต้นแบบ และตัดสินก่อนนำไปใช้เชิงพาณิชย์ | — |
+| D-09 | decided | ใบอนุญาต amCharts: ใช้แบบฟรีที่ต้องคงโลโก้ ซื้อแบบเชิงพาณิชย์ หรือเปลี่ยนเป็นกราฟของเราเอง | ใช้แบบฟรีและคงโลโก้ / ซื้อใบอนุญาตเชิงพาณิชย์ / เปลี่ยนเป็นกราฟ SVG ของเราเอง | ใช้แบบฟรีสำหรับต้นแบบ และตัดสินก่อนนำไปใช้เชิงพาณิชย์ | — |
 | D-10 | open | ตรวจล่วงหน้าว่าตรงไหนมีภาพ Street View ด้วยคีย์ Google Maps หรือไม่ | รัน tools/streetview-coverage.py หนึ่งครั้งโดยใส่คีย์ในตัวแปรสภาพแวดล้อม / ปล่อยให้ไม่รู้ต่อไป (พฤติกรรมปัจจุบัน) | รันหนึ่งครั้ง เครื่องมือขอเฉพาะข้อมูลว่ามีภาพหรือไม่ ไม่ดึงภาพ ตรวจเงื่อนไขล่าสุดของ Google ก่อนรัน | F-33 |
 | D-11 | decided | เก็บ pipeline ข้อมูลและตารางรหัสเจ้าของพร้อม salt ไว้ที่ใด | โฟลเดอร์ Google Drive ที่จำกัดสิทธิ์ (เจ้าของคนเดียว) / Git repository ส่วนตัว / เครื่องคอมพิวเตอร์ของเจ้าของงาน | ที่ที่เจ้าของเท่านั้นเข้าได้ ไม่ใช่ repository สาธารณะนี้ และเขียนไว้ว่าใครมีสิทธิ์รีเฟรชข้อมูล | F-34 |
-| D-12 | open | เส้นทางสู่ระบบจริง: คงเว็บสาธารณะแบบนี้ หรือย้ายข้อมูลรายแปลงและรายเจ้าของไปหลังการเข้าสู่ระบบของเจ้าหน้าที่ | คงต้นแบบสาธารณะแบบนี้ / สาธารณะเห็นยอดรวม เจ้าหน้าที่เข้าสู่ระบบเพื่อดูรายแปลงและรายเจ้าของ (สิทธิ์ตามบทบาท และบันทึกการเข้าถึง) / เว็บสำหรับเจ้าหน้าที่เท่านั้น | สาธารณะเห็นยอดรวม เจ้าหน้าที่เข้าสู่ระบบ ก่อนขยายการใช้ ตาม CityChat Product Brief v4 Appendix C | X-50, X-51 |
-| D-13 | open | งานภาษีอยู่ใต้ป้ายผลิตภัณฑ์ใด | คงชื่อ 'CityChat · CityMETER for Organization' / ระบุเป็น Land/property tools บนฐาน CityMETER / เจ้าของแก้ MBB section 5.1 หรือ CityChat Product Brief | ให้เจ้าของตัดสิน ระหว่างนี้เรียกไซต์ว่า 'แผนที่งานเจ้าหน้าที่' และไม่นำการประมาณการภาษีไปพูดเป็นความสามารถของ CityChat ในงานอื่น | — |
-| D-14 | open | แผนที่ดาวเทียม: ใช้ URL tile ของ Google ที่สืบทอดจาก CityChat ต่อ หรือเปลี่ยนเป็นแหล่งที่มีใบอนุญาตชัดเจน | ใช้ต่อ (ยังไม่ยืนยันใบอนุญาต) / ตั้งค่าเริ่มต้นเป็นภาพ EOX ปี 2016 ที่มีอยู่แล้ว (CC BY 4.0 ละเอียดน้อยกว่า) / ผู้ให้บริการที่มีใบอนุญาตผ่าน backend ของระบบจริง (ไม่มีคีย์ในหน้าเว็บ) | ตั้งค่าเริ่มต้นเป็นภาพ EOX ตอนนี้ แล้ววางแผนผู้ให้บริการที่มีใบอนุญาตพร้อมเส้นทางสู่ระบบจริง | F-35 |
+| D-12 | decided | เส้นทางสู่ระบบจริง: คงเว็บสาธารณะแบบนี้ หรือย้ายข้อมูลรายแปลงและรายเจ้าของไปหลังการเข้าสู่ระบบของเจ้าหน้าที่ | คงต้นแบบสาธารณะแบบนี้ / สาธารณะเห็นยอดรวม เจ้าหน้าที่เข้าสู่ระบบเพื่อดูรายแปลงและรายเจ้าของ (สิทธิ์ตามบทบาท และบันทึกการเข้าถึง) / เว็บสำหรับเจ้าหน้าที่เท่านั้น | สาธารณะเห็นยอดรวม เจ้าหน้าที่เข้าสู่ระบบ ก่อนขยายการใช้ ตาม CityChat Product Brief v4 Appendix C | X-50 |
+| D-13 | decided | งานภาษีอยู่ใต้ป้ายผลิตภัณฑ์ใด | คงชื่อ 'CityChat · CityMETER for Organization' / ระบุเป็น Land/property tools บนฐาน CityMETER / เจ้าของแก้ MBB section 5.1 หรือ CityChat Product Brief | ให้เจ้าของตัดสิน ระหว่างนี้เรียกไซต์ว่า 'แผนที่งานเจ้าหน้าที่' และไม่นำการประมาณการภาษีไปพูดเป็นความสามารถของ CityChat ในงานอื่น | — |
+| D-14 | decided | แผนที่ดาวเทียม: ใช้ URL tile ของ Google ที่สืบทอดจาก CityChat ต่อ หรือเปลี่ยนเป็นแหล่งที่มีใบอนุญาตชัดเจน | ใช้ต่อ (ยังไม่ยืนยันใบอนุญาต) / ตั้งค่าเริ่มต้นเป็นภาพ EOX ปี 2016 ที่มีอยู่แล้ว (CC BY 4.0 ละเอียดน้อยกว่า) / ผู้ให้บริการที่มีใบอนุญาตผ่าน backend ของระบบจริง (ไม่มีคีย์ในหน้าเว็บ) | ตั้งค่าเริ่มต้นเป็นภาพ EOX ตอนนี้ แล้ววางแผนผู้ให้บริการที่มีใบอนุญาตพร้อมเส้นทางสู่ระบบจริง | F-35 |
 | D-15 | open | เปิด GitHub Actions ตรวจ pull request หรือไม่ | เปิด: ตรวจอย่างเดียว ไม่ deploy ไม่มี secret / ไม่เปิด | เปิด | S-01 |
 | D-16 | open | ยืนยันสถานะ Master Brand Brief v0.5.3 | อนุมัติแล้ว: บันทึกการอนุมัติใน section 0.3 / ใช้เป็นแนวทางฉบับร่างเท่านั้น | บันทึกการอนุมัติ เพื่อให้ลำดับอำนาจมีหลักฐานในเอกสาร | — |
 | D-17 | decided | เผยแพร่ชุดส่งต่องานรุ่น 2.0.2 ขึ้น montri-th/sila อย่างไร | push ขึ้น main ตรง แล้วตรวจ Pages และไฟล์ทุกไฟล์กับ manifest / push ไป branch แล้วเปิด pull request ให้เจ้าของตรวจและ merge (ตาม GIT-01) / ยังไม่เผยแพร่ | pull request: เป็นข้อความสาธารณะชุดแรกของแพ็กเกจ เจ้าของได้ดู diff ก่อนขึ้นเว็บ และตรงกับ GIT-01 ที่แพ็กเกจนี้วางไว้ให้ทุกงานถัดไป | — |
@@ -170,6 +166,16 @@ gantt
 - ความเสี่ยงที่เหลือ: ข้อ 1 รอข้อมูล (DR-01); ข้อ 12 รอ D-06; ข้อ 13 รอ D-10
 - ที่มา: บทสนทนางาน 2026-10-20 (สรุปโดยผู้เขียน ไม่ใช่ถ้อยคำของเจ้าของ)
 
+**D-09 · ใบอนุญาต amCharts: ใช้แบบฟรีที่ต้องคงโลโก้ ซื้อแบบเชิงพาณิชย์ หรือเปลี่ยนเป็นกราฟของเราเอง**
+
+- คำของเจ้าของ (VERBATIM): "ได้"
+- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ไม่
+- สิ่งที่เปลี่ยน: ใช้ amCharts 5 แบบฟรีและคงโลโก้ amCharts (ทางเลือกแรก) ทั้งในต้นแบบนี้และในระบบจริงของ CityChat · ใบอนุญาตแบบฟรีใน vendor/amcharts5/LICENSE.md ให้ใช้ในงานเชิงพาณิชย์ได้ ถ้าไม่ซ่อนหรือแก้ลิงก์แบรนด์
+- ผลในโค้ดหรือเอกสาร: vendor/amcharts5 และ sila-charts.js คงเดิม โลโก้ amCharts ต้องเห็นในทุกกราฟ
+- ทางเลือกที่ไม่ใช้: ซื้อใบอนุญาตเชิงพาณิชย์: จำเป็นเฉพาะเมื่อจะเอาโลโก้ออก; เขียนกราฟ SVG เอง: งานมากกว่าแต่ได้ภาพเท่าเดิม
+- ความเสี่ยงที่เหลือ: ถ้าภายหลังต้องเอาโลโก้ออก ต้องซื้อใบอนุญาตเชิงพาณิชย์ ซึ่งเป็นคำตัดสินใหม่
+- ที่มา: คำตอบ 'ได้' ของเจ้าของต่อคำถามเรื่องใบอนุญาตภาพดาวเทียม amCharts และ FABDEM ในชุดส่งต่องานพอร์ตหน้าเจ้าหน้าที่เข้า CityChat (เอกสารภายใน) 2026-10-22 และคำตอบ 'ใช่' ให้บันทึกคำตัดสินนี้ใน repository นี้ วันเดียวกัน; vendor/amcharts5/LICENSE.md
+
 **D-11 · เก็บ pipeline ข้อมูลและตารางรหัสเจ้าของพร้อม salt ไว้ที่ใด**
 
 - คำของเจ้าของ (RECONSTRUCTED): ไม่มีถ้อยคำตรงในเอกสารนี้ (ดูที่มา)
@@ -179,6 +185,36 @@ gantt
 - ทางเลือกที่ไม่ใช้: โฟลเดอร์ Google Drive ที่จำกัดสิทธิ์; Git repository ส่วนตัว
 - ความเสี่ยงที่เหลือ: มีสำเนาเดียวบนเครื่องเดียว ถ้าหายรหัสเจ้าของจะไม่ต่อเนื่อง: ควรทำสำเนาสำรองแบบเข้ารหัส และไม่ sync โฟลเดอร์นี้ขึ้นบริการ cloud ที่แชร์
 - ที่มา: คำตอบในแบบถาม บทสนทนางาน 2026-10-21 (ถ้อยคำตรงระบุตำแหน่งที่เก็บ จึงอยู่ในบันทึกส่วนตัวของเจ้าของ ไม่เผยแพร่ใน repository สาธารณะ); P-10
+
+**D-12 · เส้นทางสู่ระบบจริง: คงเว็บสาธารณะแบบนี้ หรือย้ายข้อมูลรายแปลงและรายเจ้าของไปหลังการเข้าสู่ระบบของเจ้าหน้าที่**
+
+- คำของเจ้าของ (VERBATIM): "คงไว้"
+- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ไม่
+- สิ่งที่เปลี่ยน: คงเว็บต้นแบบสาธารณะนี้ตามเดิม (ทางเลือกแรก) รวมข้อมูลภาษีรายแปลงที่เผยแพร่ตาม D-03 · ระบบสำหรับเจ้าหน้าที่ทำในระบบ CityChat ซึ่งข้อมูลภาษีรายแปลงเห็นได้เฉพาะเจ้าหน้าที่ ทม.ศิลา 1+4 คนที่เจ้าของระบุ พร้อมบันทึกการเข้าถึง
+- ผลในโค้ดหรือเอกสาร: งาน X-51 (เอาข้อมูลรายแปลงออกจากเว็บสาธารณะ) ออกจากแผน · งาน X-50 เสร็จ: แบบเส้นทางสู่ระบบจริงคือชุดส่งต่องานพอร์ตเข้า CityChat ซึ่งเจ้าของตรวจและตัดสินแล้ว และเก็บนอก repository สาธารณะนี้เพราะมีรายละเอียดของระบบจริง · ผู้เห็นข้อมูลภาษีในระบบจริงมาจากคำตอบ 'เจ้าหน้าที่ 1+4 คน' ของเจ้าของ (VERBATIM, 2026-10-22)
+- ทางเลือกที่ไม่ใช้: สาธารณะเห็นยอดรวม และย้ายข้อมูลรายแปลงไปหลังการเข้าสู่ระบบ (ข้อเสนอของผู้เขียน); เว็บสำหรับเจ้าหน้าที่เท่านั้น
+- ความเสี่ยงที่เหลือ: ข้อมูลรายแปลงบนเว็บสาธารณะอาจสืบกลับถึงเจ้าของได้ผ่านข้อมูลที่ดิน (Inference, P-12)
+- ที่มา: คำตอบของเจ้าของ 2026-10-22 ต่อคำถาม 'จะให้ปิดชั้นรายแปลงให้เหลือแค่ยอดรวม หรือคงไว้เป็นต้นแบบต่อ'; P-12, P-14
+
+**D-13 · งานภาษีอยู่ใต้ป้ายผลิตภัณฑ์ใด**
+
+- คำของเจ้าของ (VERBATIM): "แบ่ง 5 งาน ตาม V2.0.2 อยู่ใต้งานภาษี"
+- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ไม่
+- สิ่งที่เปลี่ยน: คงชื่อ 'CityChat · CityMETER for Organization' และให้งานภาษีเป็นหนึ่งใน 5 งานแบบรุ่น 2.0.2 (ทางเลือกแรก) · เจ้าของสั่งให้บันทึกเรื่องนี้เป็น owner amendment ของ MBB v0.5.3 section 5.1 (ทางเลือกที่สาม)
+- ผลในโค้ดหรือเอกสาร: ไซต์คงชื่อและ 5 งานเดิม ไม่ต้องแก้โค้ด · ตัวเลขภาษียังเป็นการประมาณเพื่อวางแผน (DATA-04) และไม่อ้างเป็นความสามารถของ Landometer ทั้งเครือ (BRAND-01) · เมื่อถามว่าจะบันทึกเป็น owner amendment ใน MBB หรือไม่ เจ้าของตอบ 'บันทึกเลย' (VERBATIM, 2026-10-22)
+- ทางเลือกที่ไม่ใช้: ระบุเป็น Land/property tools บนฐาน CityMETER
+- ความเสี่ยงที่เหลือ: จนกว่า owner amendment จะอยู่ในไฟล์ MBB เอกสารสองฉบับยังเขียนไม่ตรงกัน (C-02 ใน PRODUCT_BRIEF)
+- ที่มา: คำตอบของเจ้าของ 2026-10-22 ต่อคำถาม 'งานภาษีอยู่ใต้ผลิตภัณฑ์ใด' ในชุดส่งต่องานพอร์ตเข้า CityChat; P-13
+
+**D-14 · แผนที่ดาวเทียม: ใช้ URL tile ของ Google ที่สืบทอดจาก CityChat ต่อ หรือเปลี่ยนเป็นแหล่งที่มีใบอนุญาตชัดเจน**
+
+- คำของเจ้าของ (VERBATIM): "ได้"
+- เมื่อ: 2026-10-22 · ผู้ตัดสิน: เจ้าของงาน · มอบให้ผู้เขียนเลือก: ใช่
+- สิ่งที่เปลี่ยน: เลิกใช้ URL tile ของ Google และใช้ภาพดาวเทียมที่ใหม่และละเอียดที่สุดเท่าที่ใบอนุญาตเปิดให้ใช้ · เว็บ static นี้ใส่คีย์ไม่ได้ (KEY-01) จึงใช้ EOxCloudless 2025 ของ EOX เป็นค่าเริ่มต้น (Sentinel-2 ราว 10 ม. ใบอนุญาต CC BY-NC-SA 4.0 สำหรับงานไม่เชิงพาณิชย์) และคงภาพปี 2016 ไว้เป็นภาพย้อนหลัง · ภาพละเอียดสูงที่ต้องใช้บัญชีและคีย์ทำในระบบจริงของ CityChat
+- ผลในโค้ดหรือเอกสาร: งาน F-35 เริ่มได้ · คำว่า 'ได้' ตอบคำถามเรื่องใบอนุญาตในชุดพอร์ต (เลิกเรียก tile ของ Google โดยตรง) และวันเดียวกันเจ้าของถามต่อว่า 'อันนี้ใช้ของใหม่ล่าสุดละเอียดสุดที่หาได้ได้มั้ย' (VERBATIM) ผู้เขียนจึงเลือกแหล่งภาพ · เจ้าของยืนยันว่าการใช้ใน CityChat ไม่ใช่เชิงพาณิชย์ (เรื่อง FABDEM) ผู้เขียนใช้เหตุผลเดียวกันกับ EOX 2025 ที่ใช้ CC BY-NC-SA 4.0 เหมือนกัน (Inference)
+- ทางเลือกที่ไม่ใช้: คง URL tile ของ Google: เจ้าของอนุมัติให้เลิก; EOX 2016 เป็นค่าเริ่มต้น (ข้อเสนอเดิม): เจ้าของขอภาพใหม่ล่าสุด; ผู้ให้บริการภาพละเอียดสูงที่ต้องใช้คีย์ เช่น Google Map Tiles API, Esri World Imagery, Mapbox Satellite: ใส่คีย์ในเว็บ static ไม่ได้ (KEY-01); Copernicus Sentinel-2 รายไตรมาส (10 ม. ใช้เชิงพาณิชย์ได้): ต้องทำ tile และดูแลรอบปรับปรุงเอง จึงเก็บไว้เป็นทางสำรอง
+- ความเสี่ยงที่เหลือ: ภาพ 10 ม. ไม่เห็นอาคารรายหลัง · ภาพปี 2025 ใช้ CC BY-NC-SA 4.0 (ไม่เชิงพาณิชย์ แบ่งปันแบบเดียวกัน) ต่างจากภาพปี 2016 ที่ใช้ CC BY 4.0
+- ที่มา: cloudless.eox.at/license-non-commercial (ตรวจ 2026-10-22: ปี 2016 ใช้ CC BY 4.0 ปี 2018–2025 ใช้ CC BY-NC-SA 4.0); reference/satellite-basemap-contract.json
 
 **D-17 · เผยแพร่ชุดส่งต่องานรุ่น 2.0.2 ขึ้น montri-th/sila อย่างไร**
 
@@ -1125,26 +1161,29 @@ python3 tools/handoff/build_handoff.py --check
 Task F-34 (after the DR-01 exports arrive; D-11 decided that the private archive stays on the owner's computer). Working only where the owner keeps that archive, run the private pipeline on the current-year PDS 3/4/7 exports with the existing owner-code codebook, audit the outputs with tools/publication-audit.py before they enter the repository, then update data/parcel-tax.json, qa/expected-figures.json and the figures quoted in README.md and reference/tax-map-method.md with the new as-of date. Never commit raw exports, link tables, the codebook or the salt. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
 ```
 
-### F-35 · เปลี่ยนแผนที่ดาวเทียมตามใบอนุญาตที่เจ้าของเลือก
+### F-35 · เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14)
 
-Switch the satellite basemap to the licensed option the owner chooses
+Switch the satellite basemap to the newest licensed imagery (D-14)
 
 | ระยะ | สำคัญ | ประมาณ (Hypothesis) | คำตัดสิน | สถานะ | ขึ้นกับ | แก้ปัญหา | ช่องทาง |
 |---|---|---|---|---|---|---|---|
-| phase-2 | medium | 1 วัน | D-14 | blocked | S-00 | P-11 | public-site |
+| phase-2 | medium | 1 วัน | D-14 | todo | S-00 | P-11 | public-site |
 
 - อ่านก่อน: reference/satellite-basemap-contract.md, basemap.js
 - ไฟล์ที่เกี่ยวข้อง: basemap.js, reference/satellite-basemap-contract.json, reference/satellite-basemap-contract.md, vendor/satellite-eox-2016
 
 ขั้นตอน
 
-1. Implement the D-14 option in basemap.js (for example default satellite = EOX 2016 archive) with its exact attribution.
-2. Update reference/satellite-basemap-contract.* (provider, licence, licenceStatus, attribution).
-3. Bump basemap.js with a ?v= key and run the checks; look at the satellite view by hand (tests use basemap=none).
+1. Remove the inherited Google tile URL from basemap.js.
+2. Make EOxCloudless 2025 from EOX the default satellite layer: take the exact layer name from the EOX WMTS capabilities (use the latest year listed if 2025 is missing) and show the attribution exactly as cloudless.eox.at/license-non-commercial gives it for that year, with its links.
+3. Keep the 2016 image as the archive option with its CC BY 4.0 attribution (vendor/satellite-eox-2016).
+4. Update reference/satellite-basemap-contract.* (provider, layer, year, licence CC BY-NC-SA 4.0, licenceStatus, attribution) and the LIC-01 rule text, then rebuild the handoff.
+5. Bump basemap.js with a ?v= key and run the checks; look at the satellite view by hand (tests use basemap=none).
 
 เกณฑ์รับงาน
 
-- attribution matches the licence
+- no request goes to Google tile hosts
+- attribution matches the licence of each layer
 - contract updated
 - manual check of the satellite view on desktop and phone recorded in the pull request
 
@@ -1165,11 +1204,12 @@ python3 tools/handoff/build_handoff.py --check
 
 - put an API key in the page
 - drop attribution
+- use a keyed high-resolution provider in this static site
 
 พรอมป์สำหรับ agent
 
 ```text
-Task F-35 (after owner decision D-14). Change the satellite basemap in basemap.js to the option the owner chose, with exact attribution, update reference/satellite-basemap-contract.json and .md, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
+Task F-35 (D-14 decided 2026-10-22). Remove the inherited Google tile URL from basemap.js and make EOxCloudless 2025 from EOX the default satellite layer (exact layer name from the EOX WMTS capabilities, exact attribution from cloudless.eox.at/license-non-commercial), keep the 2016 image as the archive option, update reference/satellite-basemap-contract.json and .md and the LIC-01 rule text, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
 ```
 
 ### X-50 · ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง
@@ -1178,17 +1218,16 @@ Design the production path: officer login, role-based access and access log
 
 | ระยะ | สำคัญ | ประมาณ (Hypothesis) | คำตัดสิน | สถานะ | ขึ้นกับ | แก้ปัญหา | ช่องทาง |
 |---|---|---|---|---|---|---|---|
-| phase-3 | medium | 3 วัน | D-12 | blocked | R-12, V-20 | P-12, P-14 | public-site, private-pipeline |
+| phase-3 | medium | 3 วัน | D-12 | done | — | P-12, P-14 | public-site, private-pipeline |
 
 - อ่านก่อน: reference/public-summary-contract.md, docs/handoff/PRODUCT_BRIEF.md, README.md
 - ไฟล์ที่เกี่ยวข้อง: reference/public-summary-contract.md, data/catalog.json, README.md
 
 ขั้นตอน
 
-1. Inventory every view and file that is per-parcel, per-owner or per-record versus aggregate.
-2. Propose options: static public aggregates plus an authenticated officer service (API or vector tiles), tenant and entitlement in the production CityChat platform, roles, access logging, privacy review, hosting.
-3. List the access needed (production repository) and the decisions the owner must take; no prices or contracts in public files.
-4. Write the design note where D-12 says (a private location if it holds security details).
+1. Done 2026-10-22 outside this repository: the production-path design is the CityChat port package for the officer views (internal, because it holds production details).
+2. The owner reviewed it and decided D-12: this public prototype stays as it is, and officer login, roles, access logs and the 1 + 4 tax accounts are built in CityChat.
+3. Nothing in this repository changes for this task.
 
 เกณฑ์รับงาน
 
@@ -1204,57 +1243,11 @@ python3 tools/handoff/build_handoff.py --check
 ห้าม
 
 - put endpoints, keys or security details in this public repository
-- start implementation before the owner approves the design
 
 พรอมป์สำหรับ agent
 
 ```text
-Task X-50 (after D-12; best after gate G1). Write a design note for the production path of the Sila officer views: what stays public (aggregates) and what moves behind officer login, how roles and access logging work, how data reaches an authenticated service (API or vector tiles) and how it fits the production CityChat platform. Inventory per-parcel and per-owner views first. Keep security details out of this public repository; record the owner's decision in tools/handoff/plan_data.py and rebuild the handoff.
-```
-
-### X-51 · แยกมุมมองสาธารณะกับมุมมองเจ้าหน้าที่ตามแบบที่อนุมัติ
-
-Split the public and officer views as designed
-
-| ระยะ | สำคัญ | ประมาณ (Hypothesis) | คำตัดสิน | สถานะ | ขึ้นกับ | แก้ปัญหา | ช่องทาง |
-|---|---|---|---|---|---|---|---|
-| phase-3 | medium | 10 วัน | D-12 | blocked | X-50 | P-12, P-14 | public-site, private-pipeline |
-
-- อ่านก่อน: docs/handoff/PRODUCT_BRIEF.md, reference/public-summary-contract.md
-- ไฟล์ที่เกี่ยวข้อง: app.js, data/parcel-tax.json, data/parcels.geojson, index.html
-
-ขั้นตอน
-
-1. Build the officer path from the approved design first and prove login, roles and access logs.
-2. Only then remove per-parcel and per-owner files and views from the public site, keeping aggregates.
-3. Say plainly in the pull request and the owner's design note that removed files stay in public git history (GIT-01 forbids rewriting it): removal stops serving them, it does not unpublish them.
-4. Re-run every check; verify the live site no longer serves the removed files.
-
-เกณฑ์รับงาน
-
-- officer views work behind login with access logs
-- public site serves aggregates only
-- verify-live and audit pass
-- the pull request states that git history keeps the removed files
-
-คำสั่งตรวจ
-
-```sh
-python3 tools/verify-live.py --base-url https://montri-th.github.io/sila/ --output release-evidence/live.json
-sh qa/run-unit-checks.sh
-python3 tools/publication-audit.py --since origin/main
-python3 tools/handoff/build_handoff.py --check
-```
-
-ห้าม
-
-- remove public files before the officer path works
-- keep secrets in the static site
-
-พรอมป์สำหรับ agent
-
-```text
-Task X-51 (after X-50 is approved). Implement the approved split: deliver and test the authenticated officer path with roles and access logs first, then remove per-parcel and per-owner data and views from the public static site so it serves aggregates only, and verify the live site byte by byte. State that the removed files remain in public git history. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py.
+Task X-50 is done (2026-10-22): the production path is designed in the internal CityChat port package and decided by the owner (D-12). Do not start work here; changes to the officer path belong to the CityChat production repository.
 ```
 
 ## ส่วนที่เครื่องอ่าน
@@ -1533,7 +1526,7 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    },
    {
     "id": "D-09",
-    "status": "open",
+    "status": "decided",
     "question": "ใบอนุญาต amCharts: ใช้แบบฟรีที่ต้องคงโลโก้ ซื้อแบบเชิงพาณิชย์ หรือเปลี่ยนเป็นกราฟของเราเอง",
     "options": [
      "ใช้แบบฟรีและคงโลโก้",
@@ -1542,16 +1535,19 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     ],
     "recommendation": "ใช้แบบฟรีสำหรับต้นแบบ และตัดสินก่อนนำไปใช้เชิงพาณิชย์",
     "blocks": [],
-    "decision": "",
-    "ownerWords": "",
-    "quoteLabel": "",
-    "decidedBy": "",
-    "decidedAt": "",
+    "decision": "ใช้ amCharts 5 แบบฟรีและคงโลโก้ amCharts (ทางเลือกแรก) ทั้งในต้นแบบนี้และในระบบจริงของ CityChat · ใบอนุญาตแบบฟรีใน vendor/amcharts5/LICENSE.md ให้ใช้ในงานเชิงพาณิชย์ได้ ถ้าไม่ซ่อนหรือแก้ลิงก์แบรนด์",
+    "ownerWords": "ได้",
+    "quoteLabel": "VERBATIM",
+    "decidedBy": "เจ้าของงาน",
+    "decidedAt": "2026-10-22",
     "delegatedToAuthor": false,
-    "rejectedAlternatives": [],
-    "meaning": "",
-    "openRisk": "เงื่อนไขใบอนุญาตเมื่อใช้เชิงพาณิชย์",
-    "source": "vendor/amcharts5/LICENSE.md"
+    "rejectedAlternatives": [
+     "ซื้อใบอนุญาตเชิงพาณิชย์: จำเป็นเฉพาะเมื่อจะเอาโลโก้ออก",
+     "เขียนกราฟ SVG เอง: งานมากกว่าแต่ได้ภาพเท่าเดิม"
+    ],
+    "meaning": "vendor/amcharts5 และ sila-charts.js คงเดิม โลโก้ amCharts ต้องเห็นในทุกกราฟ",
+    "openRisk": "ถ้าภายหลังต้องเอาโลโก้ออก ต้องซื้อใบอนุญาตเชิงพาณิชย์ ซึ่งเป็นคำตัดสินใหม่",
+    "source": "คำตอบ 'ได้' ของเจ้าของต่อคำถามเรื่องใบอนุญาตภาพดาวเทียม amCharts และ FABDEM ในชุดส่งต่องานพอร์ตหน้าเจ้าหน้าที่เข้า CityChat (เอกสารภายใน) 2026-10-22 และคำตอบ 'ใช่' ให้บันทึกคำตัดสินนี้ใน repository นี้ วันเดียวกัน; vendor/amcharts5/LICENSE.md"
    },
    {
     "id": "D-10",
@@ -1605,7 +1601,7 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    },
    {
     "id": "D-12",
-    "status": "open",
+    "status": "decided",
     "question": "เส้นทางสู่ระบบจริง: คงเว็บสาธารณะแบบนี้ หรือย้ายข้อมูลรายแปลงและรายเจ้าของไปหลังการเข้าสู่ระบบของเจ้าหน้าที่",
     "options": [
      "คงต้นแบบสาธารณะแบบนี้",
@@ -1614,23 +1610,25 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     ],
     "recommendation": "สาธารณะเห็นยอดรวม เจ้าหน้าที่เข้าสู่ระบบ ก่อนขยายการใช้ ตาม CityChat Product Brief v4 Appendix C",
     "blocks": [
-     "X-50",
-     "X-51"
+     "X-50"
     ],
-    "decision": "",
-    "ownerWords": "",
-    "quoteLabel": "",
-    "decidedBy": "",
-    "decidedAt": "",
+    "decision": "คงเว็บต้นแบบสาธารณะนี้ตามเดิม (ทางเลือกแรก) รวมข้อมูลภาษีรายแปลงที่เผยแพร่ตาม D-03 · ระบบสำหรับเจ้าหน้าที่ทำในระบบ CityChat ซึ่งข้อมูลภาษีรายแปลงเห็นได้เฉพาะเจ้าหน้าที่ ทม.ศิลา 1+4 คนที่เจ้าของระบุ พร้อมบันทึกการเข้าถึง",
+    "ownerWords": "คงไว้",
+    "quoteLabel": "VERBATIM",
+    "decidedBy": "เจ้าของงาน",
+    "decidedAt": "2026-10-22",
     "delegatedToAuthor": false,
-    "rejectedAlternatives": [],
-    "meaning": "",
-    "openRisk": "ข้อมูลรายแปลงบนหน้าเว็บสาธารณะอาจสืบกลับถึงเจ้าของได้ผ่านข้อมูลที่ดิน (Inference)",
-    "source": "P-12, P-14"
+    "rejectedAlternatives": [
+     "สาธารณะเห็นยอดรวม และย้ายข้อมูลรายแปลงไปหลังการเข้าสู่ระบบ (ข้อเสนอของผู้เขียน)",
+     "เว็บสำหรับเจ้าหน้าที่เท่านั้น"
+    ],
+    "meaning": "งาน X-51 (เอาข้อมูลรายแปลงออกจากเว็บสาธารณะ) ออกจากแผน · งาน X-50 เสร็จ: แบบเส้นทางสู่ระบบจริงคือชุดส่งต่องานพอร์ตเข้า CityChat ซึ่งเจ้าของตรวจและตัดสินแล้ว และเก็บนอก repository สาธารณะนี้เพราะมีรายละเอียดของระบบจริง · ผู้เห็นข้อมูลภาษีในระบบจริงมาจากคำตอบ 'เจ้าหน้าที่ 1+4 คน' ของเจ้าของ (VERBATIM, 2026-10-22)",
+    "openRisk": "ข้อมูลรายแปลงบนเว็บสาธารณะอาจสืบกลับถึงเจ้าของได้ผ่านข้อมูลที่ดิน (Inference, P-12)",
+    "source": "คำตอบของเจ้าของ 2026-10-22 ต่อคำถาม 'จะให้ปิดชั้นรายแปลงให้เหลือแค่ยอดรวม หรือคงไว้เป็นต้นแบบต่อ'; P-12, P-14"
    },
    {
     "id": "D-13",
-    "status": "open",
+    "status": "decided",
     "question": "งานภาษีอยู่ใต้ป้ายผลิตภัณฑ์ใด",
     "options": [
      "คงชื่อ 'CityChat · CityMETER for Organization'",
@@ -1639,20 +1637,22 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     ],
     "recommendation": "ให้เจ้าของตัดสิน ระหว่างนี้เรียกไซต์ว่า 'แผนที่งานเจ้าหน้าที่' และไม่นำการประมาณการภาษีไปพูดเป็นความสามารถของ CityChat ในงานอื่น",
     "blocks": [],
-    "decision": "",
-    "ownerWords": "",
-    "quoteLabel": "",
-    "decidedBy": "",
-    "decidedAt": "",
+    "decision": "คงชื่อ 'CityChat · CityMETER for Organization' และให้งานภาษีเป็นหนึ่งใน 5 งานแบบรุ่น 2.0.2 (ทางเลือกแรก) · เจ้าของสั่งให้บันทึกเรื่องนี้เป็น owner amendment ของ MBB v0.5.3 section 5.1 (ทางเลือกที่สาม)",
+    "ownerWords": "แบ่ง 5 งาน ตาม V2.0.2 อยู่ใต้งานภาษี",
+    "quoteLabel": "VERBATIM",
+    "decidedBy": "เจ้าของงาน",
+    "decidedAt": "2026-10-22",
     "delegatedToAuthor": false,
-    "rejectedAlternatives": [],
-    "meaning": "",
-    "openRisk": "การกล่าวถึงผลิตภัณฑ์ไม่ตรงกันระหว่างเอกสาร",
-    "source": "P-13"
+    "rejectedAlternatives": [
+     "ระบุเป็น Land/property tools บนฐาน CityMETER"
+    ],
+    "meaning": "ไซต์คงชื่อและ 5 งานเดิม ไม่ต้องแก้โค้ด · ตัวเลขภาษียังเป็นการประมาณเพื่อวางแผน (DATA-04) และไม่อ้างเป็นความสามารถของ Landometer ทั้งเครือ (BRAND-01) · เมื่อถามว่าจะบันทึกเป็น owner amendment ใน MBB หรือไม่ เจ้าของตอบ 'บันทึกเลย' (VERBATIM, 2026-10-22)",
+    "openRisk": "จนกว่า owner amendment จะอยู่ในไฟล์ MBB เอกสารสองฉบับยังเขียนไม่ตรงกัน (C-02 ใน PRODUCT_BRIEF)",
+    "source": "คำตอบของเจ้าของ 2026-10-22 ต่อคำถาม 'งานภาษีอยู่ใต้ผลิตภัณฑ์ใด' ในชุดส่งต่องานพอร์ตเข้า CityChat; P-13"
    },
    {
     "id": "D-14",
-    "status": "open",
+    "status": "decided",
     "question": "แผนที่ดาวเทียม: ใช้ URL tile ของ Google ที่สืบทอดจาก CityChat ต่อ หรือเปลี่ยนเป็นแหล่งที่มีใบอนุญาตชัดเจน",
     "options": [
      "ใช้ต่อ (ยังไม่ยืนยันใบอนุญาต)",
@@ -1663,16 +1663,21 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     "blocks": [
      "F-35"
     ],
-    "decision": "",
-    "ownerWords": "",
-    "quoteLabel": "",
-    "decidedBy": "",
-    "decidedAt": "",
-    "delegatedToAuthor": false,
-    "rejectedAlternatives": [],
-    "meaning": "",
-    "openRisk": "การดึง tile ของ Google ตรงโดยทั่วไปอยู่นอกเงื่อนไข Google Maps Platform (Inference)",
-    "source": "reference/satellite-basemap-contract.json"
+    "decision": "เลิกใช้ URL tile ของ Google และใช้ภาพดาวเทียมที่ใหม่และละเอียดที่สุดเท่าที่ใบอนุญาตเปิดให้ใช้ · เว็บ static นี้ใส่คีย์ไม่ได้ (KEY-01) จึงใช้ EOxCloudless 2025 ของ EOX เป็นค่าเริ่มต้น (Sentinel-2 ราว 10 ม. ใบอนุญาต CC BY-NC-SA 4.0 สำหรับงานไม่เชิงพาณิชย์) และคงภาพปี 2016 ไว้เป็นภาพย้อนหลัง · ภาพละเอียดสูงที่ต้องใช้บัญชีและคีย์ทำในระบบจริงของ CityChat",
+    "ownerWords": "ได้",
+    "quoteLabel": "VERBATIM",
+    "decidedBy": "เจ้าของงาน",
+    "decidedAt": "2026-10-22",
+    "delegatedToAuthor": true,
+    "rejectedAlternatives": [
+     "คง URL tile ของ Google: เจ้าของอนุมัติให้เลิก",
+     "EOX 2016 เป็นค่าเริ่มต้น (ข้อเสนอเดิม): เจ้าของขอภาพใหม่ล่าสุด",
+     "ผู้ให้บริการภาพละเอียดสูงที่ต้องใช้คีย์ เช่น Google Map Tiles API, Esri World Imagery, Mapbox Satellite: ใส่คีย์ในเว็บ static ไม่ได้ (KEY-01)",
+     "Copernicus Sentinel-2 รายไตรมาส (10 ม. ใช้เชิงพาณิชย์ได้): ต้องทำ tile และดูแลรอบปรับปรุงเอง จึงเก็บไว้เป็นทางสำรอง"
+    ],
+    "meaning": "งาน F-35 เริ่มได้ · คำว่า 'ได้' ตอบคำถามเรื่องใบอนุญาตในชุดพอร์ต (เลิกเรียก tile ของ Google โดยตรง) และวันเดียวกันเจ้าของถามต่อว่า 'อันนี้ใช้ของใหม่ล่าสุดละเอียดสุดที่หาได้ได้มั้ย' (VERBATIM) ผู้เขียนจึงเลือกแหล่งภาพ · เจ้าของยืนยันว่าการใช้ใน CityChat ไม่ใช่เชิงพาณิชย์ (เรื่อง FABDEM) ผู้เขียนใช้เหตุผลเดียวกันกับ EOX 2025 ที่ใช้ CC BY-NC-SA 4.0 เหมือนกัน (Inference)",
+    "openRisk": "ภาพ 10 ม. ไม่เห็นอาคารรายหลัง · ภาพปี 2025 ใช้ CC BY-NC-SA 4.0 (ไม่เชิงพาณิชย์ แบ่งปันแบบเดียวกัน) ต่างจากภาพปี 2016 ที่ใช้ CC BY 4.0",
+    "source": "cloudless.eox.at/license-non-commercial (ตรวจ 2026-10-22: ปี 2016 ใช้ CC BY 4.0 ปี 2018–2025 ใช้ CC BY-NC-SA 4.0); reference/satellite-basemap-contract.json"
    },
    {
     "id": "D-15",
@@ -2072,7 +2077,7 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     "th": "เส้นทางสู่ระบบจริง",
     "en": "Production path"
    },
-   "goal": "Officer login, role-based access and access logs before any wider rollout.",
+   "goal": "The production path (officer login, role-based access, access logs, the 1 + 4 tax accounts) is built in CityChat per D-12; this public prototype stays as it is.",
    "gate": "G3"
   }
  ],
@@ -2155,15 +2160,13 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    "id": "G3",
    "phase": "phase-3",
    "requires": [
-    "X-50",
-    "X-51"
+    "X-50"
    ],
    "nonBlockingInPhase": [],
    "criteria": [
-    "owner-approved design for officer access",
-    "role-based access and access logging tested",
-    "privacy review of every per-parcel and per-owner view",
-    "public site keeps aggregates only, if D-12 chose that"
+    "owner-reviewed design of the production path: the CityChat port package, decisions recorded 2026-10-22 (D-12)",
+    "officer login, roles and access logs are built and tested in CityChat, outside this repository",
+    "this public prototype keeps its per-parcel layers by owner decision D-12"
    ],
    "signoff": "owner"
   }
@@ -3352,10 +3355,10 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    "priority": "medium",
    "estimateDays": 1,
    "ownerDecision": "D-14",
-   "status": "blocked",
+   "status": "todo",
    "title": {
-    "th": "เปลี่ยนแผนที่ดาวเทียมตามใบอนุญาตที่เจ้าของเลือก",
-    "en": "Switch the satellite basemap to the licensed option the owner chooses"
+    "th": "เปลี่ยนแผนที่ดาวเทียมเป็นภาพใหม่ล่าสุดที่ใบอนุญาตชัดเจน (D-14)",
+    "en": "Switch the satellite basemap to the newest licensed imagery (D-14)"
    },
    "problemRefs": [
     "P-11"
@@ -3378,12 +3381,15 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    ],
    "creates": [],
    "steps": [
-    "Implement the D-14 option in basemap.js (for example default satellite = EOX 2016 archive) with its exact attribution.",
-    "Update reference/satellite-basemap-contract.* (provider, licence, licenceStatus, attribution).",
+    "Remove the inherited Google tile URL from basemap.js.",
+    "Make EOxCloudless 2025 from EOX the default satellite layer: take the exact layer name from the EOX WMTS capabilities (use the latest year listed if 2025 is missing) and show the attribution exactly as cloudless.eox.at/license-non-commercial gives it for that year, with its links.",
+    "Keep the 2016 image as the archive option with its CC BY 4.0 attribution (vendor/satellite-eox-2016).",
+    "Update reference/satellite-basemap-contract.* (provider, layer, year, licence CC BY-NC-SA 4.0, licenceStatus, attribution) and the LIC-01 rule text, then rebuild the handoff.",
     "Bump basemap.js with a ?v= key and run the checks; look at the satellite view by hand (tests use basemap=none)."
    ],
    "acceptance": [
-    "attribution matches the licence",
+    "no request goes to Google tile hosts",
+    "attribution matches the licence of each layer",
     "contract updated",
     "manual check of the satellite view on desktop and phone recorded in the pull request"
    ],
@@ -3399,9 +3405,10 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    ],
    "doNot": [
     "put an API key in the page",
-    "drop attribution"
+    "drop attribution",
+    "use a keyed high-resolution provider in this static site"
    ],
-   "prompt": "Task F-35 (after owner decision D-14). Change the satellite basemap in basemap.js to the option the owner chose, with exact attribution, update reference/satellite-basemap-contract.json and .md, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py."
+   "prompt": "Task F-35 (D-14 decided 2026-10-22). Remove the inherited Google tile URL from basemap.js and make EOxCloudless 2025 from EOX the default satellite layer (exact layer name from the EOX WMTS capabilities, exact attribution from cloudless.eox.at/license-non-commercial), keep the 2016 image as the archive option, update reference/satellite-basemap-contract.json and .md and the LIC-01 rule text, add a ?v= key for basemap.js, and record a manual desktop and phone check of the satellite view in the pull request. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py."
   },
   {
    "id": "X-50",
@@ -3410,7 +3417,7 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    "priority": "medium",
    "estimateDays": 3,
    "ownerDecision": "D-12",
-   "status": "blocked",
+   "status": "done",
    "title": {
     "th": "ออกแบบเส้นทางสู่ระบบจริง: เข้าสู่ระบบเจ้าหน้าที่ สิทธิ์ตามบทบาท และบันทึกการเข้าถึง",
     "en": "Design the production path: officer login, role-based access and access log"
@@ -3419,10 +3426,7 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     "P-12",
     "P-14"
    ],
-   "dependsOn": [
-    "R-12",
-    "V-20"
-   ],
+   "dependsOn": [],
    "surfaces": [
     "public-site",
     "private-pipeline"
@@ -3439,10 +3443,9 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
    ],
    "creates": [],
    "steps": [
-    "Inventory every view and file that is per-parcel, per-owner or per-record versus aggregate.",
-    "Propose options: static public aggregates plus an authenticated officer service (API or vector tiles), tenant and entitlement in the production CityChat platform, roles, access logging, privacy review, hosting.",
-    "List the access needed (production repository) and the decisions the owner must take; no prices or contracts in public files.",
-    "Write the design note where D-12 says (a private location if it holds security details)."
+    "Done 2026-10-22 outside this repository: the production-path design is the CityChat port package for the officer views (internal, because it holds production details).",
+    "The owner reviewed it and decided D-12: this public prototype stays as it is, and officer login, roles, access logs and the 1 + 4 tax accounts are built in CityChat.",
+    "Nothing in this repository changes for this task."
    ],
    "acceptance": [
     "one design note reviewed by the owner, with the decision recorded in tools/handoff/plan_data.py",
@@ -3452,68 +3455,9 @@ JSON ด้านล่างสำหรับโปรแกรมอ่าน
     "python3 tools/handoff/build_handoff.py --check"
    ],
    "doNot": [
-    "put endpoints, keys or security details in this public repository",
-    "start implementation before the owner approves the design"
+    "put endpoints, keys or security details in this public repository"
    ],
-   "prompt": "Task X-50 (after D-12; best after gate G1). Write a design note for the production path of the Sila officer views: what stays public (aggregates) and what moves behind officer login, how roles and access logging work, how data reaches an authenticated service (API or vector tiles) and how it fits the production CityChat platform. Inventory per-parcel and per-owner views first. Keep security details out of this public repository; record the owner's decision in tools/handoff/plan_data.py and rebuild the handoff."
-  },
-  {
-   "id": "X-51",
-   "short": "แยกสาธารณะกับเจ้าหน้าที่",
-   "phase": "phase-3",
-   "priority": "medium",
-   "estimateDays": 10,
-   "ownerDecision": "D-12",
-   "status": "blocked",
-   "title": {
-    "th": "แยกมุมมองสาธารณะกับมุมมองเจ้าหน้าที่ตามแบบที่อนุมัติ",
-    "en": "Split the public and officer views as designed"
-   },
-   "problemRefs": [
-    "P-12",
-    "P-14"
-   ],
-   "dependsOn": [
-    "X-50"
-   ],
-   "surfaces": [
-    "public-site",
-    "private-pipeline"
-   ],
-   "readFirst": [
-    "docs/handoff/PRODUCT_BRIEF.md",
-    "reference/public-summary-contract.md"
-   ],
-   "repoPaths": [
-    "app.js",
-    "data/parcel-tax.json",
-    "data/parcels.geojson",
-    "index.html"
-   ],
-   "creates": [],
-   "steps": [
-    "Build the officer path from the approved design first and prove login, roles and access logs.",
-    "Only then remove per-parcel and per-owner files and views from the public site, keeping aggregates.",
-    "Say plainly in the pull request and the owner's design note that removed files stay in public git history (GIT-01 forbids rewriting it): removal stops serving them, it does not unpublish them.",
-    "Re-run every check; verify the live site no longer serves the removed files."
-   ],
-   "acceptance": [
-    "officer views work behind login with access logs",
-    "public site serves aggregates only",
-    "verify-live and audit pass",
-    "the pull request states that git history keeps the removed files"
-   ],
-   "verify": [
-    "python3 tools/verify-live.py --base-url https://montri-th.github.io/sila/ --output release-evidence/live.json",
-    "sh qa/run-unit-checks.sh",
-    "python3 tools/publication-audit.py --since origin/main",
-    "python3 tools/handoff/build_handoff.py --check"
-   ],
-   "doNot": [
-    "remove public files before the officer path works",
-    "keep secrets in the static site"
-   ],
-   "prompt": "Task X-51 (after X-50 is approved). Implement the approved split: deliver and test the authenticated officer path with roles and access logs first, then remove per-parcel and per-owner data and views from the public static site so it serves aggregates only, and verify the live site byte by byte. State that the removed files remain in public git history. Follow every rule in AGENTS.md (PRIV, SAFE, DATA, LDS, KEY, GIT, REL, BRAND, LIC, CLAIM). Work on a new branch, keep the change to this task only, run the verify commands listed for this task in docs/handoff/implementation-plan.json, paste their summaries into the pull request, and update this task's status in tools/handoff/plan_data.py, then rebuild with python3 tools/handoff/build_handoff.py."
+   "prompt": "Task X-50 is done (2026-10-22): the production path is designed in the internal CityChat port package and decided by the owner (D-12). Do not start work here; changes to the officer path belong to the CityChat production repository."
   }
  ],
  "aiContext": {
