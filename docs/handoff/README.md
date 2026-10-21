@@ -16,12 +16,12 @@
 
 | ไฟล์ | คืออะไร | SHA-256 |
 |---|---|---|
-| [PRODUCT_BRIEF.md](PRODUCT_BRIEF.md) | brief ระดับไซต์ (ไทย) + JSON | `dc668c36731505aa360b47b9ed8efabf0c79a56396334f4ec680549a302384e1` |
-| [product-brief.json](product-brief.json) | brief สำหรับเครื่อง | `12060213ee5784f1585d4446537d54ed10388fae9f8397ccd2bc313f337bdbbd` |
-| [HANDOFF.md](HANDOFF.md) | สถานะ สถาปัตยกรรม สัญญาข้อมูล การตรวจ release | `0cd2f8ff916b8101b566ea3dc951446d75b4b6dcfbde6fcf9a826be15c8c21cf` |
+| [PRODUCT_BRIEF.md](PRODUCT_BRIEF.md) | brief ระดับไซต์ (ไทย) + JSON | `423fdc62e4d8574d6be1547aa245e0dbca90c99c854a6ebb7deaa31c2756c6a9` |
+| [product-brief.json](product-brief.json) | brief สำหรับเครื่อง | `11db9b86fb262a89dea29270fe8172f06ac654e84b780d9fe35618833266e519` |
+| [HANDOFF.md](HANDOFF.md) | สถานะ สถาปัตยกรรม สัญญาข้อมูล การตรวจ release | `a7cea60cb5bcc3de6880812edfe18be91e216c767744c6f43c269465a8f39131` |
 | [handoff.json](handoff.json) | handoff สำหรับเครื่อง | `8f3f0946707ad64f31f07d4ee42dfe4605594bdef1ef80b7268f10b5fee85b79` |
-| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | แผนลงมือ งาน เกณฑ์ผ่าน คำตัดสิน พรอมป์ | `fa21e8657f382ea9c58021e2ea64e35abed6aedb982271d410875e486699915f` |
-| [implementation-plan.json](implementation-plan.json) | แผนสำหรับเครื่อง | `f6855fdf1b1dcc3f1e9506ff54f8390fc86e90e590bbb4e829d383053c3cbef0` |
+| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | แผนลงมือ งาน เกณฑ์ผ่าน คำตัดสิน พรอมป์ | `e981911f984e700eaad23b21772786bcb1094b61617a74bfbe3210a358ab1752` |
+| [implementation-plan.json](implementation-plan.json) | แผนสำหรับเครื่อง | `f73fa1c2a07a9cf3ded2b805271e79ff6497e9020b4c1e29ecd2a95243faf1b2` |
 | [SOURCES.md](SOURCES.md) | ลำดับอำนาจและ SHA-256 ของสัญญา | `a66f1fa896e3040ca50b719d5e4af3e5a4728cfa99f265effbf124252b908d5e` |
 | [CHANGELOG.md](CHANGELOG.md) | บันทึกการเปลี่ยนแปลงของชุดนี้ | `072aa3fbdf11995bfae963c9e4a6c1c09c92df1319f0d83b4e5db678069b7cb3` |
 
