@@ -5,11 +5,12 @@ The manifest lists every tracked file except .gitignore, .nojekyll and the manif
 SHA-256 and accepted MIME types; tools/verify-live.py compares the published site against it.
 
 Usage (repository root):
-    python3 tools/gen-manifest.py --check                       # exit 1 if the file list or any hash is stale
+    python3 tools/gen-manifest.py --check                       # exit 1 if the file list, a hash or a MIME list is stale
     python3 tools/gen-manifest.py --revision 2.0.2 --date 2026-10-21 [--notes release-notes.json]
 
 New files must be added to git (git add) before they count as tracked. --notes takes a JSON object whose keys are
-merged into the top level (for example "patches" or a revision block); existing keys not in it are kept.
+merged into the top level (for example "patches" or a revision block); existing keys not in it are kept. MIME lists come
+from allowedMimeTypesByExtension in tools/validation-config.json, the policy tools/verify-live.py checks against.
 """
 import argparse
 import datetime
@@ -22,8 +23,17 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST = os.path.join(ROOT, "build-manifest.json")
 EXCLUDE = {".gitignore", ".nojekyll", "build-manifest.json"}
-DEFAULT_MIME = {".md": ["text/markdown"], ".py": ["text/x-python"], ".geojson": ["application/geo+json"], ".sh": ["application/x-sh"],
-                ".cjs": ["application/javascript", "text/javascript"], ".json": ["application/json"]}
+# Fallback only for extensions that tools/validation-config.json does not list; listed extensions always take the
+# verifier's own policy (GitHub Pages serves .py as application/octet-stream and .cjs as application/node).
+DEFAULT_MIME = {".md": ["text/markdown"], ".geojson": ["application/geo+json"], ".sh": ["application/x-sh"], ".json": ["application/json"]}
+
+
+def mime_policy():
+    try:
+        with open(os.path.join(ROOT, "tools", "validation-config.json"), encoding="utf-8") as f:
+            return json.load(f).get("allowedMimeTypesByExtension", {})
+    except (OSError, ValueError):
+        return {}
 
 
 def tracked():
@@ -38,6 +48,7 @@ def untracked():
 
 def entries(old):
     by_path = {f["path"]: f.get("mimeTypes") for f in old.get("files", [])}
+    policy = mime_policy()
     by_ext = dict(DEFAULT_MIME)
     for f in old.get("files", []):
         ext = os.path.splitext(f["path"])[1].lower()
@@ -48,7 +59,8 @@ def entries(old):
         with open(os.path.join(ROOT, path), "rb") as fh:
             data = fh.read()
         e = {"path": path, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
-        mt = by_path.get(path) or by_ext.get(os.path.splitext(path)[1].lower())
+        ext = os.path.splitext(path)[1].lower()
+        mt = policy.get(ext) or by_path.get(path) or by_ext.get(ext)
         if mt:
             e["mimeTypes"] = mt
         files.append(e)
@@ -75,9 +87,12 @@ def main():
         missing = sorted(set(want) - set(have))
         extra = sorted(set(have) - set(want))
         changed = sorted(p for p in set(want) & set(have) if want[p] != have[p])
-        ok = not (missing or extra or changed)
+        want_mt = {f["path"]: f.get("mimeTypes") for f in files}
+        have_mt = {f["path"]: f.get("mimeTypes") for f in old.get("files", [])}
+        mime = sorted(p for p in set(want) & set(have) if want_mt[p] != have_mt[p])
+        ok = not (missing or extra or changed or mime)
         print(json.dumps({"manifestRevision": old.get("revision"), "files": len(want), "notInManifest": missing[:20], "notInTree": extra[:20],
-                          "hashChanged": changed[:20], "result": "current" if ok else "stale"}, indent=1))
+                          "hashChanged": changed[:20], "mimeTypesChanged": mime[:20], "result": "current" if ok else "stale"}, indent=1))
         sys.exit(0 if ok else 1)
     if not args.revision or not args.date:
         ap.error("--revision and --date are required unless --check is given")

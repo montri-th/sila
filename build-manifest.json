@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
   "revision": "2.0.2",
-  "builtAtUtc": "2026-10-21T01:41:51.454153+00:00",
+  "builtAtUtc": "2026-10-21T01:46:53.260947+00:00",
   "releaseDateBangkok": "2026-10-21",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -42,7 +42,9 @@
       "bytes": 17858,
       "sha256": "14c598bceb273009a17ac2edf158624addc8e69a07df1d2b0034c7815f8ed348",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -50,7 +52,9 @@
       "bytes": 593,
       "sha256": "075b25493fb63eec064de1ad1f08505f4fadf8b6805a61d89a5312e68201b3b2",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1209,7 +1213,9 @@
       "bytes": 3146,
       "sha256": "072aa3fbdf11995bfae963c9e4a6c1c09c92df1319f0d83b4e5db678069b7cb3",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1217,7 +1223,9 @@
       "bytes": 10862,
       "sha256": "2baa4e25907cd6fa6c7593f8d9c9ba405662ccfe65fbd65309baa92444275733",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1225,7 +1233,9 @@
       "bytes": 139578,
       "sha256": "0cd2f8ff916b8101b566ea3dc951446d75b4b6dcfbde6fcf9a826be15c8c21cf",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1233,7 +1243,9 @@
       "bytes": 255732,
       "sha256": "fa21e8657f382ea9c58021e2ea64e35abed6aedb982271d410875e486699915f",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1241,7 +1253,9 @@
       "bytes": 79301,
       "sha256": "dc668c36731505aa360b47b9ed8efabf0c79a56396334f4ec680549a302384e1",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1249,7 +1263,9 @@
       "bytes": 3888,
       "sha256": "b666d3f35c7424ea54adf21ff1a40a69509e9e15151765f216038a3dfe7e6efe",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1257,7 +1273,9 @@
       "bytes": 7464,
       "sha256": "a66f1fa896e3040ca50b719d5e4af3e5a4728cfa99f265effbf124252b908d5e",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1265,7 +1283,9 @@
       "bytes": 6411,
       "sha256": "acb919fa49d0fde86cc4df4b18290a47794479538893417a5fa2afbad2897f47",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1273,7 +1293,9 @@
       "bytes": 66309,
       "sha256": "8f3f0946707ad64f31f07d4ee42dfe4605594bdef1ef80b7268f10b5fee85b79",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1281,7 +1303,9 @@
       "bytes": 134473,
       "sha256": "f6855fdf1b1dcc3f1e9506ff54f8390fc86e90e590bbb4e829d383053c3cbef0",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1289,7 +1313,9 @@
       "bytes": 42573,
       "sha256": "12060213ee5784f1585d4446537d54ed10388fae9f8397ccd2bc313f337bdbbd",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1391,7 +1417,9 @@
       "bytes": 3303,
       "sha256": "3679ff1a8307b36a138e9601c736acab9293765bdacd42fb291ec9e1d78f9f2d",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1399,7 +1427,8 @@
       "bytes": 5124,
       "sha256": "8a015e410a2bb35a2b3ec2acb5131675aab303fe0f9e7068b37b7b7e37e487fd",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1407,7 +1436,9 @@
       "bytes": 445,
       "sha256": "94d84af0b85ef830affda6bf03df111bccaf3031e033b507a2b847c5a490e046",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1415,7 +1446,8 @@
       "bytes": 8334,
       "sha256": "ba03f45f77c534e37d5933b0452eedd116bf6268346c403897e7e8208d566745",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1423,7 +1455,8 @@
       "bytes": 21825,
       "sha256": "ea569d4a22040bf461d564bef9bf110421ff4816e032ea0ad26e79c6a13c5cc1",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1431,7 +1464,8 @@
       "bytes": 7398,
       "sha256": "164dea0ec83debeae317f3cc91f89f5d888375427f1851531d7e1103b65fad97",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -1517,7 +1551,9 @@
       "sha256": "0748d14694f6ded7068e821afcad49a9c5cc20dee16eca1ec906e5d82da9c715",
       "mimeTypes": [
         "application/javascript",
-        "text/javascript"
+        "text/javascript",
+        "application/octet-stream",
+        "application/node"
       ]
     },
     {
@@ -1545,7 +1581,9 @@
       "bytes": 1628,
       "sha256": "f8c3bb0ed63aa17999aeb5adaa49d3ff10627f586c2c3d10dbbf26edb731a8cf",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1843,7 +1881,9 @@
       "bytes": 14298,
       "sha256": "bfeeac9d58aea0a28e815a31300be845d3a53a8eabf1a40e53f28cf439c00160",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1851,7 +1891,9 @@
       "bytes": 543,
       "sha256": "44d6cbe6e43efb3e3d6a3ee29d5bff233b519370d56cc2f7d5de6f7628c783d3",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1859,7 +1901,9 @@
       "bytes": 548,
       "sha256": "523ee12a9ff3e1386051145a9d29725ae4ca2f056246b99dd594bfe47eb81ceb",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1867,7 +1911,9 @@
       "bytes": 550,
       "sha256": "048f15afeb4e1e17f0c186b1fd332960d7694ae663147c36ecfb26546cf63e26",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1875,7 +1921,9 @@
       "bytes": 7123,
       "sha256": "b77174bf4adc989e4bd21764cdd114aea3ab206e02364163734e36af5552ae0e",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -1883,7 +1931,9 @@
       "bytes": 904,
       "sha256": "bfc48e1df0829f01b31fbdcd76089a1e0d0841c1979ef54ffe03d22469a5e640",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -2041,7 +2091,9 @@
       "bytes": 4879,
       "sha256": "4b635fc32c1ecbd1139cc2efc9703bb39999012feee13895e69ed2fde5847e30",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -2049,7 +2101,9 @@
       "bytes": 23367,
       "sha256": "4bc34ed943ed62a79f3d59e1bd2d2bfa7fabb1bc48566d33725aee07e27081c7",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -2057,15 +2111,19 @@
       "bytes": 22656,
       "sha256": "11848e5084f5fbdc89651dc59a584cd920978742e2bd4c1b85c7e8ccacbaa550",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
       "path": "qa/revision-2.0.2-publication-audit.json",
       "bytes": 3487,
-      "sha256": "587e75842ea0685a5b680137ff38525f67712c2b230cb8b88420f70ac2b9fa8e",
+      "sha256": "d6be55c387debfcfb277ed7011ed695ff588005d6341e214665c37d39938efbb",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -2541,7 +2599,9 @@
       "bytes": 2742,
       "sha256": "66cd66cc62beace67f128045e782e7165ce91e2ee94ca17b8b32652cdc4fd1ef",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2549,7 +2609,8 @@
       "bytes": 7886,
       "sha256": "bafa47b6328012c04ea4997488355dfd9db949a8c6be8598bb283c11d19a4347",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2557,7 +2618,8 @@
       "bytes": 6308,
       "sha256": "2a27252f1accdbd90df822731cc15d0af3aedc206f612dff0bdc2ae4a2624c92",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2565,15 +2627,17 @@
       "bytes": 4858,
       "sha256": "56810562500d3d894bd25b51b0a924b9c3d9fcf79b80d5256f456dd79900969c",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
       "path": "tools/gen-manifest.py",
-      "bytes": 4592,
-      "sha256": "e5d04e29d07a60b140b7c93319ce991b3a2d60a370c299e0ca3b568636016ce6",
+      "bytes": 5440,
+      "sha256": "882295da9411d156fef6b8b466a7fd0f7f44b2d9f63109c3d8fd2f4d77f2bebc",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2581,7 +2645,8 @@
       "bytes": 19098,
       "sha256": "9824ee90af58d2da1b4e185bc39ecfd7df74c09494c1d1ecfff1fdbef84af267",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2589,7 +2654,8 @@
       "bytes": 77108,
       "sha256": "f1970119813c0a8e55644636448f31686ecf3c27591003e2642cef4aa07368fc",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2597,7 +2663,8 @@
       "bytes": 53053,
       "sha256": "872cf54b6044b34a50250ca3870d410b8ca89a3c14cd240d57df11ebe7d7c900",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2605,7 +2672,8 @@
       "bytes": 90722,
       "sha256": "b3f4746c0c1b36e8b99eaf517643c1445cf2eca7f0d54e93e58e30c5e7087656",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2613,7 +2681,8 @@
       "bytes": 2381,
       "sha256": "b739007e719ee770771686d19685064284787e06184588d42af1e55ab036a6ac",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -2621,7 +2690,9 @@
       "bytes": 5821,
       "sha256": "d158a0b07779f8fe10bfe724a304f294111eb95cd09443951783d5f8d1eca8ef",
       "mimeTypes": [
-        "application/json"
+        "application/json",
+        "application/geo+json",
+        "application/octet-stream"
       ]
     },
     {
@@ -2629,7 +2700,8 @@
       "bytes": 17461,
       "sha256": "03e869b31d24582f2e4792eb14fb674d5c80ef80439192f16b34d190d4c0963a",
       "mimeTypes": [
-        "text/x-python"
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -3895,7 +3967,9 @@
       "bytes": 766,
       "sha256": "3309b7c145eee6898735fa614df874e8b91ddce3d9a76af2e3e75f60ece4c127",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     },
     {
@@ -3903,7 +3977,9 @@
       "bytes": 1407,
       "sha256": "e0cae5746036a8095f8e243b8a916411332fd2ef5e140cc7bcf78d298a67c86a",
       "mimeTypes": [
-        "text/markdown"
+        "text/markdown",
+        "text/plain",
+        "application/octet-stream"
       ]
     }
   ],
@@ -4242,7 +4318,8 @@
         "vendor/satellite-eox-2016/: SOURCE.md and LICENSE.md (CC BY 4.0, from reference/satellite-tile-inventory.json); checks made stricter after an independent review (browser cases must reach ready and same-origin 400+ responses fail; the publication audit lists unread files and fails on them; expected figures have --check)",
         "owner decisions recorded: D-11 (pipeline and owner-code codebook kept on the owner's computer), D-17 (owner chose to push 2.0.2 directly to main); new open questions D-18 (one internal id in git history) and D-19 (Drive links in public files); tasks S-05 and S-06 added",
         "README: 2.0.2 section, developer files table, preview serves docs/, parcel size note corrected; reference/terrain-contract.md: flood scripts now in tools/flood/",
-        "no change to index.html, JavaScript or CSS; cache keys unchanged"
+        "no change to index.html, JavaScript or CSS; cache keys unchanged",
+        "tools/gen-manifest.py takes MIME lists from tools/validation-config.json (the verifier's policy) and --check compares them; the first 2.0.2 manifest listed .py and .cjs types GitHub Pages does not send, so 15 script files failed the live MIME check although their bytes and SHA-256 matched"
       ],
       "foundBy": "owner request of 21 Oct 2026 for a developer handoff, product brief and implementation plan"
     }
