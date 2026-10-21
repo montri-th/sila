@@ -1,7 +1,7 @@
 ---
 artifact_id: sila-citymeter-officer-prototype-20261005
-artifact_revision: "2.0.1"
-updated_on: "2026-10-20"
+artifact_revision: "2.0.2"
+updated_on: "2026-10-21"
 product: CityChat / Officer CityMETER
 municipality: เทศบาลเมืองศิลา
 source_received_on: "2026-10-05"
@@ -16,8 +16,8 @@ revision_1_9_views: 2
 revision_2_0_views: 4
 additional_source_received_on: "2026-10-20"
 release_state: source_release_provider_attestation_separate
-published_revision_before_update: "1.9.1"
-published_commit_before_update: "5eeb59d"
+published_revision_before_update: "2.0.1"
+published_commit_before_update: "4b32208"
 additional_view: area_overview
 release_mode: owner_authorized_static_prototype
 publish_repository: montri-th/sila
@@ -31,6 +31,18 @@ municipal_writes: false
 
 # ศิลา · CityChat CityMETER สำหรับเจ้าหน้าที่
 
+## รุ่นย่อย 2.0.2 · ชุดส่งต่องานสำหรับนักพัฒนา
+
+หน้าเว็บไม่เปลี่ยน รุ่นนี้เพิ่มสิ่งที่นักพัฒนาและ AI coding agent ใช้ทำงานต่อได้ทันที
+
+- [docs/handoff/](docs/handoff/README.md) มี Product Brief ระดับไซต์ Handoff และแผนลงมือ ทุกฉบับมีส่วนที่คนอ่านและ JSON ที่เครื่องอ่านตรงกัน สร้างจาก `tools/handoff/` และตรวจด้วย `python3 tools/handoff/build_handoff.py --check`
+- [AGENTS.md](AGENTS.md) และ [CLAUDE.md](CLAUDE.md) บอก agent ว่าต้องทำตามกติกาใด รันคำสั่งใด และไฟล์ไหนทำหน้าที่อะไร
+- เครื่องมือที่เคยอยู่นอกคลังย้ายเข้ามาและรันซ้ำแล้ว: การตรวจเบราว์เซอร์ การเข้าถึง และมือถือใน [qa/browser/](qa/browser/README.md) ตัวรันชุดทดสอบ `sh qa/run-unit-checks.sh` ตัวคำนวณตัวเลขทั้งเมือง `qa/compute-figures.cjs` การตรวจข้อมูลส่วนบุคคล `tools/publication-audit.py` ตัวสร้าง manifest `tools/gen-manifest.py` และสคริปต์น้ำท่วมใน [tools/flood/](tools/flood/README.md)
+- ลบเลขรายการภายในของบัญชีหนึ่งรายการออกจากข้อความวิธีคิดใน `data/parcel-tax.json` (summary.limits) ไม่กระทบตัวเลขหรือหน้าเว็บ และการตรวจข้อมูลส่วนบุคคลจะล้มถ้ากลับมาอีก
+- เพิ่มที่มาและใบอนุญาตของภาพดาวเทียม EOX ปี 2016 ที่เก็บในคลัง ([SOURCE.md](vendor/satellite-eox-2016/SOURCE.md), [LICENSE.md](vendor/satellite-eox-2016/LICENSE.md))
+- pipeline ข้อมูลและตารางรหัสเจ้าของเก็บบนเครื่องของเจ้าของงาน (คำตัดสิน D-11) ไม่อยู่ในคลังนี้ คำตัดสินที่ยังเปิดอยู่ดูได้ใน [แผนลงมือ](docs/handoff/IMPLEMENTATION_PLAN.md)
+
+ผลตรวจบน tree นี้: [เบราว์เซอร์](qa/revision-2.0.2-browser-checks.json) · [การเข้าถึง](qa/revision-2.0.2-accessibility-checks.json) · [มือถือ 112 สถานะ](qa/revision-2.0.2-phone-overflow.json) · [ข้อมูลส่วนบุคคล](qa/revision-2.0.2-publication-audit.json)
 
 ## Revision 2.0 · แผนการเจรจา เจ้าของรายใหญ่ เกษตรราคาสูง หน้าใหม่ที่แผนที่เต็มจอ และจุดศึกษาน้ำท่วม
 
@@ -58,7 +70,7 @@ municipal_writes: false
 
 **Street View** ปุ่มแรกเปิด Google Maps พร้อมหมุดที่จุดนั้น (ไม่เปิดจอดำ) ปุ่ม Street View ที่หันเข้าหาแปลงเป็นปุ่มที่สองและบอกว่า "ถ้ามีภาพ" ถ้าเทศบาลมีคีย์ Google Maps Platform สคริปต์ [tools/streetview-coverage.py](tools/streetview-coverage.py) ตรวจความครอบคลุมแบบออฟไลน์แล้วซ่อนปุ่มที่ไม่มีภาพ คีย์ไม่อยู่ในคลัง
 
-**รุ่นย่อย 2.0.1** ระหว่างโหลดแปลง 3 MB สรุปด้านบนขึ้น “—” พร้อม “กำลังเปิดข้อมูลแปลง” แทนเลขศูนย์ และป้ายแกนกราฟห่างขึ้นบนจอกว้าง (พบเมื่อเปิดรุ่น 2.0 ใน Chrome จริง)
+**รุ่นย่อย 2.0.1** ระหว่างโหลดชั้นแปลงที่ดิน (ไฟล์ 20.7 MB ส่งจริงราว 2.1 MB เมื่อบีบอัด) สรุปด้านบนขึ้น “—” พร้อม “กำลังเปิดข้อมูลแปลง” แทนเลขศูนย์ และป้ายแกนกราฟห่างขึ้นบนจอกว้าง (พบเมื่อเปิดรุ่น 2.0 ใน Chrome จริง)
 
 **ไอคอนใหม่ (รออนุมัติ)** Material Symbols Rounded จาก commit เดิม: payments, volunteer_activism, construction, explore (งาน 5 กลุ่ม) · handshake, agriculture, leaderboard (แผนที่ใหม่) · pets, water_damage, tune, bar_chart ดู [reference/ui-icons.manifest.json](reference/ui-icons.manifest.json)
 
@@ -209,7 +221,7 @@ Revision 1.2 แก้ datum operation ของหมุดบ้าน ขอ�
 python3 server.py
 ```
 
-เปิด [http://127.0.0.1:8768/](http://127.0.0.1:8768/) ตัว server เปิดเฉพาะ loopback และ serve เฉพาะไฟล์ต้นแบบ, `assets/`, `vendor/`, `data/` และ `reference/` ไม่ serve scripts หรือ raw GIS companions ต้องเปิดผ่าน HTTP เพื่อโหลด GeoJSON และ JavaScript modules; เปลี่ยน port ได้ด้วย `python3 server.py --port 8769`
+เปิด [http://127.0.0.1:8768/](http://127.0.0.1:8768/) ตัว server เปิดเฉพาะ loopback และ serve เฉพาะไฟล์ต้นแบบ, `assets/`, `vendor/`, `data/`, `reference/` และ `docs/` ไม่ serve scripts หรือ raw GIS companions ต้องเปิดผ่าน HTTP เพื่อโหลด GeoJSON และ JavaScript modules; เปลี่ยน port ได้ด้วย `python3 server.py --port 8769`
 
 ## วิธีตรวจข้อมูล
 
@@ -334,6 +346,9 @@ Pipeline ที่รันจริงคืออ่าน source geometry แ
 | `qa/crs-repair-evidence.json`, `data/source-manifest.json`, `data/data-validation.json` | source hashes, before/after hashes และจำนวนของ data build 1.2 |
 | `tools/verify-live.py`, `tools/validation-config.json` | เทียบทุก runtime file บนเว็บเผยแพร่กับ bytes/hash/MIME ใน build manifest |
 | `qa/`, `screenshots/` | ผลตรวจและภาพตาม coverage ที่บันทึก |
+| `AGENTS.md`, `CLAUDE.md`, `docs/handoff/` | กติกาสำหรับ AI coding agent, Product Brief ระดับไซต์, Handoff และแผนลงมือ (สร้างจาก `tools/handoff/`) |
+| `qa/run-unit-checks.sh`, `qa/browser/`, `qa/compute-figures.cjs` | ชุดทดสอบ Node, การตรวจเบราว์เซอร์ การเข้าถึง และมือถือ, ตัวเลขทั้งเมืองที่ใช้เทียบ |
+| `tools/publication-audit.py`, `tools/gen-manifest.py`, `tools/flood/` | ตรวจข้อมูลส่วนบุคคลก่อนเผยแพร่, สร้างและตรวจ build manifest, สคริปต์น้ำท่วมแบบออฟไลน์ |
 
 ชุดเผยแพร่รวม converter และเครื่องมือตรวจ release ที่ระบุด้านบน แต่ไม่รวม raw ingestion packages, Python dependencies, raw-extra, cache, raw SHP/DBF/SHX/PRJ/CPG, authentication caches หรือเอกสารสัญญา/ใบแจ้งหนี้ที่ไม่เกี่ยวกับเว็บ Source hashes และ Drive links ใช้สืบกลับต้นทาง; ชื่อ `source-audit-reference/` ใน provenance ของเอกสารเป็นรหัสอ้างอิงผลตรวจเดิม ไม่ใช่ไฟล์ runtime ที่รวมมา โหลด GeoJSON ชั้นใหญ่เมื่อเลือก dataset; production ควรเปลี่ยนเป็น API/vector tiles และใช้ Officer entitlement/tenant ของ `theshifters/landometer-citychat` ที่มีจริง
 

@@ -1,0 +1,34 @@
+# ชุดส่งต่องานสำหรับนักพัฒนา · แผนที่งานเจ้าหน้าที่ศิลา
+
+> ฉบับ 1 · 2026-10-21 · ไซต์ revision 2.0.2 (ฐาน 2.0.1 commit `4b32208`) · สร้างจาก `tools/handoff/` ห้ามแก้ไฟล์นี้ด้วยมือ
+
+ชุดนี้ให้นักพัฒนาและ AI coding agent ทำงานต่อบน `montri-th/sila` ได้ทันที เอกสารหลักทุกฉบับมีส่วนที่คนอ่านและ JSON ที่เครื่องอ่าน โดย JSON ที่ฝังใน .md ตรงกับไฟล์ .json คู่กันทุกตัวอักษร
+
+## อ่านอะไรก่อน
+
+| ผู้อ่าน | ลำดับ |
+|---|---|
+| นักพัฒนา | PRODUCT_BRIEF.md → HANDOFF.md → IMPLEMENTATION_PLAN.md → AGENTS.md |
+| AI coding agent | AGENTS.md (โหลดเองจาก CLAUDE.md หรือ AGENTS.md) → implementation-plan.json งานที่ได้รับ → readFirst ของงาน |
+| เจ้าของงาน | PRODUCT_BRIEF.md หัวข้อความขัดกับเอกสารต้นทาง → IMPLEMENTATION_PLAN.md ตารางคำตัดสิน |
+
+## ไฟล์
+
+| ไฟล์ | คืออะไร | SHA-256 |
+|---|---|---|
+| [PRODUCT_BRIEF.md](PRODUCT_BRIEF.md) | brief ระดับไซต์ (ไทย) + JSON | `dc668c36731505aa360b47b9ed8efabf0c79a56396334f4ec680549a302384e1` |
+| [product-brief.json](product-brief.json) | brief สำหรับเครื่อง | `12060213ee5784f1585d4446537d54ed10388fae9f8397ccd2bc313f337bdbbd` |
+| [HANDOFF.md](HANDOFF.md) | สถานะ สถาปัตยกรรม สัญญาข้อมูล การตรวจ release | `0cd2f8ff916b8101b566ea3dc951446d75b4b6dcfbde6fcf9a826be15c8c21cf` |
+| [handoff.json](handoff.json) | handoff สำหรับเครื่อง | `8f3f0946707ad64f31f07d4ee42dfe4605594bdef1ef80b7268f10b5fee85b79` |
+| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | แผนลงมือ งาน เกณฑ์ผ่าน คำตัดสิน พรอมป์ | `fa21e8657f382ea9c58021e2ea64e35abed6aedb982271d410875e486699915f` |
+| [implementation-plan.json](implementation-plan.json) | แผนสำหรับเครื่อง | `f6855fdf1b1dcc3f1e9506ff54f8390fc86e90e590bbb4e829d383053c3cbef0` |
+| [SOURCES.md](SOURCES.md) | ลำดับอำนาจและ SHA-256 ของสัญญา | `a66f1fa896e3040ca50b719d5e4af3e5a4728cfa99f265effbf124252b908d5e` |
+| [CHANGELOG.md](CHANGELOG.md) | บันทึกการเปลี่ยนแปลงของชุดนี้ | `072aa3fbdf11995bfae963c9e4a6c1c09c92df1319f0d83b4e5db678069b7cb3` |
+
+FACTS.md และ facts.json เป็นภาพ ณ เวลาที่ build (ขนาดไฟล์ จำนวนบรรทัด cache key) จึงไม่มี hash ในตารางนี้
+
+## แก้และตรวจ
+
+- แก้เนื้อหาที่ tools/handoff/handoff_data.py, plan_data.py และ brief_data.py แล้วรัน `python3 tools/handoff/build_handoff.py`
+- ก่อนเปิด pull request รัน `python3 tools/handoff/build_handoff.py --check` (ล้มเมื่อไฟล์ไม่ตรงกับ builder แผนผิดกติกา path ไม่มีจริง หรือมี trailing space/BOM)
+- เอกสารนี้อยู่ใน repository สาธารณะ: ห้ามใส่ข้อมูลส่วนบุคคล ราคา สัญญา pipeline การขาย หรือ credential

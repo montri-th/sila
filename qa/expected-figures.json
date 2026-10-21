@@ -1,0 +1,90 @@
+{
+ "schema": "sila-expected-figures/1",
+ "engine": "2.0.0",
+ "source": "data/parcel-tax.json",
+ "totals": {
+  "billed69": 27882712.16,
+  "law69": 25893034.92,
+  "old70": 27882712.16,
+  "new70": 30341357.16,
+  "gainAll": 2458645.01,
+  "parcels69": 34573,
+  "parcelsGainAny": 8654,
+  "rollAbove69": 3024729.56,
+  "parcelsRollAbove": 2343
+ },
+ "negotiate": {
+  "gainMaterial": 2357411.32,
+  "parcelsMaterial": 1416,
+  "rollBelowSmallSum": 100143.08,
+  "rollBelowSmallTitles": 7415,
+  "byInitiative": {
+   "rollBelow": [
+    934901,
+    571
+   ],
+   "newBuildings": [
+    73677,
+    48
+   ],
+   "mainHomeOnce": [
+    43109,
+    231
+   ],
+   "rented": [
+    52374,
+    185
+   ],
+   "mixedUse": [
+    844208,
+    331
+   ],
+   "juristic": [
+    27870,
+    89
+   ],
+   "combine": [
+    380801,
+    11
+   ],
+   "agriShare": [
+    472,
+    2
+   ]
+  },
+  "rollAboveSum": 2981401.42,
+  "rollAboveTitles": 2343,
+  "vacancySteps": {
+   "0": 2108,
+   "1": 911
+  }
+ },
+ "municipalityView": {
+  "note": "the site draws parcels inside the municipal boundary only; the totals above include titles outside it",
+  "titlesOutsideBoundary": 59,
+  "outsideTitlesWithGain": 6,
+  "parcelsMaterialInside": 1410,
+  "gainMaterialInside": 2357026.92
+ },
+ "agriWatch": {
+  "titles": 279,
+  "potential": 8443089,
+  "potentialUnknown": 0,
+  "billed": 1024187,
+  "billedUnknown": 0,
+  "landValue": 3227415082,
+  "withBuilding": 84,
+  "juristic": 6
+ },
+ "owners": {
+  "count": 18567,
+  "totalValueMTHB": 40694.01,
+  "top10Share": 5,
+  "over50M": 26
+ },
+ "uiExpect": {
+  "cityGainMillions": "+2.36",
+  "mixedUseThousands": "844",
+  "topOwnerCode": "T-TJQ6JE"
+ }
+}

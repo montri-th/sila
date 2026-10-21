@@ -1,0 +1,939 @@
+{
+ "schema": "sila-browser-checks/2.0",
+ "checkedAtUtc": "2026-10-20T23:19:16.354578+00:00",
+ "base": "http://127.0.0.1:8791/",
+ "browser": "Chromium 141.0.7390.37",
+ "webgl": "Chromium SwiftShader (software WebGL); real-GPU rendering is checked separately on the live site",
+ "basemap": "none (data only; external street tiles are not part of this check)",
+ "fixtures": {
+  "negotiateRecord": "parcels-014068",
+  "taxmapRecord": "parcels-012660",
+  "buildingTaxRecord": "buildings-018975",
+  "ownerCode": "T-TJQ6JE",
+  "floodRecord": "floodsite-11"
+ },
+ "matrix": [
+  {
+   "case": "landing-dark-th",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 ล้านบาท เก็บเพิ่มได้ต่อปี",
+    "1,410 แปลงที่ต้องเจรจา",
+    "+8.5 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "negotiate-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 M THB can be added a year",
+    "1,410 titles to negotiate",
+    "+8.5 % over the 2569 bill"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "negotiate-init-mixeduse",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+844,208 บาท เก็บเพิ่มได้ต่อปี · แยกชั้นค้าขาย",
+    "331 แปลงที่ต้องเจรจา",
+    "36 % ของยอดเก็บเพิ่มได้ทั้งหมด"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "negotiate-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 170
+    }
+   ],
+   "summaryMetrics": [
+    "+174,456 บาท เก็บเพิ่มได้ต่อปี",
+    "182 แปลงที่ต้องเจรจา",
+    "+10.0 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "agriwatch",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "agri-bands",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "+8.44 ล้านบาท ต่อปี ถ้าตรวจพบว่าไม่ได้ทำประโยชน์",
+    "279 แปลงเกษตรมูลค่า 5 ล้านขึ้นไป",
+    "1.02 ล้านบาท เรียกเก็บปี 2569 ตามอัตราเกษตร"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "agriwatch-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "agri-bands",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "+8.44 M THB a year if found unused",
+    "279 farm titles worth 5M+",
+    "1.02 M THB billed in 2569 at farm rates"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "portfolio",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "owner-top",
+     "canvas": true,
+     "h": 300
+    }
+   ],
+   "summaryMetrics": [
+    "18,567 เจ้าของในบัญชีปี 2563",
+    "40,694.01 ล้านบาท มูลค่าประเมินรวม",
+    "5.0 % ถือโดย 10 อันดับแรก"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "portfolio-owner",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "636.76 ล้านบาท มูลค่าประเมินรวม · อันดับ 1",
+    "18 แปลงของรายนี้",
+    "+390,554 บาท เก็บเพิ่มได้ต่อปี"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "taxmap-light-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "taxmap-years",
+     "canvas": true,
+     "h": 190
+    },
+    {
+     "id": "taxmap-fixes",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "27.88 M THB 2569 tax, matched parcels",
+    "22.89 M THB 2569 receipts, whole city",
+    "30.34 M THB 2570 with fixes"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "taxmap-new70-adj10",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "taxmap-years",
+     "canvas": true,
+     "h": 190
+    },
+    {
+     "id": "taxmap-fixes",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "27.88 ล้านบาท ภาษีปี 2569 ของแปลงที่จับคู่ได้",
+    "22.89 ล้านบาท รับชำระปีภาษี 2569 ทั้งเมือง",
+    "32.65 ล้านบาท ปี 2570 ตามข้อเสนอ"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "properties-gain",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "props-fixes",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "1.91 ล้านบาท ภาษีปี 2570 ที่เพิ่มได้ต่อปี",
+    "6,132 ทรัพย์สินที่ควรตรวจ",
+    "23.01 ล้านบาท ปี 2570 ตามข้อเสนอ ของแปลงที่มีเจ้าของ"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "appraisal-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "34,918 แปลงที่มีราคาประเมิน",
+    "4,500 ราคากลาง บาท/ตร.ว."
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "businesses",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "654 ธุรกิจที่ปักหมุดในพื้นที่นี้",
+    "37 มีเว็บไซต์ทางการที่ยืนยันได้"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "buildings-roll-v12",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "1,657 อาคารในพื้นที่นี้",
+    "712 ผูกกับบัญชีสิ่งปลูกสร้างแล้ว",
+    "7 บ้านเลขที่ไม่อยู่ในบัญชี"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "houses-en",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "2,061 points in this area"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "floodsites",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "floodsites-status",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "16 จุดในพื้นที่นี้"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "floodsites-record-en-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "floodsites-status",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "16 sites in this area"
+   ],
+   "popup": {
+    "w": 279,
+    "h": 184,
+    "mapShare": 0.08
+   },
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "terrain-2d-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [],
+   "popup": null,
+   "smallTargets": 3,
+   "terrain3D": null
+  },
+  {
+   "case": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [],
+   "popup": null,
+   "smallTargets": 4,
+   "terrain3D": {
+    "state": "ready",
+    "webglCanvas": true,
+    "exaggeration": "2",
+    "bearing": "0"
+   }
+  },
+  {
+   "case": "popgrid",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "25,894 คนในรายชื่อ",
+    "5,525 เด็กต่ำกว่า 15 ปี",
+    "9,487 อายุประมาณ 42 ปีขึ้นไป"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "caregroups",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "194 รายการหลังตัดซ้ำตามรหัสต้นทาง (รหัส)",
+    "4 กลุ่มดูแลที่มีข้อมูลจริง (กลุ่ม)"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "animals-light",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "3,501 สุนัขตามแผ่นรายละเอียด (ตัว)",
+    "1,872 แมวตามแผ่นรายละเอียด (ตัว)"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "roads",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "713 ช่วงถนนในพื้นที่นี้"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "overview",
+   "viewport": "1440x900",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "27,993 จุดบ้านเลขที่",
+    "38,696 อาคาร",
+    "1 เขตเทศบาล"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "tablet-negotiate",
+   "viewport": "1024x768",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 ล้านบาท เก็บเพิ่มได้ต่อปี",
+    "1,410 แปลงที่ต้องเจรจา",
+    "+8.5 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "tablet-portfolio-owner",
+   "viewport": "1024x768",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.5,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "636.76 ล้านบาท มูลค่าประเมินรวม · อันดับ 1",
+    "18 แปลงของรายนี้",
+    "+390,554 บาท เก็บเพิ่มได้ต่อปี"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-landing",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 ล้านบาท เก็บเพิ่มได้ต่อปี",
+    "1,410 แปลงที่ต้องเจรจา",
+    "+8.5 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-negotiate-record",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.38,
+   "sheet": "half",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 ล้านบาท เก็บเพิ่มได้ต่อปี",
+    "1,410 แปลงที่ต้องเจรจา",
+    "+8.5 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": {
+    "w": 269,
+    "h": 181,
+    "mapShare": 0.16
+   },
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-portfolio-owner",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "636.76 ล้านบาท มูลค่าประเมินรวม · อันดับ 1",
+    "18 แปลงของรายนี้",
+    "+390,554 บาท เก็บเพิ่มได้ต่อปี"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-agriwatch-light",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "agri-bands",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "+8.44 ล้านบาท ต่อปี ถ้าตรวจพบว่าไม่ได้ทำประโยชน์",
+    "279 แปลงเกษตรมูลค่า 5 ล้านขึ้นไป",
+    "1.02 ล้านบาท เรียกเก็บปี 2569 ตามอัตราเกษตร"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-floodsites",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "floodsites-status",
+     "canvas": true,
+     "h": 150
+    }
+   ],
+   "summaryMetrics": [
+    "16 จุดในพื้นที่นี้"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-terrain-3d",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [],
+   "popup": null,
+   "smallTargets": 4,
+   "terrain3D": {
+    "state": "ready",
+    "webglCanvas": true,
+    "exaggeration": "2",
+    "bearing": "0"
+   }
+  },
+  {
+   "case": "phone-animals",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.38,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "3,501 สุนัขตามแผ่นรายละเอียด (ตัว)",
+    "1,872 แมวตามแผ่นรายละเอียด (ตัว)"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "phone-businesses-en",
+   "viewport": "390x844",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "654 businesses pinned in this area",
+    "37 with a confirmed official website"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  },
+  {
+   "case": "small-phone-negotiate-light",
+   "viewport": "320x640",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.58,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [
+    {
+     "id": "negotiate-bars",
+     "canvas": true,
+     "h": 248
+    }
+   ],
+   "summaryMetrics": [
+    "+2.36 ล้านบาท เก็บเพิ่มได้ต่อปี",
+    "1,410 แปลงที่ต้องเจรจา",
+    "+8.5 % เพิ่มจากที่เรียกเก็บปี 2569"
+   ],
+   "popup": null,
+   "smallTargets": 8,
+   "terrain3D": null
+  },
+  {
+   "case": "small-phone-caregroups-en",
+   "viewport": "320x640",
+   "pageErrors": [],
+   "horizontalOverflowPx": 0,
+   "legendShown": true,
+   "legendOverMap": false,
+   "mapShareOfViewport": 0.38,
+   "sheet": "peek",
+   "ready": true,
+   "charts": [],
+   "summaryMetrics": [
+    "194 Distinct recorded recipient keys (source keys)",
+    "4 Recorded care groups (groups)"
+   ],
+   "popup": null,
+   "smallTargets": 0,
+   "terrain3D": null
+  }
+ ],
+ "flows": {
+  "negotiationPlan": {
+   "cityGainShown": true,
+   "initiativeSummary": true,
+   "focusCard": true,
+   "urlCarriesInit": true,
+   "listRows": 60,
+   "firstRow": "แปลง 08O133\nแยกชั้นค้าขาย เรียกเก็บปี 2569 3,298 บาท\n+33,322\nบาท/ปี",
+   "cardLeadsWithGain": true,
+   "cardHasRollTitle": true,
+   "pinLinkFirst": true,
+   "panoLinkSecond": true,
+   "csvDownload": true,
+   "pageErrors": []
+  },
+  "ownerPortfolio": {
+   "topRows": 10,
+   "urlCarriesOwner": true,
+   "cardOpens": true,
+   "parcelsOutlined": true,
+   "noOwnerNames": true,
+   "csvDownload": true,
+   "backToList": true,
+   "pageErrors": []
+  },
+  "farmlandWatch": {
+   "listRows": 60,
+   "firstRow": "แปลง 01O077\nที่ดิน 174.52 ล้านบาท · เรียกเก็บ 19,904 บาท\n+628,178\nบาท/ปี",
+   "cardLeadsWithIfVacant": true,
+   "pageErrors": []
+  },
+  "floodSites": {
+   "siteNumbersHiddenAtCityZoom": true,
+   "siteNumbersWhenZoomedIn": true,
+   "cardHasCause": true,
+   "cardHasFirstAction": true,
+   "cardHasStatus": true,
+   "cardHasRoute": true,
+   "pageErrors": []
+  },
+  "phoneSheet": {
+   "startsPeek": true,
+   "mapControlsAboveSheet": true,
+   "cycles": true,
+   "heightsGrow": true,
+   "listRecordLiftsToHalf": true,
+   "popupOpen": true,
+   "pageErrors": []
+  },
+  "petsSeparate": {
+   "petsOption": true,
+   "careOption": true,
+   "petsPanelHasNoCareGroups": true,
+   "dogsCats": true,
+   "pageErrors": []
+  },
+  "keyboard": {
+   "missionTabFocusKept": true,
+   "missionFocusOutline": "solid 2px",
+   "explainOpensByKeyboard": true,
+   "explainFocusOutline": "solid 2px",
+   "pageErrors": []
+  },
+  "terrain3D": {
+   "defaultExaggeration2": true,
+   "bearing0": true,
+   "state": null,
+   "pageErrors": []
+  }
+ },
+ "summary": {
+  "cases": 36,
+  "notReadyCases": 0,
+  "pageErrors": 0,
+  "horizontalOverflowCases": 0,
+  "legendOverMapCases": 0,
+  "phoneMapShareMin": 0.38,
+  "flowsPassed": {
+   "negotiationPlan": true,
+   "ownerPortfolio": true,
+   "farmlandWatch": true,
+   "floodSites": true,
+   "phoneSheet": true,
+   "petsSeparate": true,
+   "keyboard": true,
+   "terrain3D": true
+  }
+ },
+ "notCovered": [
+  "real GPU rendering",
+  "screen readers",
+  "real phones",
+  "street basemap tiles"
+ ],
+ "smallTargetsNote": "Controls counted in smallTargets are 18 px checkboxes inside their own label; the label (at least 44 px tall, full panel width) is the click and tap target."
+}

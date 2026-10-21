@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 release-evidence/
+qa/browser/node_modules/
+qa/browser/package.json
+qa/browser/package-lock.json

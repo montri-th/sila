@@ -1,0 +1,11 @@
+{
+ "schema": "sila-browser-fixtures/1",
+ "note": "Sample record ids the browser checks open. They are public map ids (no personal data). If a data refresh removes one, pick another id of the same layer and update it here in the same pull request.",
+ "records": {
+  "negotiateRecord": "parcels-014068",
+  "taxmapRecord": "parcels-012660",
+  "buildingTaxRecord": "buildings-018975",
+  "ownerCode": "T-TJQ6JE",
+  "floodRecord": "floodsite-11"
+ }
+}

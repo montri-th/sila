@@ -1,0 +1,1590 @@
+{
+ "schema": "sila-handoff/1",
+ "document": {
+  "id": "sila-dev-handoff/handoff",
+  "title": "Handoff: แผนที่งานเจ้าหน้าที่ศิลา",
+  "kind": "developer handoff",
+  "version": "1",
+  "date": "2026-10-21",
+  "status": "current",
+  "supersedes": null,
+  "siteRevision": "2.0.2",
+  "baseCommit": "4b322081ef7677b0deb424727acb38d63408a37a",
+  "language": "th (human prose), en (agent fields)",
+  "generator": "tools/handoff/build_handoff.py",
+  "evidenceLabels": [
+   "Observed fact",
+   "Benchmark interpretation",
+   "Owner-stated",
+   "Inference",
+   "Hypothesis"
+  ],
+  "quoteLabels": [
+   "VERBATIM",
+   "PARTIAL",
+   "RECONSTRUCTED"
+  ]
+ },
+ "state": {
+  "liveUrl": "https://montri-th.github.io/sila/",
+  "repo": "montri-th/sila",
+  "branch": "main",
+  "baseRevision": "2.0.1",
+  "baseCommit": "4b322081ef7677b0deb424727acb38d63408a37a",
+  "baseCommitLiveCheck": {
+   "verifiedAtUtc": "2026-10-20T17:14:20Z",
+   "checked": 404,
+   "passed": 404,
+   "manifestSha256": "74df87034f162d2c260367cff6b4b6b85f73c40f45c37dadcd4efb56011ccda9"
+  },
+  "siteRevision": "2.0.2",
+  "production": {
+   "authentication": false,
+   "municipalWrites": false,
+   "productionDataConnected": false,
+   "source": "README.md front matter"
+  },
+  "latestReceipts": {
+   "accessibility-checks": {
+    "file": "qa/revision-2.0.2-accessibility-checks.json",
+    "views": 34,
+    "notReadyViews": 0,
+    "violations": 0,
+    "tool": "axe-core 4.10.2"
+   },
+   "browser-checks": {
+    "file": "qa/revision-2.0.2-browser-checks.json",
+    "cases": 36,
+    "notReadyCases": 0,
+    "pageErrors": 0,
+    "horizontalOverflowCases": 0,
+    "legendOverMapCases": 0,
+    "flowsPassed": "8 of 8",
+    "browser": "Chromium 141.0.7390.37"
+   },
+   "phone-overflow": {
+    "file": "qa/revision-2.0.2-phone-overflow.json",
+    "runs": 112,
+    "bad": 0
+   },
+   "publication-audit": {
+    "file": "qa/revision-2.0.2-publication-audit.json",
+    "result": "pass",
+    "filesScanned": 45,
+    "notScanned": 0
+   }
+  },
+  "publicationStateOfThisRevision": "read build-manifest.json and the latest tools/verify-live.py output; this document does not claim it"
+ },
+ "quickStart": [
+  "git clone https://github.com/montri-th/sila.git && cd sila",
+  "python3 server.py --port 8768 > /dev/null 2>&1 &   # loopback preview in the background: http://127.0.0.1:8768/",
+  "until curl -sf -o /dev/null http://127.0.0.1:8768/; do sleep 0.5; done   # wait until the preview answers",
+  "sh qa/run-unit-checks.sh",
+  "python3 -m pip install playwright==1.56.0 && python3 -m playwright install chromium",
+  "npm install --prefix qa/browser axe-core@4.10.2",
+  "python3 qa/browser/run_matrix.py --base http://127.0.0.1:8768/ --out release-evidence/matrix.json",
+  "python3 tools/handoff/build_handoff.py --check"
+ ],
+ "architecture": {
+  "modules": [
+   {
+    "file": "index.html",
+    "globals": [],
+    "role": "page shell; the order of styles and scripts and their ?v= cache keys"
+   },
+   {
+    "file": "app.js",
+    "globals": [
+     "SilaExplorer"
+    ],
+    "role": "SilaExplorer: state, URL sync, data loading, every layer, panels, record cards, charts and CSV (to be split by R-10 to R-12)"
+   },
+   {
+    "file": "missions.js",
+    "globals": [
+     "SilaMissions"
+    ],
+    "role": "SilaMissions: the 5 missions and the layer definitions (labels, kind, benefit, supplements, tools)"
+   },
+   {
+    "file": "tax-engine.js",
+    "globals": [
+     "SilaTaxEngine"
+    ],
+    "role": "SilaTaxEngine 2.0.0: per-title land-tax engine (prepare, run, agriWatch, ownerRanking, vacancyFromRoll)"
+   },
+   {
+    "file": "tax-calculator.js",
+    "globals": [
+     "SilaTaxCalculator"
+    ],
+    "role": "SilaTaxCalculator: one-parcel calculator under the Act 2562 and Royal Decree 2564 rates; inputs never leave the tab"
+   },
+   {
+    "file": "choropleth.js",
+    "globals": [
+     "SilaScales"
+    ],
+    "role": "SilaScales: LDS 0.9.7 analytical classes and the 41-sample LUT from reference/lds-analytical-subset.json"
+   },
+   {
+    "file": "sila-charts.js",
+    "globals": [
+     "SilaCharts"
+    ],
+    "role": "SilaCharts: amCharts 5 wrappers; colours come from the host (LDS series or scales); captions carry what, unit, basis, scope, time"
+   },
+   {
+    "file": "public-aggregate.js",
+    "globals": [
+     "SilaPublicAggregates"
+    ],
+    "role": "SilaPublicAggregates: municipality-level summary views (tax, business, animals, health services, care groups) from data/municipal-summary.json"
+   },
+   {
+    "file": "ui-icons.js",
+    "globals": [
+     "SilaIcons"
+    ],
+    "role": "SilaIcons: Material Symbols Rounded subset as inline SVG paths (approved glyphs only)"
+   },
+   {
+    "file": "basemap.js",
+    "globals": [
+     "SilaBasemap"
+    ],
+    "role": "SilaBasemap: street (OpenFreeMap), satellite, satellite archive (EOX 2016) and none, with OSM raster fallback"
+   },
+   {
+    "file": "terrain-3d.js",
+    "globals": [
+     "SilaTerrain3D"
+    ],
+    "role": "SilaTerrain3D: MapLibre 3D terrain from FABDEM (colour relief, contours, shading), north-up default, exaggeration 2"
+   },
+   {
+    "file": "terrain-dem-worker.js",
+    "globals": [],
+    "role": "Web Worker for terrain-3d.js: fetches and decodes FABDEM terrarium tiles, overzoom and shading"
+   },
+   {
+    "file": "fabdem-layer.js",
+    "globals": [
+     "SilaFabdem"
+    ],
+    "role": "SilaFabdem: 2D height colours and shading from FABDEM tiles (district 4001 coverage)"
+   },
+   {
+    "file": "house-points.js",
+    "globals": [
+     "SilaHousePoints"
+    ],
+    "role": "SilaHousePoints: every house record as one canvas point at every zoom"
+   },
+   {
+    "file": "map-pick.js",
+    "globals": [
+     "SilaMapPick"
+    ],
+    "role": "SilaMapPick: picks source geometries under the pointer; the host chooses among overlaps"
+   },
+   {
+    "file": "context-actions.js",
+    "globals": [
+     "SilaContextActions"
+    ],
+    "role": "SilaContextActions: search sources and prepare editable AI questions; no AI runtime, no uploads, no personal data"
+   },
+   {
+    "file": "server.py",
+    "globals": [],
+    "role": "loopback preview (127.0.0.1) with a file allowlist"
+   }
+  ],
+  "loadOrder": {
+   "styles": [
+    "assets/fonts.css",
+    "vendor/leaflet/leaflet.css",
+    "vendor/maplibre-gl/maplibre-gl.css",
+    "basemap.css",
+    "styles.css",
+    "house-points.css",
+    "context-actions.css",
+    "platform-shell.css",
+    "missions.css",
+    "tax-calculator.css",
+    "map-layers.css",
+    "shell.css",
+    "assets/brand/citychat-motif-motion.css",
+    "assets/brand/citychat-header-logo.css"
+   ],
+   "scripts": [
+    "assets/brand/citychat-header-logo.js",
+    "vendor/leaflet/leaflet.js",
+    "basemap.js",
+    "house-points.js",
+    "map-pick.js",
+    "context-actions.js",
+    "ui-icons.js",
+    "public-aggregate.js",
+    "fabdem-layer.js",
+    "terrain-3d.js",
+    "choropleth.js",
+    "missions.js",
+    "tax-calculator.js",
+    "tax-engine.js",
+    "sila-charts.js",
+    "vendor/amcharts5/amcharts5-sila.min.js",
+    "app.js"
+   ]
+  },
+  "urlParams": [
+   {
+    "param": "mission",
+    "values": "tax, flood, care, works, area"
+   },
+   {
+    "param": "dataset",
+    "values": "layer id"
+   },
+   {
+    "param": "boundary",
+    "values": "municipality, village, election"
+   },
+   {
+    "param": "scope",
+    "values": "sila or a village/election id"
+   },
+   {
+    "param": "lang",
+    "values": "th or en"
+   },
+   {
+    "param": "theme",
+    "values": "dark or light"
+   },
+   {
+    "param": "basemap",
+    "values": "street, satellite, satellite-archive, none"
+   },
+   {
+    "param": "mode",
+    "values": "2d or 3d (terrain)"
+   },
+   {
+    "param": "record",
+    "values": "selected record id"
+   },
+   {
+    "param": "scenario",
+    "values": "assessed69, old70, new70, delta (tax map)"
+   },
+   {
+    "param": "adj",
+    "values": "land appraisal change %, -30 to 100"
+   },
+   {
+    "param": "badj",
+    "values": "building value change %, -30 to 100"
+   },
+   {
+    "param": "fix",
+    "values": "selected fixes joined by a dot"
+   },
+   {
+    "param": "pm",
+    "values": "pct for percent on properties"
+   },
+   {
+    "param": "init",
+    "values": "negotiation initiative id"
+   },
+   {
+    "param": "owner",
+    "values": "owner code T-XXXXXX"
+   },
+   {
+    "param": "metric",
+    "values": "population grid metric t, c, a, o, m, f"
+   },
+   {
+    "param": "view",
+    "values": "buildings view type, tax, registry, roll, straddle, use"
+   },
+   {
+    "param": "pal, bands, map, lock, ct, low, step",
+    "values": "terrain colour and contour options"
+   },
+   {
+    "param": "ex, ext",
+    "values": "3D exaggeration (number or auto) and auto target"
+   }
+  ],
+  "testHook": "window.SilaExplorer: getState(), setDataset(id), setMission(id), selectScope(id), setTerrainMode(mode), closeRecord()",
+  "startup": "start() fetches catalog, metadata, document catalog, design tokens, municipal summary, terrain source and coverage, analytical scales, parcel-tax.json, population structure and the optional Street View coverage in parallel; prepares the tax model; loads boundaries; reads the URL; then binds events, creates the map, renders the panel and draws."
+ },
+ "missions": [
+  {
+   "id": "tax",
+   "icon": "tax",
+   "label": [
+    "ภาษีและรายได้",
+    "Tax and revenue"
+   ],
+   "short": [
+    "ภาษี",
+    "Tax"
+   ],
+   "layers": [
+    "negotiate",
+    "properties",
+    "portfolio",
+    "agriwatch",
+    "taxmap",
+    "appraisal",
+    "buildings",
+    "houses",
+    "businesses"
+   ]
+  },
+  {
+   "id": "flood",
+   "icon": "flood",
+   "label": [
+    "น้ำท่วมและภัยพิบัติ",
+    "Flood and disaster"
+   ],
+   "short": [
+    "น้ำท่วม",
+    "Flood"
+   ],
+   "layers": [
+    "floodsites",
+    "terrain",
+    "waterways",
+    "popgrid",
+    "roads",
+    "cctv"
+   ]
+  },
+  {
+   "id": "care",
+   "icon": "care",
+   "label": [
+    "ดูแลคนและสาธารณสุข",
+    "Care and public health"
+   ],
+   "short": [
+    "ดูแลคน",
+    "Care"
+   ],
+   "layers": [
+    "popgrid",
+    "caregroups",
+    "population",
+    "health",
+    "education",
+    "animals"
+   ]
+  },
+  {
+   "id": "works",
+   "icon": "works",
+   "label": [
+    "โยธาและบริการสาธารณะ",
+    "Public works and services"
+   ],
+   "short": [
+    "โยธา",
+    "Works"
+   ],
+   "layers": [
+    "roads",
+    "publicfacilities",
+    "cctv",
+    "education",
+    "religion",
+    "buildings"
+   ]
+  },
+  {
+   "id": "area",
+   "icon": "area",
+   "label": [
+    "ข้อมูลพื้นฐานพื้นที่",
+    "Area basics"
+   ],
+   "short": [
+    "พื้นที่",
+    "Area"
+   ],
+   "layers": [
+    "overview",
+    "population",
+    "houses",
+    "buildings",
+    "appraisal"
+   ]
+  }
+ ],
+ "layers": [
+  {
+   "id": "negotiate",
+   "label": [
+    "แผนการเจรจา: เก็บเพิ่มได้ตามกลุ่มข้อเสนอ",
+    "Negotiation plan: gains by initiative"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [
+    "tax"
+   ],
+   "tools": [
+    "tax-calculator"
+   ],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "derived_20261020"
+  },
+  {
+   "id": "taxmap",
+   "label": [
+    "ภาษีที่ดินรายแปลง",
+    "Land tax by parcel"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [
+    "tax"
+   ],
+   "tools": [
+    "tax-calculator"
+   ],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "source_supplied_20261019"
+  },
+  {
+   "id": "properties",
+   "label": [
+    "ทรัพย์สินรายเจ้าของ: ภาษีที่เพิ่มได้",
+    "Properties by owner: tax that can be added"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [
+    "tax"
+   ],
+   "tools": [
+    "tax-calculator"
+   ],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "source_supplied_20261020"
+  },
+  {
+   "id": "portfolio",
+   "label": [
+    "เจ้าของรายใหญ่ เรียงตามราคาประเมินรวม",
+    "Largest owners by appraised value"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [
+    "tax"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "derived_20261020"
+  },
+  {
+   "id": "agriwatch",
+   "label": [
+    "เกษตรบนที่ดินราคาสูง ควรเพ่งเล็ง",
+    "High-value farmland to watch"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [
+    "tax"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "derived_20261020"
+  },
+  {
+   "id": "businesses",
+   "label": [
+    "ธุรกิจนิติบุคคลที่จดทะเบียน VAT",
+    "VAT-registered companies"
+   ],
+   "kind": "points",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/businesses.geojson"
+   ],
+   "catalogStatus": "open_data_20261017"
+  },
+  {
+   "id": "appraisal",
+   "label": [
+    "ราคาประเมินที่ดินรายแปลง",
+    "Land appraisal by parcel"
+   ],
+   "kind": "parcel-choropleth",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/parcels.geojson",
+    "data/parcel-tax.json"
+   ],
+   "catalogStatus": "source_supplied_20261019"
+  },
+  {
+   "id": "buildings",
+   "label": [
+    "อาคาร บ้านเลขที่ และบัญชีภาษี",
+    "Buildings, house numbers and the tax roll"
+   ],
+   "kind": "polygons",
+   "supplements": [
+    "business"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/buildings.geojson"
+   ],
+   "catalogStatus": "source_supplied_20261019"
+  },
+  {
+   "id": "houses",
+   "label": [
+    "หมุดบ้านที่สำรวจ",
+    "Surveyed house points"
+   ],
+   "kind": "points",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/houses.geojson"
+   ],
+   "catalogStatus": "source_supplied_20261019"
+  },
+  {
+   "id": "terrain",
+   "label": [
+    "ที่สูงที่ต่ำ 2D และ 3D",
+    "High and low ground in 2D and 3D"
+   ],
+   "kind": "terrain",
+   "supplements": [
+    "flood"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/terrain-source.json",
+    "data/terrain-coverage.geojson",
+    "external FABDEM tiles"
+   ],
+   "catalogStatus": "external_team_pending"
+  },
+  {
+   "id": "waterways",
+   "label": [
+    "ลำห้วยและแหล่งน้ำ",
+    "Streams and water bodies"
+   ],
+   "kind": "polygons",
+   "supplements": [
+    "flood"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/waterways.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "floodsites",
+   "label": [
+    "จุดศึกษาน้ำท่วม 16 จุด",
+    "16 flood study sites"
+   ],
+   "kind": "points",
+   "supplements": [
+    "flood"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/flood-sites.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "popgrid",
+   "label": [
+    "คนในพื้นที่ แยกเพศและอายุ",
+    "People by sex and age"
+   ],
+   "kind": "grid-choropleth",
+   "supplements": [
+    "healthservices"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/population-grid.geojson"
+   ],
+   "catalogStatus": "source_supplied_20261019"
+  },
+  {
+   "id": "caregroups",
+   "label": [
+    "กลุ่มเปราะบางและผู้รับการดูแล (ยอดรวม)",
+    "Vulnerable groups and care recipients (totals)"
+   ],
+   "kind": "aggregate",
+   "supplements": [
+    "healthservices"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/municipal-summary.json"
+   ],
+   "catalogStatus": null
+  },
+  {
+   "id": "animals",
+   "label": [
+    "สัตว์เลี้ยง: สุนัขและแมว (ยอดรวม)",
+    "Pets: dogs and cats (totals)"
+   ],
+   "kind": "aggregate",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/municipal-summary.json"
+   ],
+   "catalogStatus": null
+  },
+  {
+   "id": "population",
+   "label": [
+    "ประชากรรายหมู่บ้าน",
+    "Population by village"
+   ],
+   "kind": "village-choropleth",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/villages.geojson"
+   ],
+   "catalogStatus": "needs_reconciliation"
+  },
+  {
+   "id": "health",
+   "label": [
+    "สถานพยาบาล",
+    "Health facilities"
+   ],
+   "kind": "points",
+   "supplements": [
+    "healthservices",
+    "caregroups"
+   ],
+   "tools": [],
+   "dataFiles": [
+    "data/health.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "education",
+   "label": [
+    "สถานศึกษา",
+    "Schools"
+   ],
+   "kind": "points",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/education.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "roads",
+   "label": [
+    "ถนนขึ้นทะเบียน",
+    "Registered roads"
+   ],
+   "kind": "lines",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/roads.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "cctv",
+   "label": [
+    "กล้อง CCTV",
+    "CCTV cameras"
+   ],
+   "kind": "points",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/cctv.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "publicfacilities",
+   "label": [
+    "สาธารณูปการ",
+    "Public facilities"
+   ],
+   "kind": "polygons",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/publicfacilities.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "religion",
+   "label": [
+    "ศาสนสถาน",
+    "Religious places"
+   ],
+   "kind": "points",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/religion.geojson"
+   ],
+   "catalogStatus": "ready_with_caveats"
+  },
+  {
+   "id": "overview",
+   "label": [
+    "ขอบเขตและภาพรวมพื้นที่",
+    "Boundaries and area overview"
+   ],
+   "kind": "boundaries",
+   "supplements": [],
+   "tools": [],
+   "dataFiles": [
+    "data/municipality.geojson",
+    "data/villages.geojson",
+    "data/election.geojson"
+   ],
+   "catalogStatus": null
+  }
+ ],
+ "dataContracts": {
+  "files": [
+   {
+    "path": "data/catalog.json",
+    "meaning": "dataset register: ids, labels, counts (count = source records, mappedCount = drawn), statuses, caveats, source links",
+    "privacy": "public metadata; sourceUrl values point to restricted Google Drive folders (P-17)",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/metadata.json",
+    "meaning": "municipality, villages, elections, totals per scope, quality flags, transforms, privacy and data-currency notes",
+    "privacy": "public metadata",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/parcels.geojson",
+    "meaning": "parcel polygons (WGS84) with record id parcels-NNNNNN, tax-map code, area, village and election membership",
+    "privacy": "no deed numbers, owners or tax ids",
+    "catalogStatus": [
+     "derived_20261020",
+     "source_supplied_20261019",
+     "source_supplied_20261020"
+    ]
+   },
+   {
+    "path": "data/parcel-tax.json",
+    "meaning": "per-title tax rows (see parcelTaxFields), taxpayer summaries keyed by random owner code, properties, building groups, summary with method notes and city totals",
+    "privacy": "random owner codes only; no names, ids or roll record ids",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/buildings.geojson",
+    "meaning": "building footprints with house numbers, survey attributes in published groups, links to parcels and the building roll",
+    "privacy": "survey status not published; use in groups only",
+    "catalogStatus": [
+     "source_supplied_20261019"
+    ]
+   },
+   {
+    "path": "data/houses.geojson",
+    "meaning": "surveyed house points with house number and survey attributes in published groups",
+    "privacy": "house numbers only, no notes or register codes",
+    "catalogStatus": [
+     "source_supplied_20261019"
+    ]
+   },
+   {
+    "path": "data/businesses.geojson",
+    "meaning": "juristic VAT registrants placed on parcels or buildings",
+    "privacy": "natural persons not published",
+    "catalogStatus": [
+     "open_data_20261017"
+    ]
+   },
+   {
+    "path": "data/population-grid.geojson",
+    "meaning": "250 m cells with counts by sex and age group, small groups masked",
+    "privacy": "aggregate; >=10 people and >=3 households per shown cell; <5 masking; secondary suppression",
+    "catalogStatus": [
+     "source_supplied_20261019"
+    ]
+   },
+   {
+    "path": "data/population-structure.json",
+    "meaning": "village and city totals by sex and age group with the same masking",
+    "privacy": "aggregate",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/municipal-summary.json",
+    "meaning": "municipality-level aggregates for tax, business, animals, health services and care groups",
+    "privacy": "exposure municipality_aggregate_only; no record details",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/flood-sites.geojson",
+    "meaning": "16 flood study points (study v7, 17 Oct 2569) with cause, options, receiving waterway and start order (field receiver), first action, coordinate status, survey-route length",
+    "privacy": "place names only",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/flood-evidence.json",
+    "meaning": "document evidence from the earlier 16-site flood plan (2564-2567)",
+    "privacy": "public document facts",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/terrain-source.json",
+    "meaning": "FABDEM tile service metadata: URL template, zooms, encoding, licence, attribution",
+    "privacy": "public metadata",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/terrain-coverage.geojson",
+    "meaning": "coverage outline of the terrain service used by the site",
+    "privacy": "public metadata",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/villages.geojson",
+    "meaning": "28 village boundaries with reported population and its reconciliation status",
+    "privacy": "aggregate",
+    "catalogStatus": [
+     "needs_reconciliation",
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/municipality.geojson",
+    "meaning": "municipal boundary",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/election.geojson",
+    "meaning": "3 election districts derived for display (not legally certified)",
+    "privacy": "public",
+    "catalogStatus": [
+     "derived_display"
+    ]
+   },
+   {
+    "path": "data/election-source-lines.geojson",
+    "meaning": "source lines the election polygons were derived from",
+    "privacy": "public",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/roads.geojson",
+    "meaning": "registered roads with names and surface",
+    "privacy": "bracketed personal aliases removed from soi names",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/waterways.geojson",
+    "meaning": "streams and water bodies",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/cctv.geojson",
+    "meaning": "CCTV camera points (no streams)",
+    "privacy": "no live links",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/education.geojson",
+    "meaning": "schools",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/health.geojson",
+    "meaning": "health facilities",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/religion.geojson",
+    "meaning": "religious places",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/publicfacilities.geojson",
+    "meaning": "public facilities",
+    "privacy": "public",
+    "catalogStatus": [
+     "ready_with_caveats"
+    ]
+   },
+   {
+    "path": "data/source-manifest.json",
+    "meaning": "source file hashes and transforms of the 1.2 data build",
+    "privacy": "hashes and names of source files",
+    "catalogStatus": []
+   },
+   {
+    "path": "data/data-validation.json",
+    "meaning": "validation counts and privacy flags of the data build",
+    "privacy": "public metadata",
+    "catalogStatus": []
+   }
+  ],
+  "parcelTaxFields": {
+   "id": "parcel record id parcels-NNNNNN; joins data/parcels.geojson",
+   "v": "village id vNN",
+   "price": "land appraisal, THB per square wah",
+   "sqwa": "area in square wah",
+   "landValue": "land value, THB",
+   "use": "use on the roll: res, agri, other, vacant, mixed (null = unknown)",
+   "shares": "use shares for mixed titles, e.g. {res: 0.06, other: 0.94}; null when single use",
+   "mainHome": "1 when the roll marks the title as a main home",
+   "bldValue": "value of buildings the roll links to this title, THB",
+   "tp": "random public owner code T-XXXXXX, or null",
+   "tax69": "2569 bill from PDS 7, THB; 0 only where the roll proves full exemption; null = unknown",
+   "grp": "property id: adjoining titles of the same owner (two or more), used by the combine fix",
+   "rented": "1 when the survey says rented or used by others",
+   "comShare": "commercial share of residential use from the survey, 0 to 1",
+   "surveyBld": "estimated value of surveyed buildings missing from the roll, THB",
+   "link": "how the parcel was matched to the roll title: deed, pds63 (deed number from the 2563 list via map code and area) or house (house numbers; weakest)",
+   "rollBld": "number of buildings on this title's roll",
+   "missBld": "surveyed buildings whose house number is absent from the building roll",
+   "own": "owner evidence code (ds, dl, dc, du, ca, d69; suffix h = house numbers agree); labels in app.js OWN_EVIDENCE",
+   "h63": "what the 2563 list noted about homes on the title: m main home, o other home, r rented",
+   "ex": "1 when the roll prints an exemption on the title; null otherwise (none printed, or not known). The engine treats only 1 as a printed exemption; 0 does not occur",
+   "bgrp": "building group: index + 1 into buildingGroups (titles joined by one building, s.42 para 2 proxy)",
+   "code": "tax-map parcel code"
+  },
+  "taxBaseline": {
+   "source": "reference/tax-map-method.md",
+   "sha256": "f82c48be28e92e249dc62f477613c589885feffe2b371e6977a89d87766734b8",
+   "heading": "## รุ่น 2.0: ฐานเปรียบเทียบคือยอดที่เรียกเก็บปี 2569 และการจัดสรรส่วนเพิ่มให้ข้อเสนอ",
+   "quoteLabel": "VERBATIM",
+   "text": "ตั้งแต่รุ่น 2.0 ส่วนเพิ่มของทุกแปลงคิดเทียบกับ **ยอดที่เทศบาลเรียกเก็บปี 2569 ของแปลงนั้น (ภ.ด.ส.7)** ไม่ใช่ภาษีที่เครื่องคำนวณขึ้นใหม่จากข้อมูลเดียวกัน ตามที่เจ้าของงานยืนยันเมื่อ 20 ต.ค. 2569 (`tax-engine.js` 2.0.0)\n\n- **วิธีเดิม 2570** = ยอดที่เรียกเก็บปี 2569 × (ภาษีตามกฎหมายด้วยราคาที่สมมติ ÷ ภาษีตามกฎหมายด้วยราคาเดิม) เหมือนรุ่นก่อน\n- **ตามข้อเสนอ 2570** = ค่ามากกว่าระหว่าง วิธีเดิม กับ ภาษีตามกฎหมายเมื่อใช้ข้อเสนอที่เลือก (ไม่ใช่ \"วิธีเดิม + ส่วนต่างของข้อเสนอ\" อีกต่อไป) **ส่วนเพิ่ม = ตามข้อเสนอ − วิธีเดิม** จึงเป็นเงินที่เก็บได้มากกว่าที่เรียกเก็บจริง\n- ถ้าบัญชีเรียกเก็บ **ต่ำกว่า** ภาษีตามกฎหมายจากข้อมูลเดียวกันอยู่แล้ว ส่วนต่างนั้นแยกเป็นรายการ **\"บัญชีต่ำกว่าที่คำนวณ (ต้องตรวจ)\"** ไม่ใช่ข้อเสนอ อาจเป็นข้อมูลอาคารหรือเนื้อที่ที่ต่างกัน ข้อยกเว้นเฉพาะราย หรือการเรียกเก็บผิด ต้องตรวจทีละโฉนด ส่วนต่างต่ำกว่า 100 บาทต่อโฉนด (7,415 โฉนด รวม 100,143 บาท) ไม่นำมานับ เพราะเป็นผลของการปัดเศษและค่าเสื่อม\n- ส่วนเพิ่มของแปลงจัดสรรให้ข้อเสนอแต่ละข้อตามผลของข้อนั้นเมื่อคิดทีละข้อ (ไม่เกินส่วนเพิ่มที่เหลือ) ที่เหลือจึงเป็นรายการต้องตรวจ แปลงหนึ่งจึงมีกลุ่มข้อเสนอที่อธิบายส่วนเพิ่มได้มากที่สุด (\"กลุ่มเด่น\") ใช้ระบายสีแผนการเจรจา\n- ถ้าบัญชีเรียกเก็บ **สูงกว่า** ที่คำนวณได้ (เช่น ที่ทิ้งว่างที่คิดอัตราสะสม ม.43 ซึ่งเครื่องไม่รู้ปีที่เริ่มทิ้งว่าง) ไม่มีส่วนเพิ่ม และไม่หักออกจากยอด แสดงแยกเป็น \"บัญชีสูงกว่าที่คำนวณ\" ทั้งเมือง 2,343 แปลง รวม 3,024,730 บาท\n- **ทิ้งว่างกี่ปี** อ่านย้อนจากอัตราที่เรียกเก็บ: ที่ดินว่างเปล่าเสีย 0.3% ใน 3 ปีแรก และเพิ่มอีก 0.3% ทุก 3 ปีที่ยังทิ้งว่าง (ม.43 เพดาน 3%) ดังนั้นแปลงที่เรียกเก็บ 0.6% ในปี 2569 ทิ้งว่างมาแล้ว 4–6 ปี (เริ่มราวปี 2564–2566) และจะขึ้นเป็น 0.9% ระหว่างปี 2570–2572 ส่วนแปลงที่เรียกเก็บ 0.3% ทิ้งว่าง 1–3 ปี ทั้งเมืองอ่านได้ 911 แปลงที่ 0.6% และ 2,108 แปลงที่ 0.3% (ฟังก์ชัน `vacancyFromRoll`) เป็นการอนุมานจากอัตรา ไม่ใช่ประวัติการใช้ที่ยืนยัน\n\nทั้งเมืองที่ราคาเท่าเดิม (รุ่น 2.0): เรียกเก็บปี 2569 27,882,712.16 บาท · ภาษีตามกฎหมายจากข้อมูลเดียวกันโดยไม่ใช้ข้อเสนอ 25,893,034.92 บาท · ปี 2570 ตามข้อเสนอ 30,341,357.16 บาท · **ส่วนเพิ่มที่นำมานับ 2,357,411 บาท จาก 1,416 แปลง** (บนแผนที่ 1,410 แปลง อีก 6 แปลงอยู่นอกเส้นเขตเทศบาล) แยกเป็น แยกชั้นค้าขาย 844,208 บาท (331 แปลง) · รวมแปลงติดกัน 380,801 (11) · อาคารตกบัญชี 73,677 (48) · บ้านให้เช่า 52,374 (185) · บ้านหลักคนละแห่ง 43,109 (231) · นิติบุคคล 27,870 (89) · เกษตรครั้งเดียว 472 (2) · บัญชีต่ำกว่าที่คำนวณ 934,901 (571 โฉนด ≥100 บาท) ตัวเลข 2570 ตามข้อเสนอของรุ่น 1.9 (29,349,630 บาท) ต่ำกว่าเพราะคิดจากฐานที่เครื่องสร้างเอง ไม่ใช่ยอดที่เรียกเก็บ"
+  },
+  "notPublished": {
+   "source": "reference/tax-map-method.md",
+   "sha256": "f82c48be28e92e249dc62f477613c589885feffe2b371e6977a89d87766734b8",
+   "heading": "## สิ่งที่ไม่เผยแพร่",
+   "quoteLabel": "VERBATIM",
+   "text": "ชื่อเจ้าของและชื่อผู้ประกอบการที่เป็นบุคคลธรรมดา เลขบัตรประชาชน เลขผู้เสียภาษี เบอร์โทร ที่อยู่เจ้าของ เลขโฉนด รหัสผู้เสียภาษีของเทศบาล เลขรายการในบัญชี รหัสประจำบ้าน รูปถ่าย หมายเหตุ และข้อมูลอายุหรือเพศรายหลัง รหัสเจ้าของบนเว็บเป็นรหัสสุ่ม ตัวเชื่อมภายในและไฟล์ต้นฉบับอยู่นอก repository"
+  },
+  "publicSummary": {
+   "source": "reference/public-summary-contract.md",
+   "sha256": "01d7fc428db576068c1791897bfddfee817b4ed21734133fe6911b7339db87fb",
+   "heading": "## สัญญาข้อมูล",
+   "quoteLabel": "VERBATIM",
+   "text": "- Schema: `sila-municipal-public-summary/1.0`\n- `exposure`: `municipality_aggregate_only`\n- `recordDetailsAvailable`: `false`\n- `sourceRowExportAvailable`: `false`\n- `datasets`: ต้องมีสี่ ID เดิม; เพิ่ม optional `caregroups` ได้เป็นชุดที่ห้า พร้อม `coverage: supplied_service_cohort_only` ซึ่งเป็นกลุ่มในบัญชีที่ได้รับ ไม่ใช่ผู้ป่วยทั้งหมดของเมือง\n- Metric เก็บ `value` เป็นตัวเลขหรือ `null`, ชื่อ หน่วย หมายเหตุสองภาษา และ `sourceIds` ของชุดอ้างอิงสรุป ตัวเลขศูนย์ที่มีจริงแสดง `0`; ค่าที่ยังไม่ยืนยันแสดง `—` พร้อมคำอธิบาย หาก `state/status` เป็น suppressed/withheld/restricted/not_published ให้แสดงว่าไม่เผยข้อมูลส่วนนี้\n- Source description มีชื่อที่เหมาะกับการเผยแพร่ ช่วงอ้างอิง สถานะตรวจ และ `publicDownload:false` ไม่มี raw Drive file link หรือดาวน์โหลดรายแถว\n- วันรับไฟล์ไม่ใช่วันสำรวจ วันตัดยอด หรือปีภาษีของทุกบันทึก ต้องอ่านช่วงอ้างอิงและหมายเหตุข้างแต่ละ metric\n\nยอดรับในบัญชีชำระเป็นยอดตามช่วงรับเงินในต้นทาง อาจมีหลายปีภาษีและส่วนเพิ่ม ไม่เท่ากับยอดประเมินปีเดียวกัน ยอดลูกหนี้ หรือเงินที่โครงการทำให้เก็บเพิ่ม ห้ามสร้าง collection rate หรือผลเพิ่มจากส่วนต่างของตัวเลขเหล่านี้โดยยังไม่กระทบยอดรายการ"
+  },
+  "floodCoordinateStatus": {
+   "source": "data/flood-sites.geojson",
+   "values": {
+    "approximate": "จับคู่ภาพเอกสารโดยประมาณ 11 จุด บอกบริเวณลงพื้นที่ ไม่ใช่จุดน้ำลึกสุดหรือปากท่อ",
+    "representative": "ตัวแทนบริเวณชื่อพื้นที่ 4 จุด (2, 5, 12, 16) ต้องให้เจ้าหน้าที่ชี้หมุดจริง",
+    "coordinator": "หมุดจากผู้ประสานงาน จุด 4",
+    "surveyed": "รับรองจากรังวัดภาคสนาม 0 จุด"
+   }
+  },
+  "cityFigures": {
+   "source": "qa/expected-figures.json (node qa/compute-figures.cjs)",
+   "engine": "2.0.0",
+   "totals": {
+    "billed69": 27882712.16,
+    "law69": 25893034.92,
+    "old70": 27882712.16,
+    "new70": 30341357.16,
+    "gainAll": 2458645.01,
+    "parcels69": 34573,
+    "parcelsGainAny": 8654,
+    "rollAbove69": 3024729.56,
+    "parcelsRollAbove": 2343
+   },
+   "negotiate": {
+    "gainMaterial": 2357411.32,
+    "parcelsMaterial": 1416,
+    "rollBelowSmallSum": 100143.08,
+    "rollBelowSmallTitles": 7415,
+    "byInitiative": {
+     "rollBelow": [
+      934901,
+      571
+     ],
+     "newBuildings": [
+      73677,
+      48
+     ],
+     "mainHomeOnce": [
+      43109,
+      231
+     ],
+     "rented": [
+      52374,
+      185
+     ],
+     "mixedUse": [
+      844208,
+      331
+     ],
+     "juristic": [
+      27870,
+      89
+     ],
+     "combine": [
+      380801,
+      11
+     ],
+     "agriShare": [
+      472,
+      2
+     ]
+    },
+    "rollAboveSum": 2981401.42,
+    "rollAboveTitles": 2343,
+    "vacancySteps": {
+     "0": 2108,
+     "1": 911
+    }
+   },
+   "municipalityView": {
+    "note": "the site draws parcels inside the municipal boundary only; the totals above include titles outside it",
+    "titlesOutsideBoundary": 59,
+    "outsideTitlesWithGain": 6,
+    "parcelsMaterialInside": 1410,
+    "gainMaterialInside": 2357026.92
+   },
+   "agriWatch": {
+    "titles": 279,
+    "potential": 8443089,
+    "potentialUnknown": 0,
+    "billed": 1024187,
+    "billedUnknown": 0,
+    "landValue": 3227415082,
+    "withBuilding": 84,
+    "juristic": 6
+   },
+   "owners": {
+    "count": 18567,
+    "totalValueMTHB": 40694.01,
+    "top10Share": 5,
+    "over50M": 26
+   }
+  }
+ },
+ "surfaces": [
+  {
+   "id": "public-site",
+   "name": "Public officer site (GitHub Pages from main)",
+   "auth": "none",
+   "writes": "none",
+   "data": "static files under data/, reference/ and vendor/ (including the EOX 2016 archive tiles, served from this host), loaded in the browser",
+   "cache": "GitHub Pages sends Cache-Control max-age=600 (observed 2026-10-21); ?v= keys in index.html and DATA_VERSION in app.js bust caches",
+   "analytics": "none (no analytics script in index.html or app.js, observed 2026-10-21)",
+   "externalRequests": [
+    "OpenFreeMap vector tiles (street basemap)",
+    "OpenStreetMap raster tiles only as a fallback",
+    "Google hybrid tiles for the satellite basemap (licence not verified)",
+    "landometer.com FABDEM terrain tiles",
+    "links the user opens: Google Maps, Street View, Google search and AI"
+   ],
+   "downloads": "CSV built in the browser from published fields only"
+  },
+  {
+   "id": "local-preview",
+   "name": "Loopback preview (server.py)",
+   "auth": "loopback only (127.0.0.1)",
+   "writes": "none",
+   "data": "root site files plus assets/, vendor/, data/, reference/ and docs/; scripts and raw GIS are not served",
+   "cache": "Cache-Control no-cache",
+   "analytics": "none"
+  },
+  {
+   "id": "offline-tools",
+   "name": "Offline tools (qa/, tools/)",
+   "auth": "developer machine",
+   "writes": "files the developer reviews before committing",
+   "data": "repository files; keys only from environment variables",
+   "cache": "n/a",
+   "analytics": "none"
+  },
+  {
+   "id": "private-pipeline",
+   "name": "Private data pipeline (outside this repository)",
+   "auth": "the owner's own computer (decision D-11); nothing from it is committed here",
+   "writes": "rebuilds data/parcel-tax.json and the parcel, building and house layers from restricted municipal exports",
+   "data": "LTAX and PDS exports, internal link tables, the owner-code codebook and its salt",
+   "cache": "n/a",
+   "analytics": "none"
+  }
+ ],
+ "invariants": [
+  {
+   "id": "PRIV-01",
+   "rule": "No personal data in the repository or on the site: owner names, natural-person VAT registrants, national ID or tax numbers, phone numbers, owner or business addresses, deed numbers, municipal taxpayer codes, roll record ids, house-register codes, photos or surveyor remarks. Owners appear only as random public codes T-XXXXXX.",
+   "why": "Everything on main is public through GitHub Pages.",
+   "check": "python3 tools/publication-audit.py --since PUBLISHED_COMMIT"
+  },
+  {
+   "id": "PRIV-02",
+   "rule": "Care and vulnerable-group data are aggregates only: 250 m cells with at least 10 listed people and 3 households, groups of 1-4 shown as <5, secondary suppression. Never per-house age, sex, care status or health, including in examples, fixtures and screenshots.",
+   "why": "Vulnerable-group data are sensitive; small cells can single out a household.",
+   "check": "publication audit data check populationIntervalViolations = 0"
+  },
+  {
+   "id": "PRIV-03",
+   "rule": "Bring no data from other municipalities' projects or internal registers into this repository. It holds Sila data the owner has cleared for publication, nothing else.",
+   "why": "Internal registers have their own permitted audience.",
+   "check": "review of every new file under data/"
+  },
+  {
+   "id": "PRIV-04",
+   "rule": "Links to outside services carry no personal data. Map and Street View links carry only a place coordinate; AI question links carry only a place in words, a registered business name or a general legal question (no coordinates, owner codes, tax figures, house numbers or personal names).",
+   "why": "URLs end up in other companies' logs.",
+   "check": "review of streetView(), aiQuestions() and context-actions.js changes"
+  },
+  {
+   "id": "SAFE-01",
+   "rule": "Public risk communication (flood layers, warnings, risk wording) is reviewed by a person before publishing, with no exceptions. The closed-low-ground layer and the study's 10-50 cm scenarios stay unpublished until the owner approves them.",
+   "why": "A wrong warning can harm people.",
+   "check": "a human review receipt in qa/ for any new risk content"
+  },
+  {
+   "id": "SAFE-02",
+   "rule": "Consent and permission are separate from technical ability. That the code can show something does not mean it may be shown. New kinds of published data need the owner's go-ahead, recorded in the decision log.",
+   "why": "Owner rule for CityChat work.",
+   "check": "decision log entry before merge"
+  },
+  {
+   "id": "DATA-01",
+   "rule": "Missing is not zero. Unknown values show the no-figure dash or 'ยังไม่มีข้อมูล' with a reason; never coerce null or undefined to 0 in sums, colours, charts or CSV.",
+   "why": "LDS EVID-05; a zero is a claim.",
+   "check": "browser flows and code review"
+  },
+  {
+   "id": "DATA-02",
+   "rule": "Join on ids only: record ids (parcels-NNNNNN, buildings-NNNNNN), parcel map codes, owner codes T-XXXXXX, village and election ids. Names are for search only.",
+   "why": "Names repeat and change.",
+   "check": "code review"
+  },
+  {
+   "id": "DATA-03",
+   "rule": "Every position carries its source and confidence (placedBy, coordStatus, match evidence). Never present a modelled or LLM-derived coordinate as verified.",
+   "why": "Geocoding has error.",
+   "check": "record cards show the status line"
+  },
+  {
+   "id": "DATA-04",
+   "rule": "Tax figures are planning estimates from the 2569 roll and reference/tax-map-method.md, not official assessments. Gain = law-based 2570 tax with the selected fixes minus the 2569 bill; bills above the law-based figure are listed, not deducted; gaps under 100 THB per title are noise; vacancy years are inferred from the billed rate. Changing the rule needs an owner decision.",
+   "why": "Owner decision D-01.",
+   "check": "node qa/check-tax-engine.cjs; node qa/compute-figures.cjs"
+  },
+  {
+   "id": "DATA-05",
+   "rule": "Label evidence with Observed fact, Benchmark interpretation, Owner-stated, Inference or Hypothesis. Modelled is not observed, planned is not available, a prototype is not a final result.",
+   "why": "MBB v0.5.3 section 3.7.",
+   "check": "review of copy and docs"
+  },
+  {
+   "id": "LDS-01",
+   "rule": "Colours, fonts and scales come from LDS 0.9.7 and CityChat Add-on 0.9.2 through reference/design-tokens.json and reference/lds-analytical-subset.json. Analytical colours keep the same HEX in light and dark themes (no dark formulas, inversion or opacity on data colours); every legend states unit and denominator and has a non-colour cue. No decorative bracket or coloured left rail on menus, tabs, cards or callouts. Keep a visible keyboard focus. The CityChat identity gradient is never a data scale.",
+   "why": "Project design rules.",
+   "check": "browser matrix screenshots in both themes; axe"
+  },
+  {
+   "id": "LDS-02",
+   "rule": "Every map view answers 'what should I notice and what can I do next'. Charts carry title, unit, period, source and limit; big numbers carry label, unit and context.",
+   "why": "MBB v0.5.3 section 4.5.",
+   "check": "review against the view"
+  },
+  {
+   "id": "KEY-01",
+   "rule": "No API keys, tokens or credentials in the repository, the site or fixtures. Offline tools read keys from environment variables only (for example GOOGLE_MAPS_KEY).",
+   "why": "A public static site cannot keep a secret.",
+   "check": "publication audit pattern credential_like"
+  },
+  {
+   "id": "GIT-01",
+   "rule": "Never force-push or rewrite main, never purge history, never push the revision-1.8-history branch. Work on a branch and open a pull request; the owner merges.",
+   "why": "Owner instruction in the work thread.",
+   "check": "branch protection (recommended) and review"
+  },
+  {
+   "id": "REL-01",
+   "rule": "A release is done only after: cache keys bumped for changed JS and CSS (?v= in index.html; DATA_VERSION in app.js when the interface must see new data at once), unit, browser, accessibility and phone-overflow checks pass, the publication audit passes, the manifest is regenerated, the push is built by Pages and tools/verify-live.py matches every file. Do not call anything done, published or live before that.",
+   "why": "Owner rule: report only what was checked on the real thing.",
+   "check": "docs/handoff/HANDOFF.md release steps"
+  },
+  {
+   "id": "BRAND-01",
+   "rule": "CityChat and CityStory are separate products; CityScan is part of CityChat; do not present one product's capability as Landometer's as a whole. Logo and motif files are locked artwork: exact bytes from assets/brand/, no recolour, crop or redraw.",
+   "why": "Project instructions; MBB v0.5.3 section 1.5; CityChat Add-on section 2.",
+   "check": "assets/brand/manifest.json hashes"
+  },
+  {
+   "id": "LIC-01",
+   "rule": "Keep licences intact: FABDEM CC BY-NC-SA 4.0 (non-commercial; commercial permission not verified), amCharts 5 free licence (the amCharts logo stays), OpenStreetMap and OpenFreeMap attribution, EOX Sentinel-2 cloudless 2016 CC BY 4.0 (attribution shown with the archive basemap), Material Symbols Apache-2.0. Vendor a new library or data set only with its LICENSE and a SOURCE note under vendor/NAME/.",
+   "why": "Licences are conditions of use.",
+   "check": "vendor/*/LICENSE*, data/terrain-source.json"
+  },
+  {
+   "id": "CLAIM-01",
+   "rule": "Nothing public states prices, contracts, sales pipeline or traction. Pilots, letters of intent and test sites are not customers; do not describe Sila as a customer.",
+   "why": "Project instructions; MBB v0.5.3 section 0.3.",
+   "check": "review of copy and docs"
+  }
+ ],
+ "qa": {
+  "commands": [
+   {
+    "check": "Node unit checks (tax engine, calculator, terrain, aggregates, map pick, house points, FABDEM) and expected city figures current",
+    "command": "sh qa/run-unit-checks.sh"
+   },
+   {
+    "check": "Browser matrix and flows",
+    "command": "python3 qa/browser/run_matrix.py --base http://127.0.0.1:8768/ --out RECEIPT.json"
+   },
+   {
+    "check": "Accessibility (axe-core)",
+    "command": "python3 qa/browser/run_a11y.py --base http://127.0.0.1:8768/ --out RECEIPT.json"
+   },
+   {
+    "check": "Phone overflow",
+    "command": "python3 qa/browser/run_overflow.py --base http://127.0.0.1:8768/ --out RECEIPT.json"
+   },
+   {
+    "check": "Publication audit",
+    "command": "python3 tools/publication-audit.py --since PUBLISHED_COMMIT --out RECEIPT.json"
+   },
+   {
+    "check": "Expected city figures current (write them with --out after a change to data/parcel-tax.json or tax-engine.js)",
+    "command": "node qa/compute-figures.cjs --check"
+   },
+   {
+    "check": "Manifest current",
+    "command": "python3 tools/gen-manifest.py --check"
+   },
+   {
+    "check": "Handoff documents current",
+    "command": "python3 tools/handoff/build_handoff.py --check"
+   },
+   {
+    "check": "Published bytes (after merge)",
+    "command": "python3 tools/verify-live.py --base-url https://montri-th.github.io/sila/ --output OUTPUT.json"
+   }
+  ],
+  "receipts": {
+   "accessibility-checks": {
+    "file": "qa/revision-2.0.2-accessibility-checks.json",
+    "views": 34,
+    "notReadyViews": 0,
+    "violations": 0,
+    "tool": "axe-core 4.10.2"
+   },
+   "browser-checks": {
+    "file": "qa/revision-2.0.2-browser-checks.json",
+    "cases": 36,
+    "notReadyCases": 0,
+    "pageErrors": 0,
+    "horizontalOverflowCases": 0,
+    "legendOverMapCases": 0,
+    "flowsPassed": "8 of 8",
+    "browser": "Chromium 141.0.7390.37"
+   },
+   "phone-overflow": {
+    "file": "qa/revision-2.0.2-phone-overflow.json",
+    "runs": 112,
+    "bad": 0
+   },
+   "publication-audit": {
+    "file": "qa/revision-2.0.2-publication-audit.json",
+    "result": "pass",
+    "filesScanned": 45,
+    "notScanned": 0
+   }
+  },
+  "notCovered": [
+   "real GPU rendering (3D uses software WebGL in tests)",
+   "screen readers",
+   "real phones",
+   "street basemap tiles",
+   "text contrast over map tiles",
+   "200% zoom"
+  ]
+ },
+ "release": [
+  {
+   "step": "Print the task brief, branch from main and make the change (one task, one pull request).",
+   "command": "python3 tools/handoff/task.py TASK_ID && git switch -c TASK_ID-short-name"
+  },
+  {
+   "step": "Bump ?v= for changed JS/CSS in index.html; bump DATA_VERSION in app.js if the interface must see changed data at once.",
+   "command": "(manual until task S-02 adds tools/release.py)"
+  },
+  {
+   "step": "Run the Node checks (they include the expected-figures check).",
+   "command": "sh qa/run-unit-checks.sh"
+  },
+  {
+   "step": "If data/parcel-tax.json or tax-engine.js changed, regenerate expected figures.",
+   "command": "node qa/compute-figures.cjs --out qa/expected-figures.json"
+  },
+  {
+   "step": "Start the preview in the background and wait until it answers, then run the browser, accessibility and phone-overflow checks; write receipts for a revision to qa/revision-X-*.json.",
+   "command": "python3 server.py --port 8768 > /dev/null 2>&1 & until curl -sf -o /dev/null http://127.0.0.1:8768/; do sleep 0.5; done; python3 qa/browser/run_matrix.py --base http://127.0.0.1:8768/ --out qa/revision-X-browser-checks.json && python3 qa/browser/run_a11y.py --base http://127.0.0.1:8768/ --out qa/revision-X-accessibility-checks.json && python3 qa/browser/run_overflow.py --base http://127.0.0.1:8768/ --out qa/revision-X-phone-overflow.json"
+  },
+  {
+   "step": "Rebuild the handoff documents: they read the receipts, the expected figures and tools/handoff/*_data.py.",
+   "command": "python3 tools/handoff/build_handoff.py"
+  },
+  {
+   "step": "Run the publication audit on everything changed since the published commit, rebuild the handoff (it reads the audit receipt), audit again to the same path, then confirm the handoff is current. If a change adds or edits a Google Drive link, ask the owner to confirm its sharing first (P-17).",
+   "command": "python3 tools/publication-audit.py --since PUBLISHED_COMMIT --out qa/revision-X-publication-audit.json && python3 tools/handoff/build_handoff.py && python3 tools/publication-audit.py --since PUBLISHED_COMMIT --out qa/revision-X-publication-audit.json && python3 tools/handoff/build_handoff.py --check"
+  },
+  {
+   "step": "Stage every file, then regenerate the manifest last and confirm it is current.",
+   "command": "git add -A && python3 tools/gen-manifest.py --revision X --date YYYY-MM-DD && git add build-manifest.json && python3 tools/gen-manifest.py --check"
+  },
+  {
+   "step": "Open a pull request with the receipts; the owner reviews and merges (never force-push main).",
+   "command": "gh pr create"
+  },
+  {
+   "step": "After merge, wait for the Pages build to succeed.",
+   "command": "gh run list --branch main --limit 3"
+  },
+  {
+   "step": "Verify every published file against the manifest; only now call the release live.",
+   "command": "python3 tools/verify-live.py --base-url https://montri-th.github.io/sila/ --output release-evidence/live-X.json"
+  }
+ ],
+ "decisionsRef": "implementation-plan.json#/decision/ownerDecisions",
+ "problemsRef": "implementation-plan.json#/problems",
+ "dataRequests": [
+  {
+   "id": "DR-01",
+   "to": "เทศบาล",
+   "status": "ขอแล้ว 2026-10-20 ยังไม่ได้รับ",
+   "quote": "VERBATIM",
+   "text": "ส่งออก ภ.ด.ส.3, 7 และ 4 ปีปัจจุบันโดยมีรหัสผู้เสียภาษีหรือเลขประเมินต่อโฉนด แทนบัญชีปี 2563 ที่อาจเก่า เพื่อยืนยันเจ้าของ ข้อเสนอ ม.40 ม.41 และ ม.42 วรรคสอง",
+   "source": "reference/tax-map-method.md หัวข้อ ขอจากเทศบาล ข้อ 1"
+  },
+  {
+   "id": "DR-02",
+   "to": "เทศบาล",
+   "status": "ยังเปิด",
+   "quote": "VERBATIM",
+   "text": "บัญชีรับชำระที่มีเลขประเมิน เพื่อแสดงสถานะชำระได้ทุกแปลง",
+   "source": "reference/tax-map-method.md หัวข้อ ขอจากเทศบาล ข้อ 2"
+  },
+  {
+   "id": "DR-03",
+   "to": "เทศบาล",
+   "status": "ยังเปิด",
+   "quote": "VERBATIM",
+   "text": "ยืนยันภาษีของโฉนดที่พิมพ์สูงเกินราว 100 เท่า",
+   "source": "reference/tax-map-method.md หัวข้อ ขอจากเทศบาล ข้อ 3"
+  },
+  {
+   "id": "DR-04",
+   "to": "เทศบาล",
+   "status": "ยังเปิด",
+   "quote": "VERBATIM",
+   "text": "กระทบยอดบัญชีประเมินกับรับชำระและลูกหนี้",
+   "source": "reference/tax-map-method.md หัวข้อ ขอจากเทศบาล ข้อ 4"
+  },
+  {
+   "id": "DR-05",
+   "to": "กองช่างและงานป้องกันภัยของเทศบาล",
+   "status": "ยังเปิด",
+   "quote": "RECONSTRUCTED",
+   "text": "ชี้หมุดจริงของจุดศึกษาน้ำท่วม 2, 5, 12 และ 16 (ตอนนี้เป็นตัวแทนบริเวณ) และยืนยันอีก 11 จุดที่เป็นค่าประมาณ ยังไม่มีจุดใดรังวัดในพื้นที่",
+   "source": "data/flood-sites.geojson source.coordinateStatus"
+  },
+  {
+   "id": "DR-06",
+   "to": "เจ้าของงาน",
+   "status": "ยังเปิด",
+   "quote": "RECONSTRUCTED",
+   "text": "คีย์ Google Maps Platform สำหรับตรวจ Street View แบบออฟไลน์หนึ่งครั้ง (ใส่ในตัวแปรสภาพแวดล้อมเท่านั้น ไม่เก็บไว้ที่ใด) หรือคำตัดสินว่าปล่อยให้ไม่รู้ต่อไป (D-10)",
+   "source": "tools/streetview-coverage.py"
+  },
+  {
+   "id": "DR-07",
+   "to": "เทศบาล",
+   "status": "ยังเปิด",
+   "quote": "RECONSTRUCTED",
+   "text": "แหล่งและปีของจำนวนประชากรรายหมู่บ้านที่ถือเป็นทางการ และตัวเลขที่ถูกต้องของหมู่ 11 (ยอดรวมต่างจากชายรวมหญิง 600 คน)",
+   "source": "data/catalog.json population caveats"
+  },
+  {
+   "id": "DR-08",
+   "to": "ผู้เขียนรายงานศึกษาน้ำท่วม",
+   "status": "ยังเปิด (เฉพาะถ้า D-07 ให้เผยแพร่)",
+   "quote": "RECONSTRUCTED",
+   "text": "ขอบเขตภาพจำลองระดับน้ำ 10–50 ซม. รายจุดเป็น GeoJSON พร้อมวิธีและข้อจำกัด ถ้าเจ้าของตัดสินให้เผยแพร่",
+   "source": "data/flood-sites.geojson source.scenario"
+  }
+ ],
+ "outsideRepo": [
+  {
+   "item": "Private data pipeline (LTAX/PDS parsing, title matching, owner linking, random owner codes, layer builds)",
+   "where": "one archive on the owner's computer since 2026-10-21 (D-11); ask the owner, keep an encrypted backup",
+   "why": "reads restricted municipal exports and internal link tables"
+  },
+  {
+   "item": "Owner-code codebook and its salt (restricted)",
+   "where": "inside the same archive on the owner's computer (D-11)",
+   "why": "keeps owner codes stable across data refreshes; must never be public"
+  },
+  {
+   "item": "Raw municipal sources (GIS packages, LTAX exports, registers)",
+   "where": "municipality deliveries in the owner's Google Drive (15 folder links in data/catalog.json sourceUrl and data/metadata.json; restricted, see P-17)",
+   "why": "restricted municipal deliveries; never copy them into this repository (PRIV-01, PRIV-03)"
+  },
+  {
+   "item": "Flood study v7 (Markdown, 17 Oct 2569)",
+   "where": "owner's files; SHA-256 8f9e0b9f0e479209d3f1f5a1578d4a74b1c4f1d7693678198fdcea8e2d431e5b",
+   "why": "source for tools/flood/build_flood_sites.py"
+  },
+  {
+   "item": "Closed-low-ground draft and review pictures",
+   "where": "rebuild with tools/flood/ when needed",
+   "why": "unpublished until the owner reviews (SAFE-01)"
+  },
+  {
+   "item": "Screenshots and browser evidence",
+   "where": "release-evidence/ (git-ignored) or another folder outside the repository",
+   "why": "keep the public repository small; screenshots may show data out of context"
+  }
+ ],
+ "gotchas": [
+  "app.js is a single IIFE; helpers such as $, text(), esc(), num() and the state object S are closures, so code moved to another file needs an explicit namespace (see tasks R-10 to R-12).",
+  "Scripts load in the order of index.html and expose window globals (SilaTaxEngine, SilaMissions, SilaCharts ...); app.js must stay last. amCharts loads with defer and app.js re-mounts charts on the 'sila:am5-ready' event.",
+  "Bump ?v= for every changed JS or CSS file in index.html; basemap.js, house-points.js, map-pick.js, context-actions.js, house-points.css, context-actions.css and platform-shell.css have no key yet. Bump DATA_VERSION in app.js when the interface must see changed data/ files at once (GitHub Pages caches for 10 minutes).",
+  "data/catalog.json and data/metadata.json use 1-space JSON indentation and reference/terrain-contract.json uses 2 spaces; re-serialising them with another indent creates a huge diff. Edit them with a script that keeps the indent, or by hand.",
+  "data/parcels.geojson is 20.7 MB and loads only when a parcel layer opens; the summary shows the dash with 'กำลังเปิดข้อมูลแปลง' meanwhile. Never show zero while loading.",
+  "Tests open the site with basemap=none: street tiles are external and make screenshots non-deterministic. The terrain cases still load external FABDEM tiles from landometer.com, so compare their screenshots with a looser threshold.",
+  "Headless Chromium needs --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist for the 3D terrain (MapLibre + terrain-dem-worker.js); real-GPU rendering is a separate manual check on the live site.",
+  "server.py serves an allowlist only: add a new root-level JS or CSS file to FILES or the preview returns 404 for it while GitHub Pages serves it.",
+  "Owner codes are random (T- plus 6 characters from 23456789ABCDEFGHJKLMNPQRSTUVWXYZ). Never derive them from ids or hashes of personal data in public code.",
+  "The terrain layer draws data/flood-lowground.geojson only if the file exists; do not add it to data/ without owner approval (SAFE-01).",
+  "Numbers of exactly 11 or 13 digits in committed text (not inside a longer number or a decimal) trip the publication audit's house-code and ID patterns; write big amounts in millions or add a narrow, reasoned allowlist rule.",
+  "The publication audit cannot read images, fonts or PDFs: it returns review for any binary file not covered by a reviewed binary rule in tools/publication-audit-allowlist.json (README screenshots are pinned by SHA-256, so a new screenshot needs a person's look first).",
+  "sh qa/run-unit-checks.sh rewrites qa/revision-1.8-terrain-fixtures.json and qa/revision-1.9-terrain3d-fixtures.json; the bytes stay the same unless those checks changed, so a diff there means a check changed.",
+  "The browser checks count a same-origin response of 400 or more as a page error, except two files that are absent on purpose: data/flood-lowground.geojson (until the owner approves it, F-30) and data/streetview-coverage.json (until D-10 and F-33). A case that never reaches ready fails."
+ ],
+ "recipes": [
+  {
+   "title": "Add or change a map layer (before the R-13 registry)",
+   "steps": [
+    "missions.js: add the layer to LAYERS (label TH/EN, kind, benefit, supplements, tools) and to the missions that list it.",
+    "data/catalog.json: add or update the dataset entry (id, label, geojson, counts, status, caveats) keeping the 1-space indent.",
+    "app.js: copy the handling of an existing layer of the same kind (points: floodsites or businesses; polygons: publicfacilities; parcel choropleth: appraisal) in layerValue/featureStyle, the legend, the summary and the panel content.",
+    "Bump ?v= for every changed JS/CSS file; add new root files to server.py FILES.",
+    "Add a case to qa/browser/run_matrix.py (and run_a11y.py if the panel has new controls); run the publication audit on the new data."
+   ]
+  },
+  {
+   "title": "Add a mission tab",
+   "steps": [
+    "missions.js: add the mission (id, icon, label, short, layers).",
+    "Use an approved icon from ui-icons.js; a new glyph needs the icon recipe and owner approval.",
+    "Add matrix cases for the new tab on desktop and phone."
+   ]
+  },
+  {
+   "title": "Colours and scales",
+   "steps": [
+    "Never hard-code data colours. Analytical classes come from SilaScales (choropleth.js) reading reference/lds-analytical-subset.json; tax maps use the 41-sample LUT.",
+    "Categorical series (initiatives) use the LDS series names already in app.js (INITIATIVE_SERIES); interface colours use the CSS variables from assets/color-srgb-10.production.css.",
+    "Data colours stay the same HEX in both themes; legends state unit and denominator and show no-data, zero and suppressed differently from values."
+   ]
+  },
+  {
+   "title": "Add an interface icon",
+   "steps": [
+    "Take the official SVG from google/material-design-icons at the pinned commit in reference/ui-icons.manifest.json (symbols/web/NAME/materialsymbolsrounded/NAME_wght300_24px.svg).",
+    "Add it to assets/ui-icons/ and to the manifest with its SHA-256; add the path data to GLYPHS in ui-icons.js; bump the ui-icons.js cache key.",
+    "Record the owner's approval in the manifest authority block; icons never carry meaning without a visible label or accessible name."
+   ]
+  },
+  {
+   "title": "Change tax logic",
+   "steps": [
+    "Get an owner decision first (DATA-04).",
+    "Write hand-worked cases in qa/check-tax-engine.cjs, then change tax-engine.js and bump its version and cache key.",
+    "Run node qa/compute-figures.cjs --out qa/expected-figures.json and update the method text in reference/tax-map-method.md and the figures quoted in README.md."
+   ]
+  },
+  {
+   "title": "Refresh data from the private pipeline",
+   "steps": [
+    "Only inside the restricted storage (D-11); reuse the codebook so owner codes stay stable.",
+    "Audit the outputs with tools/publication-audit.py before copying them into data/.",
+    "Regenerate expected figures, bump DATA_VERSION, run every check, then follow the release steps."
+   ]
+  }
+ ]
+}

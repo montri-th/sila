@@ -1,0 +1,259 @@
+{
+ "schema": "sila-accessibility-checks/2.0",
+ "checkedAtUtc": "2026-10-20T23:25:02.287540+00:00",
+ "base": "http://127.0.0.1:8791/",
+ "tool": "axe-core 4.10.2",
+ "rules": "axe-core default rule set (WCAG 2.0/2.1 A and AA plus best practices)",
+ "views": [
+  {
+   "view": "negotiate-dark-th",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-light-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-init-list",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "negotiate-record",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "negotiate-explain-open",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "agriwatch-light",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "agriwatch-list-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "portfolio-dark",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "portfolio-owner-light-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "portfolio-list",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-dark-th",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "taxmap-record-calc",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 31,
+   "violations": []
+  },
+  {
+   "view": "taxmap-colour-table-open",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "properties-list-light-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "properties-card",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "businesses-card-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "buildings-tax-card",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "houses-sources-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 49,
+   "violations": []
+  },
+  {
+   "view": "floodsites-dark",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "floodsites-record-light-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 50,
+   "violations": []
+  },
+  {
+   "view": "terrain-2d-light-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "terrain-3d-dark",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "popgrid-light",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "caregroups-definitions",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 52,
+   "violations": []
+  },
+  {
+   "view": "animals-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 47,
+   "violations": []
+  },
+  {
+   "view": "roads",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "overview-en",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "map-settings-open",
+   "viewport": "1440x900",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-negotiate-peek",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-negotiate-full",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 46,
+   "violations": []
+  },
+  {
+   "view": "phone-record",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-portfolio-owner",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 45,
+   "violations": []
+  },
+  {
+   "view": "phone-floodsites-light",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 48,
+   "violations": []
+  },
+  {
+   "view": "phone-animals",
+   "viewport": "390x844",
+   "ready": true,
+   "rulesPassed": 47,
+   "violations": []
+  }
+ ],
+ "notCovered": [
+  "screen readers on real devices",
+  "real phones",
+  "zoom to 200% on desktop browsers",
+  "text contrast over map tiles (manual)"
+ ],
+ "browser": "Chromium 141.0.7390.37",
+ "summary": {
+  "views": 34,
+  "notReadyViews": 0,
+  "violations": 0
+ }
+}

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "artifactId": "sila-citymeter-officer-prototype-20261005",
-  "revision": "2.0.1",
-  "builtAtUtc": "2026-10-20T17:13:12.466739+00:00",
+  "revision": "2.0.2",
+  "builtAtUtc": "2026-10-21T01:41:51.454153+00:00",
   "releaseDateBangkok": "2026-10-21",
   "use": "owner-authorized public static prototype",
   "repository": "https://github.com/montri-th/sila",
@@ -34,13 +34,29 @@
   "municipalWrites": false,
   "fullDesignSystemConformance": false,
   "validationConfig": "tools/validation-config.json",
-  "browserReceipt": "qa/revision-2.0-browser-checks.json",
-  "publicationAudit": "qa/revision-2.0-publication-audit.json",
+  "browserReceipt": "qa/revision-2.0.2-browser-checks.json",
+  "publicationAudit": "qa/revision-2.0.2-publication-audit.json",
   "files": [
     {
+      "path": "AGENTS.md",
+      "bytes": 17858,
+      "sha256": "14c598bceb273009a17ac2edf158624addc8e69a07df1d2b0034c7815f8ed348",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 593,
+      "sha256": "075b25493fb63eec064de1ad1f08505f4fadf8b6805a61d89a5312e68201b3b2",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
       "path": "README.md",
-      "bytes": 94929,
-      "sha256": "828691313182ed94fb37c01c98aa08f45297bd71e8109672247ccba82c39308e",
+      "bytes": 99034,
+      "sha256": "6ed389b9a49ea6d2c64b3bd59ccdc9b98d822ffe5cac8547ff3e3b26dbe664b9",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -1060,8 +1076,8 @@
     },
     {
       "path": "data/parcel-tax.json",
-      "bytes": 5078001,
-      "sha256": "37c8f79d4ab1f51e30f31d19e1662dcb88f1af95e15b92c282a86a471f11a0d7",
+      "bytes": 5077993,
+      "sha256": "516e833a2960dcbf42c0fb38231f408bc138a504daa3563a7ce423314b7f6a70",
       "mimeTypes": [
         "application/json",
         "application/geo+json",
@@ -1189,6 +1205,94 @@
       ]
     },
     {
+      "path": "docs/handoff/CHANGELOG.md",
+      "bytes": 3146,
+      "sha256": "072aa3fbdf11995bfae963c9e4a6c1c09c92df1319f0d83b4e5db678069b7cb3",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/FACTS.md",
+      "bytes": 10862,
+      "sha256": "2baa4e25907cd6fa6c7593f8d9c9ba405662ccfe65fbd65309baa92444275733",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/HANDOFF.md",
+      "bytes": 139578,
+      "sha256": "0cd2f8ff916b8101b566ea3dc951446d75b4b6dcfbde6fcf9a826be15c8c21cf",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/IMPLEMENTATION_PLAN.md",
+      "bytes": 255732,
+      "sha256": "fa21e8657f382ea9c58021e2ea64e35abed6aedb982271d410875e486699915f",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/PRODUCT_BRIEF.md",
+      "bytes": 79301,
+      "sha256": "dc668c36731505aa360b47b9ed8efabf0c79a56396334f4ec680549a302384e1",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/README.md",
+      "bytes": 3888,
+      "sha256": "b666d3f35c7424ea54adf21ff1a40a69509e9e15151765f216038a3dfe7e6efe",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/SOURCES.md",
+      "bytes": 7464,
+      "sha256": "a66f1fa896e3040ca50b719d5e4af3e5a4728cfa99f265effbf124252b908d5e",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "docs/handoff/facts.json",
+      "bytes": 6411,
+      "sha256": "acb919fa49d0fde86cc4df4b18290a47794479538893417a5fa2afbad2897f47",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "docs/handoff/handoff.json",
+      "bytes": 66309,
+      "sha256": "8f3f0946707ad64f31f07d4ee42dfe4605594bdef1ef80b7268f10b5fee85b79",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "docs/handoff/implementation-plan.json",
+      "bytes": 134473,
+      "sha256": "f6855fdf1b1dcc3f1e9506ff54f8390fc86e90e590bbb4e829d383053c3cbef0",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "docs/handoff/product-brief.json",
+      "bytes": 42573,
+      "sha256": "12060213ee5784f1585d4446537d54ed10388fae9f8397ccd2bc313f337bdbbd",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
       "path": "fabdem-layer.js",
       "bytes": 24785,
       "sha256": "7fd6814e15ed50c4fa9d2d6a9314c5967a62a16b7b07575a2fcbc97d1a4f6798",
@@ -1283,6 +1387,54 @@
       ]
     },
     {
+      "path": "qa/browser/README.md",
+      "bytes": 3303,
+      "sha256": "3679ff1a8307b36a138e9601c736acab9293765bdacd42fb291ec9e1d78f9f2d",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "qa/browser/common.py",
+      "bytes": 5124,
+      "sha256": "8a015e410a2bb35a2b3ec2acb5131675aab303fe0f9e7068b37b7b7e37e487fd",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "qa/browser/fixtures.json",
+      "bytes": 445,
+      "sha256": "94d84af0b85ef830affda6bf03df111bccaf3031e033b507a2b847c5a490e046",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/browser/run_a11y.py",
+      "bytes": 8334,
+      "sha256": "ba03f45f77c534e37d5933b0452eedd116bf6268346c403897e7e8208d566745",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "qa/browser/run_matrix.py",
+      "bytes": 21825,
+      "sha256": "ea569d4a22040bf461d564bef9bf110421ff4816e032ea0ad26e79c6a13c5cc1",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "qa/browser/run_overflow.py",
+      "bytes": 7398,
+      "sha256": "164dea0ec83debeae317f3cc91f89f5d888375427f1851531d7e1103b65fad97",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
       "path": "qa/check-fabdem-layer.cjs",
       "bytes": 5884,
       "sha256": "955dcd2f2358490505a2ffa8f23b3f817a183d7daa4541d35ed9bc52a3899132",
@@ -1360,6 +1512,15 @@
       ]
     },
     {
+      "path": "qa/compute-figures.cjs",
+      "bytes": 6653,
+      "sha256": "0748d14694f6ded7068e821afcad49a9c5cc20dee16eca1ec906e5d82da9c715",
+      "mimeTypes": [
+        "application/javascript",
+        "text/javascript"
+      ]
+    },
+    {
       "path": "qa/context-actions-semantic-checks.json",
       "bytes": 1297,
       "sha256": "07042600f754fc0ad0864850e692c0d627ee7f85aaff7c4cb3b65204fc5710c0",
@@ -1377,6 +1538,14 @@
         "application/json",
         "application/geo+json",
         "application/octet-stream"
+      ]
+    },
+    {
+      "path": "qa/expected-figures.json",
+      "bytes": 1628,
+      "sha256": "f8c3bb0ed63aa17999aeb5adaa49d3ff10627f586c2c3d10dbbf26edb731a8cf",
+      "mimeTypes": [
+        "application/json"
       ]
     },
     {
@@ -1868,6 +2037,46 @@
       ]
     },
     {
+      "path": "qa/revision-2.0.2-accessibility-checks.json",
+      "bytes": 4879,
+      "sha256": "4b635fc32c1ecbd1139cc2efc9703bb39999012feee13895e69ed2fde5847e30",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-2.0.2-browser-checks.json",
+      "bytes": 23367,
+      "sha256": "4bc34ed943ed62a79f3d59e1bd2d2bfa7fabb1bc48566d33725aee07e27081c7",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-2.0.2-phone-overflow.json",
+      "bytes": 22656,
+      "sha256": "11848e5084f5fbdc89651dc59a584cd920978742e2bd4c1b85c7e8ccacbaa550",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/revision-2.0.2-publication-audit.json",
+      "bytes": 3487,
+      "sha256": "587e75842ea0685a5b680137ff38525f67712c2b230cb8b88420f70ac2b9fa8e",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "qa/run-unit-checks.sh",
+      "bytes": 1457,
+      "sha256": "3b8ed8ae5ca1bf0ef237b328a1f5307916a99b03239b8aaafed6a107c5962ed1",
+      "mimeTypes": [
+        "application/x-sh"
+      ]
+    },
+    {
       "path": "qa/verifier-fixture-checks.json",
       "bytes": 574,
       "sha256": "c58815981ae54b36b4b1d0b1c966c3bd3e0c5953b7e88c4c096a82ea8c6b8de8",
@@ -2099,8 +2308,8 @@
     },
     {
       "path": "reference/terrain-contract.md",
-      "bytes": 24920,
-      "sha256": "68fbd56debd8c28cf5b435ab57a65d38b18eff8680368439e10f5835d264b540",
+      "bytes": 25087,
+      "sha256": "5ed8301ddbf1b3e87850ac00f37aa72a480b91d85c6b6b52dcbad697d2285c5b",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
@@ -2319,12 +2528,108 @@
     },
     {
       "path": "tools/README.md",
-      "bytes": 3287,
-      "sha256": "0d2535597fcea2f9d3fea79698188447b2b5639309c76a5b4e63e18c82df7eae",
+      "bytes": 4853,
+      "sha256": "7fe79f186e5ffd4a6f7412ac6deeebfbd30aec67a8328781d0c5c6a798d6ec23",
       "mimeTypes": [
         "text/markdown",
         "text/plain",
         "application/octet-stream"
+      ]
+    },
+    {
+      "path": "tools/flood/README.md",
+      "bytes": 2742,
+      "sha256": "66cd66cc62beace67f128045e782e7165ce91e2ee94ca17b8b32652cdc4fd1ef",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "tools/flood/build_flood_sites.py",
+      "bytes": 7886,
+      "sha256": "bafa47b6328012c04ea4997488355dfd9db949a8c6be8598bb283c11d19a4347",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/flood/closed_low_ground.py",
+      "bytes": 6308,
+      "sha256": "2a27252f1accdbd90df822731cc15d0af3aedc206f612dff0bdc2ae4a2624c92",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/flood/fetch_fabdem_tiles.py",
+      "bytes": 4858,
+      "sha256": "56810562500d3d894bd25b51b0a924b9c3d9fcf79b80d5256f456dd79900969c",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/gen-manifest.py",
+      "bytes": 4592,
+      "sha256": "e5d04e29d07a60b140b7c93319ce991b3a2d60a370c299e0ca3b568636016ce6",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/handoff/brief_data.py",
+      "bytes": 19098,
+      "sha256": "9824ee90af58d2da1b4e185bc39ecfd7df74c09494c1d1ecfff1fdbef84af267",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/handoff/build_handoff.py",
+      "bytes": 77108,
+      "sha256": "f1970119813c0a8e55644636448f31686ecf3c27591003e2642cef4aa07368fc",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/handoff/handoff_data.py",
+      "bytes": 53053,
+      "sha256": "872cf54b6044b34a50250ca3870d410b8ca89a3c14cd240d57df11ebe7d7c900",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/handoff/plan_data.py",
+      "bytes": 90722,
+      "sha256": "b3f4746c0c1b36e8b99eaf517643c1445cf2eca7f0d54e93e58e30c5e7087656",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/handoff/task.py",
+      "bytes": 2381,
+      "sha256": "b739007e719ee770771686d19685064284787e06184588d42af1e55ab036a6ac",
+      "mimeTypes": [
+        "text/x-python"
+      ]
+    },
+    {
+      "path": "tools/publication-audit-allowlist.json",
+      "bytes": 5821,
+      "sha256": "d158a0b07779f8fe10bfe724a304f294111eb95cd09443951783d5f8d1eca8ef",
+      "mimeTypes": [
+        "application/json"
+      ]
+    },
+    {
+      "path": "tools/publication-audit.py",
+      "bytes": 17461,
+      "sha256": "03e869b31d24582f2e4792eb14fb674d5c80ef80439192f16b34d190d4c0963a",
+      "mimeTypes": [
+        "text/x-python"
       ]
     },
     {
@@ -3584,6 +3889,22 @@
       "mimeTypes": [
         "image/jpeg"
       ]
+    },
+    {
+      "path": "vendor/satellite-eox-2016/LICENSE.md",
+      "bytes": 766,
+      "sha256": "3309b7c145eee6898735fa614df874e8b91ddce3d9a76af2e3e75f60ece4c127",
+      "mimeTypes": [
+        "text/markdown"
+      ]
+    },
+    {
+      "path": "vendor/satellite-eox-2016/SOURCE.md",
+      "bytes": 1407,
+      "sha256": "e0cae5746036a8095f8e243b8a916411332fd2ef5e140cc7bcf78d298a67c86a",
+      "mimeTypes": [
+        "text/markdown"
+      ]
     }
   ],
   "manifestScope": "All tracked files except .gitignore, .nojekyll and this manifest. Restricted sources, internal link tables, screenshots and the flood draft layers remain outside the repository.",
@@ -3614,8 +3935,8 @@
     "sha256": "dea05297714acbcf3c7e71cbf393bf811f8def0f017e9e1cb78fd1f44b2ca17c",
     "exposure": "municipality_aggregate_only"
   },
-  "previousPublishedRevision": "1.9.1",
-  "previousPublishedCommit": "5eeb59d464db2a1c021cd9ac1bdcbfa01f0734f0",
+  "previousPublishedRevision": "2.0.1",
+  "previousPublishedCommit": "4b322081ef7677b0deb424727acb38d63408a37a",
   "originalGisSourceFolders": 14,
   "additionalMunicipalSourceFolders": 3,
   "additionalMunicipalFilesInspectedThisUpdate": 6,
@@ -3680,10 +4001,7 @@
     "officialAssessment": false
   },
   "dataFilesChangedThisRevision": [
-    "data/catalog.json",
-    "data/metadata.json",
-    "data/flood-sites.geojson (new)",
-    "reference/lds-analytical-subset.json (water scale added)"
+    "data/parcel-tax.json (summary.limits[0] text only)"
   ],
   "analyticViews": [
     "taxmap",
@@ -3745,7 +4063,7 @@
     "terrainPalettes": "OH3 palettes as an owner-approved exception for ground height only; see reference/terrain-palettes.json",
     "publicSafety": "House-number fields keep numbers only (surveyor notes removed); survey status per point is not published (only whether a point is a new survey position); building use is published only in groups (rented or used by others, parking or storage, farming or livestock, and one group for everything else including owner-occupied, vacant and not stated); the population grid uses primary and secondary suppression. See qa/revision-1.8-publication-audit.json."
   },
-  "accessibilityReceipt": "qa/revision-2.0-accessibility-checks.json",
+  "accessibilityReceipt": "qa/revision-2.0.2-accessibility-checks.json",
   "terrain3dBenchmark": "qa/revision-1.9-terrain3d-benchmark.json",
   "revision19": {
     "sourceReceived": {
@@ -3911,7 +4229,29 @@
         "charts: value-axis labels spaced at 84 px so wide panels do not crowd the thousands labels",
         "app.js and sila-charts.js cache keys 2.0.1; browser and accessibility receipts re-run on the patched code"
       ],
-      "foundBy": "opening the live 2.0 site in Chrome on a Mac (Apple M5): first paint showed +0 while 3 MB of parcels loaded"
+      "foundBy": "opening the live 2.0 site in Chrome on a Mac (Apple M5): first paint showed +0 while the parcel layer loaded (data/parcels.geojson 20.7 MB raw, about 2.1 MB with gzip)"
+    },
+    {
+      "id": "2.0.2",
+      "dateBangkok": "2026-10-21",
+      "afterCommit": "4b322081ef7677b0deb424727acb38d63408a37a",
+      "changes": [
+        "developer handoff package: docs/handoff/ (product brief, handoff, implementation plan, facts, sources, changelog; human Markdown with the same JSON embedded), AGENTS.md and CLAUDE.md, generated by tools/handoff/build_handoff.py (--check for drift)",
+        "QA and release tools moved into the repository and re-run on the tree: qa/browser/ (matrix, accessibility, phone overflow), qa/run-unit-checks.sh, qa/compute-figures.cjs with qa/expected-figures.json, tools/publication-audit.py with its allowlist, tools/gen-manifest.py, tools/flood/ (flood sites from the study, FABDEM grid, closed low ground)",
+        "data/parcel-tax.json: one internal roll record id removed from summary.limits[0] (method note text; no figure or interface change); the publication audit now checks for it",
+        "vendor/satellite-eox-2016/: SOURCE.md and LICENSE.md (CC BY 4.0, from reference/satellite-tile-inventory.json); checks made stricter after an independent review (browser cases must reach ready and same-origin 400+ responses fail; the publication audit lists unread files and fails on them; expected figures have --check)",
+        "owner decisions recorded: D-11 (pipeline and owner-code codebook kept on the owner's computer), D-17 (owner chose to push 2.0.2 directly to main); new open questions D-18 (one internal id in git history) and D-19 (Drive links in public files); tasks S-05 and S-06 added",
+        "README: 2.0.2 section, developer files table, preview serves docs/, parcel size note corrected; reference/terrain-contract.md: flood scripts now in tools/flood/",
+        "no change to index.html, JavaScript or CSS; cache keys unchanged"
+      ],
+      "foundBy": "owner request of 21 Oct 2026 for a developer handoff, product brief and implementation plan"
     }
-  ]
+  ],
+  "phoneOverflowReceipt": "qa/revision-2.0.2-phone-overflow.json",
+  "developerHandoff": {
+    "index": "docs/handoff/README.md",
+    "agentGuide": "AGENTS.md",
+    "builder": "tools/handoff/build_handoff.py",
+    "check": "python3 tools/handoff/build_handoff.py --check"
+  }
 }

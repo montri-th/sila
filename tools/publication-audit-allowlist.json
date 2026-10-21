@@ -1,0 +1,148 @@
+{
+ "schema": "sila-publication-audit-allowlist/1",
+ "note": "Reviewed false positives for tools/publication-audit.py. Add a rule only after a person has looked at the match; keep each rule as narrow as possible and say why. binaryRules cover image, font and other binary files the text scan cannot read; prefer sha256In so changed bytes come back for review.",
+ "rules": [
+  {
+   "id": "audit-tool-own-patterns",
+   "patterns": [
+    "thirteen_digit_number",
+    "id_card_dashed",
+    "mobile_phone",
+    "eleven_digit_house_code",
+    "thai_person_title_with_name",
+    "raw_linkage_prefix",
+    "survey_visit_note",
+    "credential_like"
+   ],
+   "fileGlob": "tools/publication-audit*",
+   "reason": "the audit tool and this allowlist spell out the patterns and reviewed strings themselves"
+  },
+  {
+   "id": "digits-inside-a-hash",
+   "patterns": [
+    "eleven_digit_house_code",
+    "thirteen_digit_number",
+    "mobile_phone"
+   ],
+   "minHexRun": 32,
+   "reason": "digit runs inside a git commit or SHA-256 string (32 or more hex characters)"
+  },
+  {
+   "id": "amcharts-byte-size-constants",
+   "patterns": [
+    "thirteen_digit_number"
+   ],
+   "fileGlob": "vendor/amcharts5/*",
+   "matchIn": [
+    "1099511627776",
+    "4000000000000"
+   ],
+   "reason": "library constants 2^40 and 0x4000000000000 in the amCharts bundle"
+  },
+  {
+   "id": "road-named-after-a-resort",
+   "patterns": [
+    "thai_person_title_with_name"
+   ],
+   "contextContains": "นาย่ารีสอร์ท",
+   "reason": "a soi named after a resort, not a person"
+  },
+  {
+   "id": "juristic-trading-name",
+   "patterns": [
+    "thai_person_title_with_name"
+   ],
+   "contextContains": "นายพราน หมูกระทะ",
+   "reason": "registered trading name of a juristic restaurant company (นายพราน means hunter), not a person"
+  },
+  {
+   "id": "thb-amount-in-manifest",
+   "patterns": [
+    "eleven_digit_house_code"
+   ],
+   "fileGlob": "build-manifest.json",
+   "contextContains": "appraisedValueTHB",
+   "reason": "total appraised value in baht recorded in the 2.0 release notes, not a house-register code"
+  },
+  {
+   "id": "audit-receipt-lists-forbidden-key-names",
+   "patterns": [
+    "raw_linkage_prefix"
+   ],
+   "fileGlob": "qa/revision-*-publication-audit.json",
+   "matchIn": [
+    "record_id",
+    "land_record_id",
+    "taxpayer_key"
+   ],
+   "reason": "an audit receipt lists the forbidden key names it checked (forbiddenKeys); these are field names, not values"
+  }
+ ],
+ "keyRules": [
+  {
+   "id": "work-item-roles",
+   "file": "reference/platform-layout-handoff.json",
+   "keyPath": "/fasttrack/workItems/owner",
+   "reason": "work-item owner roles (intern_A, intern_B), not people"
+  }
+ ],
+ "binaryRules": [
+  {
+   "id": "web-fonts",
+   "fileGlob": "assets/fonts/*.woff2",
+   "reason": "web font files; each family's licence text sits beside it in assets/fonts (LIC-01). Fonts hold glyphs, not records."
+  },
+  {
+   "id": "brand-locked-artwork",
+   "fileGlob": "assets/brand/*.png",
+   "sha256In": [
+    "20e950c70248d08a76df8c67cb42316a4fd3d898d6ba8755f48cc632382f7e1f",
+    "37af6d9675ee4c1eac934e60c6e481727c0ddb0aff0ad0db87000a6b1923990a",
+    "3b7439f689fa6172660375e073ce3cbcd967ee2766c9d962522f712468e3b58a",
+    "d9ac160eaf23cffcd771afd13ce4b3240f486ac12043a44880760bfa27bd39a9",
+    "df00f1c02f2c2c453dbd6a21746d015fff8079880de863b2643c9fc7c2449583",
+    "e839e275948a7bacadf0925303f7a3b315d068cc3f5184d5b1a85233d1e387fd"
+   ],
+   "reason": "locked brand artwork; these exact bytes are listed in assets/brand/manifest.json or favicon-formats.manifest.json (BRAND-01). Changed bytes are not covered."
+  },
+  {
+   "id": "site-favicon",
+   "fileGlob": "favicon.ico",
+   "sha256In": [
+    "6541e9e256e8c3780fbf7b768f0cffee5a4b82f4c5feb11fbd27d3b11ee0da2b"
+   ],
+   "reason": "site favicon built from the locked CityChat artwork; hash listed in assets/brand/favicon-formats.manifest.json (BRAND-01)."
+  },
+  {
+   "id": "leaflet-library-images",
+   "fileGlob": "vendor/leaflet/images/*",
+   "reason": "marker and layer-control images shipped with Leaflet (vendor/leaflet/LICENSE)."
+  },
+  {
+   "id": "eox-2016-archive-tiles",
+   "fileGlob": "vendor/satellite-eox-2016/*.jpg",
+   "reason": "Sentinel-2 cloudless 2016 imagery tiles (about 10 m per pixel) for the archive basemap; source URL and SHA-256 of every tile in reference/satellite-tile-inventory.json; licence in vendor/satellite-eox-2016/LICENSE.md."
+  },
+  {
+   "id": "readme-screenshots-published-before-2-0-2",
+   "fileGlob": "screenshots/*",
+   "sha256In": [
+    "17799b28c74a43ce108ba354a2adceb4ee7ae5d06e7f39491d4306ee51caeb94",
+    "270fc590fb0028eb9edea6902607e3a9cd99985de8377fd0c0196c28eb2d00cc",
+    "309a4293b031dd3042caee879d24ae92c4970229e11fe17d50177bb180d4d06d",
+    "3c260bcb27c46dc03014cbb3bca99585aea5469ee4db654204b1cdc033bf60f3",
+    "42f9f8f2397fabf60af776c81b8373e57ba99fb59d397d5028da28f1410e4810",
+    "6bfc521e3472708222619d16e2200edfa9c879b4160c48daa6095bee5812e161",
+    "86f3f47d3e93bcc06543e5a7e50fb7e254adf221bff49e8d23e443550306e6a9",
+    "97e484825173a962bfe60d3d1921377117fab589f4758292e15311270010410c",
+    "9f8b5533d49b66c4d2fb10c4b2aa5843fb0d9d5b20553093d4390941b0d9611f",
+    "afc533cfd6d6eb79dd298be949f666bc9144547902c7a2be139dd6ef619e0968",
+    "c12f7e63ebb7febdf03e3f27eb45d687b133c97c61b075eabc588e18e78ff167",
+    "c58c8020c87f954b80a5976d8d000cc6e025a0445fa8130c6a0635e4339d0656",
+    "cb15d98ebbe12c20060ff2126ac51c133a3480d47a7068d0fac8c7d2c6e31d96",
+    "eaf9ab8c5d90a2267bd8e2f12f2d3d134486c5495f895d3b53d35faf65270fa9"
+   ],
+   "reason": "README screenshots already in main at 4b32208, before revision 2.0.2; not re-reviewed by this tool. A new or changed screenshot is not covered and needs a person's look for per-house data, names and addresses (PRIV-02)."
+  }
+ ]
+}
